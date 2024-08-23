@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PersonasVehiculo" pageWidth="572" pageHeight="752" columnWidth="572" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="94517dc1-289d-45a0-a262-3a2cfe9734b1">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ORACLE_MV"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="333"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="653"/>
+	<parameter name="ID_VEHICULO" class="java.lang.Long"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT * FROM VW_PERSONAS_VEHICULO WHERE EST_ID = 1 AND VEH_ID =  $P{ID_VEHICULO}]]>
+	</queryString>
+	<field name="PER_ID" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.label" value="PER_ID"/>
+	</field>
+	<field name="TIPO_PERSONA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TIPO_PERSONA"/>
+	</field>
+	<field name="TIPO_DOC" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TIPO_DOC"/>
+	</field>
+	<field name="DOCUMENTO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DOCUMENTO"/>
+	</field>
+	<field name="NOMBRE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="NOMBRE"/>
+	</field>
+	<field name="VEH_ID" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.label" value="VEH_ID"/>
+	</field>
+	<field name="PV_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="PV_ID"/>
+	</field>
+	<field name="FECHA_INI" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="FECHA_INI"/>
+	</field>
+	<field name="FECHA_FIN" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="FECHA_FIN"/>
+	</field>
+	<field name="EST_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="EST_ID"/>
+	</field>
+	<field name="ESTADO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ESTADO"/>
+	</field>
+	<field name="USU_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="USU_ID"/>
+	</field>
+	<field name="USUARIO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="USUARIO"/>
+	</field>
+	<field name="FECHA_REGISTRO" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="FECHA_REGISTRO"/>
+	</field>
+	<field name="LICENCIA_CONDUCCION" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="LICENCIA_CONDUCCION"/>
+	</field>
+	<field name="CATEGORIA_LICENCIA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="CATEGORIA_LICENCIA"/>
+	</field>
+	<field name="TIPO_DOC_CORTO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TIPO_DOC_CORTO"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="34">
+			<staticText>
+				<reportElement x="21" y="19" width="59" height="15" uuid="6fe351cd-ac50-44fd-a06b-3bfeee605848"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Persona]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="19" width="99" height="15" uuid="c7af4ce5-cbcb-46fc-970a-5f3d7b4062ef"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="19" width="231" height="15" uuid="73630646-fbfe-4e38-8e08-8d396f370ea6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="0" width="260" height="17" uuid="4dcfe172-92a2-4a0f-a227-4f1972c0e8d3"/>
+				<textElement markup="styled">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[<style isBold='true' pdfFontName='Helvetica-Bold'>Personas Asociadas al Vehiculo</style>]]></text>
+			</staticText>
+			<line>
+				<reportElement x="21" y="18" width="530" height="1" uuid="84f7e739-7265-4397-8283-f0435cd1e98e"/>
+			</line>
+			<line>
+				<reportElement x="21" y="33" width="530" height="1" uuid="6f0a472d-ac60-435e-bc33-a6d38c915e5d"/>
+			</line>
+			<staticText>
+				<reportElement x="410" y="19" width="140" height="15" uuid="bc259437-fcd6-4c49-8579-26965bd49303"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No. Licencia - Categoria]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="21" y="0" width="59" height="15" uuid="c1b66d13-1fe0-4109-a98a-c5dc7704b3cf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_PERSONA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="0" width="99" height="15" uuid="ae781cbc-c7c7-4c0b-82e2-962d67f1819d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_DOC_CORTO}+" "+$F{DOCUMENTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="179" y="0" width="231" height="15" uuid="18fe6f67-5d71-44b0-b726-b7982a54ae6e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="410" y="0" width="140" height="15" uuid="7511e125-e92b-4d54-b6f3-69dd26547602"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LICENCIA_CONDUCCION}+" - "+$F{CATEGORIA_LICENCIA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

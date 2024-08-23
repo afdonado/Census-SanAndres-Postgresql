@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/Census">
+    <Resource 
+        name="jdbc/oracle" 
+        auth="Container" 
+        type="javax.sql.DataSource"
+        driverClassName="oracle.jdbc.OracleDriver" 
+        url="jdbc:oracle:thin:@localhost:1521:ORCL" 
+        username="CENSO" 
+        password="desarrollo"
+        maxActive="5" 
+        maxIdle="1" 
+        maxWait="20000" 
+        validationQuery="SELECT 1 FROM DUAL" 
+        removeAbandoned="true" 
+        removeAbandonedTimeout="30" 
+        logAbandoned="true"
+      />
+</Context>
+<!--url="jdbc:oracle:thin:@144.91.124.50:1521:OLIMPOORACLE" 
+        username="C##CENSO" 
+        password="FZ55cgc4Qmh4rccu5T7xfQAAEMyZ4" -->
