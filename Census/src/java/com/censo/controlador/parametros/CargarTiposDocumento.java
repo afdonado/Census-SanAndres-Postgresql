@@ -26,12 +26,17 @@ public class CargarTiposDocumento extends HttpServlet {
 
         try {
 
-            if (!request.getParameter("nameCombo").equals("")) {
+            if (!request.getParameter("nameCombo").equals("") && !request.getParameter("label").equals("")) {
 
                 TipoDocumentoDao tipoDocumentoDao = new TipoDocumentoDao();
                 conex = tipoDocumentoDao.conectar();
                 
                 String nameCombo = request.getParameter("nameCombo");
+                boolean label = Boolean.parseBoolean(request.getParameter("label"));
+                
+                if(label){
+                    out.println("<label>Tipo Documento</label>");
+                }
 
                 out.println("<select class=\"form-control\" name=\""+nameCombo+"\" id=\""+nameCombo+"\">");
                 

@@ -44,25 +44,25 @@ public class InicioSesion extends HttpServlet {
                     sessionCensus.setAttribute("permisosUsuario", usuarioDao.ListarPermisosById(conex, cenusuario.getId()));
                     sessionCensus.setAttribute("modulosUsuario", usuarioDao.ListarModulosByUsuario(conex, cenusuario.getId()));
                     sessionCensus.setAttribute("modulos", usuarioDao.ListarModulos(conex));
-                    response.sendRedirect("jsp/Inicio.jsp");
+                    response.sendRedirect("dashboard");
                     
                 } else {
                     out.println("<script type=\"text/javascript\">");
                     out.println("alert('Datos incorrectos');");
-                    out.println("location='index.jsp';");
+                    out.println("location='index';");
                     out.println("</script>");
                 }
 
             } else {
                out.println("<script type=\"text/javascript\">");
                 out.println("alert('Digite los datos de usuario y contraseña');");
-                out.println("location='index.jsp';");
+                out.println("location='index';");
                 out.println("</script>");
             }
         } catch (SQLException e) {
             out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al actualizar el password');");
-            out.println("location='jsp/Inicio.jsp';");
+            out.println("alert('Error al iniciar sesion');");
+            out.println("location='index';");
             out.println("</script>");
             e.printStackTrace();
             

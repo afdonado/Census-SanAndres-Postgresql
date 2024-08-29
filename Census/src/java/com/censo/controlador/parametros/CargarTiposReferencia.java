@@ -1,7 +1,7 @@
 package com.censo.controlador.parametros;
 
-import com.censo.modelo.dao.TipoImportacionDao;
-import com.censo.modelo.persistencia.CenTipoImportacion;
+import com.censo.modelo.dao.TipoReferenciaDao;
+import com.censo.modelo.persistencia.CenTipoReferencia;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "CargarTiposImportacion", urlPatterns = {"/cargarTiposImportacion"})
-public class CargarTiposImportacion extends HttpServlet {
+@WebServlet(name = "CargarTiposReferencia", urlPatterns = {"/cargarTiposReferencia"})
+public class CargarTiposReferencia extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -26,23 +26,23 @@ public class CargarTiposImportacion extends HttpServlet {
 
         try {
 
-            TipoImportacionDao tipoImportacionDao = new TipoImportacionDao();
-            conex = tipoImportacionDao.conectar();
+            TipoReferenciaDao tipoReferenciaDao = new TipoReferenciaDao();
+            conex = tipoReferenciaDao.conectar();
             
-            out.println("<label>Tipo Importacion</label>");
-            out.println("<select class=\"form-control\" name=\"cmdtiposimportacion\" id=\"cmdtiposimportacion\">");
-            List<CenTipoImportacion> lista = tipoImportacionDao.ListarTiposImportacion(conex);
-            for (CenTipoImportacion cenTipoImportacion : lista) {
-                if (cenTipoImportacion.getId() == 1) {
-                out.println("<option value=\"" + cenTipoImportacion.getId() + "\"selected>" + cenTipoImportacion.getDescripcion() + "</option>");
+            out.println("<label>Tipo Referencia</label>");
+            out.println("<select class=\"form-control\" name=\"cmdtiposreferencia\" id=\"cmdtiposreferencia\">");
+            List<CenTipoReferencia> lista = tipoReferenciaDao.ListarTiposReferencia(conex);
+            for (CenTipoReferencia cenTipoReferencia : lista) {
+                if (cenTipoReferencia.getId() == 1) {
+                out.println("<option value=\"" + cenTipoReferencia.getId() + "\"selected>" + cenTipoReferencia.getDescripcion() + "</option>");
                 } else {
-                out.println("<option value=\"" + cenTipoImportacion.getId() + "\">" + cenTipoImportacion.getDescripcion() + "</option>");    
+                out.println("<option value=\"" + cenTipoReferencia.getId() + "\">" + cenTipoReferencia.getDescripcion() + "</option>");    
                 }
             }
             out.println("</select>");
         } catch (SQLException e) {
             out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al cargar los tipos de importacion');");
+            out.println("alert('Error al cargar los tipos de referencia');");
             out.println("location='jsp/Inicio.jsp';");
             out.println("</script>");
             e.printStackTrace();

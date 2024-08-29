@@ -73,8 +73,8 @@ public class AgregarCamposPersona extends HttpServlet {
                 }
 
                 out.println("</select></div>");
-                out.println("<div class=\"form-group col-md-2\">");
-                out.println("<input class=\"form-control\" type=\"text\" id=\"" + nameTxtDocumento + "\" name=\"" + nameTxtDocumento + "\" maxlength=\"20\" style=\"text-transform: uppercase\" required=\"true\">");
+                out.println("<div class=\"form-group col-md-2\" id=\"numeros-documeto\">");
+                out.println("<input class=\"form-control\" type=\"number\" id=\"" + nameTxtDocumento + "\" name=\"" + nameTxtDocumento + "\" maxlength=\"20\" required=\"true\">");
                 out.println("</div>");
                 out.println("<div class=\"form-group col-md-5\">");
                 out.println("<input class=\"form-control\" type=\"text\" id=\""+nameTxtNombre+"\" name=\""+nameTxtNombre+"\" readonly=\"true\">");
