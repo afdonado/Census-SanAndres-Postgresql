@@ -11,9 +11,9 @@ public class ModuloDao extends Conexion {
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public CenModulo ConsultarModuloById(int id) throws SQLException {
+    public CenModulo ConsultarModuloById(Connection conex, int id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_MODULOS WHERE EST_ID = 1 AND MOD_ID = ? ORDER BY MOD_ORDEN ");
             pst.setInt(1, id);
             rst = pst.executeQuery();
@@ -21,7 +21,7 @@ public class ModuloDao extends Conexion {
             while (rst.next()) {
                 return CenModulo.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarModuloById: " + e);
         } finally {
             try {

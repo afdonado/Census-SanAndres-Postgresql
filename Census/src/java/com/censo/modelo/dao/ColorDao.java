@@ -6,24 +6,26 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ColorDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
 
-    public java.util.List ListarColores() throws SQLException {
+    public List ListarColores(Connection conex) throws SQLException {
         
-        java.util.List listaColor = new java.util.LinkedList();
+        List listaColor = new LinkedList();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_COLORES ORDER BY COL_ID ");
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 listaColor.add(CenColor.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarColores: " + e);
         } finally {
             try {
@@ -40,11 +42,11 @@ public class ColorDao extends Conexion {
         return listaColor;
     }
 
-    public ArrayList<String> ListarNombresColores(String dato) throws SQLException {
+    public ArrayList<String> ListarNombresColores(Connection conex, String dato) throws SQLException {
 
         ArrayList<String> nombresColor = new ArrayList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT COL_NOMBRE FROM CEN_COLORES WHERE COL_NOMBRE LIKE ? AND ROWNUM <= 10 ORDER BY COL_NOMBRE");
             pst.setString(1, dato + "%");
             rst = pst.executeQuery();
@@ -52,7 +54,7 @@ public class ColorDao extends Conexion {
             while (rst.next()) {
                 nombresColor.add(rst.getString(1));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarNombresColores: " + e);
         } finally {
             try {
@@ -69,9 +71,9 @@ public class ColorDao extends Conexion {
         return nombresColor;
     }
 
-    public CenColor ConsultarColorByNombre(String nombre) throws SQLException {
+    public CenColor ConsultarColorByNombre(Connection conex, String nombre) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_COLORES WHERE COL_NOMBRE = ? ORDER BY COL_ID ");
             pst.setString(1, nombre);
             rst = pst.executeQuery();
@@ -79,7 +81,7 @@ public class ColorDao extends Conexion {
             while (rst.next()) {
                 return CenColor.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarColorByNombre: " + e);
         } finally {
             try {
@@ -96,9 +98,9 @@ public class ColorDao extends Conexion {
         return null;
     }
 
-    public CenColor ConsultarColorById(long id) throws SQLException {
+    public CenColor ConsultarColorById(Connection conex, long id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_COLORES WHERE COL_ID = ? ORDER BY COL_ID ");
             pst.setLong(1, id);
             rst = pst.executeQuery();
@@ -106,7 +108,7 @@ public class ColorDao extends Conexion {
             while (rst.next()) {
                 return CenColor.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarColorById: " + e);
         } finally {
             try {

@@ -13,42 +13,46 @@ import com.censo.modelo.persistencia.CenUsuario;
 import com.censo.modelo.persistencia.CenVehiculo;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@WebServlet(name = "ModificarVehiculo", urlPatterns = "/modificarVehiculo")
 public class ModificarVehiculo extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        
+        Connection conex = null;
 
         try {
             
-            VehiculoDao dao = new VehiculoDao();
+            VehiculoDao vehiculoDao = new VehiculoDao();
+            conex = vehiculoDao.conectar();
             MarcaDao daoMarca = new MarcaDao();
             LineaDao daoLinea = new LineaDao();
             ColorDao daoColor = new ColorDao();
             PersonaVehiculoDao daoPersonaVehiculo = new PersonaVehiculoDao();
             
             CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
-
-            CenVehiculo cenvehiculo = new CenVehiculo();
-            CenMarca cenmarca = new CenMarca();
-            CenLinea cenlinea = new CenLinea();
-            CenColor cencolor = new CenColor();
             
-            dao.conectar().setAutoCommit(false);
+            conex.setAutoCommit(false);
 
             long idlinea = 0;
             long idcolor = 0;
 
-            boolean registrado = false;
+            boolean registrado;
             
             long idvehiculo = Long.parseLong(request.getParameter("idvehiculo"));
             String placa = request.getParameter("txtplaca").toUpperCase().trim();
@@ -62,15 +66,15 @@ public class ModificarVehiculo extends HttpServlet {
             String nommarca = request.getParameter("txtmarcas").toUpperCase().trim();
             String nomlinea = request.getParameter("txtlineas").toUpperCase().trim();
 
-            cenmarca = daoMarca.ConsultarMarcaByNombre(nommarca);
+            CenMarca cenmarca = daoMarca.ConsultarMarcaByNombre(conex, nommarca);
             if (cenmarca != null) {
-                cenlinea = daoLinea.ConsultarLineaByNombreIdMarca(nomlinea, cenmarca.getId());
+                CenLinea cenlinea = daoLinea.ConsultarLineaByNombreIdMarca(conex, nomlinea, cenmarca.getId());
                 if (cenlinea != null) {
                     idlinea = cenlinea.getId();
                 }
             }
 
-            cencolor = daoColor.ConsultarColorByNombre(nomcolor);
+            CenColor cencolor = daoColor.ConsultarColorByNombre(conex, nomcolor);
             if (cencolor != null) {
                 idcolor = cencolor.getId();
             }
@@ -101,6 +105,7 @@ public class ModificarVehiculo extends HttpServlet {
             String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
             int cantpersonas = (Integer.parseInt(request.getParameter("txtcantpersonas")));
 
+            CenVehiculo cenvehiculo = new CenVehiculo();
             cenvehiculo.setId(idvehiculo);
             cenvehiculo.setPlaca_veh(placa);
             cenvehiculo.setChasis(chasis);
@@ -129,19 +134,19 @@ public class ModificarVehiculo extends HttpServlet {
             cenvehiculo.setFechaven_tecno(fechaVenTecnomecanica);
             cenvehiculo.setObservaciones(observaciones);
             cenvehiculo.setEstado(1);
-            registrado = dao.modificarVehiculo(cenvehiculo);
+            registrado = vehiculoDao.modificarVehiculo(conex, cenvehiculo);
 
             if (registrado) {
 
-                List<HashMap> listapersonasVehiculo = daoPersonaVehiculo.ListarHashPersonasVehiculoActivasByIdVehiculo(cenvehiculo.getId());
+                List<HashMap> listapersonasVehiculo = daoPersonaVehiculo.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, cenvehiculo.getId());
 
-                if (listapersonasVehiculo.size() > 0) {
+                if (!listapersonasVehiculo.isEmpty()) {
 
                     for (HashMap hash : listapersonasVehiculo) {
                         long idperveh = Long.parseLong(hash.get("PV_ID").toString());
                         int estadoperveh = Integer.parseInt(request.getParameter("estadoperveh" + idperveh));
                         if (estadoperveh == 2) {
-                            daoPersonaVehiculo.anularPersonaVehiculo(idperveh);
+                            daoPersonaVehiculo.anularPersonaVehiculo(conex, idperveh);
                         }
                     }
                 }
@@ -162,7 +167,7 @@ public class ModificarVehiculo extends HttpServlet {
                         cenpersonavehiculo.setVeh_id(idvehiculo);
                         cenpersonavehiculo.setUsu_id(cenusuario.getId());
                         cenpersonavehiculo.setEstado(1);
-                        long idPersonaVehiculo = daoPersonaVehiculo.adicionarPersonaVehiculo(cenpersonavehiculo);
+                        long idPersonaVehiculo = daoPersonaVehiculo.adicionarPersonaVehiculo(conex, cenpersonavehiculo);
 
                         if (idPersonaVehiculo == 0) {
                             registrado = false;
@@ -175,60 +180,53 @@ public class ModificarVehiculo extends HttpServlet {
             }
 
             if (registrado) {
-                dao.conectar().commit();
+                conex.commit();
                 out.println("<script type=\"text/javascript\">");
                 out.println("alert('Vehiculo Modificado');");
                 out.println("location='jsp/Vehiculos/verVehiculo.jsp?idvehiculo="+idvehiculo+"';");
                 out.println("</script>");
             } else {
-                dao.conectar().rollback();
+                conex.rollback();
                 out.println("<script type=\"text/javascript\">");
                 out.println("location='jsp/Vehiculos/verVehiculo.jsp?idvehiculo="+idvehiculo+"';");
                 out.println("</script>");
             }
 
-        } catch (Exception e) {
+        } catch (IOException | NumberFormatException | SQLException | ParseException e) {
+            if (conex != null) {
+                try {
+                    conex.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('Error al modificar el vehiculo');");
+            out.println("location='jsp/Vehiculos/registrarVehiculo.jsp';");
+            out.println("</script>");
             e.printStackTrace();
+        } finally {
+            if (conex != null) {
+                try {
+                    conex.close();
+                } catch (SQLException closeEx) {
+                    closeEx.printStackTrace();
+                }
+            }
+            out.close();
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

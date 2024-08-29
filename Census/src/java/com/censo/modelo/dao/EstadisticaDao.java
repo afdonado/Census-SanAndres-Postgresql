@@ -6,17 +6,19 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class EstadisticaDao extends Conexion {
 
     private ResultSet rst = null;
     private PreparedStatement pst = null;
 
-    public java.util.List ListarCantidadCensosClaveVehiculo() throws SQLException {
+    public List ListarCantidadCensosClaveVehiculo(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT CV.CLV_ID CLV_ID, CV.CLV_DESCRIPCION CLV_DESCRIPCION, COUNT(V.VEH_CLASE) CANTIDAD,\n"
                     + "(SELECT COUNT(C.CEN_ID) FROM CEN_CENSOS C WHERE C.EST_ID=1 ) CANTIDAD_TOTAL \n"
                     + "FROM CEN_CENSOS CC \n"
@@ -29,13 +31,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadCensosClaveVehiculo: " + e);
         } finally {
             try {
@@ -52,11 +54,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadCensosClaveVehiculoSanAndres() throws SQLException {
+    public List ListarCantidadCensosClaveVehiculoSanAndres(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT CV.CLV_ID CLV_ID, CV.CLV_DESCRIPCION CLV_DESCRIPCION, COUNT(V.VEH_CLASE) CANTIDAD,\n"
                     + "(SELECT COUNT(C.CEN_ID) FROM CEN_CENSOS C WHERE C.EST_ID=1 AND C.PUN_ID NOT IN (4)) CANTIDAD_TOTAL \n"
                     + "FROM CEN_CENSOS CC \n"
@@ -69,13 +71,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadCensosClaveVehiculo: " + e);
         } finally {
             try {
@@ -92,11 +94,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadCensosClaveVehiculoProvidencia() throws SQLException {
+    public List ListarCantidadCensosClaveVehiculoProvidencia(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT CV.CLV_ID CLV_ID, CV.CLV_DESCRIPCION CLV_DESCRIPCION, COUNT(V.VEH_CLASE) CANTIDAD,\n"
                     + "(SELECT COUNT(C.CEN_ID) FROM CEN_CENSOS C WHERE C.EST_ID=1 AND C.PUN_ID IN (4)) CANTIDAD_TOTAL \n"
                     + "FROM CEN_CENSOS CC \n"
@@ -109,13 +111,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadCensosClaveVehiculo: " + e);
         } finally {
             try {
@@ -132,11 +134,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadCensosPuntoAtencion() throws SQLException {
+    public List ListarCantidadCensosPuntoAtencion(Connection conex) throws SQLException {
         
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try{
             pst = conex.prepareStatement("SELECT P.PUN_ID PUN_ID, P.PUN_NOMBRE PUN_DESCRIPCION, COUNT(CC.PUN_ID) CANTIDAD,\n"
                     + "(SELECT COUNT(C.PUN_ID) FROM CEN_CENSOS C WHERE C.EST_ID=1 AND C.PUN_ID IN(SELECT CP.PUN_ID FROM CEN_PUNTOS_ATENCION CP )) CANTIDAD_TOTAL \n"
                     + "FROM CEN_CENSOS CC \n"
@@ -148,13 +150,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadCensosPuntoAtencion: " + e);
         } finally {
             try {
@@ -171,11 +173,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadPersonasCensadasGenero() throws SQLException {
+    public List ListarCantidadPersonasCensadasGenero(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT P.PER_GENERO, G.GEN_DESCRIPCION GENERO, COUNT(DISTINCT P.PER_ID) CANTIDAD, \n"
                     + "ROUND(((COUNT(DISTINCT P.PER_ID)/(SELECT COUNT( DISTINCT CP.PER_ID) FROM CEN_PERSONAS CP INNER JOIN CEN_CENSOS CC ON CC.EST_ID=1 AND CC.PER_ID=CP.PER_ID))*100)) PORCENTAJE,\n"
                     + "(SELECT COUNT( DISTINCT CP.PER_ID) FROM CEN_PERSONAS CP WHERE CP.PER_ID IN(SELECT CC.PER_ID FROM CEN_CENSOS CC WHERE CC.EST_ID=1 )) CANTIDAD_TOTAL \n"
@@ -187,13 +189,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadPersonasCensadasGenero: " + e);
         } finally {
             try {
@@ -210,11 +212,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadPersonasCensadasGeneroSanAndres() throws SQLException {
+    public List ListarCantidadPersonasCensadasGeneroSanAndres(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT P.PER_GENERO, G.GEN_DESCRIPCION GENERO, COUNT(DISTINCT P.PER_ID) CANTIDAD, \n"
                     + "ROUND(((COUNT(DISTINCT P.PER_ID)/(SELECT COUNT( DISTINCT CP.PER_ID) FROM CEN_PERSONAS CP INNER JOIN CEN_CENSOS CC ON CC.PUN_ID NOT IN(4) AND CC.EST_ID=1 AND CC.PER_ID=CP.PER_ID))*100)) PORCENTAJE,\n"
                     + "(SELECT COUNT( DISTINCT CP.PER_ID) FROM CEN_PERSONAS CP WHERE CP.PER_ID IN(SELECT CC.PER_ID FROM CEN_CENSOS CC WHERE CC.PUN_ID NOT IN(4) AND CC.EST_ID=1 )) CANTIDAD_TOTAL \n"
@@ -226,13 +228,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadPersonasCensadasGeneroSanAndres: " + e);
         } finally {
             try {
@@ -249,11 +251,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadPersonasCensadasGeneroProvidencia() throws SQLException {
+    public List ListarCantidadPersonasCensadasGeneroProvidencia(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT P.PER_GENERO, G.GEN_DESCRIPCION GENERO, COUNT(DISTINCT P.PER_ID) CANTIDAD, \n"
                     + "ROUND(((COUNT(DISTINCT P.PER_ID)/(SELECT COUNT( DISTINCT CP.PER_ID) FROM CEN_PERSONAS CP INNER JOIN CEN_CENSOS CC ON CC.PUN_ID IN(4) AND CC.EST_ID=1 AND CC.PER_ID=CP.PER_ID))*100)) PORCENTAJE,\n"
                     + "(SELECT COUNT( DISTINCT CP.PER_ID) FROM CEN_PERSONAS CP WHERE CP.PER_ID IN(SELECT CC.PER_ID FROM CEN_CENSOS CC WHERE CC.PUN_ID IN(4) AND CC.EST_ID=1 )) CANTIDAD_TOTAL \n"
@@ -265,13 +267,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadPersonasCensadasGeneroProvidencia: " + e);
         } finally {
             try {
@@ -288,11 +290,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadPersonasCensadasLicencia() throws SQLException {
+    public List ListarCantidadPersonasCensadasLicencia(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT 'CON LICENCIA' DESCRIPCION, \n"
                     + "ROUND(((COUNT(DISTINCT CP.PER_ID)/(SELECT COUNT( DISTINCT CP2.PER_ID) FROM CEN_PERSONAS CP2 INNER JOIN CEN_CENSOS CC2 ON CC2.EST_ID=1 AND CC2.PER_ID=CP2.PER_ID ))*100)) PORCENTAJE, \n"
                     + "COUNT(*) CANTIDAD, (SELECT COUNT(P.PER_ID) FROM CEN_PERSONAS P INNER JOIN CEN_CENSOS C ON C.PER_ID=P.PER_ID AND C.EST_ID=1) CANTIDAD_TOTAL\n"
@@ -310,13 +312,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadPersonasCensadasLicencia: " + e);
         } finally {
             try {
@@ -333,11 +335,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadPersonasCensadasLicenciaSanAndres() throws SQLException {
+    public List ListarCantidadPersonasCensadasLicenciaSanAndres(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT 'CON LICENCIA' DESCRIPCION, \n"
                     + "ROUND(((COUNT(DISTINCT CP.PER_ID)/(SELECT COUNT( DISTINCT CP2.PER_ID) FROM CEN_PERSONAS CP2 INNER JOIN CEN_CENSOS CC2 ON CC2.PUN_ID NOT IN (4) AND CC2.EST_ID=1 AND CC2.PER_ID=CP2.PER_ID ))*100)) PORCENTAJE, \n"
                     + "COUNT(*) CANTIDAD, (SELECT COUNT(P.PER_ID) FROM CEN_PERSONAS P INNER JOIN CEN_CENSOS C ON C.PUN_ID NOT IN (4) AND C.EST_ID=1 AND C.PER_ID=P.PER_ID) CANTIDAD_TOTAL\n"
@@ -355,13 +357,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadPersonasCensadasLicenciaSanAndres: " + e);
         } finally {
             try {
@@ -378,11 +380,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadPersonasCensadasLicenciaProvidencia() throws SQLException {
+    public List ListarCantidadPersonasCensadasLicenciaProvidencia(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT 'CON LICENCIA' DESCRIPCION, \n"
                     + "ROUND(((COUNT(DISTINCT CP.PER_ID)/(SELECT COUNT( DISTINCT CP2.PER_ID) FROM CEN_PERSONAS CP2 INNER JOIN CEN_CENSOS CC2 ON CC2.PUN_ID IN (4) AND CC2.EST_ID=1 AND CC2.PER_ID=CP2.PER_ID ))*100)) PORCENTAJE, \n"
                     + "COUNT(*) CANTIDAD, (SELECT COUNT(P.PER_ID) FROM CEN_PERSONAS P INNER JOIN CEN_CENSOS C ON C.PUN_ID IN (4) AND C.EST_ID=1 AND C.PER_ID=P.PER_ID) CANTIDAD_TOTAL\n"
@@ -400,13 +402,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadPersonasCensadasLicenciaProvidencia: " + e);
         } finally {
             try {
@@ -423,11 +425,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadVehiculosPlaca() throws SQLException {
+    public List ListarCantidadVehiculosPlaca(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT DESCRIPCION, PORCENTAJE, CANTIDAD, (SELECT COUNT(C.VEH_ID) FROM CEN_CENSOS C WHERE C.EST_ID=1) CANTIDAD_TOTAL FROM (\n"
                     + "SELECT 'CON PLACA DE 6 DIGITOS' DESCRIPCION, ROUND((COUNT(V.VEH_ID)/(SELECT COUNT(C.VEH_ID) FROM CEN_CENSOS C WHERE C.EST_ID=1))*100) PORCENTAJE,\n"
                     + "COUNT(V.VEH_ID) CANTIDAD, 0 CANTIDAD_TOTAL \n"
@@ -453,13 +455,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadVehiculosPlaca: " + e);
         } finally {
             try {
@@ -476,11 +478,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadVehiculosPlacaSanAndres() throws SQLException {
+    public List ListarCantidadVehiculosPlacaSanAndres(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT DESCRIPCION, PORCENTAJE, CANTIDAD, (SELECT COUNT(C.VEH_ID) FROM CEN_CENSOS C WHERE C.PUN_ID NOT IN(4) AND C.EST_ID=1) CANTIDAD_TOTAL FROM (\n"
                     + "SELECT 'CON PLACA DE 6 DIGITOS' DESCRIPCION, ROUND((COUNT(V.VEH_ID)/(SELECT COUNT(C.VEH_ID) FROM CEN_CENSOS C WHERE C.PUN_ID NOT IN(4) AND C.EST_ID=1))*100) PORCENTAJE,\n"
                     + "COUNT(V.VEH_ID) CANTIDAD, 0 CANTIDAD_TOTAL \n"
@@ -506,13 +508,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadVehiculosPlacaSanAndres: " + e);
         } finally {
             try {
@@ -529,11 +531,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadVehiculosPlacaProvidencia() throws SQLException {
+    public List ListarCantidadVehiculosPlacaProvidencia(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT DESCRIPCION, PORCENTAJE, CANTIDAD, (SELECT COUNT(C.VEH_ID) FROM CEN_CENSOS C WHERE C.PUN_ID IN(4) AND C.EST_ID=1) CANTIDAD_TOTAL FROM (\n"
                     + "SELECT 'CON PLACA DE 6 DIGITOS' DESCRIPCION, ROUND((COUNT(V.VEH_ID)/(SELECT COUNT(C.VEH_ID) FROM CEN_CENSOS C WHERE C.PUN_ID IN(4) AND C.EST_ID=1))*100) PORCENTAJE,\n"
                     + "COUNT(V.VEH_ID) CANTIDAD, 0 CANTIDAD_TOTAL \n"
@@ -559,13 +561,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadVehiculosPlacaProvidencia: " + e);
         } finally {
             try {
@@ -582,11 +584,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
     
-    public java.util.List ListarCantidadVehiculosSoat() throws SQLException {
+    public List ListarCantidadVehiculosSoat(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT DECODE(V.VEH_SOAT,'S','Si','N','No') DESCRIPCION, COUNT(DISTINCT V.VEH_ID) CANTIDAD, \n"
                     + "(SELECT COUNT( DISTINCT CV.VEH_ID) FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN(SELECT CC.VEH_ID FROM CEN_CENSOS CC WHERE CC.EST_ID=1 )) CANTIDAD_TOTAL \n"
                     + "FROM CEN_VEHICULOS V \n"
@@ -596,13 +598,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadVehiculosSoat: " + e);
         } finally {
             try {
@@ -619,11 +621,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadVehiculosSoatSanAndres() throws SQLException {
+    public List ListarCantidadVehiculosSoatSanAndres(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT DECODE(V.VEH_SOAT,'S','Si','N','No') DESCRIPCION, COUNT(DISTINCT V.VEH_ID) CANTIDAD, \n"
                     + "(SELECT COUNT( DISTINCT CV.VEH_ID) FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN(SELECT CC.VEH_ID FROM CEN_CENSOS CC WHERE CC.PUN_ID NOT IN(4) AND CC.EST_ID=1 )) CANTIDAD_TOTAL \n"
                     + "FROM CEN_VEHICULOS V \n"
@@ -633,13 +635,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadVehiculosSoat: " + e);
         } finally {
             try {
@@ -656,11 +658,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadVehiculosSoatProvidencia() throws SQLException {
+    public List ListarCantidadVehiculosSoatProvidencia(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT DECODE(V.VEH_SOAT,'S','Si','N','No') DESCRIPCION, COUNT(DISTINCT V.VEH_ID) CANTIDAD, \n"
                     + "(SELECT COUNT( DISTINCT CV.VEH_ID) FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN(SELECT CC.VEH_ID FROM CEN_CENSOS CC WHERE CC.PUN_ID IN(4) AND CC.EST_ID=1 )) CANTIDAD_TOTAL \n"
                     + "FROM CEN_VEHICULOS V \n"
@@ -670,13 +672,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadVehiculosSoat: " + e);
         } finally {
             try {
@@ -694,11 +696,11 @@ public class EstadisticaDao extends Conexion {
     }
     
     
-    public java.util.List ListarCantidadVehiculosTecno() throws SQLException {
+    public List ListarCantidadVehiculosTecno(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT DECODE(V.VEH_TECNOMEC,'S','Si','N','No') DESCRIPCION, COUNT(DISTINCT V.VEH_ID) CANTIDAD, \n"
                     + "(SELECT COUNT( DISTINCT CV.VEH_ID) FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN(SELECT CC.VEH_ID FROM CEN_CENSOS CC WHERE CC.EST_ID=1 )) CANTIDAD_TOTAL \n"
                     + "FROM CEN_VEHICULOS V \n"
@@ -708,13 +710,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadVehiculosTecno: " + e);
         } finally {
             try {
@@ -731,11 +733,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadVehiculosTecnoSanAndres() throws SQLException {
+    public List ListarCantidadVehiculosTecnoSanAndres(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT DECODE(V.VEH_TECNOMEC,'S','Si','N','No') DESCRIPCION, COUNT(DISTINCT V.VEH_ID) CANTIDAD, \n"
                     + "(SELECT COUNT( DISTINCT CV.VEH_ID) FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN(SELECT CC.VEH_ID FROM CEN_CENSOS CC WHERE CC.PUN_ID NOT IN(4) AND CC.EST_ID=1 )) CANTIDAD_TOTAL \n"
                     + "FROM CEN_VEHICULOS V \n"
@@ -745,13 +747,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadVehiculosTecnoSanAndres: " + e);
         } finally {
             try {
@@ -768,11 +770,11 @@ public class EstadisticaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCantidadVehiculosTecnoProvidencia() throws SQLException {
+    public List ListarCantidadVehiculosTecnoProvidencia(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT DECODE(V.VEH_TECNOMEC,'S','Si','N','No') DESCRIPCION, COUNT(DISTINCT V.VEH_ID) CANTIDAD, \n"
                     + "(SELECT COUNT( DISTINCT CV.VEH_ID) FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN(SELECT CC.VEH_ID FROM CEN_CENSOS CC WHERE CC.PUN_ID IN(4) AND CC.EST_ID=1 )) CANTIDAD_TOTAL \n"
                     + "FROM CEN_VEHICULOS V \n"
@@ -782,13 +784,13 @@ public class EstadisticaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCantidadVehiculosTecnoProvidencia: " + e);
         } finally {
             try {

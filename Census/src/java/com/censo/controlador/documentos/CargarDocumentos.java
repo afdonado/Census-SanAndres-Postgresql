@@ -6,8 +6,11 @@ import com.censo.modelo.persistencia.CenUsuario;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,16 +19,19 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+@WebServlet(name = "CargarDocumentos", urlPatterns = "/cargarDocumentos")
 public class CargarDocumentos extends HttpServlet {
 
     protected boolean processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
+        Connection conex = null;
+
         try {
-            DocumentoDigitalizadoDao dao = new DocumentoDigitalizadoDao();
-            CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
+
             DiskFileItemFactory factory = new DiskFileItemFactory();
             ServletFileUpload sfu = new ServletFileUpload(factory);
 
@@ -33,13 +39,15 @@ public class CargarDocumentos extends HttpServlet {
                 return false;
             }
 
-            long idcenso = 0;
-            String numerocenso = "";
-            String ruta = "";
-
             if (request.getParameter("idcenso") != null && request.getParameter("numero") != null) {
-                idcenso = Long.parseLong(request.getParameter("idcenso"));
-                numerocenso = request.getParameter("numero");
+
+                DocumentoDigitalizadoDao documentoDigitalizadoDao = new DocumentoDigitalizadoDao();
+                conex = documentoDigitalizadoDao.conectar();
+
+                CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
+
+                long idcenso = Long.parseLong(request.getParameter("idcenso"));
+                String numerocenso = request.getParameter("numero");
                 List items = sfu.parseRequest(request);
 
                 int cant = 0;
@@ -62,7 +70,7 @@ public class CargarDocumentos extends HttpServlet {
                         }
 
                         String directorio = "C:/DocumentosDigitalizados/Censos/" + numerocenso;
-                        ruta = "C:/DocumentosDigitalizados/Censos/" + numerocenso + "/" + file.getName();
+                        String ruta = "C:/DocumentosDigitalizados/Censos/" + numerocenso + "/" + file.getName();
 
                         File mkdir = new File(directorio);
                         if (!mkdir.exists()) {
@@ -73,7 +81,7 @@ public class CargarDocumentos extends HttpServlet {
                         if (!saveTo.exists()) {
                             file.write(saveTo);
 
-                            dao.conectar().setAutoCommit(false);
+                            conex.setAutoCommit(false);
 
                             CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
                             cendocumentosdigitalizado.setNombre(file.getName());
@@ -82,10 +90,10 @@ public class CargarDocumentos extends HttpServlet {
                             cendocumentosdigitalizado.setReferencia_id(idcenso);
                             cendocumentosdigitalizado.setObservacion("Imagen cargada desde cargar documentos");
                             cendocumentosdigitalizado.setUsu_id(cenusuario.getId());
-                            dao.adicionarDocumentoDigitalizado(cendocumentosdigitalizado);
-                            
-                            dao.conectar().commit();
-                            
+                            documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizado);
+
+                            conex.commit();
+
                             out.println("<script type=\"text/javascript\">");
                             out.println("alert('Documentos Cargados Correctamente');");
                             out.println("location='jsp/Documentos/ListarDocumentos.jsp?idcenso=" + idcenso + "';");
@@ -106,53 +114,43 @@ public class CargarDocumentos extends HttpServlet {
             } else {
                 return false;
             }
-        } catch (Exception ex) {
-            System.out.println("Error --> " + ex.getMessage());
+        } catch (Exception e) {
+            if (conex != null) {
+                try {
+                    conex.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
             out.println("<script type=\"text/javascript\">");
             out.println("alert('No se cargaron los documentos seleccionados');");
             out.println("location='jsp/Documentos/CargarDocumentos.jsp';");
             out.println("</script>");
+            e.printStackTrace();
+            System.out.println("Error Cargar Documentos --> " + e.getMessage());
+        } finally {
+            if (conex != null) {
+                try {
+                    conex.close();
+                } catch (SQLException closeEx) {
+                    closeEx.printStackTrace();
+                }
+            }
+            out.close();
         }
         return false;
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

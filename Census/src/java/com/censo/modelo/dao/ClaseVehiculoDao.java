@@ -5,24 +5,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ClaseVehiculoDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public java.util.List ListarClasesVehiculo() throws SQLException {
+    public List ListarClasesVehiculo(Connection conex) throws SQLException {
 
-        java.util.List listaClaseVehiculo = new java.util.LinkedList();
+        List listaClaseVehiculo = new LinkedList();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_CLASES_VEHICULO WHERE EST_ID = 1 ORDER BY CLV_ID ");
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 listaClaseVehiculo.add(CenClaseVehiculo.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarClasesVehiculo: " + e);
         } finally {
             try {
@@ -39,9 +41,9 @@ public class ClaseVehiculoDao extends Conexion {
         return listaClaseVehiculo;
     }
 
-    public CenClaseVehiculo ConsultarClaseVehiculoById(int id) throws SQLException {
+    public CenClaseVehiculo ConsultarClaseVehiculoById(Connection conex, int id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_CLASES_VEHICULO WHERE EST_ID = 1 AND CLV_ID = ? ORDER BY CLV_ID ");
             pst.setInt(1, id);
             rst = pst.executeQuery();
@@ -49,7 +51,7 @@ public class ClaseVehiculoDao extends Conexion {
             while (rst.next()) {
                 return CenClaseVehiculo.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarClaseVehiculoById: " + e);
         } finally {
             try {

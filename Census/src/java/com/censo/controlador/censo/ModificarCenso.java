@@ -4,27 +4,33 @@ import com.censo.modelo.dao.CensoDao;
 import com.censo.modelo.persistencia.CenCenso;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.text.ParseException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@WebServlet(name = "ModificarCenso", urlPatterns = "/modificarCenso")
 public class ModificarCenso extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-
+        
+        Connection conex = null;
+        
         try {
-            CensoDao dao = new CensoDao();
+            CensoDao censoDao = new CensoDao();
+            conex = censoDao.conectar();
+            conex.setAutoCommit(false);
 
-            dao.conectar().setAutoCommit(false);
-
-            CenCenso cencenso = new CenCenso();
-
-            boolean sw = false;
+            boolean sw;
 
             //captura de datos del formulario
             Date fechaActual = new java.sql.Date(new java.util.Date().getTime());
@@ -37,16 +43,16 @@ public class ModificarCenso extends HttpServlet {
                 numero = prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero;
             }
 
-            cencenso = dao.ConsultarCensoById(idcenso);
+            CenCenso cencenso = censoDao.ConsultarCensoById(conex, idcenso);
             if (cencenso != null) {
                 if (cencenso.getNumero().equals(numero)) {
                     sw = true;
                 } else {
-                    cencenso = dao.ConsultarCensoByNumero(numero);
+                    cencenso = censoDao.ConsultarCensoByNumero(conex, numero);
                     if (cencenso != null) {
                         sw = false;
                     } else {
-                        cencenso = dao.ConsultarCensoById(idcenso);
+                        cencenso = censoDao.ConsultarCensoById(conex, idcenso);
                         sw = true;
                     }
                 }
@@ -69,70 +75,63 @@ public class ModificarCenso extends HttpServlet {
                     cencenso.setNumero(numero);
                     cencenso.setObservaciones(observaciones);
 
-                    dao.modificarCenso(cencenso);
-                    dao.conectar().commit();
+                    censoDao.modificarCenso(conex, cencenso);
+                    conex.commit();
                     out.println("<script type=\"text/javascript\">");
                     out.println("alert('Censo Modificado');");
                     out.println("location='jsp/Censo/verCenso.jsp?idcenso=" + idcenso + "';");
                     out.println("</script>");
 
                 } else {
-                    dao.conectar().rollback();
+                    conex.rollback();
                     out.println("<script type=\"text/javascript\">");
                     out.println("alert('Censo no fue Modificado');");
                     out.println("location='jsp/Censo/verCenso.jsp?idcenso=" + idcenso + "';");
                     out.println("</script>");
                 }
             } else {
-                dao.conectar().rollback();
+                conex.rollback();
                 out.println("<script type=\"text/javascript\">");
                 out.println("alert('Censo no se encuentra registrado');");
                 out.println("location='jsp/Censo/modificarCenso.jsp';");
                 out.println("</script>");
             }
 
-        } catch (Exception e) {
+        } catch (SQLException | ParseException e) {
+            if (conex != null) {
+                try {
+                    conex.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('Error al modificar el censo');");
+            out.println("location='jsp/Censo/registrarCenso.jsp';");
+            out.println("</script>");
             e.printStackTrace();
+        } finally {
+            if (conex != null) {
+                try {
+                    conex.close();
+                } catch (SQLException closeEx) {
+                    closeEx.printStackTrace();
+                }
+            }
+            out.close();
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

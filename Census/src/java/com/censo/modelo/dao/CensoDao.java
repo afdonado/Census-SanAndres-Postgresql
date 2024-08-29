@@ -18,9 +18,9 @@ public class CensoDao extends Conexion {
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public long adicionarCenso(CenCenso cencenso) {
+    public long adicionarCenso(Connection conex, CenCenso cencenso) {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("INSERT INTO CEN_CENSOS (CEN_FECHA,CEN_HORA,PUN_ID,VEH_ID,PER_ID,TPER_ID,USU_ID,EST_ID,CEN_FECHAPROCESO,CEN_NUMERO,CEN_OBSERVACIONES) VALUES (?,?,?,?,?,?,?,?,SYSDATE,?,?)", new String[]{"CEN_ID"});
             pst.setDate(1, cencenso.getFecha());
             pst.setString(2, cencenso.getHora());
@@ -39,7 +39,7 @@ public class CensoDao extends Conexion {
                     return rst.getLong(1);
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.err.println("Error en adicionarCenso: " + e);
         } finally {
             try {
@@ -56,9 +56,9 @@ public class CensoDao extends Conexion {
         return 0;
     }
 
-    public CenCenso ConsultarCensoByNumero(String numero) throws SQLException {
+    public CenCenso ConsultarCensoByNumero(Connection conex, String numero) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_CENSOS WHERE EST_ID = 1 AND CEN_NUMERO = ? ");
             pst.setString(1, numero);
             rst = pst.executeQuery();
@@ -66,7 +66,7 @@ public class CensoDao extends Conexion {
             while (rst.next()) {
                 return CenCenso.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarCensoByNumero: " + e);
         } finally {
             try {
@@ -83,16 +83,16 @@ public class CensoDao extends Conexion {
         return null;
     }
 
-    public CenCenso ConsultarCensoById(long id) throws SQLException {
+    public CenCenso ConsultarCensoById(Connection conex, long id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_CENSOS WHERE CEN_ID = ? ");
             pst.setLong(1, id);
             rst = pst.executeQuery();
             while (rst.next()) {
                 return CenCenso.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarCensoById: " + e);
         } finally {
             try {
@@ -109,9 +109,9 @@ public class CensoDao extends Conexion {
         return null;
     }
 
-    public CenCenso ConsultarCensoByIdVehiculo(long idvehiculo) throws SQLException {
+    public CenCenso ConsultarCensoByIdVehiculo(Connection conex, long idvehiculo) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_CENSOS WHERE EST_ID = 1 AND VEH_ID = ? ");
             pst.setLong(1, idvehiculo);
             rst = pst.executeQuery();
@@ -119,7 +119,7 @@ public class CensoDao extends Conexion {
             while (rst.next()) {
                 return CenCenso.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarCensoByIdVehiculo: " + e);
         } finally {
             try {
@@ -136,11 +136,11 @@ public class CensoDao extends Conexion {
         return null;
     }
 
-    public List ListarCensos() throws SQLException {
+    public List ListarCensos(Connection conex) throws SQLException {
         
-        List<HashMap> listaDatos = new LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT CEN_ID,NUMERO,TO_CHAR(FECHA,'dd/MM/yyyy') FECHA,HORA,EST_ID, ESTADO,"
                     + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PUN_ID,PUNTO_ATENCION,"
                     + "VEH_PLACA,VEH_MOTOR,VEH_CHASIS,VEH_SERIE,PER_ID,TDOC_ID,TIPO_DOC_CORTO,TIPO_DOC,"
@@ -157,7 +157,7 @@ public class CensoDao extends Conexion {
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCensos: " + e);
         } finally {
             try {
@@ -174,11 +174,11 @@ public class CensoDao extends Conexion {
         return listaDatos;
     }
 
-    public List ListarCensosByNumero(String numero) throws SQLException {
+    public List ListarCensosByNumero(Connection conex, String numero) throws SQLException {
 
-        List<HashMap> listaDatos = new LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT CEN_ID,NUMERO,TO_CHAR(FECHA,'dd/MM/yyyy') FECHA,HORA,EST_ID, ESTADO,"
                     + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PUN_ID,PUNTO_ATENCION,"
                     + "VEH_PLACA,VEH_MOTOR,VEH_CHASIS,VEH_SERIE,PER_ID,TDOC_ID,TIPO_DOC_CORTO,TIPO_DOC,"
@@ -190,13 +190,13 @@ public class CensoDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCensosByNumero: " + e);
         } finally {
             try {
@@ -213,11 +213,11 @@ public class CensoDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCensosByReferenciaVehiculo(int tipoRef, String valorReferencia) throws SQLException {
+    public List ListarCensosByReferenciaVehiculo(Connection conex, int tipoRef, String valorReferencia) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             if (tipoRef == 1) {
                 pst = conex.prepareStatement("SELECT CEN_ID,NUMERO,TO_CHAR(FECHA,'dd/MM/yyyy') FECHA,HORA,EST_ID, ESTADO,"
                         + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PUN_ID,PUNTO_ATENCION,"
@@ -278,11 +278,11 @@ public class CensoDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCensosByPersona(int tipodoc, String documento) throws SQLException {
+    public List ListarCensosByPersona(Connection conex, int tipodoc, String documento) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT CEN_ID,NUMERO,TO_CHAR(FECHA,'dd/MM/yyyy') FECHA,HORA,EST_ID, ESTADO,"
                     + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PUN_ID,PUNTO_ATENCION,"
                     + "VEH_PLACA,VEH_MOTOR,VEH_CHASIS,VEH_SERIE,PER_ID,TDOC_ID,TIPO_DOC_CORTO,TIPO_DOC,"
@@ -295,13 +295,13 @@ public class CensoDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCensosByPersona: " + e);
         } finally {
             try {
@@ -318,11 +318,11 @@ public class CensoDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCensosByFecha(Date fechaini, Date fechafin, int punto) throws SQLException {
+    public List ListarCensosByFecha(Connection conex, Date fechaini, Date fechafin, int punto) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT CEN_ID,NUMERO,TO_CHAR(FECHA,'dd/MM/yyyy') FECHA,HORA,EST_ID, ESTADO,"
                     + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PUN_ID,PUNTO_ATENCION,"
                     + "VEH_PLACA,VEH_MOTOR,VEH_CHASIS,VEH_SERIE,PER_ID,TDOC_ID,TIPO_DOC_CORTO,TIPO_DOC,"
@@ -337,13 +337,13 @@ public class CensoDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCensosByFecha: " + e);
         } finally {
             try {
@@ -360,11 +360,11 @@ public class CensoDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarCensosByFechaRegistro(Date fechaini, Date fechafin, int punto) throws SQLException {
+    public List ListarCensosByFechaRegistro(Connection conex, Date fechaini, Date fechafin, int punto) throws SQLException {
         
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT CEN_ID,NUMERO,TO_CHAR(FECHA,'dd/MM/yyyy') FECHA,HORA,EST_ID, ESTADO,"
                     + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PUN_ID,PUNTO_ATENCION,"
                     + "VEH_PLACA,VEH_MOTOR,VEH_CHASIS,VEH_SERIE,PER_ID,TDOC_ID,TIPO_DOC_CORTO,TIPO_DOC,"
@@ -379,13 +379,13 @@ public class CensoDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCensosByFechaRegistro: " + e);
         } finally {
             try {
@@ -402,9 +402,9 @@ public class CensoDao extends Conexion {
         return listaDatos;
     }
 
-    public Datosresponse ConsultarCensoWSByNumero(String numero) throws SQLException {
+    public Datosresponse ConsultarCensoWSByNumero(Connection conex, String numero) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT to_char(CC.CEN_FECHA,'dd/MM/yyyy') FECHA_CENSO,CV.VEH_PLACA PLACA_VEHICULO,CTP.TPER_DESCRIPCION TIPO_PERSONA,"
                     + "CTD.TDOC_DESCRIPCION_CORTA TIPO_DOC, CP.PER_DOCUMENTO DOCUMENTO, CP.PER_NOMBRE1||' '||CP.PER_NOMBRE2||' '||CP.PER_APELLIDO1||' '||CP.PER_APELLIDO2 NOMBRE "
                     + "FROM CEN_CENSOS CC "
@@ -419,7 +419,7 @@ public class CensoDao extends Conexion {
             while (rst.next()) {
                 return Datosresponse.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarCensoWSByNumero: " + e);
         } finally {
             try {
@@ -436,9 +436,9 @@ public class CensoDao extends Conexion {
         return null;
     }
 
-    public void modificarCenso(CenCenso cencenso) throws SQLException, IOException {
+    public void modificarCenso(Connection conex, CenCenso cencenso) throws SQLException, IOException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("UPDATE CEN_CENSOS SET CEN_FECHA = ?,PUN_ID = ?,VEH_ID = ?,PER_ID = ?, TPER_ID = ?,CEN_NUMERO = ?,CEN_OBSERVACIONES = ? WHERE CEN_ID = ?");
             pst.setDate(1, cencenso.getFecha());
             pst.setLong(2, cencenso.getPun_id());

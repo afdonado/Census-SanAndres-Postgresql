@@ -6,27 +6,36 @@ import com.censo.modelo.persistencia.CenUsuario;
 import com.censo.modelo.persistencia.CenVerificacion;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@WebServlet(name = "RegistrarVerificacion", urlPatterns = "/registrarVerificacion")
 public class RegistrarVerificacion extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
 
+        response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
+        Connection conex = null;
+
         try {
-            VerificacionDao dao = new VerificacionDao();
+
+            VerificacionDao verificacionDao = new VerificacionDao();
+            conex = verificacionDao.conectar();
+
             CenUsuario cenusuarioSesion = (CenUsuario) request.getSession().getAttribute("usuario");
 
             CenVerificacion cenverificacion = new CenVerificacion();
             CenHistorialVerificacion cenhistoriaverificacion = new CenHistorialVerificacion();
 
-            dao.conectar().setAutoCommit(false);
+            conex.setAutoCommit(false);
 
             String runt = "N";
             String documentos = "N";
@@ -55,71 +64,64 @@ public class RegistrarVerificacion extends HttpServlet {
             cenverificacion.setObservaciones(observaciones);
             cenverificacion.setEstado(estado);
             cenverificacion.setUsu_id(cenusuarioSesion.getId());
-            long idverificacion = dao.adicionarVerificacion(cenverificacion);
-            
+            long idverificacion = verificacionDao.adicionarVerificacion(conex, cenverificacion);
+
             cenhistoriaverificacion.setVer_id(idverificacion);
             cenhistoriaverificacion.setEstado(estado);
             cenhistoriaverificacion.setUsu_id(cenusuarioSesion.getId());
             cenhistoriaverificacion.setObservaciones(observaciones);
-            dao.adicionarHistorialVerificacion(cenhistoriaverificacion);
+            verificacionDao.adicionarHistorialVerificacion(conex, cenhistoriaverificacion);
 
             if (idverificacion > 0) {
-                dao.conectar().commit();
+                conex.commit();
 
                 out.println("<script type=\"text/javascript\">");
                 out.println("alert('Verificacion Registrada');");
                 out.println("parent.$('#registrarverificacion').modal('hide');");
                 out.println("</script>");
             } else {
-                dao.conectar().rollback();
+                conex.rollback();
                 out.println("<script type=\"text/javascript\">");
                 out.println("alert('Verificacion no Registrada');");
                 out.println("parent.$('#registrarverificacion').modal('hide');");
                 out.println("</script>");
             }
 
-        } catch (Exception e) {
+        } catch (NumberFormatException | SQLException e) {
+            if (conex != null) {
+                try {
+                    conex.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('Error al registrar la verificacion');");
+            out.println("location='jsp/Verificaciones/registrarVerificacion.jsp';");
+            out.println("</script>");
             e.printStackTrace();
+        } finally {
+            if (conex != null) {
+                try {
+                    conex.close();
+                } catch (SQLException closeEx) {
+                    closeEx.printStackTrace();
+                }
+            }
+            out.close();
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

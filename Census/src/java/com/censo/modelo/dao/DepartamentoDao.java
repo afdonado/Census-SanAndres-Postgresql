@@ -5,24 +5,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class DepartamentoDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public java.util.List ListarDepartamentos() throws SQLException {
+    public List ListarDepartamentos(Connection conex) throws SQLException {
 
-        java.util.List listaDepartamento = new java.util.LinkedList();
+        List listaDepartamento = new LinkedList();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_DEPARTAMENTOS ORDER BY DEPT_ID ");
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 listaDepartamento.add(CenDepartamento.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarDepartamentos: " + e);
         } finally {
             try {
@@ -39,9 +41,9 @@ public class DepartamentoDao extends Conexion {
         return listaDepartamento;
     }
 
-    public CenDepartamento ConsultarDepartamentoById(long id) throws SQLException {
+    public CenDepartamento ConsultarDepartamentoById(Connection conex, long id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_DEPARTAMENTOS WHERE DEPT_ID = ? ");
             pst.setLong(1, id);
             rst = pst.executeQuery();
@@ -49,7 +51,7 @@ public class DepartamentoDao extends Conexion {
             while (rst.next()) {
                 return CenDepartamento.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en consultarDepartamentoById: " + e);
         } finally {
             try {

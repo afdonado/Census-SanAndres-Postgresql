@@ -5,24 +5,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ParametroDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public java.util.List ListarParametros() throws SQLException {
+    public List ListarParametros(Connection conex) throws SQLException {
 
-        java.util.List listaParametro = new java.util.LinkedList();
+        List listaParametro = new LinkedList();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_PARAMETROS WHERE EST_ID = 1 ORDER BY PAR_ID ");
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 listaParametro.add(CenParametro.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarParametros: " + e);
         } finally {
             try {
@@ -39,9 +41,9 @@ public class ParametroDao extends Conexion {
         return listaParametro;
     }
 
-    public CenParametro ConsultarParametroById(int id) throws SQLException {
+    public CenParametro ConsultarParametroById(Connection conex, int id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_PARAMETROS WHERE EST_ID = 1 AND PAR_ID = ? ORDER BY PAR_ID ");
             pst.setInt(1, id);
             rst = pst.executeQuery();
@@ -49,7 +51,7 @@ public class ParametroDao extends Conexion {
             while (rst.next()) {
                 return CenParametro.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarParametroById: " + e);
         } finally {
             try {

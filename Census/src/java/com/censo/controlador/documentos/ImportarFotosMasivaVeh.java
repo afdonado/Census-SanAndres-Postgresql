@@ -11,36 +11,44 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@WebServlet(name = "ImportarFotosMasivaVeh", urlPatterns = "/importarFotosMasivaVeh")
 public class ImportarFotosMasivaVeh extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
+        Connection conex = null;
+
         try {
-            DocumentoDigitalizadoDao dao = new DocumentoDigitalizadoDao();
+            DocumentoDigitalizadoDao documentoDigitalizadoDao = new DocumentoDigitalizadoDao();
+            conex = documentoDigitalizadoDao.conectar();
+            
             CensoDao censoDao = new CensoDao();
 
             long iddocumento = 0;
             long idcenso = 0;
-            String numerocenso = "";
 
-            List<HashMap> listaCensos = censoDao.ListarCensos();
+            List<HashMap> listaCensos = censoDao.ListarCensos(conex);
 
-            if (listaCensos.size() > 0) {
-                dao.conectar().setAutoCommit(false);
+            if (!listaCensos.isEmpty()) {
+                conex.setAutoCommit(false);
                 for (HashMap hash : listaCensos) {
                     try {
                         idcenso = Long.parseLong(hash.get("CEN_ID").toString());
-                        numerocenso = hash.get("NUMERO").toString().trim();
+                        String numerocenso = hash.get("NUMERO").toString().trim();
 
                         CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
 
@@ -52,14 +60,15 @@ public class ImportarFotosMasivaVeh extends HttpServlet {
                             mkdir.mkdirs();
                         }
 
-                        CenDocumentosDigitalizado cendocumentosdigitalizadoVeh = dao.ConsultarDocumentoDigitalizadoByIdCensoNombre(idcenso, nombreimagenVeh);
+                        CenDocumentosDigitalizado cendocumentosdigitalizadoVeh = 
+                                documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoByIdCensoNombre(conex, idcenso, nombreimagenVeh);
                         if (cendocumentosdigitalizadoVeh == null) {
                             String rutaRemotaVeh = "http://www.lagit.com.co/censo_sap/censos/" + nombreimagenVeh;
                             URL intlLogoURLVeh = new URL(rutaRemotaVeh);
 
                             if (intlLogoURLVeh != null) {
                                 String imagenveh = directorio + nombreimagenVeh;
-                                dao.writeTo(intlLogoURLVeh.openStream(), new FileOutputStream(new File(imagenveh)));
+                                documentoDigitalizadoDao.writeTo(intlLogoURLVeh.openStream(), new FileOutputStream(new File(imagenveh)));
 
                                 CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
                                 cendocumentosdigitalizado.setNombre(nombreimagenVeh);
@@ -68,7 +77,7 @@ public class ImportarFotosMasivaVeh extends HttpServlet {
                                 cendocumentosdigitalizado.setReferencia_id(idcenso);
                                 cendocumentosdigitalizado.setObservacion("Imagen cargada desde servidor remoto masivamente");
                                 cendocumentosdigitalizado.setUsu_id(cenusuario.getId());
-                                iddocumento = dao.adicionarDocumentoDigitalizado(cendocumentosdigitalizado);
+                                iddocumento = documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizado);
                                 
                                 System.out.println("Imagen cargada censo no. "+ numerocenso);
                             }
@@ -84,7 +93,7 @@ public class ImportarFotosMasivaVeh extends HttpServlet {
                     }
 
                 }
-                dao.conectar().commit();
+                conex.commit();
 
                 if (iddocumento > 0) {
                     out.println("<script type=\"text/javascript\">");
@@ -100,52 +109,41 @@ public class ImportarFotosMasivaVeh extends HttpServlet {
 
             }
 
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
+            if (conex != null) {
+                try {
+                    conex.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
             System.out.println("Error --> " + ex.getMessage());
             out.println("<script type=\"text/javascript\">");
             out.println("alert('No se cargaron los documentos seleccionados');");
             out.println("location='jsp/Documentos/CargarDocumentos.jsp';");
             out.println("</script>");
+        } finally {
+            if (conex != null) {
+                try {
+                    conex.close();
+                } catch (SQLException closeEx) {
+                    closeEx.printStackTrace();
+                }
+            }
+            out.close();
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

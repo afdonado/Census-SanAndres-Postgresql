@@ -9,15 +9,17 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class VehiculoDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public long adicionarVehiculo(CenVehiculo cenvehiculo) {
+    public long adicionarVehiculo(Connection conex, CenVehiculo cenvehiculo) {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("INSERT INTO CEN_VEHICULOS (VEH_PLACA,VEH_CHASIS,VEH_SERIE,VEH_MOTOR,VEH_CLASE,VEH_SERVICIO,"
                     + "COL_ID,VEH_MODELO,LIN_ID,VEH_LICTRANSITO,VEH_RUNT,VEH_SOAT,VEH_FECVENSOAT,VEH_TECNOMEC,VEH_FECVENTECNO,PAI_ID,MUN_ID,"
                     + "VEH_CIUDADMATRICULA,VEH_TIPODOCUMENTOIMP,VEH_DOCUMENTOIMP,VEH_FECHAIMP,PAI_ID_ORIGEN,VEH_OBSERVACIONES,VEH_TIPOUSO,VEH_TRANSFORMADO,"
@@ -57,7 +59,7 @@ public class VehiculoDao extends Conexion {
                     return rst.getLong(1);
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.err.println("Error en adicionarVehiculo: " + e);
         } finally {
             try {
@@ -74,9 +76,9 @@ public class VehiculoDao extends Conexion {
         return 0;
     }
 
-    public boolean modificarVehiculo(CenVehiculo cenvehiculo) throws SQLException, IOException {
+    public boolean modificarVehiculo(Connection conex, CenVehiculo cenvehiculo) throws SQLException, IOException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("UPDATE CEN_VEHICULOS SET VEH_PLACA = ?,VEH_CHASIS = ?,VEH_SERIE = ?,"
                     + "VEH_MOTOR = ?,VEH_CLASE = ?,VEH_SERVICIO = ?,COL_ID = ?,VEH_MODELO = ?,LIN_ID = ?, "
                     + "VEH_LICTRANSITO = ?,VEH_RUNT = ?,VEH_SOAT = ?,VEH_FECVENSOAT = ?,VEH_TECNOMEC = ?,"
@@ -133,9 +135,9 @@ public class VehiculoDao extends Conexion {
         return false;
     }
 
-    public CenVehiculo ConsultarVehiculoByReferencia(int tipoRef, String valorReferencia) throws SQLException {
+    public CenVehiculo ConsultarVehiculoByReferencia(Connection conex, int tipoRef, String valorReferencia) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             if (tipoRef == 1) {
                 pst = conex.prepareStatement("SELECT * FROM CEN_VEHICULOS WHERE VEH_PLACA = ? ");
             }
@@ -154,7 +156,7 @@ public class VehiculoDao extends Conexion {
             while (rst.next()) {
                 return CenVehiculo.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarVehiculoByReferencia: " + e);
         } finally {
             try {
@@ -171,9 +173,9 @@ public class VehiculoDao extends Conexion {
         return null;
     }
 
-    public CenVehiculo ConsultarVehiculoById(long id) throws SQLException {
+    public CenVehiculo ConsultarVehiculoById(Connection conex, long id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_VEHICULOS WHERE VEH_ID = ? ");
             pst.setLong(1, id);
             rst = pst.executeQuery();
@@ -181,7 +183,7 @@ public class VehiculoDao extends Conexion {
             while (rst.next()) {
                 return CenVehiculo.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarVehiculoById: " + e);
         } finally {
             try {
@@ -198,11 +200,11 @@ public class VehiculoDao extends Conexion {
         return null;
     }
 
-    public java.util.List ListarVehiculosByReferencia(int tipoRef, String valorReferencia) throws SQLException {
+    public List ListarVehiculosByReferencia(Connection conex, int tipoRef, String valorReferencia) throws SQLException {
 
-        java.util.List<HashMap> listaDatosVehiculo = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatosVehiculo = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             if (tipoRef == 1) {
                 pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS WHERE VEH_PLACA = ? ");
             }
@@ -220,13 +222,13 @@ public class VehiculoDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatosVehiculo.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarVehiculosByReferencia: " + e);
         } finally {
             try {
@@ -243,11 +245,11 @@ public class VehiculoDao extends Conexion {
         return listaDatosVehiculo;
     }
 
-    public java.util.List ListarVehiculosByPersona(int tipodoc, String documento) throws SQLException {
+    public List ListarVehiculosByPersona(Connection conex, int tipodoc, String documento) throws SQLException {
 
-        java.util.List<HashMap> listaDatosVehiculo = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatosVehiculo = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT VP.VEH_ID, VP.VEH_PLACA, VP.VEH_MOTOR, VP.VEH_CHASIS, VP.VEH_SERIE,VP.MARCA,VP.LINEA "
                     + "FROM VW_VEHICULOS_PERSONAS VP WHERE VP.PER_TIPODOC = ? AND VP.PER_DOCUMENTO=? "
                     + "GROUP BY VP.VEH_ID, VP.VEH_PLACA, VP.VEH_MOTOR, VP.VEH_CHASIS, VP.VEH_SERIE,VP.MARCA,VP.LINEA ");
@@ -257,13 +259,13 @@ public class VehiculoDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatosVehiculo.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarVehiculosByPersona: " + e);
         } finally {
             try {
@@ -280,24 +282,24 @@ public class VehiculoDao extends Conexion {
         return listaDatosVehiculo;
     }
 
-    public java.util.List ListarVehiculosById(long id) throws SQLException {
+    public List ListarVehiculosById(Connection conex, long id) throws SQLException {
 
-        java.util.List<HashMap> listaDatosVehiculo = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatosVehiculo = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS WHERE VEH_ID = ? ");
             pst.setLong(1, id);
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatosVehiculo.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarVehiculosById: " + e);
         } finally {
             try {
@@ -314,17 +316,17 @@ public class VehiculoDao extends Conexion {
         return listaDatosVehiculo;
     }
 
-    public java.util.List ListarVehiculos() throws SQLException {
+    public List ListarVehiculos(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatosVehiculo = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatosVehiculo = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS ");
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
@@ -347,11 +349,11 @@ public class VehiculoDao extends Conexion {
         return listaDatosVehiculo;
     }
 
-    public java.util.List ListarVehiculosByFechaRegistro(Date fechaini, Date fechafin) throws SQLException {
+    public List ListarVehiculosByFechaRegistro(Connection conex, Date fechaini, Date fechafin) throws SQLException {
 
-        java.util.List<HashMap> listaDatosVehiculo = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatosVehiculo = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS WHERE to_date(to_char(FECHA_PROCESO,'dd/MM/yyyy')) BETWEEN ? AND ? ORDER BY FECHA_PROCESO ");
             pst.setDate(1, fechaini);
             pst.setDate(2, fechafin);
@@ -359,13 +361,13 @@ public class VehiculoDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatosVehiculo.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarVehiculosByFechaRegistro: " + e);
         } finally {
             try {

@@ -13,18 +13,18 @@ public class CategoriaLicenciaDao extends Conexion{
     private ResultSet rst = null;
     private PreparedStatement pst = null;
 
-    public List ListarCategoriasLicencia() throws SQLException {
+    public List ListarCategoriasLicencia(Connection conex) throws SQLException {
         
         List listaCategoriasLicencia = new LinkedList();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_CATEGORIAS_LICENCIA WHERE EST_ID = 1 ORDER BY CTL_ID ");
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 listaCategoriasLicencia.add(CenCategoriaLicencia.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarCategoriasLicencia: " + e);
         } finally {
             try {
@@ -41,9 +41,9 @@ public class CategoriaLicenciaDao extends Conexion{
         return listaCategoriasLicencia;
     }
 
-    public CenCategoriaLicencia ConsultarCategoriaLicenciaById(int id) throws SQLException {
+    public CenCategoriaLicencia ConsultarCategoriaLicenciaById(Connection conex, int id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_CATEGORIAS_LICENCIA WHERE EST_ID = 1 AND CTL_ID = ? ORDER BY CTL_ID ");
             pst.setInt(1, id);
             rst = pst.executeQuery();
@@ -51,7 +51,7 @@ public class CategoriaLicenciaDao extends Conexion{
             while (rst.next()) {
                 return CenCategoriaLicencia.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarCategoriaLicenciaById: " + e);
         } finally {
             try {

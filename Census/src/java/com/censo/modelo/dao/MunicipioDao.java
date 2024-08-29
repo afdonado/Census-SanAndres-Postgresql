@@ -5,17 +5,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MunicipioDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public java.util.List ListarMunicipiosByIdDepto(long iddepto) throws SQLException {
+    public List ListarMunicipiosByIdDepto(Connection conex, long iddepto) throws SQLException {
 
-        java.util.List listaMunicipio = new java.util.LinkedList();
+        List listaMunicipio = new LinkedList();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_MUNICIPIOS WHERE DEPT_ID = ? ORDER BY MUN_ID ");
             pst.setLong(1, iddepto);
             rst = pst.executeQuery();
@@ -23,7 +25,7 @@ public class MunicipioDao extends Conexion {
             while (rst.next()) {
                 listaMunicipio.add(CenMunicipio.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarMunicipiosByIdDepto: " + e);
         } finally {
             try {
@@ -40,9 +42,9 @@ public class MunicipioDao extends Conexion {
         return listaMunicipio;
     }
 
-    public CenMunicipio ConsultarMunicipioById(long id) throws SQLException {
+    public CenMunicipio ConsultarMunicipioById(Connection conex, long id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_MUNICIPIOS WHERE MUN_ID = ? ORDER BY MUN_ID ");
             pst.setLong(1, id);
             rst = pst.executeQuery();
@@ -50,7 +52,7 @@ public class MunicipioDao extends Conexion {
             while (rst.next()) {
                 return CenMunicipio.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en consultarMunicipioById: " + e);
         } finally {
             try {

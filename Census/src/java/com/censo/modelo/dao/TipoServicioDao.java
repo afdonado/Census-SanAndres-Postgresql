@@ -5,24 +5,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class TipoServicioDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public java.util.List ListarTiposServicio() throws SQLException {
+    public List ListarTiposServicio(Connection conex) throws SQLException {
 
-        java.util.List listaTipoServicio = new java.util.LinkedList();
+        List listaTipoServicio = new LinkedList();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_TIPOS_SERVICIO WHERE EST_ID = 1 ORDER BY TSER_ID ");
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 listaTipoServicio.add(CenTipoServicio.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarTiposServicio: " + e);
         } finally {
             try {
@@ -39,9 +41,9 @@ public class TipoServicioDao extends Conexion {
         return listaTipoServicio;
     }
 
-    public CenTipoServicio ConsultarTipoServicioById(int id) throws SQLException {
+    public CenTipoServicio ConsultarTipoServicioById(Connection conex, int id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_TIPOS_SERVICIO WHERE EST_ID = 1 AND TSER_ID = ? ORDER BY TSER_ID ");
             pst.setInt(1, id);
             rst = pst.executeQuery();
@@ -49,7 +51,7 @@ public class TipoServicioDao extends Conexion {
             while (rst.next()) {
                 return CenTipoServicio.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarTipoServicioById: " + e);
         } finally {
             try {

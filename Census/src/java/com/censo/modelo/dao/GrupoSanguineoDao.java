@@ -5,24 +5,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GrupoSanguineoDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public java.util.List ListarGruposSanguineo() throws SQLException {
+    public List ListarGruposSanguineo(Connection conex) throws SQLException {
 
-        java.util.List listaGrupoSanguineo = new java.util.LinkedList();
+        List listaGrupoSanguineo = new LinkedList();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_GRUPOS_SANGUINEO WHERE EST_ID = 1 ORDER BY GRS_ID ");
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 listaGrupoSanguineo.add(CenGrupoSanguineo.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarGruposSanguineo: " + e);
         } finally {
             try {
@@ -39,9 +41,9 @@ public class GrupoSanguineoDao extends Conexion {
         return listaGrupoSanguineo;
     }
 
-    public CenGrupoSanguineo ConsultarGrupoSanguineoById(int id) throws SQLException {
+    public CenGrupoSanguineo ConsultarGrupoSanguineoById(Connection conex, int id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_GRUPOS_SANGUINEO WHERE EST_ID = 1 AND GRS_ID = ? ORDER BY GRS_ID ");
             pst.setInt(1, id);
             rst = pst.executeQuery();
@@ -49,7 +51,7 @@ public class GrupoSanguineoDao extends Conexion {
             while (rst.next()) {
                 return CenGrupoSanguineo.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarGrupoSanguineoById: " + e);
         } finally {
             try {

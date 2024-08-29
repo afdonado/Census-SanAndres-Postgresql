@@ -5,24 +5,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class TipoReferenciaDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public java.util.List ListarTiposReferencia() throws SQLException {
+    public List ListarTiposReferencia(Connection conex) throws SQLException {
         
-        java.util.List listaTipoReferencia = new java.util.LinkedList();
+        List listaTipoReferencia = new LinkedList();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_TIPOS_REFERENCIA ORDER BY TREF_ID ");
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 listaTipoReferencia.add(CenTipoReferencia.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarTiposReferencia: " + e);
         } finally {
             try {
@@ -39,9 +41,9 @@ public class TipoReferenciaDao extends Conexion {
         return listaTipoReferencia;
     }
 
-    public CenTipoReferencia ConsultarTipoReferenciaById(int id) throws SQLException {
+    public CenTipoReferencia ConsultarTipoReferenciaById(Connection conex, int id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_TIPOS_REFERENCIA WHERE TREF_ID = ? ORDER BY TREF_ID ");
             pst.setInt(1, id);
             rst = pst.executeQuery();
@@ -49,7 +51,7 @@ public class TipoReferenciaDao extends Conexion {
             while (rst.next()) {
                 return CenTipoReferencia.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarTipoReferenciaById: " + e);
         } finally {
             try {

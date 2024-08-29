@@ -24,9 +24,9 @@ public class DocumentoDigitalizadoDao extends Conexion {
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public long adicionarDocumentoDigitalizado(CenDocumentosDigitalizado cendocumentosdigitalizado) {
+    public long adicionarDocumentoDigitalizado(Connection conex, CenDocumentosDigitalizado cendocumentosdigitalizado) {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("INSERT INTO CEN_DOCUMENTOS_DIGITALIZADOS (DDIG_NOMBRE,DDIG_RUTA,DDIG_TIPO,DDIG_REFERENCIA,DDIG_OBSERVACIONES,DDIG_FECHAPROCESO,USU_ID) VALUES (?,?,?,?,?,SYSDATE,?)", new String[]{"DDIG_ID"});
             pst.setString(1, cendocumentosdigitalizado.getNombre());
             pst.setString(2, cendocumentosdigitalizado.getRuta());
@@ -41,7 +41,7 @@ public class DocumentoDigitalizadoDao extends Conexion {
                     return rst.getLong(1);
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.err.println("Error en adicionarCenso: " + e);
         } finally {
             try {
@@ -58,18 +58,18 @@ public class DocumentoDigitalizadoDao extends Conexion {
         return 0;
     }
 
-    public List ListarDocumentosDigitalizados(long idcenso) throws SQLException {
+    public List ListarDocumentosDigitalizados(Connection conex, long idcenso) throws SQLException {
         
         LinkedList listaDocumentos = new LinkedList();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_DOCUMENTOS_DIGITALIZADOS WHERE DDIG_REFERENCIA = ? ORDER BY 1");
             pst.setLong(1, idcenso);
             rst = pst.executeQuery();
             while (rst.next()) {
                 listaDocumentos.add(CenDocumentosDigitalizado.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarDocumentosDigitalizados: " + e);
         } finally {
             try {
@@ -86,8 +86,8 @@ public class DocumentoDigitalizadoDao extends Conexion {
         return listaDocumentos;
     }
 
-    public java.util.List ConvertirPDFtoImagenes(String ruta) {
-        java.util.LinkedList listar_imagenes = new java.util.LinkedList();
+    public List ConvertirPDFtoImagenes(String ruta) {
+        LinkedList listar_imagenes = new LinkedList();
         String b64 = "";
         try {
             PDDocument document = null;
@@ -123,9 +123,9 @@ public class DocumentoDigitalizadoDao extends Conexion {
         return listar_imagenes;
     }
 
-    public CenDocumentosDigitalizado ConsultarDocumentoDigitalizadoById(long id) throws SQLException {
+    public CenDocumentosDigitalizado ConsultarDocumentoDigitalizadoById(Connection conex, long id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_DOCUMENTOS_DIGITALIZADOS WHERE DDIG_ID = ? ORDER BY 1");
             pst.setLong(1, id);
             rst = pst.executeQuery();
@@ -133,7 +133,7 @@ public class DocumentoDigitalizadoDao extends Conexion {
             while (rst.next()) {
                 return CenDocumentosDigitalizado.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarDocumentoDigitalizadoById: " + e);
         } finally {
             try {
@@ -175,9 +175,9 @@ public class DocumentoDigitalizadoDao extends Conexion {
         return;
     }
 
-    public CenDocumentosDigitalizado ConsultarDocumentoDigitalizadoByIdCensoNombre(long idcenso, String nombreImagen) throws SQLException {
+    public CenDocumentosDigitalizado ConsultarDocumentoDigitalizadoByIdCensoNombre(Connection conex, long idcenso, String nombreImagen) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_DOCUMENTOS_DIGITALIZADOS WHERE DDIG_REFERENCIA = ? AND DDIG_NOMBRE = ? ORDER BY 1");
             pst.setLong(1, idcenso);
             pst.setString(2, nombreImagen);
@@ -186,7 +186,7 @@ public class DocumentoDigitalizadoDao extends Conexion {
             while (rst.next()) {
                 return CenDocumentosDigitalizado.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarDocumentoDigitalizadoByIdCensoNombre: " + e);
         } finally {
             try {
@@ -203,9 +203,9 @@ public class DocumentoDigitalizadoDao extends Conexion {
         return null;
     }
 
-    public void eliminarDocumentoById(long id) throws SQLException, IOException {
+    public void eliminarDocumentoById(Connection conex, long id) throws SQLException, IOException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("DELETE CEN_DOCUMENTOS_DIGITALIZADOS WHERE DDIG_ID = ? ");
             pst.setLong(1, id);
             pst.executeUpdate();
@@ -216,9 +216,6 @@ public class DocumentoDigitalizadoDao extends Conexion {
             try {
                 if (pst != null) {
                     pst.close();
-                }
-                if (rst != null) {
-                    rst.close();
                 }
             } catch (SQLException e) {
                 System.out.println("Error en cierres de eliminarDocumentoById:" + e);

@@ -5,24 +5,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GeneroDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public java.util.List ListarGeneros() throws SQLException {
+    public List ListarGeneros(Connection conex) throws SQLException {
         
-        java.util.List listaGenero = new java.util.LinkedList();
+        List listaGenero = new LinkedList();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_GENEROS WHERE EST_ID = 1 ORDER BY GEN_ID ");
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 listaGenero.add(CenGenero.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarGeneros: " + e);
         } finally {
             try {
@@ -39,9 +41,9 @@ public class GeneroDao extends Conexion {
         return listaGenero;
     }
 
-    public CenGenero ConsultarGeneroById(int id) throws SQLException {
+    public CenGenero ConsultarGeneroById(Connection conex, int id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_GENEROS WHERE EST_ID = 1 AND GEN_ID = ? ORDER BY GEN_ID ");
             pst.setInt(1, id);
             rst = pst.executeQuery();
@@ -49,7 +51,7 @@ public class GeneroDao extends Conexion {
             while (rst.next()) {
                 return CenGenero.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarGeneroById: " + e);
         } finally {
             try {

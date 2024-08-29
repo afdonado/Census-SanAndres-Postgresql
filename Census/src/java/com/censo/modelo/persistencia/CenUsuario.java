@@ -10,7 +10,7 @@ public class CenUsuario {
     
     private long id;
     private String nombre;
-    private String pass;
+    private String password;
     private Date fechaini;
     private Date fechafin;
     private int estado;
@@ -37,12 +37,12 @@ public class CenUsuario {
         this.nombre = nombre;
     }
 
-    public String getPass() {
-        return pass;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPass(String pass) {
-        this.pass = pass;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Date getFechaini() {
@@ -97,7 +97,7 @@ public class CenUsuario {
         CenUsuario usuario= new CenUsuario();
         usuario.setId(rs.getLong(1));
         usuario.setNombre(rs.getString(2));
-        usuario.setPass(rs.getString(3));
+        usuario.setPassword(rs.getString(3));
         usuario.setFechaini(rs.getDate(4));
         usuario.setFechafin(rs.getDate(5));
         usuario.setEstado(rs.getInt(6));

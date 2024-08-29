@@ -10,15 +10,17 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class VerificacionDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public long adicionarVerificacion(CenVerificacion cenverificacion) {
+    public long adicionarVerificacion(Connection conex, CenVerificacion cenverificacion) {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("INSERT INTO CEN_VERIFICACIONES (CEN_ID,VER_RUNT,VER_DOCUMENTOS,"
                     + "VER_FOTOS,VER_OBSERVACIONES,USU_ID,VER_FECHAPROCESO,EVER_ID) "
                     + "VALUES (?,?,?,?,?,?,sysdate,?)", new String[]{"VER_ID"});
@@ -36,7 +38,7 @@ public class VerificacionDao extends Conexion {
                     return rst.getLong(1);
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.err.println("Error en adicionarVerificacion: " + e);
         } finally {
             try {
@@ -53,9 +55,9 @@ public class VerificacionDao extends Conexion {
         return 0;
     }
 
-    public void modificarVerificacion(CenVerificacion cenverificacion) throws SQLException, IOException {
+    public void modificarVerificacion(Connection conex, CenVerificacion cenverificacion) throws SQLException, IOException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("UPDATE CEN_VERIFICACIONES SET VER_RUNT = ?,VER_DOCUMENTOS = ?,VER_FOTOS = ? ,VER_OBSERVACIONES = ?, EVER_ID = ?, USU_ID = ?, VER_FECHAPROCESO = SYSDATE WHERE VER_ID = ? ");
             pst.setString(1, cenverificacion.getVerificado_runt());
             pst.setString(2, cenverificacion.getVerificado_doc());
@@ -82,9 +84,9 @@ public class VerificacionDao extends Conexion {
         }
     }
 
-    public CenVerificacion ConsultarVerificacionByIdCenso(long id) throws SQLException {
+    public CenVerificacion ConsultarVerificacionByIdCenso(Connection conex, long id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_VERIFICACIONES WHERE CEN_ID = ? ");
             pst.setLong(1, id);
             rst = pst.executeQuery();
@@ -92,7 +94,7 @@ public class VerificacionDao extends Conexion {
             while (rst.next()) {
                 return CenVerificacion.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarVerificacionByIdCenso: " + e);
         } finally {
             try {
@@ -109,11 +111,11 @@ public class VerificacionDao extends Conexion {
         return null;
     }
 
-    public java.util.List ListarVerificacionesByFechaCenso(Date fechaini, Date fechafin, int punto) throws SQLException {
+    public List ListarVerificacionesByFechaCenso(Connection conex, Date fechaini, Date fechafin, int punto) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT CEN_ID,NUMERO,TO_CHAR(FECHA,'dd/MM/yyyy') FECHA,HORA,EST_ID, ESTADO,"
                     + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PUN_ID,PUNTO_ATENCION,"
                     + "VEH_PLACA,VEH_MOTOR,VEH_CHASIS,VEH_SERIE,PER_ID,TDOC_ID,TIPO_DOC_CORTO,TIPO_DOC,"
@@ -130,13 +132,13 @@ public class VerificacionDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarVerificacionesByFechaCenso: " + e);
         } finally {
             try {
@@ -153,11 +155,11 @@ public class VerificacionDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarVerificacionesByFechaRegistro(Date fechaini, Date fechafin, int punto) throws SQLException {
+    public List ListarVerificacionesByFechaRegistro(Connection conex, Date fechaini, Date fechafin, int punto) throws SQLException {
         
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT CEN_ID,NUMERO,TO_CHAR(FECHA,'dd/MM/yyyy') FECHA,HORA,EST_ID, ESTADO,"
                     + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PUN_ID,PUNTO_ATENCION,"
                     + "VEH_PLACA,VEH_MOTOR,VEH_CHASIS,VEH_SERIE,PER_ID,TDOC_ID,TIPO_DOC_CORTO,TIPO_DOC,"
@@ -174,13 +176,13 @@ public class VerificacionDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarVerificacionesByFechaRegistro: " + e);
         } finally {
             try {
@@ -197,11 +199,11 @@ public class VerificacionDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarVerificacionesByNumeroCenso(String numeroCenso) throws SQLException {
+    public List ListarVerificacionesByNumeroCenso(Connection conex, String numeroCenso) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT CEN_ID,NUMERO,TO_CHAR(FECHA,'dd/MM/yyyy') FECHA,HORA,EST_ID, ESTADO,"
                     + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PUN_ID,PUNTO_ATENCION,"
                     + "VEH_PLACA,VEH_MOTOR,VEH_CHASIS,VEH_SERIE,PER_ID,TDOC_ID,TIPO_DOC_CORTO,TIPO_DOC,"
@@ -215,13 +217,13 @@ public class VerificacionDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarVerificacionesByFechaRegistro: " + e);
         } finally {
             try {
@@ -238,9 +240,9 @@ public class VerificacionDao extends Conexion {
         return listaDatos;
     }
 
-    public long adicionarHistorialVerificacion(CenHistorialVerificacion cenhistotialverificacion) {
+    public long adicionarHistorialVerificacion(Connection conex, CenHistorialVerificacion cenhistotialverificacion) {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("INSERT INTO CEN_HISTORIAL_VERIFICACIONES (VER_ID,EVER_ID,USU_ID,HVER_OBSERVACIONES,HVER_FECHAPROCESO) "
                     + "VALUES (?,?,?,?,sysdate)", new String[]{"VER_ID"});
             pst.setLong(1, cenhistotialverificacion.getVer_id());
@@ -254,7 +256,7 @@ public class VerificacionDao extends Conexion {
                     return rst.getLong(1);
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.err.println("Error en adicionarHistorialVerificacion: " + e);
         } finally {
             try {

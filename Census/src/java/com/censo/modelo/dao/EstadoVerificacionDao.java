@@ -5,24 +5,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class EstadoVerificacionDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public java.util.List ListarEstadosVerificacion() throws SQLException {
+    public List ListarEstadosVerificacion(Connection conex) throws SQLException {
 
-        java.util.List listaEstado = new java.util.LinkedList();
+        List listaEstado = new LinkedList();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_ESTADOS_VERIFICACIONES ORDER BY EVER_ID ");
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 listaEstado.add(CenEstadoVerificacion.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarEstadosVerificacion: " + e);
         } finally {
             try {

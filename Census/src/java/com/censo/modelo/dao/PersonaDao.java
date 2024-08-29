@@ -17,9 +17,9 @@ public class PersonaDao extends Conexion {
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public long adicionarPersona(CenPersona cenpersona) {
+    public long adicionarPersona(Connection conex, CenPersona cenpersona) {
 
-        try(Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("INSERT INTO CEN_PERSONAS (PER_TIPODOC,PER_DOCUMENTO,"
                     + "PER_NOMBRE1,PER_NOMBRE2,PER_APELLIDO1,PER_APELLIDO2,PER_FECHANAC,PER_GENERO,PER_DIRECCION,"
                     + "MUN_ID,PER_TELEFONO,PER_MAIL,PER_GRUPOSANGUINEO,PER_LICONDUCCION,PER_FEXPLIC,PER_FVENLIC,"
@@ -48,7 +48,7 @@ public class PersonaDao extends Conexion {
                     return rst.getLong(1);
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.err.println("Error en adicionarPersona: " + e);
         } finally {
             try {
@@ -65,9 +65,9 @@ public class PersonaDao extends Conexion {
         return 0;
     }
 
-    public void modificarPersona(CenPersona cenpersona) throws SQLException, IOException {
+    public void modificarPersona(Connection conex, CenPersona cenpersona) throws SQLException, IOException {
 
-        try(Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("UPDATE CEN_PERSONAS SET PER_TIPODOC = ?,PER_DOCUMENTO = ?,"
                     + "PER_NOMBRE1 = ?,PER_NOMBRE2 = ?,PER_APELLIDO1 = ?,PER_APELLIDO2 = ?,PER_FECHANAC = ?,"
                     + "PER_GENERO = ?,PER_DIRECCION = ?,MUN_ID = ?,PER_TELEFONO = ?,PER_MAIL = ?,PER_GRUPOSANGUINEO = ?,"
@@ -109,9 +109,9 @@ public class PersonaDao extends Conexion {
         }
     }
 
-    public CenPersona ConsultarPersona(int tipodoc, String documento) throws SQLException {
+    public CenPersona ConsultarPersona(Connection conex, int tipodoc, String documento) throws SQLException {
 
-        try(Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_PERSONAS WHERE PER_TIPODOC = ? AND PER_DOCUMENTO = ? ");
             pst.setInt(1, tipodoc);
             pst.setString(2, documento);
@@ -120,7 +120,7 @@ public class PersonaDao extends Conexion {
             while (rst.next()) {
                 return CenPersona.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en consultarPersona: " + e);
         } finally {
             try {
@@ -137,9 +137,9 @@ public class PersonaDao extends Conexion {
         return null;
     }
 
-    public CenPersona ConsultarPersonaById(long id) throws SQLException {
+    public CenPersona ConsultarPersonaById(Connection conex, long id) throws SQLException {
 
-        try(Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_PERSONAS WHERE PER_ID = ? ");
             pst.setLong(1, id);
             rst = pst.executeQuery();
@@ -147,7 +147,7 @@ public class PersonaDao extends Conexion {
             while (rst.next()) {
                 return CenPersona.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en consultarPersonaById: " + e);
         } finally {
             try {
@@ -164,11 +164,11 @@ public class PersonaDao extends Conexion {
         return null;
     }
 
-    public java.util.List ListarPersonas() throws SQLException {
+    public List ListarPersonas(Connection conex) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try(Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT PER_ID,PER_TIPODOC,TIPO_DOC,DOCUMENTO,NOMBRE1,NOMBRE2,APELLIDO1,APELLIDO2,NOMBRE_COMPLETO,"
                     + "TO_CHAR(FECHA_NAC,'dd/MM/yyyy') FECHA_NAC,PER_GENERO,GENERO,DIRECCION,MUN_ID,MUNICIPIO,DEPT_ID,DEPARTAMENTO,TELEFONO,"
                     + "MAIL,ID_GRUPOSAN,GRUPO_SANGUINEO,LIC_CONDUCCION,FECHA_EXP,FECHA_VEN,PER_CATLIC,CATEGORIA_LIC,TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO "
@@ -177,13 +177,13 @@ public class PersonaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarPersonas: " + e);
         } finally {
             try {
@@ -200,11 +200,11 @@ public class PersonaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarPersonasById(long id) throws SQLException {
+    public List ListarPersonasById(Connection conex, long id) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try(Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT PER_ID,PER_TIPODOC,TIPO_DOC,DOCUMENTO,NOMBRE1,NOMBRE2,APELLIDO1,APELLIDO2,NOMBRE_COMPLETO,"
                     + "TO_CHAR(FECHA_NAC,'dd/MM/yyyy') FECHA_NAC,PER_GENERO,GENERO,DIRECCION,MUN_ID,MUNICIPIO,DEPT_ID,DEPARTAMENTO,TELEFONO,"
                     + "MAIL,ID_GRUPOSAN,GRUPO_SANGUINEO,LIC_CONDUCCION,FECHA_EXP,FECHA_VEN,PER_CATLIC,CATEGORIA_LIC,TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO "
@@ -214,13 +214,13 @@ public class PersonaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarPersonasById: " + e);
         } finally {
             try {
@@ -237,11 +237,11 @@ public class PersonaDao extends Conexion {
         return listaDatos;
     }
 
-    public List ListarPersonasByDocumento(int tipodoc, String documento) throws SQLException {
+    public List ListarPersonasByDocumento(Connection conex, int tipodoc, String documento) throws SQLException {
 
-        List<HashMap> listaDatos = new LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try(Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT PER_ID,PER_TIPODOC,TIPO_DOC,DOCUMENTO,NOMBRE1,NOMBRE2,APELLIDO1,APELLIDO2,NOMBRE_COMPLETO,"
                     + "TO_CHAR(FECHA_NAC,'dd/MM/yyyy') FECHA_NAC,PER_GENERO,GENERO,DIRECCION,MUN_ID,MUNICIPIO,DEPT_ID,DEPARTAMENTO,TELEFONO,MAIL,ID_GRUPOSAN,GRUPO_SANGUINEO,"
                     + "LIC_CONDUCCION,FECHA_EXP,FECHA_VEN,PER_CATLIC,CATEGORIA_LIC,TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO "
@@ -252,13 +252,13 @@ public class PersonaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarPersonasByDocumento: " + e);
         } finally {
             try {
@@ -275,11 +275,11 @@ public class PersonaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarPersonasByNombres(String nombre1, String nombre2, String apellido1, String apellido2) throws SQLException {
+    public List ListarPersonasByNombres(Connection conex, String nombre1, String nombre2, String apellido1, String apellido2) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try(Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT PER_ID,PER_TIPODOC,TIPO_DOC,DOCUMENTO,NOMBRE1,NOMBRE2,APELLIDO1,APELLIDO2,NOMBRE_COMPLETO,"
                     + "TO_CHAR(FECHA_NAC,'dd/MM/yyyy') FECHA_NAC,PER_GENERO,GENERO,DIRECCION,MUN_ID,MUNICIPIO,DEPT_ID,DEPARTAMENTO,TELEFONO,MAIL,ID_GRUPOSAN,GRUPO_SANGUINEO,"
                     + "LIC_CONDUCCION,FECHA_EXP,FECHA_VEN,PER_CATLIC,CATEGORIA_LIC,TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO "
@@ -292,13 +292,13 @@ public class PersonaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarPersonasByNombres: " + e);
         } finally {
             try {
@@ -315,11 +315,11 @@ public class PersonaDao extends Conexion {
         return listaDatos;
     }
 
-    public java.util.List ListarPersonasByFechaNacimiento(Date fechanacini, Date fechanacfin) throws SQLException {
+    public List ListarPersonasByFechaNacimiento(Connection conex, Date fechanacini, Date fechanacfin) throws SQLException {
 
-        java.util.List<HashMap> listaDatos = new java.util.LinkedList<HashMap>();
+        List<HashMap> listaDatos = new LinkedList<>();
 
-        try(Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT PER_ID,PER_TIPODOC,TIPO_DOC,DOCUMENTO,NOMBRE1,NOMBRE2,APELLIDO1,APELLIDO2,NOMBRE_COMPLETO,"
                     + "TO_CHAR(FECHA_NAC,'dd/MM/yyyy') FECHA_NAC,PER_GENERO,GENERO,DIRECCION,MUN_ID,MUNICIPIO,DEPT_ID,DEPARTAMENTO,TELEFONO,MAIL,ID_GRUPOSAN,GRUPO_SANGUINEO,"
                     + "LIC_CONDUCCION,FECHA_EXP,FECHA_VEN,PER_CATLIC,CATEGORIA_LIC,TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO "
@@ -330,13 +330,13 @@ public class PersonaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<String, String>();
+                HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatos.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarPersonasByFechaNacimiento: " + e);
         } finally {
             try {

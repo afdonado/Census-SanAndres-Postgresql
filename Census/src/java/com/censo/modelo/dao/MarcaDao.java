@@ -12,11 +12,11 @@ public class MarcaDao extends Conexion {
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public ArrayList<String> ListarNombresMarcas(String dato) throws SQLException {
+    public ArrayList<String> ListarNombresMarcas(Connection conex, String dato) throws SQLException {
 
         ArrayList<String> nombresMarca = new ArrayList<>();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT MAR_NOMBRE FROM CEN_MARCAS WHERE MAR_NOMBRE LIKE ? AND ROWNUM <= 10 ORDER BY MAR_NOMBRE");
             pst.setString(1, dato + "%");
             rst = pst.executeQuery();
@@ -24,7 +24,7 @@ public class MarcaDao extends Conexion {
             while (rst.next()) {
                 nombresMarca.add(rst.getString(1));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarNombresMarcas: " + e);
         } finally {
             try {
@@ -41,9 +41,9 @@ public class MarcaDao extends Conexion {
         return nombresMarca;
     }
 
-    public CenMarca ConsultarMarcaByNombre(String nombre) throws SQLException {
+    public CenMarca ConsultarMarcaByNombre(Connection conex, String nombre) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_MARCAS WHERE MAR_NOMBRE = ? ORDER BY MAR_ID ");
             pst.setString(1, nombre);
             rst = pst.executeQuery();
@@ -51,7 +51,7 @@ public class MarcaDao extends Conexion {
             while (rst.next()) {
                 return CenMarca.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarMarcaByNombre: " + e);
         } finally {
             try {
@@ -68,9 +68,9 @@ public class MarcaDao extends Conexion {
         return null;
     }
 
-    public CenMarca ConsultarMarcaById(long id) throws SQLException {
+    public CenMarca ConsultarMarcaById(Connection conex, long id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_MARCAS WHERE MAR_ID = ? ORDER BY MAR_ID ");
             pst.setLong(1, id);
             rst = pst.executeQuery();
@@ -78,7 +78,7 @@ public class MarcaDao extends Conexion {
             while (rst.next()) {
                 return CenMarca.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarMarcaById: " + e);
         } finally {
             try {

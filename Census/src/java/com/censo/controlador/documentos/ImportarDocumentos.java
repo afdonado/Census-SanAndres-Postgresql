@@ -12,32 +12,41 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.text.ParseException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@WebServlet(name = "ImportarDocumentos", urlPatterns = "/importarDocumentos")
 public class ImportarDocumentos extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        try {
-            DocumentoDigitalizadoDao dao = new DocumentoDigitalizadoDao();
-            CensoDao daoCenso = new CensoDao();
+        Connection conex = null;
 
-            long iddocumento = 0;
-            long idcenso = 0;
-            String numerocenso = "";
+        try {       
 
             if (request.getParameter("idcenso") != null && request.getParameter("txtnumerocenso") != null) {
 
-                dao.conectar().setAutoCommit(false);
+                DocumentoDigitalizadoDao documentoDigitalizadoDao = new DocumentoDigitalizadoDao();
+                conex = documentoDigitalizadoDao.conectar();
 
-                idcenso = Long.parseLong(request.getParameter("idcenso"));
-                numerocenso = request.getParameter("txtnumerocenso");
+                CensoDao censoDao = new CensoDao();
+
+                conex.setAutoCommit(false);
+                
+                long iddocumento = 0;
+
+                long idcenso = Long.parseLong(request.getParameter("idcenso"));
+                String numerocenso = request.getParameter("txtnumerocenso");
 
                 CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
 
@@ -52,7 +61,8 @@ public class ImportarDocumentos extends HttpServlet {
                     mkdir.mkdirs();
                 }
 
-                CenDocumentosDigitalizado cendocumentosdigitalizadoVeh = dao.ConsultarDocumentoDigitalizadoByIdCensoNombre(idcenso, nombreimagenVeh);
+                CenDocumentosDigitalizado cendocumentosdigitalizadoVeh
+                        = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoByIdCensoNombre(conex, idcenso, nombreimagenVeh);
                 if (cendocumentosdigitalizadoVeh == null) {
 
                     /* definimos la URL de la cual vamos a leer */
@@ -64,7 +74,7 @@ public class ImportarDocumentos extends HttpServlet {
                         /* llamamos metodo para que lea de la URL y lo escriba en le fichero pasado */
                         //rutaServidor = rutaServidor + "/" + numeroCenso + "/" + nombreimagenVeh;
                         String imagenveh = directorio + nombreimagenVeh;
-                        dao.writeTo(intlLogoURLVeh.openStream(), new FileOutputStream(new File(imagenveh)));
+                        documentoDigitalizadoDao.writeTo(intlLogoURLVeh.openStream(), new FileOutputStream(new File(imagenveh)));
 
                         CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
                         cendocumentosdigitalizado.setNombre(nombreimagenVeh);
@@ -73,7 +83,7 @@ public class ImportarDocumentos extends HttpServlet {
                         cendocumentosdigitalizado.setReferencia_id(idcenso);
                         cendocumentosdigitalizado.setObservacion("Imagen cargada desde servidor remoto");
                         cendocumentosdigitalizado.setUsu_id(cenusuario.getId());
-                        iddocumento = dao.adicionarDocumentoDigitalizado(cendocumentosdigitalizado);
+                        iddocumento = documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizado);
 
                     }
                 } else {
@@ -84,7 +94,8 @@ public class ImportarDocumentos extends HttpServlet {
 
                 }
 
-                CenDocumentosDigitalizado cendocumentosdigitalizadoImp = dao.ConsultarDocumentoDigitalizadoByIdCensoNombre(idcenso, nombreimagenImp);
+                CenDocumentosDigitalizado cendocumentosdigitalizadoImp
+                        = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoByIdCensoNombre(conex, idcenso, nombreimagenImp);
                 if (cendocumentosdigitalizadoImp == null) {
 
                     /* definimos la URL de la cual vamos a leer */
@@ -97,7 +108,7 @@ public class ImportarDocumentos extends HttpServlet {
                         /* llamamos metodo para que lea de la URL y lo escriba en le fichero pasado */
                         //rutaServidor = rutaServidor + "/" + numeroCenso + "/" + nombreimagenVeh;
                         String imagenimp = directorio + nombreimagenImp;
-                        dao.writeTo(intlLogoURLImp.openStream(), new FileOutputStream(new File(imagenimp)));
+                        documentoDigitalizadoDao.writeTo(intlLogoURLImp.openStream(), new FileOutputStream(new File(imagenimp)));
 
                         CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
                         cendocumentosdigitalizado.setNombre(nombreimagenImp);
@@ -106,7 +117,7 @@ public class ImportarDocumentos extends HttpServlet {
                         cendocumentosdigitalizado.setReferencia_id(idcenso);
                         cendocumentosdigitalizado.setObservacion("Imagen cargada desde servidor remoto");
                         cendocumentosdigitalizado.setUsu_id(cenusuario.getId());
-                        iddocumento = dao.adicionarDocumentoDigitalizado(cendocumentosdigitalizado);
+                        iddocumento = documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizado);
 
                     }
                 } else {
@@ -115,10 +126,11 @@ public class ImportarDocumentos extends HttpServlet {
                     out.println("</script>");
                 }
 
-                CenCenso cencenso = daoCenso.ConsultarCensoById(idcenso);
+                CenCenso cencenso = censoDao.ConsultarCensoById(conex, idcenso);
                 if (cencenso != null) {
                     if (cencenso.getFecha().getTime() > new java.text.SimpleDateFormat("dd/MM/yyyy").parse("11/03/2018").getTime()) {
-                        CenDocumentosDigitalizado cendocumentosdigitalizadoLat = dao.ConsultarDocumentoDigitalizadoByIdCensoNombre(idcenso, nombreimagenLat);
+                        CenDocumentosDigitalizado cendocumentosdigitalizadoLat
+                                = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoByIdCensoNombre(conex, idcenso, nombreimagenLat);
                         if (cendocumentosdigitalizadoLat == null) {
 
                             /* definimos la URL de la cual vamos a leer */
@@ -131,7 +143,7 @@ public class ImportarDocumentos extends HttpServlet {
                                 /* llamamos metodo para que lea de la URL y lo escriba en le fichero pasado */
                                 //rutaServidor = rutaServidor + "/" + numeroCenso + "/" + nombreimagenVeh;
                                 String imagenlat = directorio + nombreimagenLat;
-                                dao.writeTo(intlLogoURLLat.openStream(), new FileOutputStream(new File(imagenlat)));
+                                documentoDigitalizadoDao.writeTo(intlLogoURLLat.openStream(), new FileOutputStream(new File(imagenlat)));
 
                                 CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
                                 cendocumentosdigitalizado.setNombre(nombreimagenLat);
@@ -140,7 +152,7 @@ public class ImportarDocumentos extends HttpServlet {
                                 cendocumentosdigitalizado.setReferencia_id(idcenso);
                                 cendocumentosdigitalizado.setObservacion("Imagen cargada desde servidor remoto");
                                 cendocumentosdigitalizado.setUsu_id(cenusuario.getId());
-                                iddocumento = dao.adicionarDocumentoDigitalizado(cendocumentosdigitalizado);
+                                iddocumento = documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizado);
 
                             }
                         } else {
@@ -149,7 +161,8 @@ public class ImportarDocumentos extends HttpServlet {
                             out.println("</script>");
                         }
 
-                        CenDocumentosDigitalizado cendocumentosdigitalizadoTra = dao.ConsultarDocumentoDigitalizadoByIdCensoNombre(idcenso, nombreimagenTra);
+                        CenDocumentosDigitalizado cendocumentosdigitalizadoTra
+                                = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoByIdCensoNombre(conex, idcenso, nombreimagenTra);
                         if (cendocumentosdigitalizadoTra == null) {
 
                             /* definimos la URL de la cual vamos a leer */
@@ -162,7 +175,7 @@ public class ImportarDocumentos extends HttpServlet {
                                 /* llamamos metodo para que lea de la URL y lo escriba en le fichero pasado */
                                 //rutaServidor = rutaServidor + "/" + numeroCenso + "/" + nombreimagenVeh;
                                 String imagentra = directorio + nombreimagenTra;
-                                dao.writeTo(intlLogoURLTra.openStream(), new FileOutputStream(new File(imagentra)));
+                                documentoDigitalizadoDao.writeTo(intlLogoURLTra.openStream(), new FileOutputStream(new File(imagentra)));
 
                                 CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
                                 cendocumentosdigitalizado.setNombre(nombreimagenTra);
@@ -171,7 +184,7 @@ public class ImportarDocumentos extends HttpServlet {
                                 cendocumentosdigitalizado.setReferencia_id(idcenso);
                                 cendocumentosdigitalizado.setObservacion("Imagen cargada desde servidor remoto");
                                 cendocumentosdigitalizado.setUsu_id(cenusuario.getId());
-                                iddocumento = dao.adicionarDocumentoDigitalizado(cendocumentosdigitalizado);
+                                iddocumento = documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizado);
 
                             }
                         } else {
@@ -182,7 +195,7 @@ public class ImportarDocumentos extends HttpServlet {
                     }
                 }
 
-                dao.conectar().commit();
+                conex.commit();
 
                 if (iddocumento > 0) {
                     out.println("<script type=\"text/javascript\">");
@@ -196,6 +209,10 @@ public class ImportarDocumentos extends HttpServlet {
                     out.println("</script>");
                 }
 
+            } else {
+                out.println("<script type=\"text/javascript\">");
+                out.println("alert('Debe ingresar los datos obligatorios (*)');");
+                out.println("</script>");
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -218,53 +235,42 @@ public class ImportarDocumentos extends HttpServlet {
             out.println("location='jsp/Documentos/ConsultarDocumentoWeb.jsp';");
             out.println("</script>");
 
-        } catch (Exception ex) {
+        } catch (NumberFormatException | SQLException | ParseException ex) {
+            if (conex != null) {
+                try {
+                    conex.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
             System.out.println("Error --> " + ex.getMessage());
             out.println("<script type=\"text/javascript\">");
             out.println("alert('No se cargaron los documentos seleccionados');");
             out.println("location='jsp/Documentos/ConsultarDocumento.jsp';");
             out.println("</script>");
             //response.sendRedirect("./paginas/jsp/visor.jsp?opcion=La Imagen No Pudo Ser Guardada Debido A:" + ex.getMessage() + "&idcomparendo=" + referencia_id);
+        } finally {
+            if (conex != null) {
+                try {
+                    conex.close();
+                } catch (SQLException closeEx) {
+                    closeEx.printStackTrace();
+                }
+            }
+            out.close();
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

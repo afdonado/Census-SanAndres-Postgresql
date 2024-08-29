@@ -5,24 +5,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class TipoImportacionDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public java.util.List ListarTiposImportacion() throws SQLException {
+    public List ListarTiposImportacion(Connection conex) throws SQLException {
 
-        java.util.List listaTipoImportacion = new java.util.LinkedList();
+        List listaTipoImportacion = new LinkedList();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_TIPOS_IMPORTACION WHERE EST_ID = 1 ORDER BY TIMP_ID ");
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 listaTipoImportacion.add(CenTipoImportacion.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarTiposImportacion: " + e);
         } finally {
             try {
@@ -39,9 +41,9 @@ public class TipoImportacionDao extends Conexion {
         return listaTipoImportacion;
     }
 
-    public CenTipoImportacion ConsultarTipoImportacionById(int id) throws SQLException {
+    public CenTipoImportacion ConsultarTipoImportacionById(Connection conex, int id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_TIPOS_IMPORTACION WHERE EST_ID = 1 AND TIMP_ID = ? ORDER BY TIMP_ID ");
             pst.setInt(1, id);
             rst = pst.executeQuery();
@@ -49,7 +51,7 @@ public class TipoImportacionDao extends Conexion {
             while (rst.next()) {
                 return CenTipoImportacion.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarTipoImportacionById: " + e);
         } finally {
             try {

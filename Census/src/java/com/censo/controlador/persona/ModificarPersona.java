@@ -4,25 +4,33 @@ import com.censo.modelo.dao.PersonaDao;
 import com.censo.modelo.persistencia.CenPersona;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.text.ParseException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@WebServlet(name = "ModificarPersona", urlPatterns = "/modificarPersona")
 public class ModificarPersona extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
+
+        Connection conex = null;
+
         try {
-            
-            PersonaDao dao = new PersonaDao();
-            
-            dao.conectar().setAutoCommit(false);
-            
+
+            PersonaDao personaDao = new PersonaDao();
+            conex = personaDao.conectar();
+            conex.setAutoCommit(false);
+
             CenPersona cenpersona = new CenPersona();
 
             long idpersona = Long.parseLong(request.getParameter("idpersona"));
@@ -43,7 +51,7 @@ public class ModificarPersona extends HttpServlet {
             int categoriaLicencia = 0;
             Date fechaExpLicencia = null;
             Date fechaVenLicencia = null;
-            if(!numeroLicencia.equals("")){
+            if (!numeroLicencia.equals("")) {
                 categoriaLicencia = Integer.parseInt(request.getParameter("cmdcatlicencia"));
                 fechaExpLicencia = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechaexplic")).getTime());
                 fechaVenLicencia = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechavenlic")).getTime());
@@ -63,62 +71,55 @@ public class ModificarPersona extends HttpServlet {
             cenpersona.setTelefono(telefono);
             cenpersona.setMail(mail);
             cenpersona.setGruposanguineo(grupoSanguineo);
-            if(!numeroLicencia.equals("")){
+            if (!numeroLicencia.equals("")) {
                 cenpersona.setLicenciaconduccion(numeroLicencia);
                 cenpersona.setFechaexp(fechaExpLicencia);
                 cenpersona.setFechaven(fechaVenLicencia);
                 cenpersona.setCategorialicencia(categoriaLicencia);
             }
 
-            dao.modificarPersona(cenpersona);
-            dao.conectar().commit();
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('Persona Modificada');");
-                out.println("location='jsp/Personas/verPersona.jsp?idpersona="+idpersona+"';");
-                out.println("</script>");                
-        } catch (Exception e) {
+            personaDao.modificarPersona(conex, cenpersona);
+            conex.commit();
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('Persona Modificada');");
+            out.println("location='jsp/Personas/verPersona.jsp?idpersona=" + idpersona + "';");
+            out.println("</script>");
+        } catch (IOException | NumberFormatException | SQLException | ParseException e) {
+            if (conex != null) {
+                try {
+                    conex.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('Error al modificar la persona');");
+            out.println("location='jsp/Personas/registrarPersona.jsp';");
+            out.println("</script>");
             e.printStackTrace();
+        } finally {
+            if (conex != null) {
+                try {
+                    conex.close();
+                } catch (SQLException closeEx) {
+                    closeEx.printStackTrace();
+                }
+            }
+            out.close();
         }
-        
+
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

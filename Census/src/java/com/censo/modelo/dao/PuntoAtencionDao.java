@@ -5,24 +5,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PuntoAtencionDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public java.util.List ListarPuntosAtencion() throws SQLException {
+    public List ListarPuntosAtencion(Connection conex) throws SQLException {
 
-        java.util.List listaPuntoAtencion = new java.util.LinkedList();
+        List listaPuntoAtencion = new LinkedList();
 
-        try(Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_PUNTOS_ATENCION WHERE EST_ID = 1 ORDER BY PUN_ID ");
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 listaPuntoAtencion.add(CenPuntoAtencion.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarPuntosAtencion: " + e);
         } finally {
             try {
@@ -39,9 +41,9 @@ public class PuntoAtencionDao extends Conexion {
         return listaPuntoAtencion;
     }
 
-    public CenPuntoAtencion ConsultarPuntoAtencionById(int id) throws SQLException {
+    public CenPuntoAtencion ConsultarPuntoAtencionById(Connection conex, int id) throws SQLException {
 
-        try(Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_PUNTOS_ATENCION WHERE PUN_ID = ? ORDER BY PUN_ID ");
             pst.setInt(1, id);
             rst = pst.executeQuery();
@@ -49,7 +51,7 @@ public class PuntoAtencionDao extends Conexion {
             while (rst.next()) {
                 return CenPuntoAtencion.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarPuntoAtencionById: " + e);
         } finally {
             try {
@@ -65,6 +67,5 @@ public class PuntoAtencionDao extends Conexion {
         }
         return null;
     }
-    //Fin PuntoAtencion
     
 }

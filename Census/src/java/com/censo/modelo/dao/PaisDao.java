@@ -5,24 +5,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PaisDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public java.util.List ListarPaises() throws SQLException {
+    public List ListarPaises(Connection conex) throws SQLException {
 
-        java.util.List listaPais = new java.util.LinkedList();
+        List listaPais = new LinkedList();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_PAISES ORDER BY PAI_ID ");
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 listaPais.add(CenPais.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarPaises: " + e);
         } finally {
             try {
@@ -39,9 +41,9 @@ public class PaisDao extends Conexion {
         return listaPais;
     }
 
-    public CenPais ConsultarPaisById(long id) throws SQLException {
+    public CenPais ConsultarPaisById(Connection conex, long id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_PAISES WHERE PAI_ID = ? ORDER BY PAI_ID ");
             pst.setLong(1, id);
             rst = pst.executeQuery();
@@ -49,7 +51,7 @@ public class PaisDao extends Conexion {
             while (rst.next()) {
                 return CenPais.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarPaisById: " + e);
         } finally {
             try {

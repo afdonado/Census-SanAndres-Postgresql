@@ -5,24 +5,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class EstadoDao extends Conexion {
     
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public java.util.List ListarEstados() throws SQLException {
+    public List ListarEstados(Connection conex) throws SQLException {
         
-        java.util.List listaEstado = new java.util.LinkedList();
+        List listaEstado = new LinkedList();
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_ESTADOS ORDER BY EST_ID ");
             rst = pst.executeQuery();
 
             while (rst.next()) {
                 listaEstado.add(CenEstado.load(rst));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarEstados: " + e);
         } finally {
             try {
@@ -39,9 +41,9 @@ public class EstadoDao extends Conexion {
         return listaEstado;
     }
 
-    public CenEstado ConsultarEstadoById(int id) throws SQLException {
+    public CenEstado ConsultarEstadoById(Connection conex, int id) throws SQLException {
 
-        try (Connection conex = conectar()) {
+        try {
             pst = conex.prepareStatement("SELECT * FROM CEN_ESTADOS WHERE EST_ID = ? ORDER BY EST_ID ");
             pst.setInt(1, id);
             rst = pst.executeQuery();
@@ -49,7 +51,7 @@ public class EstadoDao extends Conexion {
             while (rst.next()) {
                 return CenEstado.load(rst);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ConsultarEstadoById: " + e);
         } finally {
             try {
