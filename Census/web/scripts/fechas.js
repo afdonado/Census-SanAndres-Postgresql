@@ -1,7 +1,7 @@
 
 //registrar vehiculo
 $(function () {
-    $("#txtfechamatri").datepicker();
+    $("#txtfechamatricula").datepicker();
 });
 $(function () {
     $("#txtfechaimportacion").datepicker();
@@ -10,10 +10,9 @@ $(function () {
     $("#txtfechavsoat").datepicker();
 });
 $(function () {
-    $("#txtfechavtecno").datepicker();
+    $("#txtfechavtecnomecanica").datepicker();
 });
 
-//registrar Censo
 $(function () {
     $("#tabs").tabs();
 });

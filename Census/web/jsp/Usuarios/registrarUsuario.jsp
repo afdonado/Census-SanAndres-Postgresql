@@ -95,15 +95,15 @@
                                 <div class="row">
                                     <div class="form-group col-md-3">
                                         <label>Usuario(*)</label>
-                                        <input class="form-control" type="text" id="txtnomusuario" name="txtnomusuario" maxlength="20" autocomplete="off" style="text-transform: uppercase" required>
+                                        <input class="form-control" type="text" id="nombreusuario" name="nombreusuario" maxlength="20" autocomplete="off" style="text-transform: uppercase" required>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label>Password(*)</label>
-                                        <input class="form-control" type="password" id="txtpass" name="txtpass" maxlength="20" onblur="validarPass()" autocomplete="off" required>
+                                        <input class="form-control" type="password" id="password" name="password" maxlength="20" onblur="validarPass()" autocomplete="off" required>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label>Repita Password(*)</label>
-                                        <input class="form-control" type="password" id="txtreppass" name="txtreppass" maxlength="20" onblur="validarPass()" autocomplete="off" required>
+                                        <input class="form-control" type="password" id="repetirpassword" name="repetirpassword" maxlength="20" onblur="validarPass()" autocomplete="off" required>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label>Perfil(*)</label>

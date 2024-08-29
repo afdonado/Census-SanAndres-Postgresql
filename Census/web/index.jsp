@@ -2,46 +2,58 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" />
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        
         <title>Inicio Sesion - Census</title>
         
-        <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="dist/css/sb-admin-2.css" rel="stylesheet">
-        
+        <link href="template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="template/css/sb-admin-2.min.css" rel="stylesheet">
+
         <script src="scripts/iniciosesion.js" type="text/javascript"></script>
     </head>
     <body>
         <div class="container">
-            <div class="row">
-                <center>
-                    <img src="vendor/imagenes/lagit.jpeg" alt="Lagit" class="visible-xs" style="margin-top: 60px; width: 270px; height: 92px">
-                    <img src="vendor/imagenes/lagit.jpeg" alt="Lagit" class="visible-sm" style="margin-top: 60px; width: 590px; height: 180px">
-                    <img src="vendor/imagenes/lagit.jpeg" alt="Lagit" class="visible-md" style="margin-top: 60px; width: 280px; height: 92px">
-                    <img src="vendor/imagenes/lagit.jpeg" alt="Lagit" class="visible-lg" style="margin-top: 100px; margin-left: 20px; width: 400px; height: 120px;">
-                    <h2 class="title">Census</h2>
-                </center>
 
-                <div class="col-md-4 col-md-offset-4">
-                    <div class="login-panel panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Inicio de Sesion</h3>
-                        </div>
-                        <div class="panel-body">
-                            <form role="form" id="frminiciosesion" action="inicioSesion">
-                                <fieldset>
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" id="txtloginusuario" name="txtloginusuario" placeholder="Usuario" style="text-transform: uppercase" autofocus>
+            <div class="row justify-content-center">
+
+                <div class="col-xl-10 col-lg-12 col-md-9">
+
+                    <div class="card o-hidden border-0 shadow-lg my-5">
+                        <div class="card-body p-0">
+                            <div class="row">
+                                <div class="d-lg-none d-md-block">
+                                    <img src="template/logo/movisai-logo.jpg" alt="MOVISAI" style="margin-top: 60px; width: 280px; height: 92px">
+                                </div>
+                                <div class="col-lg-6 d-none d-lg-block bg-login-image">
+                                    <img src="template/logo/movisai-logo.jpg" alt="MOVISAI" style="margin-top: 100px; margin-left: 20px; width: 400px; height: 120px;">
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="p-5">
+                                        <div class="text-center">
+                                            <h1 class="h4 text-gray-900 mb-4">Census</h1>
+                                        </div>
+                                        <form class="user" id="frminiciosesion" action="inicioSesion" method="post">
+                                            <div class="form-group">
+                                                <input class="form-control form-control-user" type="text" id="txtloginusuario" name="txtloginusuario" placeholder="Nombre de usuario" style="text-transform: uppercase" autofocus>
+                                            </div>
+                                            <div class="form-group">
+                                                <input class="form-control form-control-user" type="password"  id="txtloginpassword" name="txtloginpassword" placeholder="CONTRASEÑA">
+                                            </div>
+                                            <button type="button" class="btn btn-primary btn-user btn-block" name="btniniciar" id="btniniciar">Iniciar</button>
+                                            <hr>
+                                        </form>
                                     </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="password"  id="txtloginpassword" name="txtloginpassword" placeholder="Contraseña">
-                                    </div>
-                                    <button type="button" class="btn btn-lg btn-success btn-block" name="btniniciar" id="btniniciar">Iniciar</button>
-                                </fieldset>
-                            </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    
                 </div>
+                
             </div>
+            
         </div>
     </body>
 </html>

@@ -1,4 +1,61 @@
 
+$(function () {
+    $('#personas-vehiculo').on('blur', 'input[type="number"]', function () {
+        // Aquí puedes agregar la lógica para identificar qué input ha disparado el evento 'blur'
+        var inputId = $(this).attr('id'); // Obtener el id del input que disparó el evento
+
+        // Extraer el número del ID para construir los IDs de los otros elementos
+        var idNumber = inputId.match(/\d+/)[0];
+
+        // Construir los nombres dinámicos de los elementos
+        var tipoDoc = 'cmbtiposdocumento' + idNumber;
+        var documento = 'txtdocumento' + idNumber;
+        var nombre = 'txtnombre' + idNumber;
+        var idPersona = 'idpersona' + idNumber;
+
+        // Llamar a la función con los parámetros correctos
+        consultarPersonaVehiculo(1, tipoDoc, documento, nombre, idPersona);
+    });
+
+    function consultarPersonaVehiculo(sw, nametipodocumento, namedocumento, namenombre, nameidpersona) {
+        var tipodocumento = $('#' + nametipodocumento).val();
+        var documento = $('#' + namedocumento).val().toUpperCase();
+
+        if (documento.length > 0) {
+            $.ajax({
+                type: "POST",
+                url: "../../verificarPersonaVehiculo",
+                data: {
+                    tipodocumento: tipodocumento,
+                    documento: documento,
+                    namenombre: namenombre,
+                    nameidpersona: nameidpersona
+
+                },
+                success: function (response) {
+                    var data = response.trim().split(',');
+                    var result = data[0]; // Primer elemento de la respuesta
+                    if (result === 'si') {
+                        if (sw === 1) {
+                            var nombreCompleto = data[1]; // Segundo elemento
+                            var idPersona = data[2]; // Tercer elemento
+                            $('#' + namenombre).val(nombreCompleto);
+                            $('#' + nameidpersona).val(idPersona);
+                        }
+                    } else {
+                        $('#' + namenombre).val('');
+                        viewModalRegPersona(tipodocumento, documento);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error en la solicitud: " + error);
+                }
+            });
+        }
+    }
+
+});
+
 function registrarPersona() {
     var documento = document.getElementById('txtdocumento').value.toString().toUpperCase();
     var primerNombre = document.getElementById('txtprinom').value.toString().toUpperCase();
@@ -185,35 +242,6 @@ function viewModalRegPersona(tipoDocumento, documento) {
     $('#registrarpersona').modal('show');
     $('#registrarpersona iframe').attr('src', src);
 
-}
-
-function consultarPersonaRegVeh(sw, tipodoc, doc, nom, idper) {
-    var tipodocumento = document.getElementById(tipodoc).value;
-    var documento = document.getElementById(doc).value.toString().toUpperCase();
-
-    if (documento.length > 0) {
-        ajax = new nuevoAjax();
-        ajax.open("POST", "../Gets/getVerificarDocumentoPersona2.jsp", true);
-        ajax.onreadystatechange = function () {
-            if (ajax.readyState == 4 && ajax.status == 200) {
-                var docxml = ajax.responseXML;
-                var result = docxml.getElementsByTagName('result')[0].childNodes[0].nodeValue;
-                if (result == 'si') {
-                    if (sw == '1') {
-                        var nombreCompleto = docxml.getElementsByTagName('nombrecompleto')[0].childNodes[0].nodeValue;
-                        var idPersona = docxml.getElementsByTagName('idpersona')[0].childNodes[0].nodeValue;
-                        document.getElementById(nom).value = nombreCompleto;
-                        document.getElementById(idper).value = idPersona;
-                    }
-                } else {
-                    document.getElementById(nom).value = '';
-                    viewModalRegPersona(tipodocumento, documento);
-                }
-            }
-        }
-        ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        ajax.send("tipodocumento=" + tipodocumento + "&documento=" + documento);
-    }
 }
 
 function consultarPersonaModificar(sw) {

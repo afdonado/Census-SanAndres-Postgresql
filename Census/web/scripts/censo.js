@@ -1,3 +1,87 @@
+$(function (){
+    $('#numero').blur(function () {
+        if ($('#numero').val().length > 0) {
+            verificarNumeroCenso($('#numero').val().toString().toUpperCase());
+        }
+    });
+    
+    function verificarNumeroCenso(numero) {
+        var parametros = {
+            "numero": numero
+        };
+        $.ajax({
+            data: parametros,
+            url: "../../verificarNumeroCenso",
+            type: "post"
+        })
+                .done(function (data) {
+                    var respuesta = data.toString();
+                    respuesta = respuesta.toString().trim();
+                    if (respuesta === 'si') {
+                        $('#numero').val('');
+                        $('#numero').focus();
+                        alert("Numero Censo ya se encuentra registrado");
+                    }
+                });
+    }
+    
+    
+    $('#numero_m').blur(function () {
+        if ($('#numero_m').val().length > 0 && $('#numero_m').val().eq($('#numerocenso').val())) {
+            verificarNumeroCenso($('#numero_m').val().toString().toUpperCase());
+        }
+    });
+    
+    /*function consultarNumeroCenso(numero) {
+        var parametros = {
+            "numero": numero
+        };
+        $.ajax({
+            data: parametros,
+            url: "../../consultarNumeroCenso",
+            type: "post"
+        })
+                .done(function (data) {
+                    var respuesta = data.toString();
+                    respuesta = respuesta.toString().trim();
+                    var datos = respuesta.split(',');
+                    if (datos[0] === 'si') {
+                        $('#numero_m').val('');
+                        $('#numero_m').focus();
+                        alert("Numero Censo ya se encuentra registrado");
+                    } else {
+                        $('#numero_m').val(datos[1]);
+                    }
+                });
+    }*/
+    
+});
+
+/*function consultarNumeroCensoModificar() {
+    var numerocensonew = document.getElementById('txtnumero').value.toString().toUpperCase();
+    var numerocenso = document.getElementById('numerocenso').value.toString().toUpperCase();
+
+    if (numerocensonew.length > 0 && numerocensonew !== numerocenso) {
+        ajax = new nuevoAjax();
+        ajax.open("POST", "../Gets/getVerificarNumeroCenso.jsp", true);
+        ajax.onreadystatechange = function () {
+            if (ajax.readyState == 4 && ajax.status == 200) {
+                var docxml = ajax.responseXML;
+                var result = docxml.getElementsByTagName('result')[0].childNodes[0].nodeValue;
+                if (result == 'si') {
+                    document.getElementById('txtnumero').value = '';
+                    alert("Numero Censo ya se encuentra registrado");
+                }else{
+                    var numeroCen = docxml.getElementsByTagName('numerocenso')[0].childNodes[0].nodeValue;
+                    document.getElementById('txtnumero').value = numeroCen;
+                }
+            }
+        }
+        ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        ajax.send("numerocenso=" + numerocensonew);
+    }
+}
+*/
 
 function registrarCenso() {
     var numero = document.getElementById('txtnumero').value;
@@ -12,7 +96,7 @@ function registrarCenso() {
     }
 }
 
-function consultarNumeroCenso() {
+/*function consultarNumeroCenso() {
     var numerocenso = document.getElementById('txtnumero').value.toString().toUpperCase();
 
     if (numerocenso.length > 0) {
@@ -35,6 +119,8 @@ function consultarNumeroCenso() {
         ajax.send("numerocenso=" + numerocenso);
     }
 }
+ * 
+ */
 
 function consultarCensoById(idcenso) {
     document.location.href = "verCenso.jsp?idcenso=" + idcenso;
@@ -137,31 +223,6 @@ function generarReporteCenso(opcion) {
             break;
     }
 
-}
-
-function consultarNumeroCensoModificar() {
-    var numerocensonew = document.getElementById('txtnumero').value.toString().toUpperCase();
-    var numerocenso = document.getElementById('numerocenso').value.toString().toUpperCase();
-
-    if (numerocensonew.length > 0 && numerocensonew !== numerocenso) {
-        ajax = new nuevoAjax();
-        ajax.open("POST", "../Gets/getVerificarNumeroCenso.jsp", true);
-        ajax.onreadystatechange = function () {
-            if (ajax.readyState == 4 && ajax.status == 200) {
-                var docxml = ajax.responseXML;
-                var result = docxml.getElementsByTagName('result')[0].childNodes[0].nodeValue;
-                if (result == 'si') {
-                    document.getElementById('txtnumero').value = '';
-                    alert("Numero Censo ya se encuentra registrado");
-                }else{
-                    var numeroCen = docxml.getElementsByTagName('numerocenso')[0].childNodes[0].nodeValue;
-                    document.getElementById('txtnumero').value = numeroCen;
-                }
-            }
-        }
-        ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        ajax.send("numerocenso=" + numerocensonew);
-    }
 }
 
 function ImprimirCensoById(idcenso) {

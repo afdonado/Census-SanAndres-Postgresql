@@ -1,3 +1,4 @@
+<%@page import="java.sql.Connection"%>
 <?xml version="1.0" encoding="iso-8859-1"?>
 <%@page contentType="text/xml" %>
 <%@page import="com.censo.modelo.dao.PersonaDao"%>
@@ -5,7 +6,9 @@
 <%@page import="com.censo.modelo.persistencia.CenUsuario"%>
 <root>
 <%
+    try {
     PersonaDao personaDao = new PersonaDao();
+    Connection conex = personaDao.conectar();
     if (!request.getParameter("tipodocumento").equals("") && !request.getParameter("documento").equals("")) {
         int tipodoc = Integer.parseInt(request.getParameter("tipodocumento"));
         String documento = request.getParameter("documento");

@@ -1,10 +1,57 @@
 
 $(function () {
-    $('#txtnomusuario').blur(function () {
-        if ($('#txtnomusuario').val().length > 0) {
-            verificarNombreUsuario($('#txtnomusuario').val().toString().toUpperCase());
+
+    $('#nombreusuario').blur(function () {
+        var nombreusuario = $('#nombreusuario').val().toString().toUpperCase();
+        if (nombreusuario.length > 0) {
+            verificarNombreUsuario(nombreusuario);
         }
     });
+
+    $('#passwordactual').blur(function () {
+        var passwordactual = $('#passwordactual').val();
+        var idusuario = $('#idusuario').val();
+        if (passwordactual.length > 0 && idusuario.length > 0) {
+            validarPasswordActual(passwordactual, idusuario);
+        }
+    });
+
+    $('#password').blur(function () {
+        var password = $('#password').val();
+        var repetirpassword = $('#repetirpassword').val();
+        if (password.trim() !== "") {
+            if (password.length > 5) {
+                validarPassword(password, repetirpassword);
+            } else {
+                alert('El password debe tener minimo 6 caracteres');
+                $('#password').val('');
+                $('#password').focus();
+            }
+        }
+    });
+
+    $('#repetirpassword').blur(function () {
+        var password = $('#password').val();
+        var repetirpassword = $('#repetirpassword').val();
+        if (repetirpassword.trim() !== "") {
+            if (repetirpassword.length > 5) {
+                validarPassword(password, repetirpassword);
+            } else {
+                alert('El password debe tener minimo 6 caracteres');
+                $('#repetirpassword').val('');
+                $('#repetirpassword').focus();
+            }
+        }
+    });
+
+    function validarPassword(password, repetirpassword) {
+        if (password.length > 5 && repetirpassword.length > 5 && password !== repetirpassword) {
+            alert('Los password no coinciden');
+            $('#password').val('');
+            $('#repetirpassword').val('');
+            $('#password').focus();
+        }
+    }
 
     function verificarNombreUsuario(nomusuario) {
         var parametros = {
@@ -12,30 +59,57 @@ $(function () {
         };
         $.ajax({
             data: parametros,
-            url: "../Gets/getVerificarNombreUsuario.jsp",
+            url: "../../verificarNombreUsuario",
             type: "post"
         })
                 .done(function (data) {
                     var respuesta = data.toString();
                     respuesta = respuesta.toString().trim();
-                    if (respuesta == 'si') {
-                        $('#txtnomusuario').val('');
-                        $('#txtpass').val('');
-                        $('#txtreppass').val('');
-                        $('#txtnomusuario').focus();
+                    if (respuesta === 'si') {
+                        $('#nombreusuario').val('');
+                        $('#password').val('');
+                        $('#repetirpassword').val('');
+                        $('#nombreusuario').focus();
                         alert("Nombre de usuario ya se encuentra registrado");
                     }
                 });
     }
+
+    function validarPasswordActual(passwordactual, idusuario) {
+        var parametros = {
+            "idusuario": idusuario,
+            "passwordactual": passwordactual
+        };
+        $.ajax({
+            data: parametros,
+            url: "../../verificarPasswordActual",
+            type: "post"
+        })
+                .done(function (data) {
+                    var respuesta = data.toString();
+                    respuesta = respuesta.toString().trim();
+                    if (respuesta === 'no') {
+                        $('#passwordactual').val('');
+                        $('#passwordactual').focus();
+                        alert("Password actual no es correcto");
+                    }
+                });
+    }
+
+    $("#guardar").click(function (event) {
+        event.preventDefault(); // Evita la navegación del enlace
+        $("#frmactualizarusuario").submit(); // Envia el formulario
+    });
+
 });
 
 function registrarUsuario() {
     var documento = document.getElementById('txtdocumento').value.toString().toUpperCase();
-    var nomusu = document.getElementById('txtnomusuario').value.toString().toUpperCase();
-    var pass = document.getElementById('txtpass').value;
-    var repass = document.getElementById('txtreppass').value;
+    var nombreusuario = document.getElementById('nombreusuario').value.toString().toUpperCase();
+    var password = document.getElementById('password').value;
+    var repetirpassword = document.getElementById('repetirpassword').value;
 
-    if (documento.length === 0 && nomusu.length === 0 && pass.length === 0 && repass.length === 0) {
+    if (documento.length === 0 && nombreusuario.length === 0 && password.length === 0 && repetirpassword.length === 0) {
         alert('Debe ingresar como minimo los datos obligatorios (*)');
     } else {
         document.getElementById('frmregistrarusuario').submit();
@@ -43,45 +117,8 @@ function registrarUsuario() {
 }
 
 function LimpiarCampos() {
-    document.getElementById('txtnomusuario').value = "";
-    document.getElementById('txtpass').value = "";
-}
-
-
-function validarPass() {
-    var pass = document.getElementById('txtpass').value;
-    var repass = document.getElementById('txtreppass').value;
-
-    if (pass.length > 5 && repass.length > 5 && pass !== repass) {
-        alert('Los password no coinciden');
-        document.getElementById('txtpass').value = '';
-        document.getElementById('txtreppass').value = '';
-    }
-
-}
-
-function verificarNombreUsuarioAjax() {
-    var nomusuario = document.getElementById('txtnomusu').value.toString().toUpperCase();
-
-    if (nomusuario.length > 0) {
-        ajax = new nuevoAjax();
-        ajax.open("POST", "../Gets/getVerificarNombreUsuario.jsp", true);
-        ajax.onreadystatechange = function () {
-            if (ajax.readyState == 4 && ajax.status == 200) {
-                var docxml = ajax.responseXML;
-                var result = docxml.getElementsByTagName('result')[0].childNodes[0].nodeValue;
-                if (result == 'si') {
-                    document.getElementById('txtnomusu').value = '';
-                    document.getElementById('txtpass').value = '';
-                    document.getElementById('txtreppass').value = '';
-                    document.getElementById('txtnomusu').focus();
-                    alert("Nombre de usuario ya se encuentra registrado");
-                }
-            }
-        }
-        ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        ajax.send("nomusuario=" + nomusuario);
-    }
+    document.getElementById('nombreusuario').value = "";
+    document.getElementById('password').value = "";
 }
 
 function consultarListadoUsuario(opcion) {
@@ -89,7 +126,7 @@ function consultarListadoUsuario(opcion) {
 
     switch (opcion) {
         case 0 :
-            var nombre = document.getElementById("txtnomusu").value.toString().toUpperCase();
+            var nombre = document.getElementById("nombreusuario").value.toString().toUpperCase();
             window.frames[0].location.href = "listarUsuarios.jsp?opcion=0&tipoconsulta=" + tipoconsulta + "&nombre=" + nombre;
             break;
 
@@ -136,44 +173,17 @@ function restaurarPassword() {
         document.getElementById('frmconsultarusuario').submit();
     }
 }
-
-function validarPassActual() {
-    var idusuario = document.getElementById('idusuario').value.toString().toUpperCase();
-    var passactual = document.getElementById('txtpassactual').value.toString().toUpperCase();
-
-    if (idusuario.length > 0 && passactual.length > 0) {
-        ajax = new nuevoAjax();
-        ajax.open("POST", "../Gets/getVerificarPasswordActual.jsp", true);
-        ajax.onreadystatechange = function () {
-            if (ajax.readyState == 4 && ajax.status == 200) {
-                var docxml = ajax.responseXML;
-                var result = docxml.getElementsByTagName('result')[0].childNodes[0].nodeValue;
-                if (result == 'no') {
-                    document.getElementById('txtpassactual').value = '';
-                    document.getElementById('txtpassactual').focus();
-                    alert("Password actual no es correcto");
-                }
-            }
-        }
-        ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        ajax.send("idusuario=" + idusuario + "&passactual=" + passactual);
-    }
-}
-
-function actualizarPassword() {
-    var idusuario = document.getElementById('idusuario').value.toString().toUpperCase();
-    var passactual = document.getElementById('txtpassactual').value.toString().toUpperCase();
-    var pass = document.getElementById('txtpass').value.toString().toUpperCase();
-    var reppass = document.getElementById('txtreppass').value.toString().toUpperCase();
-    if (idusuario > 0 && passactual.length > 0 && pass.length > 7 && reppass.length > 7) {
-        document.getElementById('frmactualizarusuario').action = '../../actualizarPassword';
-        document.getElementById('frmactualizarusuario').submit();
-    }
-}
-
-function LimpiarCamposActualizar() {
-    document.getElementById('txtpassactual').value = "";
-}
+/*
+ function actualizarPassword() {
+ var idusuario = document.getElementById('idusuario').value.toString().toUpperCase();
+ var passactual = document.getElementById('passwordactual').value.toString().toUpperCase();
+ var pass = document.getElementById('password').value.toString().toUpperCase();
+ var reppass = document.getElementById('repetirpassword').value.toString().toUpperCase();
+ if (idusuario > 0 && passactual.length > 0 && pass.length > 7 && reppass.length > 7) {
+ document.getElementById('frmactualizarusuario').action = '../../actualizarPassword';
+ document.getElementById('frmactualizarusuario').submit();
+ }
+ }*/
 
 function consultarUsuarioById(idusuario) {
     document.location.href = "verUsuario.jsp?idusuario=" + idusuario;

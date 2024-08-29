@@ -1,4 +1,164 @@
 
+$(function () {
+    $('#txtplaca').blur(function () {
+        var placa = $('#txtplaca').val().toString().toUpperCase();
+        if (placa.length > 0) {
+            verificarVehiculo(1, placa);
+        }
+    });
+
+    $('#txtmotor').blur(function () {
+        var motor = $('#txtmotor').val().toString().toUpperCase();
+        if (motor.length > 0) {
+            verificarVehiculo(2, motor);
+        }
+    });
+
+    $('#txtchasis').blur(function () {
+        var chasis = $('#txtchasis').val().toString().toUpperCase();
+        if (chasis.length > 0) {
+            verificarVehiculo(3, chasis);
+        }
+    });
+
+    $('#txtserie').blur(function () {
+        var serie = $('#txtserie').val().toString().toUpperCase();
+        if (serie.length > 0) {
+            verificarVehiculo(4, serie);
+        }
+    });
+
+    // Verificar si la referencia de vehiculo existe o no
+    function verificarVehiculo(tiporeferencia, valorreferencia) {
+        var parametros = {
+            "tiporeferencia": tiporeferencia,
+            "valorreferencia": valorreferencia,
+            "opcion": 1
+        };
+        $.ajax({
+            data: parametros,
+            url: "../../verificarVehiculo",
+            type: "post"
+        })
+                .done(function (data) {
+                    var respuesta = data.toString().trim();
+                    if (respuesta === 'si') {
+                        if (tiporeferencia === '1') {
+                            alert("Placa ya se encuentra registrada");
+                            $('#txtplaca').val('');
+                            $('#txtplaca').focus();
+                        }
+                        if (tiporeferencia === '2') {
+                            alert("Motor ya se encuentra registrado");
+                            $('#txtmotor').val('');
+                            $('#txtmotor').focus();
+                        }
+                        if (tiporeferencia === '3') {
+                            alert("Chasis ya se encuentra registrado");
+                            $('#txtchasis').val('');
+                            $('#txtchasis').focus();
+                        }
+                        if (tiporeferencia === '4') {
+                            alert("Serie ya se encuentra registrada");
+                            $('#txtserie').val('');
+                            $('#txtserir').focus();
+                        }
+                    }
+                });
+    }
+
+    // Ocultar/Mostrar Departamento Municipio ciudad de Matricula
+    $('#pais-matricula').on('change', '#cmbpaismatricula', function () {
+        if ($('#cmbpaismatricula').val() === "18") {
+            $('#departamento-matricula').show();
+            $('#municipio-matricula').show();
+            $('#ciudad-matricula').hide();
+        } else {
+            $('#departamento-matricula').hide();
+            $('#municipio-matricula').hide();
+            $('#ciudad-matricula').show();
+        }
+    });
+
+    // Ocultar/Mostrar Departamento Municipio ciudad de Matricula
+    $('#pais-matricula').on('focus', '#cmbpaismatricula', function () {
+        if ($('#cmbpaismatricula').val() === "18") {
+            $('#departamento-matricula').show();
+            $('#municipio-matricula').show();
+            $('#ciudad-matricula').hide();
+        } else {
+            $('#departamento-matricula').hide();
+            $('#municipio-matricula').hide();
+            $('#ciudad-matricula').show();
+        }
+    });
+
+    // Ocultar/Mostrar Datos de importacion
+    $('#tipos-importacion').on('change', '#cmdtiposimportacion', function () {
+        if ($('#cmdtiposimportacion').val() === "0") {
+            $('#documento-importacion').hide();
+            $('#fecha-importacion').hide();
+            $('#pais-importancion').hide();
+        } else {
+            $('#documento-importacion').show();
+            $('#fecha-importacion').show();
+            $('#pais-importancion').show();
+        }
+    });
+
+    var identificador = 1;
+    $('#agregar-campos').click(function () {
+        if (identificador < 5) {
+            identificador++;
+            var $contentID = $("#personas-vehiculo");
+
+            // Crear nuevo div para la persona
+            var $nuevoDivPersona = $("<div>", {
+                id: 'contenedor'.concat(identificador),
+                class: 'row'
+            });
+
+            // Realizar la solicitud AJAX con jQuery
+            $.ajax({
+                type: "post",
+                url: "../../agregarCamposPersona",
+                data: {
+                    identificador: identificador,
+                    nameComboTP: "cmbtipospersona".concat(identificador),
+                    nameComboTD: "cmbtiposdocumento".concat(identificador),
+                    nameTxtDocumento: "txtdocumento".concat(identificador),
+                    nameTxtNombre: "txtnombre".concat(identificador),
+                    nameTxtId: "idpersona".concat(identificador)
+                },
+                contentType: "application/x-www-form-urlencoded",
+                success: function (response) {
+                    $("#txtcantidadpersonas").val(identificador); // Actualizar valor del input
+                    $nuevoDivPersona.html(response); // Insertar la respuesta en el nuevo div
+                    $contentID.append($nuevoDivPersona); // Agregar el nuevo div al contenedor
+                },
+                error: function () {
+                    alert("Hubo un error al cargar los campos.");
+                }
+            });
+        } else {
+            alert("No se pueden agregar más personas");
+        }
+    });
+
+    $('#quitar-campos').click(function () {
+        if (identificador !== 0) {
+            // Seleccionar el contenedor del último campo de persona y eliminarlo
+            $('#contenedor'.concat(identificador)).remove();
+
+            // Decrementar el identificador
+            identificador--;
+
+            // Actualizar el valor del input txtcantpersonas con el nuevo valor de identificador
+            $("#txtcantidadpersonas").val(identificador);
+        }
+    });
+});
+
 function registrarVehiculo() {
     var motor = document.getElementById('txtmotor').value.toString().toUpperCase();
     var chasis = document.getElementById('txtchasis').value.toString().toUpperCase();
@@ -42,39 +202,6 @@ function registrarVehiculo() {
 
     document.getElementById('frmregistrarvehiculo').submit();
 
-}
-
-function verificarVehiculo(tiporef, nombrecampo) {
-    var valorreferencia = document.getElementById(nombrecampo).value.toString().toUpperCase();
-
-    if (valorreferencia.length > 0) {
-        ajax = new nuevoAjax();
-        ajax.open("POST", "../Gets/getVerificarVehiculo.jsp", true);
-        ajax.onreadystatechange = function () {
-            if (ajax.readyState == 4 && ajax.status == 200) {
-                var docxml = ajax.responseXML;
-                var result = docxml.getElementsByTagName('result')[0].childNodes[0].nodeValue;
-                if (result == 'si') {
-                    if (tiporef == '1') {
-                        alert("Placa ya se encuentra registrada");
-                    }
-                    if (tiporef == '2') {
-                        alert("Motor ya se encuentra registrado");
-                    }
-                    if (tiporef == '3') {
-                        alert("Chasis ya se encuentra registrado");
-                    }
-                    if (tiporef == '4') {
-                        alert("Serie ya se encuentra registrada");
-                    }
-                    document.getElementById(nombrecampo).value = '';
-                    document.getElementById(nombrecampo).focus();
-                }
-            }
-        }
-        ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        ajax.send("tiporef=" + tiporef + "&valorreferencia=" + valorreferencia + "&opcion=1");
-    }
 }
 
 function consultarVehiculoByReferencia() {
@@ -166,33 +293,6 @@ function consultarRefVehiculo() {
     }
 }
 
-
-function habilitarCombosDepMun() {
-    var paismatricula = document.getElementById('cmbpaismatricula').value;
-    if (paismatricula == "18") {
-        document.getElementById("comboDepMatri").style.display = "";
-        document.getElementById("comboMunMatri").style.display = "";
-        document.getElementById("ciudadMatri").style.display = "none";
-    } else {
-        document.getElementById("comboDepMatri").style.display = "none";
-        document.getElementById("comboMunMatri").style.display = "none";
-        document.getElementById("ciudadMatri").style.display = "";
-    }
-}
-
-function habilitarCamposImportacion() {
-    var tipodocimportacion = document.getElementById('cmdtipodocimportacion').value;
-    if (tipodocimportacion == "0") {
-        document.getElementById("docImp").style.display = "none";
-        document.getElementById("fechaImp").style.display = "none";
-        document.getElementById("paisImp").style.display = "none";
-    } else {
-        document.getElementById("docImp").style.display = "";
-        document.getElementById("fechaImp").style.display = "";
-        document.getElementById("paisImp").style.display = "";
-    }
-}
-
 function habilitarCampoLicenciaTransito() {
     var runt = document.getElementById('cmbrunt').value;
     if (runt == "N") {
@@ -228,40 +328,7 @@ function viewModalRegVehiculo(tipoReferencia, referencia) {
 
 }
 
-var identificador = 1;
 
-function AgregarCamposPersona() {
-
-    if (identificador < 5) {
-        identificador = identificador + 1;
-        var contentID = document.getElementById("personasvehiculo");
-        var nuevoDivPersona = document.createElement('div');
-        nuevoDivPersona.setAttribute('id', 'contenedor' + identificador);
-        nuevoDivPersona.setAttribute('class', 'row');
-        ajax = new nuevoAjax();
-        ajax.open("POST", "../Gets/getCrearCampos.jsp", true);
-        ajax.onreadystatechange = function () {
-            if (ajax.readyState == 4) {
-                document.getElementById("txtcantpersonas").value = identificador;
-                nuevoDivPersona.innerHTML = ajax.responseText;
-                contentID.appendChild(nuevoDivPersona);
-            }
-        }
-        ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        ajax.send("identificador=" + identificador);
-    } else {
-        alert("No se pueden agregar mas personas");
-    }
-}
-
-function QuitarCampoPersona() {
-    if (identificador != 0) {
-        var contentID = document.getElementById('personasvehiculo');
-        contentID.removeChild(document.getElementById('contenedor' + identificador));
-        identificador = identificador - 1;
-        document.getElementById("txtcantpersonas").value = identificador;
-    }
-}
 
 var identificadorModificar = 0;
 

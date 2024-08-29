@@ -1,112 +1,50 @@
 <%@page import="javax.servlet.http.HttpSession"%>
-<%@page import="com.censo.modelo.dao.UsuarioDao"%>
-<%@page import="com.censo.modelo.persistencia.CenModulo"%>
-<%@page import="com.censo.modelo.persistencia.CenPermiso"%>
-<%@page import="com.censo.modelo.persistencia.CenUsuario"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" />
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Census - Inicio</title>
 
-        <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
-        <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
-        <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <!-- Custom fonts for this template-->
+        <link href="template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
 
-        <script src="../vendor/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
-        <script src="../vendor/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="../vendor/metisMenu/metisMenu.min.js" type="text/javascript"></script>
-        <script src="../dist/js/sb-admin-2.js" type="text/javascript" ></script>
+        <!-- Custom styles for this template-->
+        <link href="template/css/sb-admin-2.min.css" rel="stylesheet">
 
-        <script>
-            function action(file) {
-                window.frames[0].location.href = file;
-            }
-        </script>
     </head>
-    <body>
+    <body id="page-top">
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
                 if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("Inicio.jsp")) {
-                    CenUsuario cenusuario = (CenUsuario) sessionCensus.getAttribute("usuario");
                     try {
         %>
         <div id="wrapper">
-            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="Inicio.jsp"><img src="../vendor/imagenes/lagit.jpeg" alt="Lagit" style="width: 130px; height: 30px;"></a>
-                </div>
-
-                <ul class="nav navbar-top-links navbar-right">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <%=cenusuario.getNombre()%>&nbsp;<i class="fa fa-user fa-fw"></i><i class="fa fa-caret-down"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a onclick="action('AdminUsuarios/actualizarPassword.jsp')"><i class="fa fa-user fa-fw"></i> Cambiar Password</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li><a href="../cerrarSesion"><i class="fa fa-sign-out fa-fw"></i> Cerrar Sesion</a>
-                            </li>
-                        </ul>
-                    </li>
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                <jsp:include page="/jsp/Menu.jsp"></jsp:include>
                 </ul>
+                <div id="content-wrapper" class="d-flex flex-column">
+                    <div id="content">
 
-                <div class="navbar-default sidebar" role="navigation">
-                    <div class="sidebar-nav navbar-collapse">
-                        <ul class="nav" id="side-menu">
-                            <li>
-                                <a href="Inicio.jsp"><i class="fa fa-dashboard fa-fw"></i> Inicio</a>
-                            </li>
-                            <%
-                                List listaModulosUsuario = (List) sessionCensus.getAttribute("modulosUsuario");
-                                List<CenModulo> listaModulos = (List<CenModulo>) sessionCensus.getAttribute("modulos");
-                                for (int i = 0; i < listaModulosUsuario.size(); i++) {
-                                    for (CenModulo cenmodulo : listaModulos) {
-                                        if (cenmodulo.getId() == listaModulosUsuario.get(i).hashCode()) {
-                            %>
-                            <li>
-                                <a href="#"><i class="<%=cenmodulo.getIcono()%>"></i><%=cenmodulo.getNombre()%><span class="fa arrow"></span></a>
-                                        <%
-                                            UsuarioDao usuarioDao = new UsuarioDao();
-                                            List listaPermisos = usuarioDao.ListarPermisosByUsuarioModulo(cenusuario.getId(), cenmodulo.getId());
-                                            for (int j = 0; j < listaPermisos.size(); j++) {
-                                                CenPermiso permiso = (CenPermiso) listaPermisos.get(j);
-                                                String ubicacion = "";
-                                                if (permiso.getUbicacion() != null) {
-                                                    ubicacion = permiso.getUbicacion();
-                                                }
-                                                String ruta = ubicacion + "/" + permiso.getDescripcion() + "?opcion=1";
-                                        %>
-                                <ul class="nav nav-second-level">
-                                    <li>
-                                        <a onclick="action('<%=ruta%>')" ><%=permiso.getNombre()%></a>
-                                    </li>
-                                </ul>
-                                <%
-                                    }
-                                %>
-                            </li>
-                            <%
-                                        }
-                                    }
-                                }
-                            %>
-                        </ul>
+                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                        <jsp:include page="/jsp/Header.jsp"></jsp:include>
+                        </nav>
+
+                        <div class="container-fluid">
+                            <div class="row"></div>
+                        </div>
+
+                        <footer class="sticky-footer bg-white">
+                        <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                        </footer>
                     </div>
                 </div>
-            </nav>
-
-            <div id="page-wrapper">
-                <div class="row">
-                    <iframe id="frmPrincipal" src="Info.jsp" style="width: 100%; min-height: 1800px;" transparency="transparency" frameborder="0" ></iframe>
-                </div>
             </div>
-        </div>
         <%
             } catch (Exception e) {
                 e.printStackTrace();
@@ -128,5 +66,23 @@
         <%
             }
         %>
+
+        <!-- Bootstrap core JavaScript-->
+        <script src="template/vendor/jquery/jquery.min.js"></script>
+        <script src="template/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Core plugin JavaScript-->
+        <script src="template/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="template/js/sb-admin-2.min.js"></script>
+
+        <!-- Page level plugins -->
+        <script src="template/vendor/chart.js/Chart.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="template/js/demo/chart-area-demo.js"></script>
+        <script src="template/js/demo/chart-pie-demo.js"></script>
+        
     </body>
 </html>

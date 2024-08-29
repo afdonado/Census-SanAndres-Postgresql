@@ -1,69 +1,31 @@
 <%@page import="javax.servlet.http.HttpSession"%>
-<%@page import="com.censo.modelo.dao.TipoDocumentoDao"%>
-<%@page import="com.censo.modelo.dao.TipoPersonaDao"%>
-<%@page import="com.censo.modelo.dao.TipoImportacionDao"%>
-<%@page import="com.censo.modelo.dao.MunicipioDao"%>
-<%@page import="com.censo.modelo.dao.DepartamentoDao"%>
-<%@page import="com.censo.modelo.dao.PaisDao"%>
-<%@page import="com.censo.modelo.dao.TipoUsoDao"%>
-<%@page import="com.censo.modelo.dao.TipoServicioDao"%>
-<%@page import="com.censo.modelo.dao.ClaseVehiculoDao"%>
-<%@page import="com.censo.modelo.dao.VehiculoDao"%>
-<%@page import="com.censo.modelo.persistencia.CenTipoDocumento"%>
-<%@page import="com.censo.modelo.persistencia.CenTipoPersona"%>
-<%@page import="com.censo.modelo.persistencia.CenDepartamento"%>
-<%@page import="com.censo.modelo.persistencia.CenMunicipio"%>
-<%@page import="com.censo.modelo.persistencia.CenTipoUso"%>
-<%@page import="com.censo.modelo.persistencia.CenLinea"%>
-<%@page import="com.censo.modelo.persistencia.CenMarca"%>
-<%@page import="com.censo.modelo.persistencia.CenPais"%>
-<%@page import="com.censo.modelo.persistencia.CenClaseVehiculo"%>
-<%@page import="com.censo.modelo.persistencia.CenTipoServicio"%>
-<%@page import="com.censo.modelo.persistencia.CenTipoImportacion"%>
 <%@page import="java.sql.Date"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" />
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Registrar Vehiculo</title>
 
-        <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <script src="../../vendor/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
-        <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-        <script src="../../scripts/Ajax.js" type="text/javascript"></script>
+        <!-- Custom fonts for this template-->
+        <link href="../../template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="../../template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
 
-        <link href="../../vendor/jquery-ui-1.12.1.Redmond/jquery-ui.css" rel="stylesheet" type="text/css"/>
-        <link href="../../vendor/jquery/calendario_es.css" rel="stylesheet" type="text/css"/>
-        <script src="../../vendor/jquery-ui-1.12.1.Redmond/jquery-ui.js" type="text/javascript"></script>
-        <script src="../../vendor/jquery/calendario_es.js" type="text/javascript"></script>
+        <!-- Custom styles for this template-->
+        <link href="../../template/css/sb-admin-2.min.css" rel="stylesheet">
 
-        <script src="../../scripts/validacionesCampos.js" type="text/javascript"></script>
-        <script src="../../scripts/personas.js" type="text/javascript"></script>
-        <script src="../../scripts/vehiculos.js" type="text/javascript"></script>
-        <script src="../../scripts/municipios.js" type="text/javascript"></script>
-        <script src="../../scripts/cargarMarcas.js" type="text/javascript"></script>
-        <script src="../../scripts/cargarLineas.js" type="text/javascript"></script>
-        <script src="../../scripts/cargarColores.js" type="text/javascript"></script>
-        <script src="../../scripts/fechas.js" type="text/javascript"></script>
+        <!-- Custom styles for this page -->
+        <link href="../../template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     </head>
     <body>
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
                 if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("registrarVehiculo.jsp")) {
-                    
-                    ClaseVehiculoDao claseVehiculoDao = new ClaseVehiculoDao();
-                    TipoServicioDao tipoServicioDao = new TipoServicioDao();
-                    TipoUsoDao tipoUsoDao = new TipoUsoDao();
-                    PaisDao paisDao = new PaisDao();
-                    DepartamentoDao departamentoDao = new DepartamentoDao();
-                    MunicipioDao municipioDao = new MunicipioDao();
-                    TipoImportacionDao tipoImportacionDao = new TipoImportacionDao();
-                    TipoPersonaDao tipoPersonaDao = new TipoPersonaDao();
-                    TipoDocumentoDao tipoDocumentoDao = new TipoDocumentoDao();
-                    
+
                     Date fechaActual = new Date(new java.util.Date().getTime());
                     int opcion = 0;
                     int tipoRefencia = 0;
@@ -92,440 +54,262 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid">
-            <%
-                if (opcion == 1) {
-            %>
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 class="page-header">Vehiculos - Registrar Vehiculo</h1>
-                </div>
-            </div>
-            <%
-                }
-            %>
-            <form role="form" id="frmregistrarvehiculo" action="../../registrarVehiculo">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Datos de Identificacion
-                            </div>
-                            <%
-                                if (opcion == 2) {
-                                    tipoRefencia = Integer.parseInt(request.getParameter("tiporeferencia"));
-                                    referencia = request.getParameter("referencia").toUpperCase().trim();
+        <div id="wrapper">
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                <jsp:include page="/jsp/Menu.jsp"></jsp:include>
+                </ul>
 
-                                    if (tipoRefencia == 1) {
-                                        placa = referencia;
-                                        readonlyplaca = "readonly";
-                                    }
-                                    if (tipoRefencia == 2) {
-                                        motor = referencia;
-                                        readonlymotor = "readonly";
-                                    }
-                                    if (tipoRefencia == 3) {
-                                        chasis = referencia;
-                                        readonlychasis = "readonly";
-                                    }
-                                    if (tipoRefencia == 4) {
-                                        serie = referencia;
-                                        readonlyserie = "readonly";
-                                    }
+                <div id="content-wrapper" class="d-flex flex-column">
+                    <div id="content">
+
+                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                        <jsp:include page="/jsp/Header.jsp"></jsp:include>
+                        </nav>
+                        
+                        <div class="container-fluid">
+                        <%
+                            if (opcion == 1) {
+                        %>
+                        <h1 class="h3 mb-2 text-gray-800">Registrar Vehiculo</h1>
+                        <%
+                            }
+
+                            if (opcion == 2) {
+                                tipoRefencia = Integer.parseInt(request.getParameter("tiporeferencia"));
+                                referencia = request.getParameter("referencia").toUpperCase().trim();
+
+                                if (tipoRefencia == 1) {
+                                    placa = referencia;
+                                    readonlyplaca = "readonly";
                                 }
+                                if (tipoRefencia == 2) {
+                                    motor = referencia;
+                                    readonlymotor = "readonly";
+                                }
+                                if (tipoRefencia == 3) {
+                                    chasis = referencia;
+                                    readonlychasis = "readonly";
+                                }
+                                if (tipoRefencia == 4) {
+                                    serie = referencia;
+                                    readonlyserie = "readonly";
+                                }
+                            }
 
-                            %>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="form-group col-md-3">
-                                        <label>Placa</label>
-                                        <input class="form-control" type="text" id="txtplaca" name="txtplaca" onblur="verificarVehiculo(1, 'txtplaca')" maxlength="10" style="text-transform: uppercase" value="<%=placa%>" <%=readonlyplaca%> required>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label>Motor (*)</label>
-                                        <input class="form-control" type="text" id="txtmotor" name="txtmotor" onblur="verificarVehiculo(2, 'txtmotor')" maxlength="30" style="text-transform: uppercase" value="<%=motor%>" <%=readonlymotor%> required>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label>Chasis (*)</label>
-                                        <input class="form-control" type="text" id="txtchasis" name="txtchasis" onblur="verificarVehiculo(3, 'txtchasis')" maxlength="30"style="text-transform: uppercase" value="<%=chasis%>" <%=readonlychasis%> required>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label>Serie</label>
-                                        <input class="form-control" type="text" id="txtserie" name="txtserie" onblur="verificarVehiculo(4, 'txtserie')" maxlength="30" style="text-transform: uppercase" value="<%=serie%>" <%=readonlyserie%> required>
+                        %>
+                        <form class="user" id="frmregistrarvehiculo" action="../../registrarVehiculo">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos de Identificación</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Placa</label>
+                                            <input class="form-control" type="text" id="txtplaca" name="txtplaca" maxlength="10" style="text-transform: uppercase" value="<%=placa%>" <%=readonlyplaca%> required>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Motor (*)</label>
+                                            <input class="form-control" type="text" id="txtmotor" name="txtmotor" maxlength="30" style="text-transform: uppercase" value="<%=motor%>" <%=readonlymotor%> required>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Chasis (*)</label>
+                                            <input class="form-control" type="text" id="txtchasis" name="txtchasis" maxlength="30"style="text-transform: uppercase" value="<%=chasis%>" <%=readonlychasis%> required>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Serie</label>
+                                            <input class="form-control" type="text" id="txtserie" name="txtserie" maxlength="30" style="text-transform: uppercase" value="<%=serie%>" <%=readonlyserie%> required>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Datos Generales
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="form-group col-md-3">
-                                        <label>Clase(*)</label>
-                                        <select class="form-control" id="cmbclaseveh" name="cmbclaseveh">
-                                            <%
-                                                List listaClasesVehiculo = claseVehiculoDao.ListarClasesVehiculo();
-                                                for (int i = 0; i < listaClasesVehiculo.size(); i++) {
-                                                    CenClaseVehiculo cenclasevehiculo = (CenClaseVehiculo) listaClasesVehiculo.get(i);
-                                                    if (cenclasevehiculo.getId() == 1) {
-                                            %>
-                                            <option value="<%=cenclasevehiculo.getId()%>" selected><%=cenclasevehiculo.getDescripcion()%></option>
-                                            <% } else {%>
-                                            <option value="<%=cenclasevehiculo.getId()%>"><%=cenclasevehiculo.getDescripcion()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label>Servicio(*)</label>
-                                        <select class="form-control" id="cmbservicio" name="cmbservicio">
-                                            <%
-                                                List listaTiposServicio = tipoServicioDao.ListarTiposServicio();
-                                                for (int i = 0; i < listaTiposServicio.size(); i++) {
-                                                    CenTipoServicio Centiposervicio = (CenTipoServicio) listaTiposServicio.get(i);
-                                                    if (Centiposervicio.getId() == 1) {
-                                            %>
-                                            <option value="<%=Centiposervicio.getId()%>" selected><%=Centiposervicio.getDescripcion()%></option>
-                                            <% } else {%>
-                                            <option value="<%=Centiposervicio.getId()%>"><%=Centiposervicio.getDescripcion()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label>Tipo de Uso</label>
-                                        <select class="form-control" id="cmbtipouso" name="cmbtipouso">
-                                            <%
-                                                List listaTiposUso = tipoUsoDao.ListarTiposUso();
-                                                for (int i = 0; i < listaTiposUso.size(); i++) {
-                                                    CenTipoUso centipouso = (CenTipoUso) listaTiposUso.get(i);
-                                                    if (centipouso.getId() == 1) {
-                                            %>
-                                            <option value="<%=centipouso.getId()%>" selected><%=centipouso.getDescripcion()%></option>
-                                            <% } else {%>
-                                            <option value="<%=centipouso.getId()%>"><%=centipouso.getDescripcion()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label>Color(*)</label>
-                                        <input class="form-control" id="txtcolores" name="txtcolores" style="text-transform: uppercase">
-                                    </div>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos Generales</h6>
                                 </div>
-                                <div class="row">
-                                    <div class="form-group col-md-3">
-                                        <label>Marca(*)</label>
-                                        <input class="form-control" id="txtmarcas" name="txtmarcas" style="text-transform: uppercase">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="clase-vehiculo"></div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-servicio"></div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-uso"></div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Color(*)</label>
+                                            <input class="form-control" id="txtcolores" name="txtcolores" style="text-transform: uppercase">
+                                        </div>
                                     </div>
-                                    <div class="form-group col-md-3">
-                                        <label>Linea(*)</label>
-                                        <input class="form-control" id="txtlineas" name="txtlineas" style="text-transform: uppercase">
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label>Modelo (*)</label>
-                                        <input class="form-control" type="text" id="txtmodelo" name="txtmodelo" onKeyPress=" return validarNumeros(event)" maxlength="4" required>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label>Transformado (*)</label>
-                                        <select class="form-control" id="cmbtransformado" name="cmbtransformado">
-                                            <option value="S" selected>Si</option>
-                                            <option value="N">No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Datos Registro Inicial
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="form-group col-md-3">
-                                        <label>Registrado en Runt (*)</label>
-                                        <select class="form-control" id="cmbrunt" name="cmbrunt" onchange="habilitarCampoLicenciaTransito()">
-                                            <option value="S" selected>Si</option>
-                                            <option value="N">No</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-3" id="lictransito" >
-                                        <label>Licencia Transito</label>
-                                        <input class="form-control" type="text" id="txtlictransito" name="txtlictransito" value="" style="text-transform: uppercase"/>
-                                    </div>
-                                    <div class="form-group col-md-3" id="fechamatri">
-                                        <label>Fecha Matricula</label>
-                                        <input class="form-control" type="text" id="txtfechamatri" name="txtfechamatri" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-md-3" id="paismatri">
-                                        <label>Pais</label>
-                                        <select class="form-control" id="cmbpaismatricula" name="cmbpaismatricula" onChange="habilitarCombosDepMun()" onFocus="habilitarCombosDepMun()">
-                                            <%
-                                                List listaPaisesMatricula = paisDao.ListarPaises();
-
-                                                for (int i = 0; i < listaPaisesMatricula.size(); i++) {
-                                                    CenPais cenpais = (CenPais) listaPaisesMatricula.get(i);
-                                                    if (cenpais.getId() == 18) {
-                                            %>
-                                            <option value="<%=cenpais.getId()%>" selected><%=cenpais.getNombre()%></option>
-                                            <% } else {%>
-                                            <option value="<%=cenpais.getId()%>"><%=cenpais.getNombre()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-3" id="comboDepMatri" id="deptmatri">
-                                        <label>Departamento</label>
-
-                                        <select class="form-control" id="cmbdepartamentomatri" name="cmbdepartamentomatri" onChange="consultarMunicipiosByDepto('cmbdepartamentomatri', 'cmbmunicipiomatri')
-                                                return false" onFocus="consultarMunicipiosByDepto('cmbdepartamentomatri', 'cmbmunicipiomatri')">
-                                            <%
-                                                List listaDepartamentosMatri = departamentoDao.ListarDepartamentos();
-
-                                                for (int i = 0; i < listaDepartamentosMatri.size(); i++) {
-                                                    CenDepartamento cendepartamento = (CenDepartamento) listaDepartamentosMatri.get(i);
-                                                    if (cendepartamento.getId() == 4) {
-                                            %>
-                                            <option value="<%=cendepartamento.getId()%>" selected><%=cendepartamento.getNombre()%></option>
-                                            <% } else {%>
-                                            <option value="<%=cendepartamento.getId()%>"><%=cendepartamento.getNombre()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-3" id="comboMunMatri">
-                                        <label>Municipio</label>
-
-                                        <select class="form-control" id="cmbmunicipiomatri" name="cmbmunicipiomatri">
-                                            <%
-                                                java.util.List listaMunicipiosMatricula = municipioDao.ListarMunicipiosByIdDepto(4);
-                                                for (int i = 0; i < listaMunicipiosMatricula.size(); i++) {
-                                                    CenMunicipio cenmunicipio = (CenMunicipio) listaMunicipiosMatricula.get(i);
-                                                    if (cenmunicipio.getId() == 144) {
-                                            %>
-                                            <option value="<%=cenmunicipio.getId()%>" selected><%=cenmunicipio.getNombre()%></option>
-                                            <%
-                                            } else {
-                                            %>
-                                            <option value="<%=cenmunicipio.getId()%>"><%=cenmunicipio.getNombre()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-3" id="ciudadMatri" style="display: none">
-                                        <label>Ciudad</label>
-                                        <input class="form-control" type="text" id="txtciudadmatri" name="txtciudadmatri" maxlength="80" style="text-transform: uppercase" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Datos Importacion
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="form-group col-md-3">
-                                        <label>Tipo Doc. Importacion</label>
-                                        <select class="form-control" id="cmdtipodocimportacion" name="cmdtipodocimportacion" onchange="habilitarCamposImportacion()">
-                                            <%
-                                                List listaTiposImportacion = tipoImportacionDao.ListarTiposImportacion();
-                                                for (int i = 0; i < listaTiposImportacion.size(); i++) {
-                                                    CenTipoImportacion centipoimportacion = (CenTipoImportacion) listaTiposImportacion.get(i);
-                                                    if (centipoimportacion.getId() == 1) {
-                                            %>
-                                            <option value="<%=centipoimportacion.getId()%>" selected><%=centipoimportacion.getDescripcion()%></option>
-                                            <% } else {%>
-                                            <option value="<%=centipoimportacion.getId()%>"><%=centipoimportacion.getDescripcion()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-3" id="docImp">
-                                        <label>Documento Importacion (*)</label>
-                                        <input class="form-control" type="text" id="txtdocimportacion" name="txtdocimportacion" maxlength="80" style="text-transform: uppercase">
-                                    </div>
-                                    <div class="form-group col-md-3" id="fechaImp">
-                                        <label>Fecha Importacion (*)</label>
-                                        <input class="form-control" type="text" id="txtfechaimportacion" name="txtfechaimportacion" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
-                                    </div>
-                                    <div class="form-group col-md-3" id="paisImp">
-                                        <label>Pais</label>
-                                        <select class="form-control" id="cmbpaisimportacion" name="cmbpaisimportacion" onChange="habilitarCombosDepMun() return false" onFocus="habilitarCombosDepMun()">
-                                            <%
-                                                List listaPaisesImportacion = paisDao.ListarPaises();
-
-                                                for (int i = 0; i < listaPaisesImportacion.size(); i++) {
-                                                    CenPais cenPais = (CenPais) listaPaisesImportacion.get(i);
-                                                    if (cenPais.getId() == 18) {
-                                            %>
-                                            <option value="<%=cenPais.getId()%>" selected><%=cenPais.getNombre()%></option>
-                                            <% } else {%>
-                                            <option value="<%=cenPais.getId()%>"><%=cenPais.getNombre()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Polizas y Certificados
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="form-group col-md-3">
-                                        <label>SOAT (*)</label>
-                                        <select class="form-control" id="cmbsoat" name="cmbsoat">
-                                            <option value="S" selected>Si</option>
-                                            <option value="N">No</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label>Fecha Venc. Soat</label>
-                                        <input class="form-control" type="text" id="txtfechavsoat" name="txtfechavsoat" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label>Tecnomecanica (*)</label>
-                                        <select class="form-control" id="cmbtecno" name="cmbtecno">
-                                            <option value="S" selected>Si</option>
-                                            <option value="N">No</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label>Fecha Venc. Tecnomecanica</label>
-                                        <input class="form-control" type="text" id="txtfechavtecno" name="txtfechavtecno" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        Personas Asociadas
-                                    </div>
-                                    <div class="col-md-1">
-                                        <a class="btn btn-primary" href="javascript:AgregarCamposPersona();">Agregar</a>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <a class="btn btn-danger" href="javascript:QuitarCampoPersona();">Quitar</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <label>Tipo</label>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label>Tipo Documento</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Documento</label>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label>Nombre</label>
-                                    </div>
-                                </div>
-                                <div id="personasvehiculo">
-                                    <div id="contenedor1" class="row">
-                                        <div class="form-group col-md-2">
-                                            <select class="form-control" id="cmbtipopersona1" name="cmbtipopersona1">
-                                                <%
-                                                    List listaTiposPersona = tipoPersonaDao.ListarTiposPersona();
-
-                                                    for (int i = 0; i < listaTiposPersona.size(); i++) {
-                                                        CenTipoPersona centipopersona = (CenTipoPersona) listaTiposPersona.get(i);
-                                                        if (centipopersona.getId() == 1) {
-                                                %>
-                                                <option value="<%=centipopersona.getId()%>" selected><%=centipopersona.getDescripcion()%></option>
-                                                <% } else {%>
-                                                <option value="<%=centipopersona.getId()%>"><%=centipopersona.getDescripcion()%></option>
-                                                <%
-                                                        }
-                                                    }
-                                                %>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Marca(*)</label>
+                                            <input class="form-control" id="txtmarcas" name="txtmarcas" style="text-transform: uppercase">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Linea(*)</label>
+                                            <input class="form-control" id="txtlineas" name="txtlineas" style="text-transform: uppercase">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Modelo (*)</label>
+                                            <input class="form-control" type="number" id="txtmodelo" name="txtmodelo" maxlength="4" required>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Transformado (*)</label>
+                                            <select class="form-control" id="cmbtransformado" name="cmbtransformado">
+                                                <option value="S" selected>Si</option>
+                                                <option value="N">No</option>
                                             </select>
                                         </div>
-                                        <div class="form-group col-md-2">
-                                            <select class="form-control" id="cmbtipodoc1" name="cmbtipodoc1">
-                                                <%
-                                                    List listaTiposDocumento = tipoDocumentoDao.ListarTiposDocumento();
-
-                                                    for (int i = 0; i < listaTiposDocumento.size(); i++) {
-                                                        CenTipoDocumento centipodocumento = (CenTipoDocumento) listaTiposDocumento.get(i);
-                                                        if (centipodocumento.getId() == 1) {
-                                                %>
-                                                <option value="<%=centipodocumento.getId()%>" selected><%=centipodocumento.getDescripcion()%></option>
-                                                <% } else {%>
-                                                <option value="<%=centipodocumento.getId()%>"><%=centipodocumento.getDescripcion()%></option>
-                                                <%
-                                                        }
-                                                    }
-                                                %>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-md-2">
-                                            <input class="form-control" type="text" id="txtdocumento1" name="txtdocumento1" onKeyPress=" return validarNumeros(event)" onblur="consultarPersonaRegVeh(1, 'cmbtipodoc1', 'txtdocumento1', 'txtnombre1', 'idpersona1')" maxlength="20" style="text-transform: uppercase" required>
-                                        </div>
-                                        <div class="form-group col-md-5">
-                                            <input class="form-control" type="text" id="txtnombre1" name="txtnombre1" readonly="true">
-                                        </div>
-                                        <input type="hidden" id="idpersona1" name="idpersona1">
                                     </div>
                                 </div>
-
                             </div>
-                            <input type="hidden" id="txtcantpersonas" name="txtcantpersonas" value="1">
-                        </div>
-
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Observaciones
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos Registro Inicial</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Registrado en Runt (*)</label>
+                                            <select class="form-control" id="cmbrunt" name="cmbrunt" onchange="habilitarCampoLicenciaTransito()">
+                                                <option value="S" selected>Si</option>
+                                                <option value="N">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="lictransito" >
+                                            <label>Licencia Transito</label>
+                                            <input class="form-control" type="text" id="txtlicenciatransito" name="txtlicenciatransito" value="" style="text-transform: uppercase"/>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="fechamatri">
+                                            <label>Fecha Matricula</label>
+                                            <input class="form-control" type="text" id="txtfechamatricula" name="txtfechamatricula" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="pais-matricula"></div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="departamento-matricula"></div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="municipio-matricula"></div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="ciudad-matricula" style="display: none">
+                                            <label>Ciudad</label>
+                                            <input class="form-control" type="text" id="txtciudadmatricula" name="txtciudadmatricula" maxlength="80" style="text-transform: uppercase" required>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="form-group col-md-12">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos Importacion</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-importacion"></div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="documento-importacion">
+                                            <label>Documento Importacion (*)</label>
+                                            <input class="form-control" type="text" id="txtdocumentoimportacion" name="txtdocumentoimportacion" maxlength="80" style="text-transform: uppercase">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="fecha-importacion">
+                                            <label>Fecha Importacion (*)</label>
+                                            <input class="form-control" type="text" id="txtfechaimportacion" name="txtfechaimportacion" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="pais-importancion"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Polizas y Certificados</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>SOAT (*)</label>
+                                            <select class="form-control" id="cmbsoat" name="cmbsoat">
+                                                <option value="S" selected>Si</option>
+                                                <option value="N">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Fecha Venc. Soat</label>
+                                            <input class="form-control" type="text" id="txtfechavsoat" name="txtfechavsoat" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Tecnomecanica (*)</label>
+                                            <select class="form-control" id="cmbtecnomecanica" name="cmbtecnomecanica">
+                                                <option value="S" selected>Si</option>
+                                                <option value="N">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Fecha Venc. Tecnomecanica</label>
+                                            <input class="form-control" type="text" id="txtfechavtecnomecanica" name="txtfechavtecnomecanica" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                                    <h6 class="m-0 font-weight-bold text-primary">Personas Asociadas</h6>
+                                    <div class="d-flex">
+                                        <a class="btn btn-primary" id="agregar-campos">Agregar</a>
+                                        <a class="btn btn-danger ml-1" id="quitar-campos">Quitar</a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-2 mb-3 mb-sm-0">
+                                            <label>Tipo</label>
+                                        </div>
+                                        <div class="col-sm-2 mb-3 mb-sm-0">
+                                            <label>Tipo Documento</label>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Documento</label>
+                                        </div>
+                                        <div class="col-sm-5 mb-3 mb-sm-0">
+                                            <label>Nombre</label>
+                                        </div>
+                                    </div>
+                                    <div id="personas-vehiculo">
+                                        <div id="contenedor1" class="form-group row">
+                                            <div class="col-sm-2 mb-3 mb-sm-0" id="tipos-persona1"></div>
+                                            <div class="col-sm-2 mb-3 mb-sm-0" id="tipos-documento1"></div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <input class="form-control" type="number" id="txtdocumento1" name="txtdocumento1" maxlength="20" required="true">
+                                            </div>
+                                            <div class="col-sm-5 mb-3 mb-sm-0">
+                                                <input class="form-control" type="text" id="txtnombre1" name="txtnombre1" readonly="true">
+                                            </div>
+                                            <input type="hidden" id="idpersona1" name="idpersona1">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <input type="hidden" id="txtcantidadpersonas" name="txtcantidadpersonas" value="1">
+                            </div>
+
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
                                         <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" cols="3"></textarea>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="row page-header">
+                                <div class="form-group col-xs-12 col-sm-3 col-md-3">
+                                    <button type="button" class="btn btn-lg btn-success btn-block" onclick="registrarVehiculo()" id="btnregistrar" name="btnregistrar" >Registrar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <footer class="sticky-footer bg-white">
+                        <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                        </footer>
                     </div>
                 </div>
-                <div class="row page-header">
-                    <div class="form-group col-xs-12 col-sm-3 col-md-3">
-                        <button type="button" class="btn btn-lg btn-success btn-block" onclick="registrarVehiculo()" id="btnregistrar" name="btnregistrar" >Registrar</button>
-                    </div>
-                </div>
-            </form>
-        </div>
+            </div>
         <%
         } else {
         %>
@@ -544,5 +328,27 @@
         <%
             }
         %>
+
+        <!-- Bootstrap core JavaScript-->
+        <script src="../../template/vendor/jquery/jquery.min.js"></script>
+        <script src="../../template/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- Core plugin JavaScript-->
+        <script src="../../template/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="../../template/js/sb-admin-2.min.js"></script>
+
+        <link href="../../template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.css" rel="stylesheet" type="text/css"/>
+        <link href="../../template/vendor/jquery/calendario_es.css" rel="stylesheet" type="text/css"/>
+        <script src="../../template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.js" type="text/javascript"></script>
+        <script src="../../template/vendor/jquery/calendario_es.js" type="text/javascript"></script>
+
+        <script src="../../scripts/validacionesCampos.js" type="text/javascript"></script>
+        <script src="../../scripts/personas.js" type="text/javascript"></script>
+        <script src="../../scripts/parametros.js" type="text/javascript"></script>
+        <script src="../../scripts/vehiculos.js" type="text/javascript"></script>        
+        <script src="../../scripts/fechas.js" type="text/javascript"></script>
+
     </body>
 </html>

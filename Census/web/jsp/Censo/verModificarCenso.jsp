@@ -129,7 +129,7 @@
                                 <div class="row">
                                     <div class="form-group col-md-2">
                                         <label># Censo(*)</label>
-                                        <input class="form-control" type="text" id="txtnumero" name="txtnumero" onblur="consultarNumeroCensoModificar()" onKeyPress="return validarNumeros(event)" style="text-transform: uppercase" maxlength="7" value="<%= cencenso.getNumero()== null ? "" : cencenso.getNumero().trim()%>"/>
+                                        <input class="form-control" type="text" id="numero_m" name="numero" onKeyPress="return validarNumeros(event)" style="text-transform: uppercase" maxlength="7" value="<%= cencenso.getNumero()== null ? "" : cencenso.getNumero().trim()%>"/>
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label>Fecha Censo (*)</label>

@@ -97,7 +97,7 @@
                                 <div class="row">
                                     <div class="form-group col-md-2">
                                         <label># Censo(*)</label>
-                                        <input class="form-control" type="text" id="txtnumero" name="txtnumero" value="" onblur="consultarNumeroCenso()" onKeyPress="return validarNumeros(event)" style="text-transform: uppercase" maxlength="5"/>
+                                        <input class="form-control" type="text" id="numero" name="numero" value="" onKeyPress="return validarNumeros(event)" style="text-transform: uppercase" maxlength="5"/>
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label>Fecha Censo (*)</label>
