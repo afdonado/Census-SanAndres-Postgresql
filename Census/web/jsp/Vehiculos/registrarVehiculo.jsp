@@ -1,5 +1,7 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.LinkedList"%>
 <%@page import="javax.servlet.http.HttpSession"%>
-<%@page import="java.sql.Date"%>
+<%@page import="java.util.Date"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -24,9 +26,9 @@
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
-                if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("registrarVehiculo.jsp")) {
+                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("registrarVehiculo.jsp")) {
 
-                    Date fechaActual = new Date(new java.util.Date().getTime());
+                    Date fechaActual = new Date(new Date().getTime());
                     int opcion = 0;
                     int tipoRefencia = 0;
                     String referencia = "";
@@ -179,7 +181,7 @@
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0" id="fechamatri">
                                             <label>Fecha Matricula</label>
-                                            <input class="form-control" type="text" id="txtfechamatricula" name="txtfechamatricula" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
+                                            <input class="form-control" type="text" id="txtfechamatricula" name="txtfechamatricula" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -206,7 +208,7 @@
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0" id="fecha-importacion">
                                             <label>Fecha Importacion (*)</label>
-                                            <input class="form-control" type="text" id="txtfechaimportacion" name="txtfechaimportacion" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
+                                            <input class="form-control" type="text" id="txtfechaimportacion" name="txtfechaimportacion" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0" id="pais-importancion"></div>
                                     </div>
@@ -228,7 +230,7 @@
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
                                             <label>Fecha Venc. Soat</label>
-                                            <input class="form-control" type="text" id="txtfechavsoat" name="txtfechavsoat" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
+                                            <input class="form-control" type="text" id="txtfechavsoat" name="txtfechavsoat" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
                                             <label>Tecnomecanica (*)</label>
@@ -239,7 +241,7 @@
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
                                             <label>Fecha Venc. Tecnomecanica</label>
-                                            <input class="form-control" type="text" id="txtfechavtecnomecanica" name="txtfechavtecnomecanica" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
+                                            <input class="form-control" type="text" id="txtfechavtecnomecanica" name="txtfechavtecnomecanica" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
                                         </div>
                                     </div>
                                 </div>
@@ -315,7 +317,7 @@
         %>
         <script type="text/javascript">
             alert("Su usuario no tiene permiso para acceder a esta pagina");
-            window.parent.location.href = "../Inicio.jsp";
+            window.parent.location.href = "dashboard";
         </script>
         <%
             }
@@ -323,7 +325,7 @@
         %>
         <script type="text/javascript">
             alert("Su sesion a terminado");
-            document.location.href = "../../cerrarSesion";
+            document.location.href = "../../index.jsp";
         </script>
         <%
             }

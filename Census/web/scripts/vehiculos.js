@@ -157,6 +157,7 @@ $(function () {
             $("#txtcantidadpersonas").val(identificador);
         }
     });
+    
 });
 
 function registrarVehiculo() {
@@ -218,42 +219,6 @@ function consultarVehiculoByReferencia() {
     }
     ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     ajax.send("tiporef=" + tiporef + "&valorreferencia=" + valorreferencia + "&namediv=" + namediv);
-}
-
-function consultarListadoVehiculo(opcion) {
-    var tipoconsulta = document.getElementById("tipoconsulta").value;
-
-    switch (opcion) {
-        case 1 :
-            var tiporef = document.getElementById("cmbtiporeferencia").value;
-            var referencia = document.getElementById("txtreferencia").value.toString().toUpperCase();
-            window.frames[0].location.href = "listarVehiculos.jsp?opcion=1&tipoconsulta=" + tipoconsulta + "&tiporef=" + tiporef + "&referencia=" + referencia;
-            break;
-
-        case 2:
-            var tipodocumento = document.getElementById('cmbtipodoc').value;
-            var documento = document.getElementById('txtdocumento').value.toString().toUpperCase();
-            window.frames[0].location.href = "listarVehiculos.jsp?opcion=2&tipoconsulta=" + tipoconsulta + "&tipodocumento=" + tipodocumento + "&documento=" + documento;
-            break;
-
-        case 3:
-            var fechaRegini = document.getElementById("txtfechaRegini").value.toString();
-            var fechaRegfin = document.getElementById("txtfechaRegfin").value.toString();
-            window.frames[0].location.href = "listarVehiculos.jsp?opcion=3&tipoconsulta=" + tipoconsulta + "&fechaRegini=" + fechaRegini + "&fechaRegfin=" + fechaRegfin;
-            break;
-
-        case 4:
-            ancho = 800;
-            alto = 640;
-            barra = 0;
-            izquierda = (screen.width) ? (screen.width - ancho) / 2 : 100;
-            arriba = (screen.height) ? (screen.height - alto) / 2 : 100;
-            opciones = 'toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=' + barra + ',resizable=no,width=' + ancho + ',height=' + alto + ',left=' + izquierda + ',top=' + arriba;
-            url = "generarReporteVehiculos.jsp?opcion=1";
-            window.open(url, 'popUp', opciones);
-            break;
-    }
-
 }
 
 function consultarVehiculoById(idvehiculo) {

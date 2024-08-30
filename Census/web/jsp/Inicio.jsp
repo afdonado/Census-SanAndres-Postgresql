@@ -53,7 +53,7 @@
         %>
         <script type="text/javascript">
             alert("Su usuario no tiene permiso para acceder a esta pagina");
-            document.location.href = "../cerrarSesion";
+            document.location.href = "dashboard";
         </script>
         <%
             }
@@ -61,7 +61,7 @@
         %>
         <script type="text/javascript">
             alert("Su sesion a terminado");
-            document.location.href = "../cerrarSesion";
+            document.location.href = "index.jsp";
         </script>
         <%
             }

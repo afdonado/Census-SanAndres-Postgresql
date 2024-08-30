@@ -1,310 +1,277 @@
-<%@page import="com.censo.modelo.dao.PersonaVehiculoDao"%>
-<%@page import="com.censo.modelo.dao.VehiculoDao"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@page import="javax.servlet.http.HttpSession"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <script src="../../vendor/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
-        <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-        <script src="../../scripts/Ajax.js" type="text/javascript"></script>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Datos Vehiculo</title>
 
-        <script src="../../scripts/vehiculos.js" type="text/javascript"></script>
+        <!-- Custom fonts for this template-->
+        <link href="${pageContext.request.contextPath}/template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="${pageContext.request.contextPath}/template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
+
+        <!-- Custom styles for this template-->
+        <link href="${pageContext.request.contextPath}/template/css/sb-admin-2.min.css" rel="stylesheet">
+
+        <!-- Custom styles for this page -->
+        <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     </head>
     <body>
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
                 if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("consultarVehiculo.jsp")) {
-                    if (!request.getParameter("idvehiculo").equals("")) {
-                    
-                        VehiculoDao vehiculoDao = new VehiculoDao();
-                        PersonaVehiculoDao personaVehiculoDao = new PersonaVehiculoDao();
-                    
-                        long idvehiculo = Long.parseLong(request.getParameter("idvehiculo"));
-
-                        List<HashMap> datosVehiculo = vehiculoDao.ListarVehiculosById(idvehiculo);
-
-                        if (datosVehiculo.size() > 0) {
-
-                            for (HashMap hash : datosVehiculo) {
-
         %>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            Datos de Identificacion
-                        </div>
-                        <div class="panel-body">
-                            <div class="row form-group">
-                                <div class="col-md-3">
-                                    <label>Placa</label>
-                                    <input class="form-control" type="text" id="txtplaca" name="txtplaca" value="<%= hash.get("VEH_PLACA") == null ? "" : hash.get("VEH_PLACA")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Motor</label>
-                                    <input class="form-control" type="text" id="txtmotor" name="txtmotor" value="<%= hash.get("VEH_MOTOR") == null ? "" : hash.get("VEH_MOTOR")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Chasis</label>
-                                    <input class="form-control" type="text" id="txtchasis" name="txtchasis" value="<%= hash.get("VEH_CHASIS") == null ? "" : hash.get("VEH_CHASIS")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Serie</label>
-                                    <input class="form-control" type="text" id="txtserie" name="txtserie" value="<%= hash.get("VEH_SERIE") == null ? "" : hash.get("VEH_SERIE")%>" readonly="true">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            Datos Generales
-                        </div>
-                        <div class="panel-body">    
-                            <div class="row form-group">
-                                <div class="col-md-3">
-                                    <label>Clase</label>
-                                    <input class="form-control" type="text" id="txtclase" name="txtclase" value="<%= hash.get("CLASE") == null ? "" : hash.get("CLASE")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Servicio</label>
-                                    <input class="form-control" type="text" id="txtservicio" name="txtservicio" value="<%= hash.get("SERVICIO") == null ? "" : hash.get("SERVICIO")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Tipo de Uso</label>
-                                    <input class="form-control" type="text" id="txttipouso" name="txttipouso" value="<%= hash.get("TIPO_USO") == null ? "" : hash.get("TIPO_USO")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Color</label>
-                                    <input class="form-control" type="text" id="txtcolor" name="txtcolor" value="<%= hash.get("COLOR") == null ? "" : hash.get("COLOR")%>" readonly="true">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label>Marca</label>
-                                    <input class="form-control" type="text" id="txtmarca" name="txtmarca" value="<%= hash.get("MARCA") == null ? "" : hash.get("MARCA")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Linea</label>
-                                    <input class="form-control" type="text" id="txtlinea" name="txtlinea" value="<%= hash.get("LINEA") == null ? "" : hash.get("LINEA")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Modelo</label>
-                                    <input class="form-control" type="text" id="txtmodelo" name="txtmodelo" value="<%= hash.get("MODELO") == null ? "" : hash.get("MODELO")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Transformado</label>
-                                    <input class="form-control" type="text" id="txttransformado" name="txttransformado" value="<%= hash.get("TRANSFORMADO") == null ? "" : hash.get("TRANSFORMADO").equals("S") ? "SI" : "NO"%>" readonly="true">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            Datos Registro Inicial
-                        </div>
-                        <div class="panel-body">
-                            <div class="row form-group">
-                                <div class="col-md-3">
-                                    <label>Registrado en Runt</label>
-                                    <input class="form-control" type="text" id="txtrunt" name="txtrunt" value="<%= hash.get("RUNT") == null ? "" : hash.get("RUNT").equals("S") ? "SI" : "NO"%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Licencia Transito</label>
-                                    <input class="form-control" type="text" id="txtlictransito" name="txtlictransito" value="<%= hash.get("LICENCIA_TRANSITO") == null ? "" : hash.get("LICENCIA_TRANSITO")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Fecha Matricula</label>
-                                    <input class="form-control" type="text" id="txtfechamatri" name="txtfechamatri" value="<%= hash.get("FECHA_MATRICULA") == null ? "" : hash.get("FECHA_MATRICULA")%>" readonly="true">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label>Pais</label>
-                                    <input class="form-control" type="text" id="txtpaismatricula" name="txtpaismatricula" value="<%= hash.get("PAIS_MATRICULA") == null ? "" : hash.get("PAIS_MATRICULA")%>" readonly="true">
-                                </div>
-                                <%
-                                    if (hash.get("PAIS_MATRICULA") != null) {
-                                        if (hash.get("PAIS_MATRICULA").equals("COLOMBIA")) {
-                                %>
-                                <div class="col-md-3">
-                                    <label>Departamento</label>
-                                    <input class="form-control" type="text" id="txtdepartamentomatri" name="txtdepartamentomatri" value="<%= hash.get("DPTO_MATRICULA") == null ? "" : hash.get("DPTO_MATRICULA")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Municipio</label>
-                                    <input class="form-control" type="text" id="txtmunicipiomatri" name="txtmunicipiomatri" value="<%= hash.get("MUNI_MATRICULA") == null ? "" : hash.get("MUNI_MATRICULA")%>" readonly="true">
-                                </div>
-                                <%
-                                } else {
-                                %>
-                                <div class="col-md-3">
-                                    <label>Ciudad</label>
-                                    <input class="form-control" type="text" id="txtciudadmatri" name="txtciudadmatri" value="<%= hash.get("CIUDAD_MATRICULA") == null ? "" : hash.get("CIUDAD_MATRICULA")%>" readonly="true">
-                                </div>
-                                <%
-                                        }
-                                    }
-                                %>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            Datos Importación
-                        </div>
-                        <div class="panel-body">
-                            <div class="row form-group">
-                                <div class="col-md-3">
-                                    <label>Tipo Documento</label>
-                                    <input class="form-control" type="text" id="txttipodocimportacion" name="txttipodocimportacion" value="<%= hash.get("TDOC_IMP") == null ? "" : hash.get("TDOC_IMP")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Documento</label>
-                                    <input class="form-control" type="text" id="txtdocimportacion" name="txtdocimportacion" value="<%= hash.get("DOCUMENTO_IMP") == null ? "" : hash.get("DOCUMENTO_IMP")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Fecha</label>
-                                    <input class="form-control" type="text" id="txtfechaimportacion" name="txtfechaimportacion" value="<%= hash.get("FECHA_IMP") == null ? "" : hash.get("FECHA_IMP")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Pais</label>
-                                    <input class="form-control" type="text" id="txtpaisimportacion" name="txtpaisimportacion" value="<%= hash.get("PAIS_IMP") == null ? "" : hash.get("PAIS_IMP")%>" readonly="true">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            Polizas y Certificados
-                        </div>
-                        <div class="panel-body">
-                            <div class="row form-group">
-                                <div class="col-md-3">
-                                    <label>SOAT</label>
-                                    <input class="form-control" type="text" id="txtsoat" name="txtrunt" value="<%= hash.get("SOAT") == null ? "" : hash.get("SOAT").equals("S") ? "SI" : "NO"%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Fecha Venc. Soat</label>
-                                    <input class="form-control" type="text" id="txtfechavsoat" name="txtfechavsoat" value="<%= hash.get("FECHAV_SOAT") == null ? "" : hash.get("FECHAV_SOAT")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Tecnomecanica</label>
-                                    <input class="form-control" type="text" id="txttecno" name="txttecno" value="<%= hash.get("TECNO_MECANICA") == null ? "" : hash.get("TECNO_MECANICA").equals("S") ? "SI" : "NO"%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Fecha Venc. Tecnomecanica</label>
-                                    <input class="form-control" type="text" id="txtfechavtecno" name="txtfechavtecno" value="<%= hash.get("FECHAV_TECNO") == null ? "" : hash.get("FECHAV_TECNO")%>" readonly="true">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            Observaciones
-                        </div>
-                        <div class="panel-body">
-                            <div class="row form-group">
-                                <div class="col-md-12">
-                                    <textarea readonly id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%"><%= hash.get("OBSERVACIONES") == null ? "" : hash.get("OBSERVACIONES")%></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <%
-                        }
-                    %>
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            Personas Asociadas
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <label>Tipo</label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label>Tipo Documento</label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Documento</label>
-                                </div>
-                                <div class="col-md-5">
-                                    <label>Nombre</label>
-                                </div>
-                            </div>
-                            <%
-                                List<HashMap> personasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(idvehiculo);
+        <c:set var="vehiculo" value="${requestScope.datosVehiculo}" />
+        <c:set var="personas" value="${requestScope.personasVehiculo}" />
+        <div id="wrapper">
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                <jsp:include page="/jsp/Menu.jsp"></jsp:include>
+                </ul>
 
-                                if (personasVehiculo.size() > 0) {
+                <div id="content-wrapper" class="d-flex flex-column">
+                    <div id="content">
 
-                                    for (HashMap hash : personasVehiculo) {
-                            %>
-                            <div class="row form-group">
-                                <div class="col-md-2">
-                                    <input class="form-control" type="text" id="txttipopersona" name="txttipopersona" value="<%= hash.get("TIPO_PERSONA") == null ? "" : hash.get("TIPO_PERSONA")%>" readonly="true">
+                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                        <jsp:include page="/jsp/Header.jsp"></jsp:include>
+                        </nav>
+
+                        <div class="container-fluid">
+                            <h1 class="h3 mb-2 text-gray-800">Datos del Vehiculo</h1>
+
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos de Identificación</h6>
                                 </div>
-                                <div class="col-md-2">
-                                    <input class="form-control" type="text" id="cmbtipodoc" name="cmbtipodoc" value="<%= hash.get("TIPO_DOC") == null ? "" : hash.get("TIPO_DOC")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <input class="form-control" type="text" id="txtdocumento" name="txtdocumento" value="<%= hash.get("DOCUMENTO") == null ? "" : hash.get("DOCUMENTO")%>" readonly="true">
-                                </div>
-                                <div class="col-md-5">
-                                    <input class="form-control" type="text" id="txtnombre" name="txtnombre" value="<%= hash.get("NOMBRE") == null ? "" : hash.get("NOMBRE")%>" readonly="true">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Placa</label>
+                                            <input class="form-control" type="text" id="txtplaca" name="txtplaca" value="${vehiculo.VEH_PLACA}" readonly="true">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Motor</label>
+                                        <input class="form-control" type="text" id="txtmotor" name="txtmotor" value="${vehiculo.VEH_MOTOR}" readonly="true">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Chasis</label>
+                                        <input class="form-control" type="text" id="txtchasis" name="txtchasis" value="${vehiculo.VEH_CHASIS}" readonly="true">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Serie</label>
+                                        <input class="form-control" type="text" id="txtserie" name="txtserie" value="${vehiculo.VEH_SERIE}" readonly="true">
+                                    </div>
                                 </div>
                             </div>
-                            <%
-                                }
-
-                            } else {
-                            %>
-                            <div class="row form-group">
-                                <div class="col-md-12">
-                                    <label>No se encontraron personas registradas</label>
+                        </div>
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Datos Generales</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Clase</label>
+                                        <input class="form-control" type="text" id="txtclase" name="txtclase" value="${vehiculo.CLASE}" readonly="true">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Servicio</label>
+                                        <input class="form-control" type="text" id="txtservicio" name="txtservicio" value="${vehiculo.SERVICIO}" readonly="true">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Tipo de Uso</label>
+                                        <input class="form-control" type="text" id="txttipouso" name="txttipouso" value="${vehiculo.TIPO_USO}" readonly="true">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Color</label>
+                                        <input class="form-control" type="text" id="txtcolores" name="txtcolores" value="${vehiculo.COLOR}" readonly="true">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Marca</label>
+                                        <input class="form-control" id="txtmarcas" name="txtmarcas" value="${vehiculo.MARCA}" readonly="true">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Linea</label>
+                                        <input class="form-control" id="txtlineas" name="txtlineas" value="${vehiculo.LINEA}" readonly="true">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Modelo</label>
+                                        <input class="form-control" type="text" id="txtmodelo" name="txtmodelo" value="${vehiculo.MODELO}" readonly="true">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Transformado</label>
+                                        <input class="form-control" type="text" id="txttransformado" name="txttransformado" value="${vehiculo.TRANSFORMADO}" readonly="true">
+                                    </div>
                                 </div>
                             </div>
-                            <%
-                                }
-                            %>
+                        </div>
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Datos Registro Inicial</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Registrado en Runt</label>
+                                        <input class="form-control" type="text" id="txtrunt" name="txtrunt" value="${vehiculo.RUNT}" readonly="true">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Licencia Transito</label>
+                                        <input class="form-control" type="text" id="txtlicenciatransito" name="txtlicenciatransito" value="${vehiculo.LICENCIA_TRANSITO}" readonly="true">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Fecha Matricula</label>
+                                        <input class="form-control" type="text" id="txtfechamatricula" name="txtfechamatricula" readonly="true" value="${vehiculo.FECHA_MATRICULA}"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Pais</label>
+                                        <input class="form-control" type="text" id="txtpaismatricula" name="txtpaismatricula" value="${vehiculo.PAIS_MATRICULA}" readonly="true">
+                                    </div>
+                                    <c:choose>
+                                        <c:when test="${vehiculo.PAIS_MATRICULA != null && vehiculo.PAIS_MATRICULA == 'COLOMBIA'}">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Departamento</label>
+                                                <input class="form-control" type="text" id="txtdepartamentomatricula" name="txtdepartamentomatricula" value="${vehiculo.DPTO_MATRICULA}" readonly="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Municipio</label>
+                                                <input class="form-control" type="text" id="txtmunicipiomatricula" name="txtmunicipiomatricula" value="${vehiculo.MUNI_MATRICULA}" readonly="true">
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Ciudad</label>
+                                                <input class="form-control" type="text" id="txtciudadmatricula" name="txtciudadmatricula" value="${vehiculo.CIUDAD_MATRICULA}" readonly="true">
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Datos Importacion</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Tipo Importacion</label>
+                                        <input class="form-control" type="text" id="txttipodocimportacion" name="txttipodocimportacion" value="${vehiculo.TDOC_IMP}" readonly="true">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Documento Importacion</label>
+                                        <input class="form-control" type="text" id="txtdocumentoimportacion" name="txtdocumentoimportacion" value="${vehiculo.DOCUMENTO_IMP}" readonly="true">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Fecha Importacion</label>
+                                        <input class="form-control" type="text" id="txtfechaimportacion" name="txtfechaimportacion" value="${vehiculo.FECHA_IMP}" readonly="true">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Pais Importacion</label>
+                                        <input class="form-control" type="text" id="txtpaisimportacion" name="txtpaisimportacion" value="${vehiculo.PAIS_IMP}" readonly="true">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Polizas y Certificados</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>SOAT</label>
+                                        <input class="form-control" type="text" id="txtsoat" name="txtsoat" value="<c:choose><c:when test='${vehiculo.SOAT} == "S"'>SI</c:when><c:otherwise>NO</c:otherwise></c:choose>"  readonly="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Fecha Venc. Soat</label>
+                                                    <input class="form-control" type="text" id="txtfechavsoat" name="txtfechavsoat" value="${vehiculo.FECHAV_SOAT}" readonly="true">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Tecnomecanica</label>
+                                        <input class="form-control" type="text" id="txttecnomecanica" name="txttecnomecanica" value="<c:choose><c:when test='${vehiculo.TECNO_MECANICA} == "S"'>SI</c:when><c:otherwise>NO</c:otherwise></c:choose>" readonly="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Fecha Venc. Tecnomecanica</label>
+                                                    <input class="form-control" type="text" id="txtfechavtecnomecanica" name="txtfechavtecnomecanica" value="${vehiculo.FECHAV_TECNO}" readonly="true">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" readonly="true">${vehiculo.OBSERVACIONES}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                                <h6 class="m-0 font-weight-bold text-primary">Personas Asociadas</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-2 mb-3 mb-sm-0">
+                                        <label>Tipo</label>
+                                    </div>
+                                    <div class="col-sm-2 mb-3 mb-sm-0">
+                                        <label>Tipo Documento</label>
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label>Documento</label>
+                                    </div>
+                                    <div class="col-sm-5 mb-3 mb-sm-0">
+                                        <label>Nombre</label>
+                                    </div>
+                                </div>
+                                <c:choose>
+                                    <c:when test="${not empty personas}">
+                                        <c:forEach items="${personas}" var="persona">
+                                            <div class="form-group row">
+                                                <div class="col-sm-2 mb-3 mb-sm-0">
+                                                    <input class="form-control" type="text" id="txttipopersona" name="txttipopersona" value="${persona.TIPO_PERSONA}" readonly="true">
+                                                </div>
+                                                <div class="col-sm-2 mb-3 mb-sm-0">
+                                                    <input class="form-control" type="text" id="cmbtipodocumento" name="cmbtipodocumento" value="${persona.TIPO_DOC}" readonly="true">
+                                                </div>
+                                                <div class="col-sm-3 mb-3 mb-sm-0">
+                                                    <input class="form-control" type="number" id="txtdocumento" name="txtdocumento" value="${persona.DOCUMENTO}" readonly="true">
+                                                </div>
+                                                <div class="col-sm-5 mb-3 mb-sm-0">
+                                                    <input class="form-control" type="text" id="txtnombre" name="txtnombre" value="${persona.NOMBRE}" readonly="true">
+                                                </div>
+                                            </div>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="form-group row">
+                                            <label>No se encontraron personas asociadas al vehiculo</label>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
                         </div>
                     </div>
-                        <input type="hidden" id="idvehiculo" name="idvehiculo" value="<%=idvehiculo%>">
-                        <%
-                            if (((java.util.LinkedList) session.getAttribute("permisosUsuario")).contains("modificarVehiculo.jsp")) {
-                        %>
-                        <div class="row page-header">
-                            <div class="form-group col-xs-12 col-sm-3 col-md-3">
-                                <button type="button" class="btn btn-lg btn-info btn-block" onclick="modificarVehiculoById('<%=idvehiculo%>')" id="btnmodificar" name="btnmodificar">Modificar</button>
-                            </div>
-                        </div>
-                        <%
-                                }
-                    } else {
-                    %>
-                    <div class="panel panel-danger">    
-                        <div class="panel-heading">
-                            Vehiculo no registrado
-                        </div>
-                    </div>
-                    <%
-                        }
-                    %>
                 </div>
             </div>
         </div>
         <%
-            }
         } else {
         %>
         <script type="text/javascript">
             alert("Su usuario no tiene permiso para acceder a esta pagina");
-            window.parent.location.href = "../Inicio.jsp";
+            window.parent.location.href = "dashboard";
         </script>
         <%
             }
@@ -312,10 +279,30 @@
         %>
         <script type="text/javascript">
             alert("Su sesion a terminado");
-            document.location.href = "../../cerrarSesion";
+            document.location.href = "index.jsp";
         </script>
         <%
             }
         %>
+
+        <!-- Bootstrap core JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- Core plugin JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
+
+        <!-- Page level plugins -->
+        <script src="${pageContext.request.contextPath}/template/vendor/datatables/jquery.dataTables.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="${pageContext.request.contextPath}/template/js/demo/datatables-demo.js"></script>
+
+        <script src="${pageContext.request.contextPath}/scripts/vehiculos.js" type="text/javascript"></script>
+
     </body>
 </html>
