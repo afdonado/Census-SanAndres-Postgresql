@@ -1,11 +1,12 @@
-package com.censo.controlador.parametros;
+package com.censo.controlador.vehiculo;
 
-import com.censo.modelo.dao.TipoReferenciaDao;
-import com.censo.modelo.persistencia.CenTipoReferencia;
+import com.censo.modelo.dao.PersonaVehiculoDao;
+import com.censo.modelo.dao.VehiculoDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,8 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "CargarTiposReferencia", urlPatterns = {"/cargarTiposReferencia"})
-public class CargarTiposReferencia extends HttpServlet {
+@WebServlet(name = "CargarDatosVehiculo", urlPatterns = {"/cargarDatosVehiculo"})
+public class CargarDatosVehiculo extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -26,24 +27,32 @@ public class CargarTiposReferencia extends HttpServlet {
 
         try {
 
-            TipoReferenciaDao tipoReferenciaDao = new TipoReferenciaDao();
-            conex = tipoReferenciaDao.conectar();
-            
-            out.println("<label>Tipo Referencia</label>");
-            out.println("<select class=\"form-control\" name=\"cmbtiposreferencia\" id=\"cmbtiposreferencia\">");
-            List<CenTipoReferencia> lista = tipoReferenciaDao.ListarTiposReferencia(conex);
-            for (CenTipoReferencia cenTipoReferencia : lista) {
-                if (cenTipoReferencia.getId() == 1) {
-                out.println("<option value=\"" + cenTipoReferencia.getId() + "\"selected>" + cenTipoReferencia.getDescripcion() + "</option>");
-                } else {
-                out.println("<option value=\"" + cenTipoReferencia.getId() + "\">" + cenTipoReferencia.getDescripcion() + "</option>");    
+            if (!request.getParameter("id").equals("")) {
+
+                VehiculoDao vehiculoDao = new VehiculoDao();
+                conex = vehiculoDao.conectar();
+
+                long idvehiculo = Long.parseLong(request.getParameter("id"));
+
+                HashMap<String, String> datosVehiculo = vehiculoDao.ListarVehiculosById(conex, idvehiculo);
+
+                if (!datosVehiculo.isEmpty()) {
+                    request.setAttribute("datosVehiculo", datosVehiculo);
+
+                    PersonaVehiculoDao personaVehiculoDao = new PersonaVehiculoDao();
+                    List<HashMap> personasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, idvehiculo);
+
+                    if (!personasVehiculo.isEmpty()) {
+                        request.setAttribute("personasVehiculo", personasVehiculo);                        
+                    }
+                    request.getRequestDispatcher("jsp/Vehiculos/verVehiculo.jsp").forward(request, response);
                 }
             }
-            out.println("</select>");
+
         } catch (SQLException e) {
             out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al cargar los tipos de referencia');");
-            out.println("location='jsp/Inicio.jsp';");
+            out.println("alert('Error al listar los vehiculos');");
+            out.println("location='dashboard';");
             out.println("</script>");
             e.printStackTrace();
 

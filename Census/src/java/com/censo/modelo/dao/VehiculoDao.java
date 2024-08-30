@@ -13,10 +13,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class VehiculoDao extends Conexion {
-    
+
     private ResultSet rst = null;
     private PreparedStatement pst = null;
-    
+
     public long adicionarVehiculo(Connection conex, CenVehiculo cenvehiculo) {
 
         try {
@@ -282,23 +282,30 @@ public class VehiculoDao extends Conexion {
         return listaDatosVehiculo;
     }
 
-    public List ListarVehiculosById(Connection conex, long id) throws SQLException {
+    public HashMap<String, String> ListarVehiculosById(Connection conex, long id) throws SQLException {
 
-        List<HashMap> listaDatosVehiculo = new LinkedList<>();
+        HashMap<String, String> datosVehiculo = new HashMap<>();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS WHERE VEH_ID = ? ");
             pst.setLong(1, id);
             rst = pst.executeQuery();
 
-            while (rst.next()) {
+            if (rst.next()) {
+                ResultSetMetaData rsmd = rst.getMetaData();
+                for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                    datosVehiculo.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+                }
+            }
+
+            /*while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
                 HashMap<String, String> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
                 listaDatosVehiculo.add(hash);
-            }
+            }*/
         } catch (SQLException e) {
             throw new SQLException("Error en ListarVehiculosById: " + e);
         } finally {
@@ -313,7 +320,7 @@ public class VehiculoDao extends Conexion {
                 System.out.println("Error en cierres de ListarVehiculosById:" + e);
             }
         }
-        return listaDatosVehiculo;
+        return datosVehiculo;
     }
 
     public List ListarVehiculos(Connection conex) throws SQLException {
@@ -383,5 +390,5 @@ public class VehiculoDao extends Conexion {
         }
         return listaDatosVehiculo;
     }
-    
+
 }
