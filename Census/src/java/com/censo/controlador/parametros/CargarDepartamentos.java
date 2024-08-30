@@ -2,6 +2,7 @@ package com.censo.controlador.parametros;
 
 import com.censo.modelo.dao.DepartamentoDao;
 import com.censo.modelo.persistencia.CenDepartamento;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -26,25 +27,19 @@ public class CargarDepartamentos extends HttpServlet {
 
         try {
 
-            if (!request.getParameter("nameCombo").equals("")) {
+            DepartamentoDao departamentoDao = new DepartamentoDao();
+            conex = departamentoDao.conectar();
 
-                DepartamentoDao departamentoDao = new DepartamentoDao();
-                conex = departamentoDao.conectar();
-                
-                String nameCombo = request.getParameter("nameCombo");
+            List<CenDepartamento> lista = departamentoDao.ListarDepartamentos(conex);
 
-                out.println("<label>Departamento</label>");
-                out.println("<select class=\"form-control\" name=\""+nameCombo+"\" id=\""+nameCombo+"\">");
-                List<CenDepartamento> lista = departamentoDao.ListarDepartamentos(conex);
-                for (CenDepartamento cenDepartamento : lista) {
-                    if (cenDepartamento.getId() == 4) {
-                        out.println("<option value=\"" + cenDepartamento.getId() + "\"selected>" + cenDepartamento.getNombre() + "</option>");
-                    } else {
-                        out.println("<option value=\"" + cenDepartamento.getId() + "\">" + cenDepartamento.getNombre() + "</option>");
-                    }
-                }
-                out.println("</select>");
+            if (!lista.isEmpty()) {
+                Gson gson = new Gson();
+                String json = gson.toJson(lista);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(json);
             }
+
         } catch (SQLException e) {
             out.println("<script type=\"text/javascript\">");
             out.println("alert('Error al cargar los departamentos');");

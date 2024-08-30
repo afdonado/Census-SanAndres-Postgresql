@@ -2,6 +2,7 @@ package com.censo.controlador.parametros;
 
 import com.censo.modelo.dao.TipoDocumentoDao;
 import com.censo.modelo.persistencia.CenTipoDocumento;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -26,33 +27,19 @@ public class CargarTiposDocumento extends HttpServlet {
 
         try {
 
-            if (!request.getParameter("nameCombo").equals("") && !request.getParameter("label").equals("")) {
+            TipoDocumentoDao tipoDocumentoDao = new TipoDocumentoDao();
+            conex = tipoDocumentoDao.conectar();
 
-                TipoDocumentoDao tipoDocumentoDao = new TipoDocumentoDao();
-                conex = tipoDocumentoDao.conectar();
-                
-                String nameCombo = request.getParameter("nameCombo");
-                boolean label = Boolean.parseBoolean(request.getParameter("label"));
-                
-                if(label){
-                    out.println("<label>Tipo Documento</label>");
-                }
+            List<CenTipoDocumento> lista = tipoDocumentoDao.ListarTiposDocumento(conex);
 
-                out.println("<select class=\"form-control\" name=\""+nameCombo+"\" id=\""+nameCombo+"\">");
-                
-                List<CenTipoDocumento> lista = tipoDocumentoDao.ListarTiposDocumento(conex);
-                
-                for (CenTipoDocumento cenTipoDocumento : lista) {
-                    if (cenTipoDocumento.getId() == 1) {
-                        out.println("<option value=\"" + cenTipoDocumento.getId() + "\"selected>" + cenTipoDocumento.getDescripcion() + "</option>");
-                    } else {
-                        out.println("<option value=\"" + cenTipoDocumento.getId() + "\">" + cenTipoDocumento.getDescripcion() + "</option>");
-                    }
-                }
-                
-                out.println("</select>");
+            if (!lista.isEmpty()) {
+                Gson gson = new Gson();
+                String json = gson.toJson(lista);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(json);
             }
-            
+
         } catch (SQLException e) {
             out.println("<script type=\"text/javascript\">");
             out.println("alert('Error al cargar los tipos de documento');");

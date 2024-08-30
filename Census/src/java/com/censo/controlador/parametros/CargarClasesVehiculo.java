@@ -2,6 +2,7 @@ package com.censo.controlador.parametros;
 
 import com.censo.modelo.dao.ClaseVehiculoDao;
 import com.censo.modelo.persistencia.CenClaseVehiculo;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -29,17 +30,16 @@ public class CargarClasesVehiculo extends HttpServlet {
             ClaseVehiculoDao claseVehiculoDao = new ClaseVehiculoDao();
             conex = claseVehiculoDao.conectar();
             
-            out.println("<label>Clase(*)</label>");
-            out.println("<select class=\"form-control\" name=\"cmbclasevehiculo\" id=\"cmbclasevehiculo\">");
             List<CenClaseVehiculo> lista = claseVehiculoDao.ListarClasesVehiculo(conex);
-            for (CenClaseVehiculo cenClaseVehiculo : lista) {
-                if (cenClaseVehiculo.getId() == 1) {
-                out.println("<option value=\"" + cenClaseVehiculo.getId() + "\"selected>" + cenClaseVehiculo.getDescripcion() + "</option>");
-                } else {
-                out.println("<option value=\"" + cenClaseVehiculo.getId() + "\">" + cenClaseVehiculo.getDescripcion() + "</option>");    
-                }
+            
+            if (!lista.isEmpty()) {
+                    Gson gson = new Gson();
+                    String json = gson.toJson(lista);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(json);
             }
-            out.println("</select>");
+
         } catch (SQLException e) {
             out.println("<script type=\"text/javascript\">");
             out.println("alert('Error al cargar las clases de vehiculo');");

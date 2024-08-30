@@ -44,7 +44,7 @@ public class AgregarCamposPersona extends HttpServlet {
                 String nameTxtNombre = request.getParameter("nameTxtNombre");
                 String nameTxtId = request.getParameter("nameTxtId");
 
-                out.println("<div class=\"form-group col-md-2\">");
+                out.println("<div class=\"col-sm-2 mb-3 mb-sm-0\">");
                 out.println("<select class=\"form-control\" name=\"" + nameComboTP + "\" id=\"" + nameComboTP + "\">");
 
                 List<CenTipoPersona> listaTiposPersona = tipoPersonaDao.ListarTiposPersona(conex);
@@ -59,7 +59,7 @@ public class AgregarCamposPersona extends HttpServlet {
 
                 out.println("</select></div>");
 
-                out.println("<div class=\"form-group col-md-2\">");
+                out.println("<div class=\"col-sm-2 mb-3 mb-sm-0\">");
                 out.println("<select class=\"form-control\" name=\"" + nameComboTD + "\" id=\"" + nameComboTD + "\">");
 
                 List<CenTipoDocumento> listaTiposDocumento = tipoDocumentoDao.ListarTiposDocumento(conex);
@@ -73,10 +73,10 @@ public class AgregarCamposPersona extends HttpServlet {
                 }
 
                 out.println("</select></div>");
-                out.println("<div class=\"form-group col-md-2\" id=\"numeros-documeto\">");
+                out.println("<div class=\"col-sm-3 mb-3 mb-sm-0\" id=\"numeros-documeto\">");
                 out.println("<input class=\"form-control\" type=\"number\" id=\"" + nameTxtDocumento + "\" name=\"" + nameTxtDocumento + "\" maxlength=\"20\" required=\"true\">");
                 out.println("</div>");
-                out.println("<div class=\"form-group col-md-5\">");
+                out.println("<div class=\"col-sm-5 mb-3 mb-sm-0\">");
                 out.println("<input class=\"form-control\" type=\"text\" id=\""+nameTxtNombre+"\" name=\""+nameTxtNombre+"\" readonly=\"true\">");
                 out.println("</div>");
                 out.println("<input type=\"hidden\" id=\""+nameTxtId+"\" name=\""+nameTxtId+"\">");

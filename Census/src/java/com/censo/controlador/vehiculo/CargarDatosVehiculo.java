@@ -2,12 +2,14 @@ package com.censo.controlador.vehiculo;
 
 import com.censo.modelo.dao.PersonaVehiculoDao;
 import com.censo.modelo.dao.VehiculoDao;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,15 +39,20 @@ public class CargarDatosVehiculo extends HttpServlet {
                 HashMap<String, String> datosVehiculo = vehiculoDao.ListarVehiculosById(conex, idvehiculo);
 
                 if (!datosVehiculo.isEmpty()) {
-                    request.setAttribute("datosVehiculo", datosVehiculo);
 
                     PersonaVehiculoDao personaVehiculoDao = new PersonaVehiculoDao();
                     List<HashMap> personasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, idvehiculo);
 
-                    if (!personasVehiculo.isEmpty()) {
-                        request.setAttribute("personasVehiculo", personasVehiculo);                        
-                    }
-                    request.getRequestDispatcher("jsp/Vehiculos/verVehiculo.jsp").forward(request, response);
+                    Map<String, Object> responseMap = new HashMap<>();
+                    responseMap.put("vehiculo", datosVehiculo);
+                    responseMap.put("personasVehiculo", personasVehiculo);
+
+                    Gson gson = new Gson();
+                    String json = gson.toJson(responseMap);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(json);
+
                 }
             }
 

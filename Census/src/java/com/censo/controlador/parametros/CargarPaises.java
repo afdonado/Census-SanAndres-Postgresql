@@ -2,6 +2,7 @@ package com.censo.controlador.parametros;
 
 import com.censo.modelo.dao.PaisDao;
 import com.censo.modelo.persistencia.CenPais;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -26,30 +27,19 @@ public class CargarPaises extends HttpServlet {
 
         try {
 
-            if (!request.getParameter("nameCombo").equals("") && !request.getParameter("label").equals("")) {
+            PaisDao paisDao = new PaisDao();
+            conex = paisDao.conectar();
 
-                PaisDao paisDao = new PaisDao();
-                conex = paisDao.conectar();
-                
-                String nameCombo = request.getParameter("nameCombo");
-                String label = request.getParameter("label");
+            List<CenPais> lista = paisDao.ListarPaises(conex);
 
-                out.println("<label>"+label+"</label>");
-                out.println("<select class=\"form-control\" name=\""+nameCombo+"\" id=\""+nameCombo+"\">");
-                
-                List<CenPais> lista = paisDao.ListarPaises(conex);
-                
-                for (CenPais cenPais : lista) {
-                    if (cenPais.getId() == 18) {
-                        out.println("<option value=\"" + cenPais.getId() + "\"selected>" + cenPais.getNombre() + "</option>");
-                    } else {
-                        out.println("<option value=\"" + cenPais.getId() + "\">" + cenPais.getNombre() + "</option>");
-                    }
-                }
-                
-                out.println("</select>");
-                
+            if (!lista.isEmpty()) {
+                Gson gson = new Gson();
+                String json = gson.toJson(lista);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(json);
             }
+
         } catch (SQLException e) {
             out.println("<script type=\"text/javascript\">");
             out.println("alert('Error al cargar los paises');");

@@ -2,6 +2,7 @@ package com.censo.controlador.parametros;
 
 import com.censo.modelo.dao.MunicipioDao;
 import com.censo.modelo.persistencia.CenMunicipio;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -29,19 +30,18 @@ public class CargarMunicipios extends HttpServlet {
             MunicipioDao municipioDao = new MunicipioDao();
             conex = municipioDao.conectar();
 
-            if (!request.getParameter("iddepartamento").equals("") && !request.getParameter("nameCombo").equals("")) {
-                
-                out.println("<label>Municipio</label>");
-                out.println("<select class=\"form-control\" name=\""+request.getParameter("nameCombo")+"\" id=\""+request.getParameter("nameCombo")+"\">");
-                
+            if (!request.getParameter("iddepartamento").equals("")) {
+
                 List<CenMunicipio> lista = municipioDao.ListarMunicipiosByIdDepto(conex, Integer.parseInt(request.getParameter("iddepartamento")));
-                
-                for (CenMunicipio cenmunicipio: lista) {
-                    out.println("<option value=\""+cenmunicipio.getId()+"\">"+cenmunicipio.getNombre()+"</option>");
+
+                if (!lista.isEmpty()) {
+                    Gson gson = new Gson();
+                    String json = gson.toJson(lista);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(json);
                 }
-                
-                out.println("</select>");
-                
+
             }
         } catch (SQLException e) {
             out.println("<script type=\"text/javascript\">");
@@ -62,14 +62,14 @@ public class CargarMunicipios extends HttpServlet {
         }
     }
 
-@Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
     @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }

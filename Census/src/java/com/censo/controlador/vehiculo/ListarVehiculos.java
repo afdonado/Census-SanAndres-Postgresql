@@ -1,6 +1,7 @@
 package com.censo.controlador.vehiculo;
 
 import com.censo.modelo.dao.VehiculoDao;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -29,30 +30,16 @@ public class ListarVehiculos extends HttpServlet {
             VehiculoDao vehiculoDao = new VehiculoDao();
             conex = vehiculoDao.conectar();
 
-            List<HashMap> datosVehiculo = vehiculoDao.ListarVehiculos(conex);
+            List<HashMap> listaVehiculos = vehiculoDao.ListarVehiculos(conex);
 
-            if (!datosVehiculo.isEmpty()) {
-                for (HashMap hash : datosVehiculo) {
+            if (!listaVehiculos.isEmpty()) {
 
-                    String id = hash.get("VEH_ID") == null ? "" : hash.get("VEH_ID").toString();
-                    String placa = hash.get("VEH_PLACA") == null ? "" : hash.get("VEH_PLACA").toString();
-                    String motor = hash.get("VEH_MOTOR") == null ? "" : hash.get("VEH_MOTOR").toString();
-                    String chasis = hash.get("VEH_CHASIS") == null ? "" : hash.get("VEH_CHASIS").toString();
-                    String serie = hash.get("VEH_SERIE") == null ? "" : hash.get("VEH_SERIE").toString();
-                    String marca = hash.get("MARCA") == null ? "" : hash.get("MARCA").toString();
-                    String linea = hash.get("LINEA") == null ? "" : hash.get("LINEA").toString();
-                    
-                    out.println("<tr>");
-                    out.println("<td>" + placa + "</td>");
-                    out.println("<td>" + motor + "</td>");
-                    out.println("<td>" + chasis + "</td>");
-                    out.println("<td>" + serie + "</td>");
-                    out.println("<td>" + marca + "</td>");
-                    out.println("<td>" + linea + "</td>");
-                    out.println("<td><button type=\"button\" class=\"btn btn-info btnconsultar\" name=\"btnconsultar\" data-id=\""+id+"\" title=\"Ver datos del vehiculo\"><span class=\"glyphicon glyphicon-search\">Consultar</span></button></td>");
-                    out.println("<td><button type=\"button\" class=\"btn btn-danger btneditar\" name=\"btneditar\" data-id=\""+id+"\" title=\"Editar datos del vehiculo\"><span class=\"glyphicon glyphicon-edit\">Editar</span></button></td>");
-                    out.println("</tr>");
-                }
+                Gson gson = new Gson();
+                String json = gson.toJson(listaVehiculos);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(json);
+                
             }
 
         } catch (SQLException e) {

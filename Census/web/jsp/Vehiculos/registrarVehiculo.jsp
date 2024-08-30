@@ -67,7 +67,7 @@
                         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                         <jsp:include page="/jsp/Header.jsp"></jsp:include>
                         </nav>
-                        
+
                         <div class="container-fluid">
                         <%
                             if (opcion == 1) {
@@ -131,9 +131,18 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="clase-vehiculo"></div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-servicio"></div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-uso"></div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Clase Vehículo(*)</label>
+                                            <select class="form-control" id="cmbclasevehiculo" name="cmbclasevehiculo" required="true"></select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Servicio(*)</label>
+                                            <select class="form-control" id="cmbtiposservicio" name="cmbtiposservicio" required="true"></select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-uso">
+                                            <label>Tipo de Uso</label>
+                                            <select class="form-control" id="cmbtiposuso" name="cmbtiposuso" required="true"></select>
+                                        </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
                                             <label>Color(*)</label>
                                             <input class="form-control" id="txtcolores" name="txtcolores" style="text-transform: uppercase">
@@ -175,42 +184,57 @@
                                                 <option value="N">No</option>
                                             </select>
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="lictransito" >
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula">
                                             <label>Licencia Transito</label>
                                             <input class="form-control" type="text" id="txtlicenciatransito" name="txtlicenciatransito" value="" style="text-transform: uppercase"/>
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="fechamatri">
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula">
                                             <label>Fecha Matricula</label>
                                             <input class="form-control" type="text" id="txtfechamatricula" name="txtfechamatricula" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="pais-matricula"></div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="departamento-matricula"></div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="municipio-matricula"></div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="ciudad-matricula" style="display: none">
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula">
+                                            <label>Pais Matricula</label>
+                                            <select class="form-control" id="cmbpaismatricula" name="cmbpaismatricula" required="true"></select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula matricula-pais" id="departamento-matricula">
+                                            <label>Departamento Matricula</label>
+                                            <select class="form-control" id="cmbdepartamentomatricula" name="cmbdepartamentomatricula" required="true"></select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula matricula-pais">
+                                            <label>Municipio Matricula</label>
+                                            <select class="form-control" id="cmbmunicipiomatricula" name="cmbmunicipiomatricula" required="true"></select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula" id="ciudad-matricula">
                                             <label>Ciudad</label>
-                                            <input class="form-control" type="text" id="txtciudadmatricula" name="txtciudadmatricula" maxlength="80" style="text-transform: uppercase" required>
+                                            <input class="form-control" type="text" id="txtciudadmatricula" name="txtciudadmatricula" maxlength="80" style="text-transform: uppercase">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Datos Importacion</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos Importación</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-importacion"></div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="documento-importacion">
-                                            <label>Documento Importacion (*)</label>
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-importacion">
+                                            <label>Tipo Importación</label>
+                                            <select class="form-control" id="cmdtiposimportacion" name="cmdtiposimportacion" required="true"></select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0 importacion">
+                                            <label>Documento Importación(*)</label>
                                             <input class="form-control" type="text" id="txtdocumentoimportacion" name="txtdocumentoimportacion" maxlength="80" style="text-transform: uppercase">
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="fecha-importacion">
-                                            <label>Fecha Importacion (*)</label>
+                                        <div class="col-sm-3 mb-3 mb-sm-0 importacion">
+                                            <label>Fecha Importación (*)</label>
                                             <input class="form-control" type="text" id="txtfechaimportacion" name="txtfechaimportacion" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="pais-importancion"></div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0 importacion">
+                                            <label>Pais Importación</label>
+                                            <select class="form-control" id="cmbpaisimportacion" name="cmbpaisimportacion" required="true"></select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -273,8 +297,12 @@
                                     </div>
                                     <div id="personas-vehiculo">
                                         <div id="contenedor1" class="form-group row">
-                                            <div class="col-sm-2 mb-3 mb-sm-0" id="tipos-persona1"></div>
-                                            <div class="col-sm-2 mb-3 mb-sm-0" id="tipos-documento1"></div>
+                                            <div class="col-sm-2 mb-3 mb-sm-0" id="tipos-persona1">
+                                                <select class="form-control" id="cmbtipospersona1" name="cmbtipospersona1" required="true"></select>
+                                            </div>
+                                            <div class="col-sm-2 mb-3 mb-sm-0" id="tipos-documento1">
+                                                <select class="form-control" id="cmbtiposdocumento1" name="cmbtiposdocumento1" required="true"></select>
+                                            </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <input class="form-control" type="number" id="txtdocumento1" name="txtdocumento1" maxlength="20" required="true">
                                             </div>
@@ -299,9 +327,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row page-header">
-                                <div class="form-group col-xs-12 col-sm-3 col-md-3">
-                                    <button type="button" class="btn btn-lg btn-success btn-block" onclick="registrarVehiculo()" id="btnregistrar" name="btnregistrar" >Registrar</button>
+                            <div class="row">
+                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                    <button type="button" class="btn btn-lg btn-success btn-block" id="btnguardar" name="btnguardar" >Guardar</button>
+                                </div>
+                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                    <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
                                 </div>
                             </div>
                         </form>
@@ -346,6 +377,7 @@
         <script src="../../template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.js" type="text/javascript"></script>
         <script src="../../template/vendor/jquery/calendario_es.js" type="text/javascript"></script>
 
+        <script src="../../scripts/registrarVehiculo.js" type="text/javascript"></script>
         <script src="../../scripts/validacionesCampos.js" type="text/javascript"></script>
         <script src="../../scripts/personas.js" type="text/javascript"></script>
         <script src="../../scripts/parametros.js" type="text/javascript"></script>

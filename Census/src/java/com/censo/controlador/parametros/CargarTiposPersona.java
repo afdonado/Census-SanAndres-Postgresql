@@ -2,6 +2,7 @@ package com.censo.controlador.parametros;
 
 import com.censo.modelo.dao.TipoPersonaDao;
 import com.censo.modelo.persistencia.CenTipoPersona;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -26,28 +27,19 @@ public class CargarTiposPersona extends HttpServlet {
 
         try {
 
-            if (!request.getParameter("nameCombo").equals("")) {
+            TipoPersonaDao tipoPersonaDao = new TipoPersonaDao();
+            conex = tipoPersonaDao.conectar();
 
-                TipoPersonaDao tipoPersonaDao = new TipoPersonaDao();
-                conex = tipoPersonaDao.conectar();
-                
-                String nameCombo = request.getParameter("nameCombo");
+            List<CenTipoPersona> lista = tipoPersonaDao.ListarTiposPersona(conex);
 
-                out.println("<select class=\"form-control\" name=\""+nameCombo+"\" id=\""+nameCombo+"\">");
-                
-                List<CenTipoPersona> lista = tipoPersonaDao.ListarTiposPersona(conex);
-                
-                for (CenTipoPersona cenTipoPersona : lista) {
-                    if (cenTipoPersona.getId() == 1) {
-                        out.println("<option value=\"" + cenTipoPersona.getId() + "\"selected>" + cenTipoPersona.getDescripcion() + "</option>");
-                    } else {
-                        out.println("<option value=\"" + cenTipoPersona.getId() + "\">" + cenTipoPersona.getDescripcion() + "</option>");
-                    }
-                }
-                
-                out.println("</select>");
+            if (!lista.isEmpty()) {
+                Gson gson = new Gson();
+                String json = gson.toJson(lista);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(json);
             }
-            
+
         } catch (SQLException e) {
             out.println("<script type=\"text/javascript\">");
             out.println("alert('Error al cargar los tipos de persona');");

@@ -2,6 +2,7 @@ package com.censo.controlador.parametros;
 
 import com.censo.modelo.dao.TipoReferenciaDao;
 import com.censo.modelo.persistencia.CenTipoReferencia;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -29,17 +30,16 @@ public class CargarTiposReferencia extends HttpServlet {
             TipoReferenciaDao tipoReferenciaDao = new TipoReferenciaDao();
             conex = tipoReferenciaDao.conectar();
             
-            out.println("<label>Tipo Referencia</label>");
-            out.println("<select class=\"form-control\" name=\"cmbtiposreferencia\" id=\"cmbtiposreferencia\">");
             List<CenTipoReferencia> lista = tipoReferenciaDao.ListarTiposReferencia(conex);
-            for (CenTipoReferencia cenTipoReferencia : lista) {
-                if (cenTipoReferencia.getId() == 1) {
-                out.println("<option value=\"" + cenTipoReferencia.getId() + "\"selected>" + cenTipoReferencia.getDescripcion() + "</option>");
-                } else {
-                out.println("<option value=\"" + cenTipoReferencia.getId() + "\">" + cenTipoReferencia.getDescripcion() + "</option>");    
-                }
+            
+            if (!lista.isEmpty()) {
+                    Gson gson = new Gson();
+                    String json = gson.toJson(lista);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(json);
             }
-            out.println("</select>");
+            
         } catch (SQLException e) {
             out.println("<script type=\"text/javascript\">");
             out.println("alert('Error al cargar los tipos de referencia');");
