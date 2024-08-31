@@ -138,36 +138,36 @@
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Registrado en Runt (*)</label>
-                                                <select class="form-control" id="cmbrunt" name="cmbrunt" onchange="habilitarCampoLicenciaTransito()">
+                                                <select class="form-control" id="cmbrunt" name="cmbrunt">
                                                     <option value="S" selected>Si</option>
                                                     <option value="N">No</option>
                                                 </select>
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0" id="lictransito" >
+                                            <div class="col-sm-3 mb-3 mb-sm-0 matricula">
                                                 <label>Licencia Transito</label>
-                                                <input class="form-control" type="text" id="txtlicenciatransito" name="txtlicenciatransito" value="" style="text-transform: uppercase"/>
+                                                <input class="form-control" type="text" id="txtlicenciatransito" name="txtlicenciatransito" style="text-transform: uppercase"/>
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0" id="fechamatri">
+                                            <div class="col-sm-3 mb-3 mb-sm-0 matricula">
                                                 <label>Fecha Matricula</label>
                                                 <input class="form-control" type="text" id="txtfechamatricula" name="txtfechamatricula" readonly="true"/>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <div class="col-sm-3 mb-3 mb-sm-0 matricula">
                                                 <label>Pais Matricula</label>
                                                 <select class="form-control" id="cmbpaismatricula" name="cmbpaismatricula" required="true"></select>
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <div class="col-sm-3 mb-3 mb-sm-0 matricula matricula-pais">
                                                 <label>Departamento Matricula</label>
-                                                <select class="form-control" id="cmbdepartamentomatricula" name="cmbdepartamentomatricula" required="true"></select>
+                                                <select class="form-control" id="cmbdepartamentomatricula" name="cmbdepartamentomatricula"></select>
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <div class="col-sm-3 mb-3 mb-sm-0 matricula matricula-pais">
                                                 <label>Municipio Matricula</label>
-                                                <select class="form-control" id="cmbmunicipiomatricula" name="cmbmunicipiomatricula" required="true"></select>
+                                                <select class="form-control" id="cmbmunicipiomatricula" name="cmbmunicipiomatricula"></select>
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0" id="ciudad-matricula" style="display: none">
+                                            <div class="col-sm-3 mb-3 mb-sm-0 matricula" id="ciudad-matricula">
                                                 <label>Ciudad Matricula</label>
-                                                <input class="form-control" type="text" id="txtciudadmatricula" name="txtciudadmatricula" maxlength="80" style="text-transform: uppercase" required>
+                                                <input class="form-control" type="text" id="txtciudadmatricula" name="txtciudadmatricula" maxlength="80" style="text-transform: uppercase">
                                             </div>
                                         </div>
                                     </div>
@@ -182,15 +182,15 @@
                                                 <label>Tipo Importación</label>
                                                 <select class="form-control" id="cmbtiposimportacion" name="cmbtiposimportacion" required="true"></select>
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0" id="documento-importacion">
+                                            <div class="col-sm-3 mb-3 mb-sm-0 importacion">
                                                 <label>Documento Importación (*)</label>
                                                 <input class="form-control" type="text" id="txtdocumentoimportacion" name="txtdocumentoimportacion" maxlength="80" style="text-transform: uppercase">
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0" id="fecha-importacion">
+                                            <div class="col-sm-3 mb-3 mb-sm-0 importacion">
                                                 <label>Fecha Importación (*)</label>
                                                 <input class="form-control" type="text" id="txtfechaimportacion" name="txtfechaimportacion" readonly="true" />
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <div class="col-sm-3 mb-3 mb-sm-0 importacion">
                                                 <label>Pais Importación</label>
                                                 <select class="form-control" id="cmbpaisimportacion" name="cmbpaisimportacion" required="true"></select>
                                             </div>
@@ -257,7 +257,7 @@
                                         </div>
 
                                     </div>
-                                    <input type="hidden" id="txtcantidadpersonas" name="txtcantidadpersonas">
+                                    <input type="hidden" id="txtcantidadpersonas" name="txtcantidadpersonas" value="0">
                                 </div>
 
                                 <div class="card shadow mb-4">

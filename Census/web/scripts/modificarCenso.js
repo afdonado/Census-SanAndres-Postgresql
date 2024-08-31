@@ -118,5 +118,18 @@ $(function () {
     } else {
         console.log("Parámetros no encontrados en la URL");
     }
+    
+    $('#btnguardar').click(function () {
+        var numero = $('#txtnumerocenso').val();
+        var fechacenso = $('#txtfechacenso').val();
+        var referencia = $('#txtreferencia').val();
+        var documento = $('#txtdocumento').val();
+
+        if (numero.length > 0 && fechacenso.length > 0 && referencia.length > 0 && documento.length > 0) {
+            $('#frmregistrarcenso').submit();
+        } else {
+            alert('Debe ingresar como minimo los datos obligatorios (*)');
+        }
+    });
 
 });

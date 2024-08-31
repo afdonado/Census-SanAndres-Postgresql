@@ -51,6 +51,36 @@ public class PersonaVehiculoDao extends Conexion {
         }
         return 0;
     }
+    
+    public boolean modificarPersonaVehiculo(Connection conex, CenPersonaVehiculo cenpersonasvehiculo) throws SQLException, IOException {
+
+        try {
+            pst = conex.prepareStatement("UPDATE CEN_PERSONA_VEHICULO SET TPER_ID = ?, PER_ID = ?, USU_ID = ?, PV_FECHAPROCESO = sysdate WHERE PV_ID = ? ");
+            pst.setLong(1, cenpersonasvehiculo.getTper_id());
+            pst.setLong(2, cenpersonasvehiculo.getPer_id());
+            pst.setLong(3, cenpersonasvehiculo.getUsu_id());
+            pst.setLong(4, cenpersonasvehiculo.getId());
+            pst.executeUpdate();
+
+            return true;
+
+        } catch (SQLException e) {
+            System.err.println("Error en modificarPersonaVehiculo: " + e);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (rst != null) {
+                    rst.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error en cierres de modificarPersonaVehiculo:" + e);
+            }
+        }
+
+        return false;
+    }
 
     public List ListarPersonasVehiculoByIdVehiculo(Connection conex, long idvehiculo) throws SQLException {
 

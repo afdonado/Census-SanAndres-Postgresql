@@ -161,51 +161,40 @@ $(function () {
 
                 var personas = data.personasVehiculo;
                 var contenedor = $('#personas-vehiculo');
-                var contador = 0;
                 contenedor.empty();
 
                 $.each(personas, function (index, persona) {
-                    contador = index + 1;
                     var nuevoElemento = `
                 <div id="contenedor${persona.PV_ID}" class="form-group row">
                     <div class="col-sm-2 mb-3 mb-sm-0">
-                        <select class="form-control" id="cmbtipospersona${contador}" name="cmbtipospersona${contador}" required="true"></select>
+                        <select class="form-control" id="cmbtipospersona${persona.PV_ID}" name="cmbtipospersona${persona.PV_ID}" required="true"></select>
                     </div>
                     <div class="col-sm-2 mb-3 mb-sm-0">
-                        <select class="form-control" id="cmbtiposdocumento${contador}" name="cmbtiposdocumento${contador}" required="true"></select>
+                        <select class="form-control" id="cmbtiposdocumento${persona.PV_ID}" name="cmbtiposdocumento${persona.PV_ID}" required="true"></select>
                     </div>
                     <div class="col-sm-3 mb-3 mb-sm-0">
-                        <input class="form-control" type="number" id="txtdocumento${contador}" name="txtdocumento${contador}" maxlength="20" value="${persona.DOCUMENTO}" required="true">
+                        <input class="form-control" type="number" id="txtdocumento${persona.PV_ID}" name="txtdocumento${persona.PV_ID}" maxlength="20" value="${persona.DOCUMENTO}" required="true">
                     </div>
-                    <div class="col-sm-5 mb-2 mb-sm-0">
-                        <input class="form-control" type="text" id="txtnombre${contador}" name="txtnombre${contador}" value="${persona.NOMBRE}" readonly="true">
+                    <div class="col-sm-4 mb-2 mb-sm-0">
+                        <input class="form-control" type="text" id="txtnombre${persona.PV_ID}" name="txtnombre${persona.PV_ID}" value="${persona.NOMBRE}" readonly="true">
                     </div>
                     <div class="col-sm-1 mb-1 mb-sm-0">
-                        <button class="btn btn-danger" onclick="anularPersonaVehiculo(${persona.PV_ID});">X</button>
+                        <button type="button" class="btn btn-danger btnanular" id="btnanular${persona.PV_ID}" name="btnanular${persona.PV_ID}" data-id="${persona.PV_ID}">X</button>
                     </div>
-                    <input type="hidden" id="idpersona${contador}" name="idpersona${contador}" value="${persona.ID}">
+                    <input type="hidden" id="idpersona${persona.PV_ID}" name="idpersona${persona.PV_ID}" value="${persona.PER_ID}">
                     <input type="hidden" id="estadoperveh${persona.PV_ID}" name="estadoperveh${persona.PV_ID}" value="1">
                 </div>
             `;
                     contenedor.append(nuevoElemento);
 
-                    cargarTiposPersona(`#cmbtipospersona${contador}`, persona.TIPO_PERSONA_ID);
-                    cargarTiposDocumento(`#cmbtiposdocumento${contador}`, persona.TIPO_DOC_ID);
+                    cargarTiposPersona(`#cmbtipospersona${persona.PV_ID}`, persona.TIPO_PERSONA_ID);
+                    cargarTiposDocumento(`#cmbtiposdocumento${persona.PV_ID}`, persona.TIPO_DOC_ID);
                 });
-                console.log('contador: ', contador);
-                $('#txtcantidadpersonas').val(contador);
-
             }
         });
 
     } else {
         console.log("Parámetros no encontrados en la URL");
-    }
-
-    function anularPersonaVehiculo(idperveh) {
-        $('#estadoperveh' + idperveh).val(2);
-        $('#registropersona' + idperveh).hide();
-
     }
 
     function cargarTiposPersona(selector, tipoPersonaId) {
@@ -218,7 +207,6 @@ $(function () {
                 $.each(data, function (index, item) {
                     select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
                 });
-                console.log("tipo persona: ", tipoPersonaId);
                 select.val(tipoPersonaId);
             }
         });
@@ -234,10 +222,67 @@ $(function () {
                 $.each(data, function (index, item) {
                     select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
                 });
-                console.log("tipo documento: ", tipoDocumentoId);
                 select.val(tipoDocumentoId);
             }
         });
+    }
+    
+     $('#btnguardar').click(function () {
+        var motor = $('#txtmotor').val();
+        var chasis = $('#txtchasis').val();
+        var modelo = $('#txtmodelo').val();
+
+        var runt = $('#cmbrunt').val();
+        var licenciaTransito = $('#txtlicenciatransito').val();
+        var paisMatricula = $('#cmbpaismatricula').val();
+        var ciudadMatricula = $('#txtciudadmatricula').val();
+
+        var tipoImportacion = $('#cmbtiposimportacion').val();
+        var documentoImportacion = $('#txtdocumentoimportacion').val();
+
+        var colores = $('#txtcolores').val();
+        var marcas = $('#txtmarcas').val();
+        var lineas = $('#txtlineas').val();
+
+        if (motor.length === 0 && chasis.length === 0 && modelo.length === 0) {
+            alert('Debe ingresar los datos obligatorios (*)');
+            return false;
+        }
+
+        if (colores.length === 0 && marcas.length === 0 && lineas.length === 0) {
+            alert('Debe ingresar los datos obligatorios (*)');
+            return false;
+        }
+
+        if (runt === "S" && licenciaTransito.length === 0) {
+            alert('Debe ingresar numero de Licencia de Transito');
+            return false;
+        }
+
+        if (paisMatricula !== "18" && ciudadMatricula.length === 0) {
+            alert('Debe ingresar los datos obligatorios (*)');
+            return false;
+        }
+
+        if (tipoImportacion !== "0" && documentoImportacion.length === 0) {
+            alert('Debe ingresar los datos obligatorios (*)');
+            return false;
+        }
+        
+        $('#frmmodificarvehiculo').submit();
+    });
+    
+    $('#personas-vehiculo').on('click','.btnanular', function () {
+        console.log('btn anular');
+        console.log('id',$(this).data('id'));
+        var id = $(this).data('id');
+        anularPersonaVehiculo(id);
+    });
+
+    function anularPersonaVehiculo(idperveh) {
+        console.log('anular persona veh');
+        $('#estadoperveh' + idperveh).val(2);
+        $('#contenedor' + idperveh).hide();      
     }
 
 });

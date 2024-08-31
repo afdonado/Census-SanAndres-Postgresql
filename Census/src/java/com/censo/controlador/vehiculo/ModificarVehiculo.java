@@ -30,31 +30,32 @@ public class ModificarVehiculo extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
+
         Connection conex = null;
 
+        long idvehiculo = 0;
         try {
-            
+
             VehiculoDao vehiculoDao = new VehiculoDao();
             conex = vehiculoDao.conectar();
             MarcaDao daoMarca = new MarcaDao();
             LineaDao daoLinea = new LineaDao();
             ColorDao daoColor = new ColorDao();
             PersonaVehiculoDao daoPersonaVehiculo = new PersonaVehiculoDao();
-            
+
             CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
-            
+
             conex.setAutoCommit(false);
 
             long idlinea = 0;
             long idcolor = 0;
 
             boolean registrado;
-            
-            long idvehiculo = Long.parseLong(request.getParameter("idvehiculo"));
+
+            idvehiculo = Long.parseLong(request.getParameter("idvehiculo"));
             String placa = request.getParameter("txtplaca").toUpperCase().trim();
             String motor = request.getParameter("txtmotor").toUpperCase().trim();
             String chasis = request.getParameter("txtchasis").toUpperCase().trim();
@@ -147,12 +148,22 @@ public class ModificarVehiculo extends HttpServlet {
                         int estadoperveh = Integer.parseInt(request.getParameter("estadoperveh" + idperveh));
                         if (estadoperveh == 2) {
                             daoPersonaVehiculo.anularPersonaVehiculo(conex, idperveh);
+                        } else {
+                            CenPersonaVehiculo cenpersonavehiculo = new CenPersonaVehiculo();
+                            int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona" + idperveh));
+                            long idPersona = Long.parseLong(request.getParameter("idpersona" + idperveh));
+
+                            cenpersonavehiculo.setTper_id(tipoPersona);
+                            cenpersonavehiculo.setPer_id(idPersona);
+                            cenpersonavehiculo.setUsu_id(cenusuario.getId());
+                            cenpersonavehiculo.setId(idperveh);
+                            daoPersonaVehiculo.modificarPersonaVehiculo(conex, cenpersonavehiculo);
                         }
                     }
                 }
             }
-            
-            if(registrado){
+
+            if (registrado) {
 
                 if (cantpersonas > 0) {
                     CenPersonaVehiculo cenpersonavehiculo = new CenPersonaVehiculo();
@@ -183,13 +194,13 @@ public class ModificarVehiculo extends HttpServlet {
                 conex.commit();
                 out.println("<script type=\"text/javascript\">");
                 out.println("alert('Vehiculo modificado');");
-                out.println("location='jsp/Vehiculos/verVehiculo.jsp?id="+idvehiculo+"';");
+                out.println("location='jsp/Vehiculos/verVehiculo.jsp?opcion=1?id=" + idvehiculo + "';");
                 out.println("</script>");
             } else {
                 conex.rollback();
                 out.println("<script type=\"text/javascript\">");
                 out.println("alert('Vehiculo no modificado');");
-                out.println("location='jsp/Vehiculos/verVehiculo.jsp?id="+idvehiculo+"';");
+                out.println("location='jsp/Vehiculos/verVehiculo.jsp?opcion=1?id=" + idvehiculo + "';");
                 out.println("</script>");
             }
 
@@ -203,7 +214,7 @@ public class ModificarVehiculo extends HttpServlet {
             }
             out.println("<script type=\"text/javascript\">");
             out.println("alert('Error al modificar el vehiculo');");
-            out.println("location='jsp/Vehiculos/registrarVehiculo.jsp';");
+            out.println("location='jsp/Vehiculos/verModificarVehiculo.jsp?opcion=2?id=" + idvehiculo + "';");
             out.println("</script>");
             e.printStackTrace();
         } finally {

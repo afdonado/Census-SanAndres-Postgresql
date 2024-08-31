@@ -179,7 +179,7 @@
                                     <div class="form-group row">
                                         <div class="col-sm-3 mb-3 mb-sm-0">
                                             <label>Registrado en Runt (*)</label>
-                                            <select class="form-control" id="cmbrunt" name="cmbrunt" onchange="habilitarCampoLicenciaTransito()">
+                                            <select class="form-control" id="cmbrunt" name="cmbrunt">
                                                 <option value="S" selected>Si</option>
                                                 <option value="N">No</option>
                                             </select>

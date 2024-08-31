@@ -290,7 +290,7 @@ $(function () {
             return false;
         }
 
-        if (tipoImportacion !== "0" && documentoImportacion.length == 0) {
+        if (tipoImportacion !== "0" && documentoImportacion.length === 0) {
             alert('Debe ingresar los datos obligatorios (*)');
             return false;
         }
