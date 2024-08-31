@@ -1,106 +1,33 @@
-<%@page import="com.censo.modelo.dao.TipoDocumentoDao"%>
-<%@page import="com.censo.modelo.dao.TipoReferenciaDao"%>
-<%@page import="com.censo.modelo.dao.TipoPersonaDao"%>
-<%@page import="com.censo.modelo.dao.PuntoAtencionDao"%>
-<%@page import="com.censo.modelo.dao.PersonaDao"%>
-<%@page import="com.censo.modelo.dao.VehiculoDao"%>
-<%@page import="com.censo.modelo.dao.CensoDao"%>
 <%@page import="javax.servlet.http.HttpSession"%>
-<%@page import="com.censo.modelo.persistencia.CenVehiculo"%>
-<%@page import="com.censo.modelo.persistencia.CenTipoReferencia"%>
-<%@page import="com.censo.modelo.persistencia.CenPersona"%>
-<%@page import="com.censo.modelo.persistencia.CenCenso"%>
-<%@page import="com.censo.modelo.persistencia.CenUsuario"%>
-<%@page import="com.censo.modelo.persistencia.CenTipoPersona"%>
-<%@page import="com.censo.modelo.persistencia.CenTipoDocumento"%>
-<%@page import="com.censo.modelo.persistencia.CenPuntoAtencion"%>
-<%@page import="java.sql.Date"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.LinkedList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Modificar Censo</title>
 
-        <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <script src="../../vendor/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
-        <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-        <script src="../../scripts/Ajax.js" type="text/javascript"></script>
+        <!-- Custom fonts for this template-->
+        <link href="${pageContext.request.contextPath}/template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="${pageContext.request.contextPath}/template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
 
-        <script src="../../scripts/validacionesCampos.js" type="text/javascript"></script>
-        <script src="../../scripts/censo.js" type="text/javascript"></script>
-        <script src="../../scripts/vehiculos.js" type="text/javascript"></script>
-        <script src="../../scripts/personas.js" type="text/javascript"></script>
+        <!-- Custom styles for this template-->
+        <link href="${pageContext.request.contextPath}/template/css/sb-admin-2.min.css" rel="stylesheet">
 
-        <link href="../../vendor/jquery-ui-1.12.1.Redmond/jquery-ui.css" rel="stylesheet" type="text/css"/>
-        <link href="../../vendor/jquery/calendario_es.css" rel="stylesheet" type="text/css"/>
-        <script src="../../vendor/jquery-ui-1.12.1.Redmond/jquery-ui.js" type="text/javascript"></script>
-        <script src="../../vendor/jquery/calendario_es_menor.js" type="text/javascript"></script>
+        <!-- Custom styles for this page -->
+        <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
-        <link href="../../fileinput/css/fileinput.css" rel="stylesheet" type="text/css"/>
-        <script src="../../fileinput/js/fileinput.min.js" type="text/javascript"></script>
-        <script>
-            $(function () {
-                $("#txtfechacenso").datepicker();
-            });
-        </script>
+        <link href="${pageContext.request.contextPath}/template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/template/vendor/jquery/calendario_es.css" rel="stylesheet" type="text/css"/>
+
     </head>
     <body>
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
-                if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("modificarCenso.jsp")) {
-                    if (!request.getParameter("idcenso").equals("")) {
-                    
-                    CensoDao censoDao = new CensoDao();
-                    VehiculoDao vehiculoDao = new VehiculoDao();
-                    PersonaDao personaDao = new PersonaDao();
-                    PuntoAtencionDao puntoAtencionDao = new PuntoAtencionDao();
-                    TipoPersonaDao tipoPersonaDao = new TipoPersonaDao();
-                    TipoReferenciaDao tipoReferenciaDao = new TipoReferenciaDao();
-                    TipoDocumentoDao tipoDocumentoDao = new TipoDocumentoDao();
-                    
-                    long idcenso = Long.parseLong(request.getParameter("idcenso"));
-                    CenUsuario cenusuario = (CenUsuario) session.getAttribute("usuario");
-                    
-                    Date fechaActual = new Date(new java.util.Date().getTime());
-                    String nombreCompleto = "";
-                    int TipoRef = 0;
-                    String referencia = "";
-                    
-                    CenCenso cencenso = censoDao.ConsultarCensoById(idcenso);
-                    if(cencenso!=null){
-                        
-                        CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoById(cencenso.getVeh_id());
-                        if(cenvehiculo!=null){
-                            if(cenvehiculo.getPlaca_veh()!= null && !cenvehiculo.getPlaca_veh().equals("")){
-                                TipoRef = 1;
-                                referencia = cenvehiculo.getPlaca_veh();
-                            }else{
-                                if(cenvehiculo.getMotor()!= null && !cenvehiculo.getMotor().equals("")){
-                                    TipoRef = 2;
-                                    referencia = cenvehiculo.getMotor();
-                                }else{
-                                    if(cenvehiculo.getChasis()!= null && !cenvehiculo.getChasis().equals("")){
-                                        TipoRef = 3;
-                                        referencia = cenvehiculo.getChasis();
-                                    }else{
-                                        if(cenvehiculo.getSerie()!= null && !cenvehiculo.getSerie().equals("")){
-                                            TipoRef = 4;
-                                            referencia = cenvehiculo.getSerie();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        
-                        CenPersona cenpersonacenso = personaDao.ConsultarPersonaById(cencenso.getPer_id());
-                        if(cenpersonacenso!=null){
-                            nombreCompleto = cenpersonacenso.getNombre1() + " " + (cenpersonacenso.getNombre2() != null ? cenpersonacenso.getNombre2().trim() : "") 
-                    + " " + (cenpersonacenso.getApellido1() != null ? cenpersonacenso.getApellido1().trim() : "") 
-                    + " " + (cenpersonacenso.getApellido2() != null ? cenpersonacenso.getApellido2().trim() : "");
-                        }
+                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("modificarCenso.jsp")) {
         %>
         <div class="modal fade" id="registrarpersona" name="registrarpersona" role="dialog" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -117,161 +44,119 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid">
-            <form role="form" id="frmmodificarcenso" action="../../modificarCenso">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Datos del censo
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="form-group col-md-2">
-                                        <label># Censo(*)</label>
-                                        <input class="form-control" type="text" id="numero_m" name="numero" onKeyPress="return validarNumeros(event)" style="text-transform: uppercase" maxlength="7" value="<%= cencenso.getNumero()== null ? "" : cencenso.getNumero().trim()%>"/>
+        <div id="wrapper">
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                <jsp:include page="/jsp/Menu.jsp"></jsp:include>
+                </ul>
+
+                <div id="content-wrapper" class="d-flex flex-column">
+                    <div id="content">
+
+                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                        <jsp:include page="/jsp/Header.jsp"></jsp:include>
+                        </nav>
+
+                        <div class="container-fluid">
+                            <h1 class="h3 mb-2 text-gray-800">Modificar Censo</h1>
+
+                            <form role="form" id="frmregistrarcenso" action="../../registrarCenso">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Datos del censo</h6>
                                     </div>
-                                    <div class="form-group col-md-2">
-                                        <label>Fecha Censo (*)</label>
-                                        <input class="form-control" type="text" id="txtfechacenso" name="txtfechacenso" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(cencenso.getFecha())%>"/>
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label># Censo(*)</label>
+                                                <input class="form-control" type="text" id="txtnumerocenso" name="txtnumerocenso" maxlength="10" style="text-transform: uppercase" required="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Fecha Censo (*)</label>
+                                                <input class="form-control" type="text" id="txtfechacenso" name="txtfechacenso" readonly="true">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Punto de Atención(*)</label>
+                                                <select class="form-control" id="cmbpuntosatencion" name="cmbpuntosatencion" required="true"></select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Tipo Referencia(*)</label>
+                                                <select class="form-control" id="cmbtiposreferencia" name="cmbtiposreferencia" required="true" onblur="consultarRefVehiculo()"></select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Referencia Vehiculo(*)</label>
+                                                <input class="form-control" type="text" id="txtreferencia" name="txtreferencia" maxlength="10" style="text-transform: uppercase" required="true" onblur="consultarRefVehiculo()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary"> Datos Persona Presentó Vehiculo</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Tipo Persona(*)</label>
+                                                <select class="form-control" id="cmbtipospersona" name="cmbpuntoatencion" required="true"></select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Tipo Documento(*)</label>
+                                                <select class="form-control" id="cmbtiposdocumento" name="cmbtiposdocumento" required="true"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Documento(*)</label>
+                                                <input class="form-control" type="number" id="txtdocumento" name="txtdocumento" maxlength="20" required="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Nombre</label>
+                                                <input class="form-control" type="text" id="txtnombre" name="txtnombre" readonly="true">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" cols="3"></textarea>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-3">
-                                        <label>Punto de Atención(*)</label>
-                                        <select class="form-control" id="cmbpuntoaten" name="cmbpuntoaten">
-                                            <%
-                                                List listaPuntosAtencion = puntoAtencionDao.ListarPuntosAtencion();
-
-                                                for (int i = 0; i < listaPuntosAtencion.size(); i++) {
-                                                    CenPuntoAtencion cenpuntoatencion = (CenPuntoAtencion) listaPuntosAtencion.get(i);
-                                                    if (cenpuntoatencion.getId() == cencenso.getPun_id()) {
-                                            %>
-                                            <option value="<%=cenpuntoatencion.getId()%>" selected><%=cenpuntoatencion.getNombre()%></option>
-                                            <% } else {%>
-                                            <option value="<%=cenpuntoatencion.getId()%>"><%=cenpuntoatencion.getNombre()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
+                                    <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                        <button type="button" class="btn btn-lg btn-success btn-block" id="btnguardar" name="btnguardar" >Guardar</button>
                                     </div>
-                                    <div class="col-md-2">
-                                        <label>Tipo Referencia (*)</label>
-                                        <select class="form-control" id="cmbtiporeferencia" name="cmbtiporeferencia">
-                                            <%
-                                                List listaTipoReferencia = tipoReferenciaDao.ListarTiposReferencia();
-
-                                                for (int i = 0; i < listaTipoReferencia.size(); i++) {
-                                                    CenTipoReferencia centiporeferencia = (CenTipoReferencia) listaTipoReferencia.get(i);
-                                                    if (centiporeferencia.getId() == TipoRef) {
-                                            %>
-                                            <option value="<%=centiporeferencia.getId()%>" selected><%=centiporeferencia.getDescripcion()%></option>
-                                            <% } else {%>
-                                            <option value="<%=centiporeferencia.getId()%>"><%=centiporeferencia.getDescripcion()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Referencia Vehiculo(*)</label>
-                                        <input class="form-control" type="text" id="txtreferencia" name="txtreferencia" placeholder="" onblur="consultarRefVehiculoModificar()" required style="text-transform: uppercase" value="<%=referencia%>">
+                                    <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                        <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Datos Persona Presentó Vehiculo
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="form-group col-md-3">
-                                        <label>Tipo Persona(*)</label>
-                                        <select class="form-control" id="cmbtipopersona" name="cmbtipopersona">
-                                            <%
-                                                List listaTiposPersona = tipoPersonaDao.ListarTiposPersona();
+                                <input type="hidden" id="idcenso" name="idcenso">
+                                <input type="hidden" id="idpersona" name="idpersona">
+                                <input type="hidden" id="idvehiculo" name="idvehiculo">
+                                <input type="hidden" id="numerocenso" name="numerocenso">
+                                <input type="hidden" id="tiporeferencia" name="tiporeferencia">
+                                <input type="hidden" id="referencia" name="referencia">
 
-                                                for (int i = 0; i < listaTiposPersona.size(); i++) {
-                                                    CenTipoPersona centipopersona = (CenTipoPersona) listaTiposPersona.get(i);
-                                                    if (centipopersona.getId() == cencenso.getTper_id()) {
-                                            %>
-                                            <option value="<%=centipopersona.getId()%>" selected><%=centipopersona.getDescripcion()%></option>
-                                            <% } else {%>
-                                            <option value="<%=centipopersona.getId()%>"><%=centipopersona.getDescripcion()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Tipo Documento(*)</label>
-                                        <select class="form-control" id="cmbtipodoc" name="cmbtipodoc">
-                                            <%
-                                                List listaTiposDocumento = tipoDocumentoDao.ListarTiposDocumento();
-
-                                                for (int i = 0; i < listaTiposDocumento.size(); i++) {
-                                                    CenTipoDocumento centipodocumento = (CenTipoDocumento) listaTiposDocumento.get(i);
-                                                    if (centipodocumento.getId() == cenpersonacenso.getTipodocumento()) {
-                                            %>
-                                            <option value="<%=centipodocumento.getId()%>" selected><%=centipodocumento.getDescripcion()%></option>
-                                            <% } else {%>
-                                            <option value="<%=centipodocumento.getId()%>"><%=centipodocumento.getDescripcion()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Documento(*)</label>
-                                        <input class="form-control" type="text" id="txtdocumento" name="txtdocumento" onKeyPress=" return validarNumeros(event)" onblur="consultarPersona(2)" maxlength="20" required style="text-transform: uppercase" value="<%= cenpersonacenso.getDocumento()== null ? "" : cenpersonacenso.getDocumento().trim()%>">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Nombre</label>
-                                        <input class="form-control" type="text" id="txtnombre" name="txtnombre" readonly="true" value="<%=nombreCompleto%>" >
-                                    </div>
-                                </div>
-                            </div>
+                            </form>
                         </div>
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Observaciones
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="form-group col-md-12">
-                                        <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" cols="3"><%=cenpersonacenso.getDocumento()== null ? "" : cenpersonacenso.getDocumento().trim()%></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row page-header">
-                            <div class="form-group col-xs-12 col-sm-3 col-md-3">
-                                <button type="button" class="btn btn-lg btn-success btn-block" onclick="modificarCenso()" id="btnregistrar" name="btnregistrar" >Guardar</button>
-                            </div>
-                        </div>
-                        <input type="hidden" id="idcenso" name="idcenso" value="<%=cencenso.getId()%>">
-                        <input type="hidden" id="idpersona" name="idpersona" value="<%=cenpersonacenso.getId()%>">
-                        <input type="hidden" id="idvehiculo" name="idvehiculo" value="<%=cenvehiculo.getId()%>">
-                        <input type="hidden" id="numerocenso" name="numerocenso" value="<%=cencenso.getNumero()%>">
-                        <input type="hidden" id="tiporeferencia" name="tiporeferencia" value="<%=TipoRef%>">
-                        <input type="hidden" id="referencia" name="referencia" value="<%=referencia %>">
+                        <footer class="sticky-footer bg-white">
+                        <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                        </footer>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
         <%
-            }
-            }
         } else {
         %>
         <script type="text/javascript">
             alert("Su usuario no tiene permiso para acceder a esta pagina");
-            window.parent.location.href = "../Inicio.jsp";
+            window.parent.location.href = "dashboard";
         </script>
         <%
             }
@@ -279,10 +164,41 @@
         %>
         <script type="text/javascript">
             alert("Su sesion a terminado");
-            document.location.href = "../../cerrarSesion";
+            document.location.href = "../../index.jsp";
         </script>
         <%
             }
         %>
+
+        <!-- Bootstrap core JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- Core plugin JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
+
+        <!-- Page level plugins -->
+        <script src="${pageContext.request.contextPath}/template/vendor/datatables/jquery.dataTables.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="${pageContext.request.contextPath}/template/js/demo/datatables-demo.js"></script>
+
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery/calendario_es.js" type="text/javascript"></script>
+
+        <script src="${pageContext.request.contextPath}/scripts/modificarCenso.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/censo.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/personas.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/parametros.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/fechas.js" type="text/javascript"></script>
+
+        <link href="${pageContext.request.contextPath}/fileinput/css/fileinput.css" rel="stylesheet" type="text/css"/>
+        <script src="${pageContext.request.contextPath}/fileinput/js/fileinput.min.js" type="text/javascript"></script>
+
     </body>
 </html>

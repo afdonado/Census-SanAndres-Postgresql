@@ -1,4 +1,5 @@
 <%@page import="javax.servlet.http.HttpSession"%>
+<%@page import="java.util.LinkedList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -26,7 +27,7 @@
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
-                if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("modificarVehiculo.jsp")) {
+                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("modificarVehiculo.jsp")) {
         %>
         <div class="modal fade" id="registrarpersona" name="modificarpersona" role="dialog" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -56,8 +57,8 @@
                         </nav>
 
                         <div class="container-fluid">
-                            <h1 class="h3 mb-2 text-gray-800">Registrar Vehiculo</h1>
-                            <form class="user" id="frmregistrarvehiculo" action="../../registrarVehiculo">
+                            <h1 class="h3 mb-2 text-gray-800">Modificar Vehiculo</h1>
+                            <form class="user" id="frmmodificarvehiculo" action="../../modificarVehiculo">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
                                         <h6 class="m-0 font-weight-bold text-primary">Datos de Identificación</h6>
@@ -179,7 +180,7 @@
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-importacion">
                                                 <label>Tipo Importación</label>
-                                                <select class="form-control" id="cmdtiposimportacion" name="cmdtiposimportacion" required="true"></select>
+                                                <select class="form-control" id="cmbtiposimportacion" name="cmbtiposimportacion" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0" id="documento-importacion">
                                                 <label>Documento Importación (*)</label>
@@ -277,6 +278,7 @@
                                         <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
                                     </div>
                                 </div>
+                                <input type="hidden" id="idvehiculo" name="idvehiculo">
                             </form>
                         </div>
                         <footer class="sticky-footer bg-white">

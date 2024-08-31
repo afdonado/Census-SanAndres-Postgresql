@@ -9,14 +9,14 @@ $(function () {
     }
 
     var opcion = getParameterByName('opcion');
-    var vehiculoId = getParameterByName('id');
+    var id = getParameterByName('id');
 
-    if (opcion && vehiculoId) {
+    if (opcion && id) {
 
         $.ajax({
             url: '../../cargarDatosVehiculo',
             method: 'get',
-            data: {id: vehiculoId},
+            data: {id: id},
             success: function (data) {
                 $('#txtplaca').val(data.vehiculo.VEH_PLACA);
                 $('#txtmotor').val(data.vehiculo.VEH_MOTOR);
@@ -53,6 +53,7 @@ $(function () {
                 $('#txtfechavtecnomecanica').val(data.vehiculo.FECHAV_TECNO);
 
                 $('#txtobservaciones').val(data.vehiculo.OBSERVACIONES);
+                $('#idvehiculo').val(data.vehiculo.VEH_ID);
 
                 $.ajax({
                     url: '../../cargarClasesVehiculo',
@@ -149,7 +150,7 @@ $(function () {
                     url: '../../cargarTiposImportacion',
                     method: 'GET',
                     success: function (data) {
-                        var select = $('#cmdtiposimportacion');
+                        var select = $('#cmbtiposimportacion');
                         select.empty();
                         $.each(data, function (index, item) {
                             select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
@@ -166,24 +167,24 @@ $(function () {
                 $.each(personas, function (index, persona) {
                     contador = index + 1;
                     var nuevoElemento = `
-                <div id="contenedor${contador}" class="form-group row">
+                <div id="contenedor${persona.PV_ID}" class="form-group row">
                     <div class="col-sm-2 mb-3 mb-sm-0">
-                        <select class="form-control" id="cmbtipospersona${contador}" name="cmbtipospersona${contador}" required="true">
-                            <!-- Opciones dinámicas aquí -->
-                        </select>
+                        <select class="form-control" id="cmbtipospersona${contador}" name="cmbtipospersona${contador}" required="true"></select>
                     </div>
                     <div class="col-sm-2 mb-3 mb-sm-0">
-                        <select class="form-control" id="cmbtiposdocumento${contador}" name="cmbtiposdocumento${contador}" required="true">
-                            <!-- Opciones dinámicas aquí -->
-                        </select>
+                        <select class="form-control" id="cmbtiposdocumento${contador}" name="cmbtiposdocumento${contador}" required="true"></select>
                     </div>
                     <div class="col-sm-3 mb-3 mb-sm-0">
                         <input class="form-control" type="number" id="txtdocumento${contador}" name="txtdocumento${contador}" maxlength="20" value="${persona.DOCUMENTO}" required="true">
                     </div>
-                    <div class="col-sm-5 mb-3 mb-sm-0">
+                    <div class="col-sm-5 mb-2 mb-sm-0">
                         <input class="form-control" type="text" id="txtnombre${contador}" name="txtnombre${contador}" value="${persona.NOMBRE}" readonly="true">
                     </div>
+                    <div class="col-sm-1 mb-1 mb-sm-0">
+                        <button class="btn btn-danger" onclick="anularPersonaVehiculo(${persona.PV_ID});">X</button>
+                    </div>
                     <input type="hidden" id="idpersona${contador}" name="idpersona${contador}" value="${persona.ID}">
+                    <input type="hidden" id="estadoperveh${persona.PV_ID}" name="estadoperveh${persona.PV_ID}" value="1">
                 </div>
             `;
                     contenedor.append(nuevoElemento);
@@ -193,12 +194,18 @@ $(function () {
                 });
                 console.log('contador: ', contador);
                 $('#txtcantidadpersonas').val(contador);
-                
+
             }
         });
 
     } else {
         console.log("Parámetros no encontrados en la URL");
+    }
+
+    function anularPersonaVehiculo(idperveh) {
+        $('#estadoperveh' + idperveh).val(2);
+        $('#registropersona' + idperveh).hide();
+
     }
 
     function cargarTiposPersona(selector, tipoPersonaId) {

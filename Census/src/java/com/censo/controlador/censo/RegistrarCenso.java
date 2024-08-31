@@ -37,15 +37,15 @@ public class RegistrarCenso extends HttpServlet {
             //captura de datos del formulario
             Date fechaActual = new java.sql.Date(new java.util.Date().getTime());
             String hora = new java.text.SimpleDateFormat("HHmm").format(fechaActual);
-            String numero = request.getParameter("txtnumero").toUpperCase().trim();
+            String numero = request.getParameter("txtnumerocenso").toUpperCase().trim();
             if (numero.length() < 6) {
                 String prefijo = "CS";
                 numero = prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero;
             }
-            int puntoAtencion = Integer.parseInt(request.getParameter("cmbpuntoaten"));
+            int puntoAtencion = Integer.parseInt(request.getParameter("cmbpuntosatencion"));
             long idvehiculo = Long.parseLong(request.getParameter("idvehiculo"));
             long idpersona = Long.parseLong(request.getParameter("idpersona"));
-            int tipoPersona = Integer.parseInt(request.getParameter("cmbtipopersona"));
+            int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona"));
             String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
             Date fechaCenso = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechacenso")).getTime());
 
@@ -66,7 +66,7 @@ public class RegistrarCenso extends HttpServlet {
                 conex.commit();
                 out.println("<script type=\"text/javascript\">");
                 out.println("alert('Censo Registrado');");
-                out.println("location='jsp/Censo/registrarCenso.jsp';");
+                out.println("location='jsp/Censo/listarCensos.jsp';");
                 out.println("</script>");
             } else {
                 conex.rollback();

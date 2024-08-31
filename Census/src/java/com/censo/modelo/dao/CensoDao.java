@@ -135,7 +135,7 @@ public class CensoDao extends Conexion {
         }
         return null;
     }
-
+/*
     public List ListarCensos(Connection conex) throws SQLException {
         
         List<HashMap> listaDatos = new LinkedList<>();
@@ -173,6 +173,7 @@ public class CensoDao extends Conexion {
         }
         return listaDatos;
     }
+*/
 
     public List ListarCensosByNumero(Connection conex, String numero) throws SQLException {
 
@@ -464,6 +465,72 @@ public class CensoDao extends Conexion {
                 System.out.println("Error en cierres de modificarCenso:" + e);
             }
         }
+    }
+    
+    public HashMap<String, String> ConsultarDatosCensoById(Connection conex, long id) throws SQLException {
+
+        HashMap<String, String> datos = new HashMap<>();
+
+        try {
+            pst = conex.prepareStatement("SELECT * FROM VW_CENSOS WHERE CEN_ID = ? ");
+            pst.setLong(1, id);
+            rst = pst.executeQuery();
+
+            if (rst.next()) {
+                ResultSetMetaData rsmd = rst.getMetaData();
+                for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                    datos.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new SQLException("Error en ConsultarDatosCensoById: " + e);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (rst != null) {
+                    rst.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error en cierres de ConsultarDatosCensoById:" + e);
+            }
+        }
+        return datos;
+    }
+    
+    public List ListarCensos(Connection conex) throws SQLException {
+
+        List<HashMap> lista = new LinkedList<>();
+
+        try {
+            pst = conex.prepareStatement("SELECT * FROM VW_CENSOS ");
+            rst = pst.executeQuery();
+
+            while (rst.next()) {
+                ResultSetMetaData rsmd = rst.getMetaData();
+                HashMap<String, String> hash = new HashMap<>();
+                for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                    hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+                }
+                lista.add(hash);
+            }
+        } catch (Exception e) {
+            throw new SQLException("Error en ListarCensos: " + e);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (rst != null) {
+                    rst.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error en cierres de ListarCensos:" + e);
+            }
+        }
+        return lista;
     }
     
 }

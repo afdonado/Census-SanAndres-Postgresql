@@ -9,14 +9,14 @@ $(function () {
     }
 
     var opcion = getParameterByName('opcion');
-    var vehiculoId = getParameterByName('id');
+    var id = getParameterByName('id');
 
-    if (opcion && vehiculoId) {
+    if (opcion && id) {
 
         $.ajax({
             url: '../../cargarDatosVehiculo',
             method: 'get',
-            data: {id: vehiculoId},
+            data: {id: id},
             success: function (data) {
                 $('#txtplaca').val(data.vehiculo.VEH_PLACA);
                 $('#txtmotor').val(data.vehiculo.VEH_MOTOR);
@@ -68,7 +68,7 @@ $(function () {
                         <input class="form-control" id="txttipodocumento" name="txttipodocumento" value="${persona.TIPO_DOC}" readonly="true">
                     </div>
                     <div class="col-sm-3 mb-3 mb-sm-0">
-                        <input class="form-control" type="number" id="txtdocumento" name="txtdocumento" maxlength="20" value="${persona.DOCUMENTO}" required="true">
+                        <input class="form-control" type="number" id="txtdocumento" name="txtdocumento" value="${persona.DOCUMENTO}" required="true">
                     </div>
                     <div class="col-sm-5 mb-3 mb-sm-0">
                         <input class="form-control" type="text" id="txtnombre" name="txtnombre" value="${persona.NOMBRE}" readonly="true">

@@ -1,7 +1,5 @@
 <%@page import="javax.servlet.http.HttpSession"%>
-<%@page import="java.sql.Date"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.LinkedList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -26,7 +24,7 @@
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
-                if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("listarVehiculos.jsp")) {
+                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("listarVehiculos.jsp")) {
         %>
         <div id="wrapper">
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -78,7 +76,7 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>          
+                            </div>
                     </div>
                     <footer class="sticky-footer bg-white">
                         <jsp:include page="/jsp/Footer.jsp"></jsp:include>
@@ -90,7 +88,7 @@
         %>
         <script type="text/javascript">
             alert("Su usuario no tiene permiso para acceder a esta pagina");
-            window.parent.location.href = "../Inicio.jsp";
+            window.parent.location.href = "dashboard";
         </script>
         <%
             }
@@ -98,7 +96,7 @@
         %>
         <script type="text/javascript">
             alert("Su sesion a terminado");
-            document.location.href = "../../cerrarSesion";
+            document.location.href = "../../index.jsp";
         </script>
         <%
             }

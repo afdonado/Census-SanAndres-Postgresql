@@ -1,7 +1,6 @@
-package com.censo.controlador.vehiculo;
+package com.censo.controlador.censo;
 
-import com.censo.modelo.dao.PersonaVehiculoDao;
-import com.censo.modelo.dao.VehiculoDao;
+import com.censo.modelo.dao.CensoDao;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,15 +8,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "CargarDatosVehiculo", urlPatterns = {"/cargarDatosVehiculo"})
-public class CargarDatosVehiculo extends HttpServlet {
+@WebServlet(name = "ListarCensos", urlPatterns = {"/listarCensos"})
+public class ListarCensos extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -29,37 +27,25 @@ public class CargarDatosVehiculo extends HttpServlet {
 
         try {
 
-            if (!request.getParameter("id").equals("")) {
+            CensoDao censoDao = new CensoDao();
+            conex = censoDao.conectar();
 
-                VehiculoDao vehiculoDao = new VehiculoDao();
-                conex = vehiculoDao.conectar();
+            List<HashMap> lista = censoDao.ListarCensos(conex);
 
-                long idvehiculo = Long.parseLong(request.getParameter("id"));
+            if (!lista.isEmpty()) {
 
-                HashMap<String, String> datosVehiculo = vehiculoDao.ConsultarDatosVehiculoById(conex, idvehiculo);
-
-                if (!datosVehiculo.isEmpty()) {
-
-                    PersonaVehiculoDao personaVehiculoDao = new PersonaVehiculoDao();
-                    List<HashMap> personasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, idvehiculo);
-
-                    Map<String, Object> responseMap = new HashMap<>();
-                    responseMap.put("vehiculo", datosVehiculo);
-                    responseMap.put("personasVehiculo", personasVehiculo);
-
-                    Gson gson = new Gson();
-                    String json = gson.toJson(responseMap);
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
-                    response.getWriter().write(json);
-
-                }
+                Gson gson = new Gson();
+                String json = gson.toJson(lista);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(json);
+                
             }
 
         } catch (SQLException e) {
             out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al listar los vehiculos');");
-            out.println("location='dashboard';");
+            out.println("alert('Error al listar los censos');");
+            out.println("location='jsp/Inicio.jsp';");
             out.println("</script>");
             e.printStackTrace();
 

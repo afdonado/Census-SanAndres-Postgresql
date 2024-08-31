@@ -1,7 +1,7 @@
-package com.censo.controlador.vehiculo;
+package com.censo.controlador.censo;
 
+import com.censo.modelo.dao.CensoDao;
 import com.censo.modelo.dao.PersonaVehiculoDao;
-import com.censo.modelo.dao.VehiculoDao;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "CargarDatosVehiculo", urlPatterns = {"/cargarDatosVehiculo"})
-public class CargarDatosVehiculo extends HttpServlet {
+@WebServlet(name = "CargarDatosCenso", urlPatterns = {"/cargarDatosCenso"})
+public class CargarDatosCenso extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -31,20 +31,20 @@ public class CargarDatosVehiculo extends HttpServlet {
 
             if (!request.getParameter("id").equals("")) {
 
-                VehiculoDao vehiculoDao = new VehiculoDao();
-                conex = vehiculoDao.conectar();
+                CensoDao censoDao = new CensoDao();
+                conex = censoDao.conectar();
 
-                long idvehiculo = Long.parseLong(request.getParameter("id"));
+                long idcenso = Long.parseLong(request.getParameter("id"));
 
-                HashMap<String, String> datosVehiculo = vehiculoDao.ConsultarDatosVehiculoById(conex, idvehiculo);
+                HashMap<String, String> datosCenso = censoDao.ConsultarDatosCensoById(conex, idcenso);
 
-                if (!datosVehiculo.isEmpty()) {
+                if (!datosCenso.isEmpty()) {
 
                     PersonaVehiculoDao personaVehiculoDao = new PersonaVehiculoDao();
-                    List<HashMap> personasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, idvehiculo);
+                    List<HashMap> personasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, Long.parseLong(datosCenso.get("VEH_ID")));
 
                     Map<String, Object> responseMap = new HashMap<>();
-                    responseMap.put("vehiculo", datosVehiculo);
+                    responseMap.put("censo", datosCenso);
                     responseMap.put("personasVehiculo", personasVehiculo);
 
                     Gson gson = new Gson();
@@ -58,7 +58,7 @@ public class CargarDatosVehiculo extends HttpServlet {
 
         } catch (SQLException e) {
             out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al listar los vehiculos');");
+            out.println("alert('Error al consultar los datos del censo');");
             out.println("location='dashboard';");
             out.println("</script>");
             e.printStackTrace();

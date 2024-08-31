@@ -1,245 +1,193 @@
-<%@page import="com.censo.modelo.dao.PersonaVehiculoDao"%>
-<%@page import="com.censo.modelo.dao.TipoDocumentoDao"%>
-<%@page import="com.censo.modelo.dao.PersonaDao"%>
-<%@page import="com.censo.modelo.dao.TipoPersonaDao"%>
-<%@page import="com.censo.modelo.dao.PuntoAtencionDao"%>
-<%@page import="com.censo.modelo.dao.VehiculoDao"%>
-<%@page import="com.censo.modelo.dao.UsuarioDao"%>
-<%@page import="com.censo.modelo.dao.CensoDao"%>
 <%@page import="javax.servlet.http.HttpSession"%>
-<%@page import="com.censo.modelo.persistencia.CenUsuario"%>
-<%@page import="com.censo.modelo.persistencia.CenPuntoAtencion"%>
-<%@page import="com.censo.modelo.persistencia.CenCenso"%>
-<%@page import="com.censo.modelo.persistencia.CenTipoDocumento"%>
-<%@page import="com.censo.modelo.persistencia.CenTipoPersona"%>
-<%@page import="com.censo.modelo.persistencia.CenVehiculo"%>
-<%@page import="com.censo.modelo.persistencia.CenPersona"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.LinkedList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <script src="../../vendor/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
-        <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-        <script src="../../scripts/Ajax.js" type="text/javascript"></script>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <script src="../../scripts/censo.js" type="text/javascript"></script>
+        <title>Datos Censo</title>
+
+        <!-- Custom fonts for this template-->
+        <link href="${pageContext.request.contextPath}/template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="${pageContext.request.contextPath}/template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
+
+        <!-- Custom styles for this template-->
+        <link href="${pageContext.request.contextPath}/template/css/sb-admin-2.min.css" rel="stylesheet">
+
+        <!-- Custom styles for this page -->
+        <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     </head>
     <body>
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
-                if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("consultarCenso.jsp")) {
-                    if (!request.getParameter("idcenso").equals("")) {
-                        
-                        CensoDao censoDao = new CensoDao();
-                        PuntoAtencionDao puntoAtencionDao = new PuntoAtencionDao();
-                        UsuarioDao usuarioDao = new UsuarioDao();
-                        VehiculoDao vehiculoDao = new VehiculoDao();
-                        TipoPersonaDao tipoPersonaDao = new TipoPersonaDao();
-                        PersonaDao personaDao = new PersonaDao();
-                        TipoDocumentoDao tipoDocumentoDao = new TipoDocumentoDao();
-                        PersonaVehiculoDao personaVehiculoDao = new PersonaVehiculoDao();
-                        
-                        long idcenso = Long.parseLong(request.getParameter("idcenso"));
-
-                        CenCenso cencenso = censoDao.ConsultarCensoById(idcenso);
-
-                        if (cencenso != null) {
-                            CenPuntoAtencion cenpuntoatencion = puntoAtencionDao.ConsultarPuntoAtencionById(cencenso.getPun_id());
-                            CenUsuario cenusuario = usuarioDao.ConsultarUsuarioById(cencenso.getUsu_id());
-                            CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoById(cencenso.getVeh_id());
-
-                            CenTipoPersona centipopersona = tipoPersonaDao.ConsultarTipoPersonaById(cencenso.getTper_id());
-                            CenPersona cenpersona = personaDao.ConsultarPersonaById(cencenso.getPer_id());
-                            CenTipoDocumento centipodocumento = tipoDocumentoDao.ConsultarTipoDocumentoById(cenpersona.getTipodocumento());
-                            String nombreCompleto = cenpersona.getNombre1() + " " + (cenpersona.getNombre2() != null ? cenpersona.getNombre2().trim() : "")
-                                    + " " + (cenpersona.getApellido1() != null ? cenpersona.getApellido1().trim() : "")
-                                    + " " + (cenpersona.getApellido2() != null ? cenpersona.getApellido2().trim() : "");
+                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("listarCensos.jsp")) {
 
         %>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            Datos del Censo
-                        </div>
-                        <div class="panel-body">
-                            <div class="row form-group">
-                                <div class="col-md-2">
-                                    <label># Censo</label>
-                                    <input class="form-control" type="text" id="txtnumero" name="txtnumero" value="<%= cencenso.getNumero() == null ? "" : cencenso.getNumero().trim()%>" readonly="true">
+        <div id="wrapper">
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                <jsp:include page="/jsp/Menu.jsp"></jsp:include>
+                </ul>
+
+                <div id="content-wrapper" class="d-flex flex-column">
+                    <div id="content">
+
+                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                        <jsp:include page="/jsp/Header.jsp"></jsp:include>
+                        </nav>
+
+                        <div class="container-fluid">
+                            <h1 class="h3 mb-2 text-gray-800">Datos del Censo</h1>
+
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos del censo</h6>
                                 </div>
-                                <div class="col-md-2">
-                                    <label>Fecha y Hora</label>
-                                    <input class="form-control" type="text" id="txtfechahora" name="txtfechahora" value="<%= cencenso.getFecha() == null || cencenso.getHora() == null ? "" : new java.text.SimpleDateFormat("dd/MM/yyyy").format(cencenso.getFecha()) + " " + cencenso.getHora()%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Punto Atención</label>
-                                    <input class="form-control" type="text" id="txtpuntoaten" name="txtpuntoaten" value="<%= cenpuntoatencion == null ? "" : cenpuntoatencion.getNombre().trim()%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Usuario Registró</label>
-                                    <input class="form-control" type="text" id="txtusureg" name="txtusureg" value="<%= cenusuario == null ? "" : cenusuario.getNombre().trim()%>" readonly="true">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            Identificacion del Vehiculo
-                        </div>
-                        <div class="panel-body">
-                            <div class="row form-group">
-                                <div class="col-md-3">
-                                    <label>Placa</label>
-                                    <input class="form-control" type="text" id="txtplaca" name="txtplaca" value="<%= cenvehiculo.getPlaca_veh() == null ? "" : cenvehiculo.getPlaca_veh().trim()%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Motor</label>
-                                    <input class="form-control" type="text" id="txtmotor" name="txtmotor" value="<%= cenvehiculo.getMotor() == null ? "" : cenvehiculo.getMotor().trim()%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Chasis</label>
-                                    <input class="form-control" type="text" id="txtchasis" name="txtchasis" value="<%= cenvehiculo.getChasis() == null ? "" : cenvehiculo.getChasis().trim()%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Serie</label>
-                                    <input class="form-control" type="text" id="txtserie" name="txtserie" value="<%= cenvehiculo.getSerie() == null ? "" : cenvehiculo.getSerie().trim()%>" readonly="true">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label># Censo</label>
+                                            <input class="form-control" type="text" id="txtnumerocenso" name="txtnumerocenso" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Fecha Censo</label>
+                                            <input class="form-control" type="text" id="txtfechacenso" name="txtfechacenso" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Punto de Atención</label>
+                                            <input class="form-control" id="txtpuntoatencion" name="txtpuntoatencion" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Usuario Registró</label>
+                                            <input class="form-control" id="txtusuarioregistro" name="txtusuarioregistro" readonly="true">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            Personas Asociadas al Vehiculo
-                        </div>
-                        <div class="panel-body">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Identificacion del Vehiculo</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Placa</label>
+                                            <input class="form-control" type="text" id="txtplaca" name="txtplaca" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Motor</label>
+                                            <input class="form-control" type="text" id="txtmotor" name="txtmotor" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Chasis</label>
+                                            <input class="form-control" type="text" id="txtchasis" name="txtchasis" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Serie</label>
+                                            <input class="form-control" type="text" id="txtserie" name="txtserie" readonly="true">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                                    <h6 class="m-0 font-weight-bold text-primary">Personas Asociadas</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-2 mb-3 mb-sm-0">
+                                            <label>Tipo</label>
+                                        </div>
+                                        <div class="col-sm-2 mb-3 mb-sm-0">
+                                            <label>Tipo Documento</label>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Documento</label>
+                                        </div>
+                                        <div class="col-sm-5 mb-3 mb-sm-0">
+                                            <label>Nombre</label>
+                                        </div>
+                                    </div>
+                                    <div id="personas-censo">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                                    <h6 class="m-0 font-weight-bold text-primary">Personas Presentó Vehiculo</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-2 mb-3 mb-sm-0">
+                                            <label>Tipo</label>
+                                        </div>
+                                        <div class="col-sm-2 mb-3 mb-sm-0">
+                                            <label>Tipo Documento</label>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Documento</label>
+                                        </div>
+                                        <div class="col-sm-5 mb-3 mb-sm-0">
+                                            <label>Nombre</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-2 mb-3 mb-sm-0">
+                                            <input class="form-control" id="txttipopersonapresento" name="txttipopersonapresento" readonly="true">
+                                        </div>
+                                        <div class="col-sm-2 mb-3 mb-sm-0">
+                                            <input class="form-control" id="txttipodocumentopresento" name="txttipodocumentopresento" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <input class="form-control" type="number" id="txtdocumentopresento" name="txtdocumentopresento" required="true">
+                                        </div>
+                                        <div class="col-sm-5 mb-3 mb-sm-0">
+                                            <input class="form-control" type="text" id="txtnombrepresento" name="txtnombrepresento" readonly="true">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" readonly="true"></textarea>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
-                                <div class="col-md-2">
-                                    <label>Tipo</label>
+                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                    <button type="button" class="btn btn-lg btn-success btn-block" id="btngenerarpdf" name="btngenerarpdf">Generar PDF</button><!--onclick="ImprimirCensoById(idcenso)"-->
                                 </div>
-                                <div class="col-md-2">
-                                    <label>Tipo Documento</label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Documento</label>
-                                </div>
-                                <div class="col-md-5">
-                                    <label>Nombre</label>
+                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                    <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
                                 </div>
                             </div>
-                            <%
-                                List<HashMap> personasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(cenvehiculo.getId());
-
-                                if (personasVehiculo.size() > 0) {
-
-                                    for (HashMap hash : personasVehiculo) {
-                            %>
-                            <div class="row form-group">
-                                <div class="col-md-2">
-                                    <input class="form-control" type="text" id="txttipopersona" name="txttipopersona" value="<%= hash.get("TIPO_PERSONA") == null ? "" : hash.get("TIPO_PERSONA")%>" readonly="true">
-                                </div>
-                                <div class="col-md-2">
-                                    <input class="form-control" type="text" id="cmbtipodoc" name="cmbtipodoc" value="<%= hash.get("TIPO_DOC") == null ? "" : hash.get("TIPO_DOC")%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <input class="form-control" type="text" id="txtdocumento" name="txtdocumento" value="<%= hash.get("DOCUMENTO") == null ? "" : hash.get("DOCUMENTO")%>" readonly="true">
-                                </div>
-                                <div class="col-md-5">
-                                    <input class="form-control" type="text" id="txtnombre" name="txtnombre" value="<%= hash.get("NOMBRE") == null ? "" : hash.get("NOMBRE")%>" readonly="true">
-                                </div>
-                            </div>
-                            <%
-                                }
-
-                            } else {
-                            %>
-                            <div class="row form-group">
-                                <div class="col-md-12">
-                                    <label>No se encontraron personas registradas</label>
-                                </div>
-                            </div>
-                            <%
-                                }
-                            %>
+                            <!--
+                                                        <div id="page-wrapper">
+                                                            <div class="row">
+                                                                <iframe src="../Documentos/ListarDocumentos.jsp?idcenso=idcenso" style="width: 100%; min-height: 1500px;" transparency="transparency" frameborder="0" ></iframe>
+                                                        </div>
+                                                    </div>
+                            -->
                         </div>
                     </div>
-
-
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            Persona Asociada Presento Vehiculo
-                        </div>
-                        <div class="panel-body">
-                            <div class="row form-group">
-                                <div class="col-md-2">
-                                    <label>Tipo</label>
-                                    <input class="form-control" type="text" id="txttipopersona" name="txttipopersona" value="<%= centipopersona == null ? "" : centipopersona.getDescripcion().trim()%>" readonly="true">
-                                </div>
-                                <div class="col-md-2">
-                                    <label>Tipo Documento</label>
-                                    <input class="form-control" type="text" id="cmbtipodoc" name="cmbtipodoc" value="<%= centipodocumento == null ? "" : centipodocumento.getDescripcion()%>" readonly="true">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Documento</label>
-                                    <input class="form-control" type="text" id="txtdocumento" name="txtdocumento" value="<%= cenpersona.getDocumento() == null ? "" : cenpersona.getDocumento().trim()%>" readonly="true">
-                                </div>
-                                <div class="col-md-5">
-                                    <label>Nombre</label>
-                                    <input class="form-control" type="text" id="txtnombre" name="txtnombre" value="<%= nombreCompleto%>" readonly="true">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            Observaciones
-                        </div>
-                        <div class="panel-body">
-                            <div class="row form-group">
-                                <div class="col-md-12">
-                                    <textarea readonly id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%"><%= cencenso.getObservaciones() == null ? "" : cencenso.getObservaciones().trim()%></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="col-md-3">
-                                <label></label>
-                                <button type="button" class="btn btn-md btn-danger btn-block" onclick="ImprimirCensoById(<%=idcenso%>)" id="btngenerarreporte">Imprimir Certificado PDF</button>
-                            </div>
-                        </div>
-                    </div>
-                    <input type="hidden" id="idcenso" name="idcenso" value="<%=idcenso%>"/>
-                    <div id="page-wrapper">
-                        <div class="row">
-                            <iframe src="../Documentos/ListarDocumentos.jsp?idcenso=<%=idcenso%>" style="width: 100%; min-height: 1500px;" transparency="transparency" frameborder="0" ></iframe>
-                        </div>
-                    </div>
+                    <footer class="sticky-footer bg-white">
+                    <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                    </footer>
                 </div>
             </div>
-        </div>
-        <%
-        } else {
-        %>
-        <div class="panel panel-danger">    
-            <div class="panel-heading">
-                Numero de censo no registrado
-            </div>
-        </div>
-        <%
-                }
-            }
-        } else {
+        <%                        } else {
         %>
         <script type="text/javascript">
             alert("Su usuario no tiene permiso para acceder a esta pagina");
-            window.parent.location.href = "../Inicio.jsp";
+            window.parent.location.href = "../dashboard";
         </script>
         <%
             }
@@ -247,10 +195,31 @@
         %>
         <script type="text/javascript">
             alert("Su sesion a terminado");
-            document.location.href = "../../cerrarSesion";
+            document.location.href = "../../index.jsp";
         </script>
         <%
             }
         %>
+
+        <!-- Bootstrap core JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- Core plugin JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
+
+        <!-- Page level plugins -->
+        <script src="${pageContext.request.contextPath}/template/vendor/datatables/jquery.dataTables.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="${pageContext.request.contextPath}/template/js/demo/datatables-demo.js"></script>
+
+        <script src="${pageContext.request.contextPath}/scripts/verCenso.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/censo.js" type="text/javascript"></script>
+
     </body>
 </html>

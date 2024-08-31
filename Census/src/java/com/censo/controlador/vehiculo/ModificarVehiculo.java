@@ -59,9 +59,9 @@ public class ModificarVehiculo extends HttpServlet {
             String motor = request.getParameter("txtmotor").toUpperCase().trim();
             String chasis = request.getParameter("txtchasis").toUpperCase().trim();
             String serie = request.getParameter("txtserie").toUpperCase().trim();
-            int claseVeh = Integer.parseInt(request.getParameter("cmbclaseveh"));
-            int tipoServicio = Integer.parseInt(request.getParameter("cmbservicio"));
-            int tipoUso = Integer.parseInt(request.getParameter("cmbtipouso"));
+            int claseVeh = Integer.parseInt(request.getParameter("cmbclasevehiculo"));
+            int tipoServicio = Integer.parseInt(request.getParameter("cmbtiposservicio"));
+            int tipoUso = Integer.parseInt(request.getParameter("cmbtiposuso"));
             String nomcolor = request.getParameter("txtcolores").toUpperCase().trim();
             String nommarca = request.getParameter("txtmarcas").toUpperCase().trim();
             String nomlinea = request.getParameter("txtlineas").toUpperCase().trim();
@@ -82,28 +82,28 @@ public class ModificarVehiculo extends HttpServlet {
             long modeloveh = Long.parseLong(request.getParameter("txtmodelo"));
             String transformado = request.getParameter("cmbtransformado").toUpperCase().trim();
             String runt = request.getParameter("cmbrunt").toUpperCase().trim();
-            String licenciaTransito = request.getParameter("txtlictransito").toUpperCase().trim();
-            Date fechaMatricula = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechamatri")).getTime());
+            String licenciaTransito = request.getParameter("txtlicenciatransito").toUpperCase().trim();
+            Date fechaMatricula = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechamatricula")).getTime());
             long paisMatricula = Long.parseLong(request.getParameter("cmbpaismatricula"));
-            long municipioMatricula = Long.parseLong(request.getParameter("cmbmunicipiomatri"));
-            String ciudaMatricula = request.getParameter("txtciudadmatri").toUpperCase().trim();
-            int tipoDocImportacion = Integer.parseInt(request.getParameter("cmdtipodocimportacion"));
+            long municipioMatricula = Long.parseLong(request.getParameter("cmbmunicipiomatricula"));
+            String ciudaMatricula = request.getParameter("txtciudadmatricula").toUpperCase().trim();
+            int tipoDocImportacion = Integer.parseInt(request.getParameter("cmbtiposimportacion"));
             String documentoImportacion = "";
             Date fechaImportacion = null;
             long paisImportacion = 0;
 
-            if (tipoDocImportacion != 1) {
-                documentoImportacion = request.getParameter("txtdocimportacion").toUpperCase().trim();
+            if (tipoDocImportacion != 0) {
+                documentoImportacion = request.getParameter("txtdocumentoimportacion").toUpperCase().trim();
                 fechaImportacion = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechaimportacion")).getTime());
                 paisImportacion = Long.parseLong(request.getParameter("cmbpaisimportacion"));
             }
             String soat = request.getParameter("cmbsoat").toUpperCase().trim();
             Date fechaVenSoat = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechavsoat")).getTime());
-            String tecnoMecanica = request.getParameter("cmbtecno").toUpperCase().trim();
-            Date fechaVenTecnomecanica = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechavtecno")).getTime());
+            String tecnoMecanica = request.getParameter("cmbtecnomecanica").toUpperCase().trim();
+            Date fechaVenTecnomecanica = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechavtecnomecanica")).getTime());
 
             String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
-            int cantpersonas = (Integer.parseInt(request.getParameter("txtcantpersonas")));
+            int cantpersonas = (Integer.parseInt(request.getParameter("txtcantidadpersonas")));
 
             CenVehiculo cenvehiculo = new CenVehiculo();
             cenvehiculo.setId(idvehiculo);
@@ -159,7 +159,7 @@ public class ModificarVehiculo extends HttpServlet {
 
                     for (int i = 1; i <= cantpersonas; i++) {
 
-                        int tipoPersona = Integer.parseInt(request.getParameter("cmbtipopersona" + i));
+                        int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona" + i));
                         long idPersona = Long.parseLong(request.getParameter("idpersona" + i));
 
                         cenpersonavehiculo.setTper_id(tipoPersona);
@@ -182,13 +182,14 @@ public class ModificarVehiculo extends HttpServlet {
             if (registrado) {
                 conex.commit();
                 out.println("<script type=\"text/javascript\">");
-                out.println("alert('Vehiculo Modificado');");
-                out.println("location='jsp/Vehiculos/verVehiculo.jsp?idvehiculo="+idvehiculo+"';");
+                out.println("alert('Vehiculo modificado');");
+                out.println("location='jsp/Vehiculos/verVehiculo.jsp?id="+idvehiculo+"';");
                 out.println("</script>");
             } else {
                 conex.rollback();
                 out.println("<script type=\"text/javascript\">");
-                out.println("location='jsp/Vehiculos/verVehiculo.jsp?idvehiculo="+idvehiculo+"';");
+                out.println("alert('Vehiculo no modificado');");
+                out.println("location='jsp/Vehiculos/verVehiculo.jsp?id="+idvehiculo+"';");
                 out.println("</script>");
             }
 

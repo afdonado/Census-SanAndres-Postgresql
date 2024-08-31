@@ -1,6 +1,6 @@
 
 $(function () {
-    
+
     $("#ciudad-matricula").hide();
 
     var identificador = 0;
@@ -68,25 +68,25 @@ $(function () {
             }
         }
     }
-    
+
     $('#cmbrunt').on('change focus', actualizarCamposMatricula);
 
     $('#cmbpaismatricula').on('change', actualizarCamposMatricula);
-    
+
     function actualizarCamposImportacion() {
-        var tipoImportacion = $('#cmdtiposimportacion').val();
+        var tipoImportacion = $('#cmbtiposimportacion').val();
         if (tipoImportacion === "0") {
             $('.importacion').hide();
         } else {
             $('.importacion').show();
         }
     }
-    
-    $('#cmdtiposimportacion').on('change focus', actualizarCamposImportacion);
-    
-    $('#btnvolver').click( function () {
-     var id = $(this).data('id');
-     console.log("id: " + id);
-     window.location.href = "listarVehiculos.jsp";
-     });
+
+    $('#cmbtiposimportacion').on('change focus', actualizarCamposImportacion);
+
+    $('#btnvolver').click(function () {
+        var id = $(this).data('id');
+        console.log("id: " + id);
+        window.location.href = "listarVehiculos.jsp";
+    });
 });

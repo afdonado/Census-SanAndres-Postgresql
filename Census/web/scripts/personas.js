@@ -14,10 +14,16 @@ $(function () {
         var idPersona = 'idpersona' + idNumber;
 
         // Llamar a la función con los parámetros correctos
-        consultarPersonaVehiculo(1, tipoDoc, documento, nombre, idPersona);
+        consultarDocumentoPersona(1, tipoDoc, documento, nombre, idPersona);
+    });
+    
+    $('#txtdocumento').blur(function () {
+        if ($('#txtdocumento').val().length > 0) {
+            consultarDocumentoPersona(1, 'cmbtiposdocumento', 'txtdocumento', 'txtnombre', 'idpersona');
+        }
     });
 
-    function consultarPersonaVehiculo(sw, nametipodocumento, namedocumento, namenombre, nameidpersona) {
+    function consultarDocumentoPersona(sw, nametipodocumento, namedocumento, namenombre, nameidpersona) {
         var tipodocumento = $('#' + nametipodocumento).val();
         var documento = $('#' + namedocumento).val().toUpperCase();
 
@@ -53,7 +59,7 @@ $(function () {
             });
         }
     }
-
+    
 });
 
 function registrarPersona() {
@@ -133,56 +139,6 @@ function generarReportePersona(opcion) {
     window.open(url, 'popUp', opciones);
 
 }
-
-$(function () {
-    $('#txtdocumento').blur(function () {
-        if ($('#txtdocumento').val().length > 0) {
-            consultarDocumentoPersona($('#cmbtipodoc').val(), $('#txtdocumento').val().toString().toUpperCase(), 3);
-        }
-    });
-
-    function consultarDocumentoPersona(tipodocumento, numdocumento, sw) {
-        var parametros = {
-            tipodocumento: tipodocumento,
-            documento: numdocumento,
-            sw: sw
-        };
-        $.ajax({
-            data: parametros,
-            url: "../Gets/getVerificarDocumentoPersona.jsp",
-            type: "post",
-            beforeSend: function () {
-                console.log("Procesando");
-            }
-        })
-                .done(function (data) {
-                    var cadena = data.toString();
-                    var matriz = cadena.toString().trim().split(",");
-                    var respuesta = matriz[0];
-                    if (respuesta === 'si') {
-                        var idpersona = matriz[1];
-                        var nombreCompleto = matriz[2];
-                        var nomUsuario = matriz[3];
-                        if (nomUsuario !== '0') {
-                            alert('Esta persona tiene un usuario activo : ' + nomUsuario);
-                            $('#txtdocumento').val('');
-                            $('#txtnombre').val('');
-                            $('#idpersona').val('');
-                            $('#txtdocumento').focus();
-                        } else {
-                            $("#idpersona").val(idpersona);
-                            $("#txtnombre").val(nombreCompleto);
-                        }
-                    } else {
-                        if (sw !== '1') {
-                            $('#txtnombre').val('');
-                            $('#idpersona').val('');
-                            viewModalRegPersona(tipodocumento, numdocumento);
-                        }
-                    }
-                });
-    }
-});
 
 function consultarPersona(sw) {
     var tipodocumento = document.getElementById('cmbtipodoc').value;

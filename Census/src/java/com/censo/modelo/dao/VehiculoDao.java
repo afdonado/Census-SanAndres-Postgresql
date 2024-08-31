@@ -282,7 +282,7 @@ public class VehiculoDao extends Conexion {
         return listaDatosVehiculo;
     }
 
-    public HashMap<String, String> ListarVehiculosById(Connection conex, long id) throws SQLException {
+    public HashMap<String, String> ConsultarDatosVehiculoById(Connection conex, long id) throws SQLException {
 
         HashMap<String, String> datosVehiculo = new HashMap<>();
 
@@ -298,16 +298,8 @@ public class VehiculoDao extends Conexion {
                 }
             }
 
-            /*while (rst.next()) {
-                ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<>();
-                for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                    hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
-                }
-                listaDatosVehiculo.add(hash);
-            }*/
         } catch (SQLException e) {
-            throw new SQLException("Error en ListarVehiculosById: " + e);
+            throw new SQLException("Error en ConsultarDatosVehiculoById: " + e);
         } finally {
             try {
                 if (pst != null) {
@@ -317,7 +309,7 @@ public class VehiculoDao extends Conexion {
                     rst.close();
                 }
             } catch (SQLException e) {
-                System.out.println("Error en cierres de ListarVehiculosById:" + e);
+                System.out.println("Error en cierres de ConsultarDatosVehiculoById:" + e);
             }
         }
         return datosVehiculo;
@@ -325,7 +317,7 @@ public class VehiculoDao extends Conexion {
 
     public List ListarVehiculos(Connection conex) throws SQLException {
 
-        List<HashMap> listaDatosVehiculo = new LinkedList<>();
+        List<HashMap> lista = new LinkedList<>();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS ");
@@ -337,7 +329,7 @@ public class VehiculoDao extends Conexion {
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
-                listaDatosVehiculo.add(hash);
+                lista.add(hash);
             }
         } catch (Exception e) {
             throw new SQLException("Error en ListarVehiculos: " + e);
@@ -353,7 +345,7 @@ public class VehiculoDao extends Conexion {
                 System.out.println("Error en cierres de ListarVehiculos:" + e);
             }
         }
-        return listaDatosVehiculo;
+        return lista;
     }
 
     public List ListarVehiculosByFechaRegistro(Connection conex, Date fechaini, Date fechafin) throws SQLException {

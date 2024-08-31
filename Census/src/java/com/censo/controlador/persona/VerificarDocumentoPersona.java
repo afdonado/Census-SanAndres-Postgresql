@@ -1,9 +1,7 @@
-package com.censo.controlador.vehiculo;
+package com.censo.controlador.persona;
 
-import com.censo.modelo.dao.CensoDao;
-import com.censo.modelo.dao.VehiculoDao;
-import com.censo.modelo.persistencia.CenCenso;
-import com.censo.modelo.persistencia.CenVehiculo;
+import com.censo.modelo.dao.PersonaDao;
+import com.censo.modelo.persistencia.CenPersona;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -14,12 +12,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "VerificarVehiculo", urlPatterns = {"/verificarVehiculo"})
-public class VerificarVehiculo extends HttpServlet {
+@WebServlet(name = "VerificarDocumentoPersona", urlPatterns = {"/verificarDocumentoPersona"})
+public class VerificarDocumentoPersona extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
@@ -27,39 +25,32 @@ public class VerificarVehiculo extends HttpServlet {
 
         try {
 
-            if (!request.getParameter("tiporeferencia").equals("") && !request.getParameter("valorreferencia").equals("")) {
+            if (!request.getParameter("tipodocumento").equals("") && !request.getParameter("documento").equals("")) {
 
-                VehiculoDao vehiculoDao = new VehiculoDao();
-                conex = vehiculoDao.conectar();
+                PersonaDao personaDao = new PersonaDao();
+                conex = personaDao.conectar();
 
-                int tipoRef = Integer.parseInt(request.getParameter("tiporeferencia"));
-                String valorReferencia = request.getParameter("valorreferencia");
-                int opcion = Integer.parseInt(request.getParameter("opcion"));
+                int tipodoc = Integer.parseInt(request.getParameter("tipodocumento"));
+                String documento = request.getParameter("documento");
 
-                CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, tipoRef, valorReferencia);
+                CenPersona cenpersona = personaDao.ConsultarPersona(conex, tipodoc, documento);
+                if (cenpersona != null) {
+                    String nombreCompleto = cenpersona.getNombre1() + " " + (cenpersona.getNombre2() != null ? cenpersona.getNombre2().trim() : "")
+                            + " " + (cenpersona.getApellido1() != null ? cenpersona.getApellido1().trim() : "")
+                            + " " + (cenpersona.getApellido2() != null ? cenpersona.getApellido2().trim() : "");
+                    long idpersona = cenpersona.getId();
 
-                if (cenvehiculo != null) {
-
-                    if (opcion == 2) {
-
-                        CensoDao censoDao = new CensoDao();
-                        CenCenso cencenso = censoDao.ConsultarCensoByIdVehiculo(conex, cenvehiculo.getId());
-
-                        if (cencenso == null) {
-                            out.println(cenvehiculo.getId());
-                        } else {
-                            out.println("si");
-                        }
-                    } else {
-                        out.println("si");
-                    }
+                    
+                    out.println("si," + nombreCompleto + ","+idpersona);
                 } else {
                     out.println("no");
                 }
+            } else {
+                out.println("no");
             }
         } catch (SQLException e) {
             out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al verificar el numero de censo');");
+            out.println("alert('Error al verificar el numero de documento');");
             out.println("location='jsp/Inicio.jsp';");
             out.println("</script>");
             e.printStackTrace();

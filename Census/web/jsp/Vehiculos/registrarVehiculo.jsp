@@ -1,6 +1,6 @@
+<%@page import="javax.servlet.http.HttpSession"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.LinkedList"%>
-<%@page import="javax.servlet.http.HttpSession"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -190,7 +190,7 @@
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0 matricula">
                                             <label>Fecha Matricula</label>
-                                            <input class="form-control" type="text" id="txtfechamatricula" name="txtfechamatricula" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
+                                            <input class="form-control" type="text" id="txtfechamatricula" name="txtfechamatricula" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -221,7 +221,7 @@
                                     <div class="form-group row">
                                         <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-importacion">
                                             <label>Tipo Importación</label>
-                                            <select class="form-control" id="cmdtiposimportacion" name="cmdtiposimportacion" required="true"></select>
+                                            <select class="form-control" id="cmbtiposimportacion" name="cmbtiposimportacion" required="true"></select>
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0 importacion">
                                             <label>Documento Importación(*)</label>

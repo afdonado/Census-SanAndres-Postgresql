@@ -1,4 +1,5 @@
 <%@page import="javax.servlet.http.HttpSession"%>
+<%@page import="java.util.LinkedList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -6,7 +7,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Consultar Vehiculo</title>
+        <title>Datos Vehiculo</title>
 
         <!-- Custom fonts for this template-->
         <link href="${pageContext.request.contextPath}/template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -22,7 +23,7 @@
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
-                if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("listarVehiculos.jsp")) {
+                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("listarVehiculos.jsp")) {
         %>
         <div id="wrapper">
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
