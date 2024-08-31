@@ -88,7 +88,7 @@
         %>
         <script type="text/javascript">
             alert("Su usuario no tiene permiso para acceder a esta pagina");
-            window.parent.location.href = "dashboard";
+            window.parent.location.href = "../../dashboard";
         </script>
         <%
             }
@@ -101,6 +101,7 @@
         <%
             }
         %>
+        
         <!-- Bootstrap core JavaScript-->
         <script src="../../template/vendor/jquery/jquery.min.js"></script>
         <script src="../../template/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -118,7 +119,7 @@
         <!-- Page level custom scripts -->
         <script src="../../template/js/demo/datatables-demo.js"></script>
 
-        <script src="../../scripts/listarVehiculos.js" type="text/javascript"></script>        
+        <script src="../../scripts/listarVehiculos.js" type="text/javascript"></script>
 
     </body>
 </html>

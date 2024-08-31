@@ -47,7 +47,6 @@ $(function () {
         if (identificador !== 0) {
             $('#contenedor'.concat(identificador)).remove();
             identificador--;
-            console.log('identificador despues: ', identificador);
             $("#txtcantidadpersonas").val(identificador);
         }
     });
@@ -86,7 +85,6 @@ $(function () {
 
     $('#btnvolver').click(function () {
         var id = $(this).data('id');
-        console.log("id: " + id);
         window.location.href = "listarVehiculos.jsp";
     });
 });

@@ -1,6 +1,7 @@
 
 $(function () {
     $('#txtplaca').blur(function () {
+        console.log('placa: ',$('#txtplaca').val());
         var placa = $('#txtplaca').val().toString().toUpperCase();
         if (placa.length > 0) {
             verificarVehiculo(1, placa);
@@ -42,23 +43,24 @@ $(function () {
         })
                 .done(function (data) {
                     var respuesta = data.toString().trim();
+            console.log('respuesta: ',respuesta);
                     if (respuesta === 'si') {
-                        if (tiporeferencia === '1') {
+                        if (tiporeferencia === 1) {
                             alert("Placa ya se encuentra registrada");
                             $('#txtplaca').val('');
                             $('#txtplaca').focus();
                         }
-                        if (tiporeferencia === '2') {
+                        if (tiporeferencia === 2) {
                             alert("Motor ya se encuentra registrado");
                             $('#txtmotor').val('');
                             $('#txtmotor').focus();
                         }
-                        if (tiporeferencia === '3') {
+                        if (tiporeferencia === 3) {
                             alert("Chasis ya se encuentra registrado");
                             $('#txtchasis').val('');
                             $('#txtchasis').focus();
                         }
-                        if (tiporeferencia === '4') {
+                        if (tiporeferencia === 4) {
                             alert("Serie ya se encuentra registrada");
                             $('#txtserie').val('');
                             $('#txtserir').focus();

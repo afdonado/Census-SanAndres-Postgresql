@@ -1,113 +1,93 @@
-<%@page import="com.censo.modelo.dao.UsuarioDao"%>
 <%@page import="javax.servlet.http.HttpSession"%>
-<%@page import="java.sql.Date"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.LinkedList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title>Listar Usuarios</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Listado Usuarios</title>
 
-        <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <script src="../../vendor/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
-        <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-        <script src="../../scripts/Ajax.js" type="text/javascript"></script>
+        <!-- Custom fonts for this template-->
+        <link href="../../template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="../../template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
 
-        <script src="../../scripts/usuarios.js" type="text/javascript"></script>
+        <!-- Custom styles for this template-->
+        <link href="../../template/css/sb-admin-2.min.css" rel="stylesheet">
+
+        <!-- Custom styles for this page -->
+        <link href="../../template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
     </head>
     <body>
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
-                if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("consultarUsuario.jsp")) {
-                    
-                    UsuarioDao usuarioDao = new UsuarioDao();
-                    
-                    int opcion = Integer.parseInt(request.getParameter("opcion"));
-                    int tipoconsulta = Integer.parseInt(request.getParameter("tipoconsulta"));
-
-                    List<HashMap> datosUsuario = null;
-
-                    long idusuario = 0;
-
-                    switch (opcion) {
-                        case 0:
-                            String nombre = request.getParameter("nombre");
-                            datosUsuario = usuarioDao.ListarUsuariosByNombre(nombre);
-                            break;
-                        case 1:
-                            int tipodoc = Integer.parseInt(request.getParameter("tipodocumento"));
-                            String documento = request.getParameter("documento");
-                            datosUsuario = usuarioDao.ListarUsuariosByPersona(tipodoc, documento);
-                            break;
-                        case 2:
-                            int punto = Integer.parseInt(request.getParameter("puntoatencion"));
-                            datosUsuario = usuarioDao.ListarUsuariosByPunto(punto);
-                            break;
-                    }
+                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("listarUsuarios.jsp")) {
         %>
-        <div class="container-fluid">
-            <div class="table-responsive">
-                <table id="dynamic-table" name="dynamic-table" class="table table-striped table-bordered table-hover">
-                    <thead>
-                        <tr class="active">
-                            <th>No.</th>
-                            <th>Nombre</th>
-                            <th>Fecha Creacion</th>
-                            <th>Fecha Inactivo</th>
-                            <th>Perfil</th>
-                            <th>Punto Atención</th>
-                            <th>Estado</th>
-                            <th>Detalle</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <%
-                                if (datosUsuario.size() > 0) {
-                                    int contador = 0;
-                                    for (HashMap hash : datosUsuario) {
-                                        contador++;
-                                        idusuario = Long.parseLong(hash.get("USU_ID").toString());
-                            %>
-                        <tr>
-                            <td><%=contador %></td>
-                            <td><%=hash.get("NOMBRE_USUARIO") == null ? "" : hash.get("NOMBRE_USUARIO").toString()%></td>
-                            <td><%=hash.get("FECHA_INICIO") == null ? "" : hash.get("FECHA_INICIO").toString()%></td>
-                            <td><%=hash.get("FECHA_FINAL") == null ? "" : hash.get("FECHA_FINAL").toString()%></td>
-                            <td><%=hash.get("PERFIL") == null ? "" : hash.get("PERFIL").toString()%></td>
-                            <td><%=hash.get("PUNTO_ATENCION") == null ? "" : hash.get("PUNTO_ATENCION").toString()%></td>
-                            <td><%=hash.get("ESTADO") == null ? "" : hash.get("ESTADO").toString()%></td>
-                            <%
-                                if (tipoconsulta == 1) {
-                            %>
-                            <td>
-                                <button type="button" class="btn btn-danger" title="Ver datos de la Usuario" onclick="consultarUsuarioById('<%=idusuario%>')"><span class="glyphicon glyphicon-search"></span></button>
-                            </td>
-                            <%
-                            } else {
-                            %>
-                            <td>
-                                <button type="button" class="btn btn-danger" title="Ver datos de la Usuario" onclick="modificarUsuarioById('<%=idusuario%>')"><span class="glyphicon glyphicon-search"></span></button>
-                            </td>
-                            <%
-                                        }
-                                    }
-                                }
-                            %>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>            
-        </div>
+        <div id="wrapper">
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                <jsp:include page="/jsp/Menu.jsp"></jsp:include>
+                </ul>
+
+                <div id="content-wrapper" class="d-flex flex-column">
+                    <div id="content">
+
+                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                        <jsp:include page="/jsp/Header.jsp"></jsp:include>
+                        </nav>
+
+                        <div class="container-fluid">
+                            <h1 class="h3 mb-2 text-gray-800">Usuarios</h1>
+
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Lista de Usuarios</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Fecha Creación</th>
+                                                    <th>Fecha Inactivo</th>
+                                                    <th>Perfil</th>
+                                                    <th>Estado</th>
+                                                    <th>Ver</th>
+                                                    <th>Editar</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Fecha Creación</th>
+                                                    <th>Fecha Inactivo</th>
+                                                    <th>Perfil</th>
+                                                    <th>Estado</th>
+                                                    <th>Ver</th>
+                                                    <th>Editar</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody id="lista-usuarios"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <footer class="sticky-footer bg-white">
+                        <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                        </footer>
+                    </div>
+                </div>
+            </div>
         <%
         } else {
         %>
         <script type="text/javascript">
             alert("Su usuario no tiene permiso para acceder a esta pagina");
-            window.parent.location.href = "../Inicio.jsp";
+            window.parent.location.href = "../../dashboard";
         </script>
         <%
             }
@@ -115,10 +95,30 @@
         %>
         <script type="text/javascript">
             alert("Su sesion a terminado");
-            document.location.href = "../../cerrarSesion";
+            document.location.href = "../../index.jsp";
         </script>
         <%
             }
         %>
+
+        <!-- Bootstrap core JavaScript-->
+        <script src="../../template/vendor/jquery/jquery.min.js"></script>
+        <script src="../../template/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- Core plugin JavaScript-->
+        <script src="../../template/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="../../template/js/sb-admin-2.min.js"></script>
+
+        <!-- Page level plugins -->
+        <script src="../../template/vendor/datatables/jquery.dataTables.min.js"></script>
+        <script src="../../template/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="../../template/js/demo/datatables-demo.js"></script>
+
+        <script src="../../scripts/listarUsuarios.js" type="text/javascript"></script>
+
     </body>
 </html>

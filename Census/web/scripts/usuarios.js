@@ -100,6 +100,11 @@ $(function () {
         event.preventDefault(); // Evita la navegación del enlace
         $("#frmactualizarusuario").submit(); // Envia el formulario
     });
+    
+    $('#btnvolver').click(function () {
+        var id = $(this).data('id');
+        window.location.href = "listarUsuarios.jsp";
+    });
 
 });
 
@@ -172,19 +177,4 @@ function restaurarPassword() {
         document.getElementById('frmconsultarusuario').action = '../../restaurarPassword';
         document.getElementById('frmconsultarusuario').submit();
     }
-}
-/*
- function actualizarPassword() {
- var idusuario = document.getElementById('idusuario').value.toString().toUpperCase();
- var passactual = document.getElementById('passwordactual').value.toString().toUpperCase();
- var pass = document.getElementById('password').value.toString().toUpperCase();
- var reppass = document.getElementById('repetirpassword').value.toString().toUpperCase();
- if (idusuario > 0 && passactual.length > 0 && pass.length > 7 && reppass.length > 7) {
- document.getElementById('frmactualizarusuario').action = '../../actualizarPassword';
- document.getElementById('frmactualizarusuario').submit();
- }
- }*/
-
-function consultarUsuarioById(idusuario) {
-    document.location.href = "verUsuario.jsp?idusuario=" + idusuario;
 }

@@ -25,7 +25,6 @@
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
                 if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("listarCensos.jsp")) {
-
         %>
         <div id="wrapper">
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -44,7 +43,7 @@
 
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Datos del censo</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos censo</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="form-group row">

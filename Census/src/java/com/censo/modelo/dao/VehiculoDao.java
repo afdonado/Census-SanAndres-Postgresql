@@ -331,7 +331,7 @@ public class VehiculoDao extends Conexion {
                 }
                 lista.add(hash);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new SQLException("Error en ListarVehiculos: " + e);
         } finally {
             try {

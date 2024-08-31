@@ -273,14 +273,11 @@ $(function () {
     });
     
     $('#personas-vehiculo').on('click','.btnanular', function () {
-        console.log('btn anular');
-        console.log('id',$(this).data('id'));
         var id = $(this).data('id');
         anularPersonaVehiculo(id);
     });
 
     function anularPersonaVehiculo(idperveh) {
-        console.log('anular persona veh');
         $('#estadoperveh' + idperveh).val(2);
         $('#contenedor' + idperveh).hide();      
     }

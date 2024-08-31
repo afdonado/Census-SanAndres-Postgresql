@@ -559,5 +559,76 @@ public class UsuarioDao extends Conexion {
             }
         }
     }
+    
+    
+    public HashMap<String, String> ConsultarDatosUsuarioById(Connection conex, long id) throws SQLException {
+
+        HashMap<String, String> datos = new HashMap<>();
+
+        try {
+            pst = conex.prepareStatement("SELECT USU_ID, NOMBRE_USUARIO,TO_CHAR(FECHA_INICIO,'dd/MM/yyyy') FECHA_INICIO,NVL(TO_CHAR(FECHA_FINAL,'dd/MM/yyyy'),' ') FECHA_FINAL,"
+                    + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PEF_ID,PERFIL, TIPO_DOCUMENTO_ID, TIPO_DOCUMENTO, TIPO_DOCUMENTO_CORTO,"
+                    + "NUMERO_DOCUMENTO, ESTADO_ID, ESTADO FROM VW_USUARIOS "
+                    + "WHERE USU_ID = ? ");
+            pst.setLong(1, id);
+            rst = pst.executeQuery();
+
+            if (rst.next()) {
+                ResultSetMetaData rsmd = rst.getMetaData();
+                for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                    datos.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error en ConsultarDatosUsuarioById: " + e);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (rst != null) {
+                    rst.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error en cierres de ConsultarDatosUsuarioById:" + e);
+            }
+        }
+        return datos;
+    }
+    
+    public List ListarUsuarios(Connection conex) throws SQLException {
+
+        List<HashMap> lista = new LinkedList<>();
+
+        try {
+            pst = conex.prepareStatement("SELECT USU_ID, NOMBRE_USUARIO,TO_CHAR(FECHA_INICIO,'dd/MM/yyyy') FECHA_INICIO,NVL(TO_CHAR(FECHA_FINAL,'dd/MM/yyyy'),' ') FECHA_FINAL, "
+                    + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PEF_ID,PERFIL, TIPO_DOCUMENTO_ID, TIPO_DOCUMENTO, TIPO_DOCUMENTO_CORTO, "
+                    + "NUMERO_DOCUMENTO, ESTADO_ID, ESTADO FROM VW_USUARIOS");
+            rst = pst.executeQuery();
+
+            while (rst.next()) {
+                ResultSetMetaData rsmd = rst.getMetaData();
+                HashMap<String, String> hash = new HashMap<>();
+                for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                    hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+                }
+                lista.add(hash);
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error en ListarUsuarios: " + e);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (rst != null) {
+                    rst.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error en cierres de ListarUsuarios:" + e);
+            }
+        }
+        return lista;
+    }
 
 }

@@ -22,8 +22,8 @@ $(function () {
                     <td>${censo.FECHA_PROCESO}</td>
                     <td>${censo.DOCUMENTO_PDF}</td>
                     <td>${censo.FOTO}</td>
-                    <td><button type="button" class="btn btn-info btnconsultar" name="btnconsultar" data-id="${censo.CEN_ID}" title="Ver datos del vehiculo">Consultar</button></td>
-                    <td><button type="button" class="btn btn-danger btneditar" name="btneditar" data-id="${censo.CEN_ID}" title="Editar datos del vehiculo">Editar</button></td>
+                    <td><button type="button" class="btn btn-info btnconsultar" name="btnconsultar" data-id="${censo.CEN_ID}">Consultar</button></td>
+                    <td><button type="button" class="btn btn-danger btneditar" name="btneditar" data-id="${censo.CEN_ID}">Editar</button></td>
                     </tr>
                 `;
                 $("#lista-censos").append(nuevoElemento);
@@ -32,7 +32,6 @@ $(function () {
     });
 
     $('.table-responsive').on('click', '.btnconsultar', function () {
-        console.log("Consultar Vehiculo");
         var id = $(this).data('id');
         console.log("id: " + id);
         window.location.href = "verCenso.jsp?opcion=1&id=" + id;
@@ -40,7 +39,6 @@ $(function () {
     });
 
     $('.table-responsive').on('click', '.btneditar', function () {
-        console.log("Editar Vehiculo");
         var id = $(this).data('id');
         console.log("id: " + id);
         window.location.href = "verModificarCenso.jsp?opcion=2&id=" + id;

@@ -1,127 +1,111 @@
-<%@page import="com.censo.modelo.dao.TipoDocumentoDao"%>
-<%@page import="com.censo.modelo.dao.EstadoDao"%>
-<%@page import="com.censo.modelo.dao.UsuarioDao"%>
 <%@page import="javax.servlet.http.HttpSession"%>
-<%@page import="com.censo.modelo.persistencia.CenPerfilUsuario"%>
-<%@page import="com.censo.modelo.persistencia.CenPerfil"%>
-<%@page import="com.censo.modelo.persistencia.CenEstado"%>
-<%@page import="com.censo.modelo.persistencia.CenTipoDocumento"%>
-<%@page import="com.censo.modelo.persistencia.CenUsuario"%>
+<%@page import="java.util.LinkedList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" />
-        <title>Ver Usuario</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Datos Usuario</title>
 
-        <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <script src="../../vendor/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
-        <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-        <script src="../../scripts/Ajax.js" type="text/javascript"></script>
+        <!-- Custom fonts for this template-->
+        <link href="${pageContext.request.contextPath}/template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="${pageContext.request.contextPath}/template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
 
-        <script src="../../scripts/usuarios.js" type="text/javascript"></script>
+        <!-- Custom styles for this template-->
+        <link href="${pageContext.request.contextPath}/template/css/sb-admin-2.min.css" rel="stylesheet">
+
+        <!-- Custom styles for this page -->
+        <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     </head>
     <body>
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
-                if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("consultarUsuario.jsp")) {
-                    if (!request.getParameter("idusuario").equals("")) {
-                    
-                        UsuarioDao usuarioDao = new UsuarioDao();
-                        EstadoDao estadoDao = new EstadoDao();
-                        TipoDocumentoDao tipoDocumentoDao = new TipoDocumentoDao();
-                        
-                        long idusuario = Long.parseLong(request.getParameter("idusuario"));
-                        
-                        CenTipoDocumento centipodocumento = new CenTipoDocumento();
-                        CenUsuario cenusuario = usuarioDao.ConsultarUsuarioById(idusuario);
-                        
-                        if (cenusuario != null) {
-                            CenEstado cenestado = estadoDao.ConsultarEstadoById(cenusuario.getEstado());
-                            CenPerfilUsuario cenperfilusuario = usuarioDao.ConsultarPerfilUsuarioByIdUsuario(cenusuario.getId());
-                            CenPerfil cenperfil = new CenPerfil();
-                            if(cenperfilusuario!=null){
-                                cenperfil = usuarioDao.ConsultarPerfilById(cenperfilusuario.getPef_id());
-                            }else{
-                                cenperfil = null;
-                            }
-                            centipodocumento = tipoDocumentoDao.ConsultarTipoDocumentoById(cenusuario.getTipodocumento());
+                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("listarUsuarios.jsp")) {
         %>
-        <div class="container-fluid">
-            <div class="panel panel-info">    
-                <div class="panel-heading">
-                    Datos Persona
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="form-group col-md-3">
-                            <label>Tipo Documento</label>
-                            <input class="form-control" type="text" id="txttipodoc" name="txttipodoc" value="<%= centipodocumento.getDescripcion() == null ? "" : centipodocumento.getDescripcion()%>" readonly="true">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label>Documento</label>
-                            <input class="form-control" type="text" id="txtdocumento" name="txtdocumento" value="<%= cenusuario.getNumerodocumento()== null ? "" : cenusuario.getNumerodocumento().trim()%>" readonly="true">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>Nombre</label>
-                            <input class="form-control" type="text" id="txtnombre" name="txtnombre" value="<%= cenusuario.getNombre() == null ? "" : cenusuario.getNombre()%>" readonly="true">
+        <div id="wrapper">
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                <jsp:include page="/jsp/Menu.jsp"></jsp:include>
+                </ul>
+
+                <div id="content-wrapper" class="d-flex flex-column">
+                    <div id="content">
+
+                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                        <jsp:include page="/jsp/Header.jsp"></jsp:include>
+                        </nav>
+
+                        <div class="container-fluid">
+                            <h1 class="h3 mb-2 text-gray-800">Datos del Usuario</h1>
+
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos Usuario</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Nombre</label>
+                                            <input class="form-control" type="text" id="txtnombre" name="txtnombre" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Tipo Documento</label>
+                                            <input class="form-control" type="text" id="txttipodocumento" name="txttipodocumento" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Documento</label>
+                                            <input class="form-control" type="text" type="number" id="txtdocumento" name="txtdocumento" required="true">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Perfil</label>
+                                            <input class="form-control" type="text" id="txtperfil" name="txtperfil" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Estado</label>
+                                            <input class="form-control" type="text" id="txtestado" name="txtestado" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Fecha Inicio</label>
+                                            <input class="form-control" type="text" id="txtfechainicial" name="txtfechainicial" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Fecha Final</label>
+                                            <input class="form-control" type="text" id="txtfechafinal" name="txtfechafinal" readonly="true">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                            <%
+                                if (((java.util.LinkedList) session.getAttribute("permisosUsuario")).contains("modificarUsuario.jsp")) {
+                            %>
+                            <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                <button type="button" class="btn btn-lg btn-success btn-block" id="btnmodificar" name="btnmodificar">Editar</button>
+                            </div>
+                            <%
+                                }
+                            %>
+                            <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    Datos de Usuario
-                </div>
-                <div class="panel-body">
-                    <div class="row form-group">
-                        <div class="form-group col-md-3">
-                            <label>Perfil</label>
-                            <input class="form-control" type="text" id="txtperfil" name="txtperfil" value="<%= cenperfil == null ? "" : cenperfil.getNombre()%>" readonly="true">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label>Fecha Inicio</label>
-                            <input class="form-control" type="text" id="txtfechaini" name="txtfechaini" value="<%= cenusuario.getFechaini() == null ? "" : new java.text.SimpleDateFormat("dd/MM/yyyy").format(cenusuario.getFechaini())%>" readonly="true">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label>Fecha Final</label>
-                            <input class="form-control" type="text" id="txtfechafin" name="txtfechafin" value="<%= cenusuario.getFechafin() == null ? "" : new java.text.SimpleDateFormat("dd/MM/yyyy").format(cenusuario.getFechafin())%>" readonly="true">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label>Estado</label>
-                            <input class="form-control" type="text" id="txtestado" name="txtestado" value="<%= cenestado == null ? "" : cenestado.getDescripcion()%>" readonly="true">
-                        </div>
-                    </div>
+                <footer class="sticky-footer bg-white">
+                    <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                    </footer>
                 </div>
             </div>
-            <input type="hidden" id="idusuario" name="idusuario" value="<%=idusuario%>">
-            <%
-                if (((java.util.LinkedList) session.getAttribute("permisosUsuario")).contains("modificarUsuario.jsp")) {
-            %>
-            <div class="row page-header">
-                <div class="form-group col-xs-12 col-sm-3 col-md-3">
-                    <button type="button" class="btn btn-lg btn-info btn-block" onclick="modificarUsuarioById('<%=idusuario%>')" id="btnmodificar" name="btnmodificar" >Modificar</button>
-                </div>
-            </div>
-            <%
-                }
-            } else {
-            %>
-            <div class="panel panel-danger">    
-                <div class="panel-heading">
-                    Usuario no registrado
-                </div>
-            </div>
-        </div>
         <%
-                }
-            }
         } else {
         %>
         <script type="text/javascript">
             alert("Su usuario no tiene permiso para acceder a esta pagina");
-            window.parent.location.href = "../Inicio.jsp";
+            window.parent.location.href = "../../dashboard";
         </script>
         <%
             }
@@ -129,10 +113,31 @@
         %>
         <script type="text/javascript">
             alert("Su sesion a terminado");
-            document.location.href = "../../cerrarSesion";
+            document.location.href = "../../index.jsp";
         </script>
         <%
             }
         %>
+
+        <!-- Bootstrap core JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- Core plugin JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
+
+        <!-- Page level plugins -->
+        <script src="${pageContext.request.contextPath}/template/vendor/datatables/jquery.dataTables.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="${pageContext.request.contextPath}/template/js/demo/datatables-demo.js"></script>
+
+        <script src="${pageContext.request.contextPath}/scripts/verUsuario.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/usuarios.js" type="text/javascript"></script>
+
     </body>
 </html>
