@@ -3,11 +3,11 @@ package com.censo.controlador.vehiculo;
 import com.censo.modelo.dao.VehiculoDao;
 import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,33 +20,28 @@ public class ListarVehiculos extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        
         Connection conex = null;
+        
+        Map<String, Object> respuesta = new HashMap<>();
 
         try {
 
             VehiculoDao vehiculoDao = new VehiculoDao();
             conex = vehiculoDao.conectar();
 
-            List<HashMap> listaVehiculos = vehiculoDao.ListarVehiculos(conex);
+            List<HashMap<String, Object>> lista = vehiculoDao.ListarVehiculos(conex);
 
-            if (!listaVehiculos.isEmpty()) {
-
-                Gson gson = new Gson();
-                String json = gson.toJson(listaVehiculos);
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(json);
-                
+            if (!lista.isEmpty()) {
+                respuesta.put("status", "success");
+                respuesta.put("vehiculos", lista);
             }
 
         } catch (SQLException e) {
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al listar los vehiculos');");
-            out.println("location='jsp/Inicio.jsp';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al listas los vehiculos");
             e.printStackTrace();
 
         } finally {
@@ -57,8 +52,10 @@ public class ListarVehiculos extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
+        
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override

@@ -1,7 +1,7 @@
 
 $(function () {
     $('#txtplaca').blur(function () {
-        console.log('placa: ',$('#txtplaca').val());
+        console.log('placa: ', $('#txtplaca').val());
         var placa = $('#txtplaca').val().toString().toUpperCase();
         if (placa.length > 0) {
             verificarVehiculo(1, placa);
@@ -39,34 +39,25 @@ $(function () {
         $.ajax({
             data: parametros,
             url: "../../verificarVehiculo",
-            type: "post"
-        })
-                .done(function (data) {
-                    var respuesta = data.toString().trim();
-            console.log('respuesta: ',respuesta);
-                    if (respuesta === 'si') {
-                        if (tiporeferencia === 1) {
-                            alert("Placa ya se encuentra registrada");
-                            $('#txtplaca').val('');
-                            $('#txtplaca').focus();
-                        }
-                        if (tiporeferencia === 2) {
-                            alert("Motor ya se encuentra registrado");
-                            $('#txtmotor').val('');
-                            $('#txtmotor').focus();
-                        }
-                        if (tiporeferencia === 3) {
-                            alert("Chasis ya se encuentra registrado");
-                            $('#txtchasis').val('');
-                            $('#txtchasis').focus();
-                        }
-                        if (tiporeferencia === 4) {
-                            alert("Serie ya se encuentra registrada");
-                            $('#txtserie').val('');
-                            $('#txtserir').focus();
-                        }
-                    }
-                });
+            type: "POST",
+            dataType: "json",
+            success: function (response) {
+                // Maneja la respuesta JSON
+                if (response.status === "success") {
+                    alert(response.message);
+                } else if (response.status === "fail") {
+                    $(response.input).val('');
+                    $(response.input).focus();
+                    alert(response.message);
+                } else if (response.status === "error") {
+                    alert(response.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de verificar vehiculo: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de verificar vehiculo.");
+            }
+        });
     }
 
     $('#cmbdepartamentomatricula').change(function () {
@@ -91,6 +82,10 @@ $(function () {
                 $.each(data, function (index, item) {
                     select.append('<option value="' + item.id + '">' + item.nombre + '</option>');
                 });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de cargar municipios por departamento: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de cargar municipios por departamento.");
             }
         });
     }
@@ -105,6 +100,10 @@ $(function () {
             $.each(data, function (index, item) {
                 select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
             });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de cargar clases vehiculo: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar clases de vehiculo.");
         }
     });
 
@@ -118,6 +117,10 @@ $(function () {
             $.each(data, function (index, item) {
                 select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
             });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de cargar tipos servicio: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar tipos de servicio.");
         }
     });
 
@@ -132,6 +135,10 @@ $(function () {
             $.each(data, function (index, item) {
                 select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
             });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de cargar tipos servicio: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar tipos de uso.");
         }
     });
 
@@ -154,6 +161,10 @@ $(function () {
                 selectImportacion.append('<option value="' + item.id + '">' + item.nombre + '</option>');
             });
             selectImportacion.val(18);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de cargar paises: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar paises.");
         }
     });
 
@@ -169,6 +180,10 @@ $(function () {
             });
 
             select.val(4);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de cargar departamentos: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar departamentos.");
         }
     });
 
@@ -185,6 +200,10 @@ $(function () {
             $.each(data, function (index, item) {
                 select.append('<option value="' + item.id + '">' + item.nombre + '</option>');
             });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de cargar municipios: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar municipios.");
         }
     });
 
@@ -200,6 +219,10 @@ $(function () {
             });
 
             select.val(1);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de cargar tipos de importacion: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar tipos de importacion.");
         }
     });
 
@@ -213,6 +236,10 @@ $(function () {
             $.each(data, function (index, item) {
                 select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
             });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de cargar tipos de referencia: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar tipos de referencia.");
         }
     });
 
@@ -226,19 +253,10 @@ $(function () {
             $.each(data, function (index, item) {
                 select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
             });
-        }
-    });
-
-    $.ajax({
-        url: '../../cargarTiposDocumento',
-        method: 'GET',
-        success: function (data) {
-            var select = $('#cmbtiposdocumento1');
-            select.empty();
-
-            $.each(data, function (index, item) {
-                select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
-            });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de cargar tipos de persona: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar tipos de persona.");
         }
     });
 
@@ -252,6 +270,17 @@ $(function () {
             $.each(data, function (index, item) {
                 select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
             });
+            
+            var select = $('#cmbtiposdocumento1');
+            select.empty();
+
+            $.each(data, function (index, item) {
+                select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
+            });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de cargar tipos de documentos: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar tipos de documentos.");
         }
     });
 
@@ -296,8 +325,35 @@ $(function () {
             alert('Debe ingresar los datos obligatorios (*)');
             return false;
         }
-        
-        $('#frmregistrarvehiculo').submit();
+
+        $('#frmregistrarvehiculo').trigger("submit");
+    });
+
+    $("#frmregistrarvehiculo").submit(function (event) {
+        event.preventDefault();
+
+        var parametros = $(this).serialize();
+
+        $.ajax({
+            data: parametros,
+            url: "../../registrarVehiculo",
+            type: "POST",
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    alert(response.message);
+                    window.location.href = "verVehiculo.jsp?opcion=1&id=" + response.id;
+                } else if (response.status === "fail") {
+                    alert(response.message);
+                } else if (response.status === "error") {
+                    alert(response.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de registrar vehiculo: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de registrar vehiculo.");
+            }
+        });
     });
 
 });

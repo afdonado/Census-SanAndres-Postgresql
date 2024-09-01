@@ -147,10 +147,12 @@ public class UsuarioDao extends Conexion {
     public long adicionarUsuario(Connection conex, CenUsuario cenusuario) throws SQLException, IOException {
 
         try {
-            pst = conex.prepareStatement("INSERT INTO CEN_USUARIOS (USU_NOMBRE,USU_PASS,USU_FECHAINICIO,EST_ID,USU_FECHAPROCESO) VALUES (?,?,SYSDATE,?,SYSDATE)", new String[]{"USU_ID"});
+            pst = conex.prepareStatement("INSERT INTO CEN_USUARIOS (USU_NOMBRE,USU_PASS,USU_FECHAINICIO,EST_ID,USU_FECHAPROCESO,TIPO_DOCUMENTO,NUMERO_DOCUMENTO) VALUES (?,?,SYSDATE,?,SYSDATE,?,?)", new String[]{"USU_ID"});
             pst.setString(1, cenusuario.getNombre());
             pst.setString(2, cenusuario.getPassword());
             pst.setInt(3, cenusuario.getEstado());
+            pst.setInt(4, cenusuario.getTipodocumento());
+            pst.setString(5, cenusuario.getNumerodocumento());
             pst.executeUpdate();
             rst = pst.getGeneratedKeys();
             if (rst != null) {

@@ -44,10 +44,10 @@
                         <div class="container-fluid">
                             <h1 class="h3 mb-2 text-gray-800">Modificar Usuario</h1>
 
-                            <form role="form" id="frmmodificarusuario" action="../../registrarCenso">
+                            <form role="form" id="frmmodificarusuario" action="../../modificarUsuario">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Datos del censo</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Datos del Usuario</h6>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group row">
@@ -66,7 +66,7 @@
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Perfiles(*)</label>
+                                                <label>Perfil(*)</label>
                                                 <select class="form-control" id="cmbperfiles" name="cmbperfiles" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
@@ -78,7 +78,7 @@
                                                 <input class="form-control" type="text" id="txtfechainicial" name="txtfechainicial" readonly="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Fecha Inicio</label>
+                                                <label>Fecha Final</label>
                                                 <input class="form-control" type="text" id="txtfechafinal" name="txtfechafinal" readonly="true">
                                             </div>
                                         </div>
@@ -95,6 +95,7 @@
                                         <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
                                     </div>
                                 </div>
+                                <input type="hidden" id="idusuario" name="idusuario">
                             </form>
                         </div>
                         <footer class="sticky-footer bg-white">
@@ -108,7 +109,7 @@
         %>
         <script type="text/javascript">
             alert("Su usuario no tiene permiso para acceder a esta pagina");
-            window.parent.location.href = "../Inicio.jsp";
+            window.parent.location.href = "../dashboard";
         </script>
         <%
             }
@@ -116,7 +117,7 @@
         %>
         <script type="text/javascript">
             alert("Su sesion a terminado");
-            document.location.href = "../../cerrarSesion";
+            document.location.href = "../../index.jsp";
         </script>
         <%
             }
@@ -143,8 +144,7 @@
         <script src="${pageContext.request.contextPath}/template/vendor/jquery/calendario_es.js" type="text/javascript"></script>
         
         <script src="${pageContext.request.contextPath}/scripts/modificarUsuario.js" type="text/javascript"></script>
-        <script src="${pageContext.request.contextPath}/scripts/usuarios.js" type="text/javascript"></script>
-        <script src="${pageContext.request.contextPath}/scripts/fechas.js" type="text/javascript"></script>
+        <!--<script src="${pageContext.request.contextPath}/scripts/usuarios.js" type="text/javascript"></script>-->
         
     </body>
 </html>

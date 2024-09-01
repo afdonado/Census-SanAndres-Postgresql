@@ -11,14 +11,15 @@ import com.censo.modelo.persistencia.CenMarca;
 import com.censo.modelo.persistencia.CenPersonaVehiculo;
 import com.censo.modelo.persistencia.CenUsuario;
 import com.censo.modelo.persistencia.CenVehiculo;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,12 +32,13 @@ public class ModificarVehiculo extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         Connection conex = null;
 
-        long idvehiculo = 0;
+        Map<String, String> respuesta = new HashMap<>();
+
         try {
 
             VehiculoDao vehiculoDao = new VehiculoDao();
@@ -55,7 +57,7 @@ public class ModificarVehiculo extends HttpServlet {
 
             boolean registrado;
 
-            idvehiculo = Long.parseLong(request.getParameter("idvehiculo"));
+            long idvehiculo = Long.parseLong(request.getParameter("idvehiculo"));
             String placa = request.getParameter("txtplaca").toUpperCase().trim();
             String motor = request.getParameter("txtmotor").toUpperCase().trim();
             String chasis = request.getParameter("txtchasis").toUpperCase().trim();
@@ -192,16 +194,13 @@ public class ModificarVehiculo extends HttpServlet {
 
             if (registrado) {
                 conex.commit();
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('Vehiculo modificado');");
-                out.println("location='jsp/Vehiculos/verVehiculo.jsp?opcion=1?id=" + idvehiculo + "';");
-                out.println("</script>");
+                respuesta.put("status", "success");
+                respuesta.put("message", "Vehiculo modificado exitosamente");
+                respuesta.put("id", String.valueOf(idvehiculo));
             } else {
                 conex.rollback();
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('Vehiculo no modificado');");
-                out.println("location='jsp/Vehiculos/verVehiculo.jsp?opcion=1?id=" + idvehiculo + "';");
-                out.println("</script>");
+                respuesta.put("status", "fail");
+                respuesta.put("message", "Vehiculo no modificado");
             }
 
         } catch (IOException | NumberFormatException | SQLException | ParseException e) {
@@ -212,10 +211,8 @@ public class ModificarVehiculo extends HttpServlet {
                     rollbackEx.printStackTrace();
                 }
             }
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al modificar el vehiculo');");
-            out.println("location='jsp/Vehiculos/verModificarVehiculo.jsp?opcion=2?id=" + idvehiculo + "';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al modificar el vehiculo");
             e.printStackTrace();
         } finally {
             if (conex != null) {
@@ -225,8 +222,11 @@ public class ModificarVehiculo extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
+        
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
+        
     }
 
     @Override

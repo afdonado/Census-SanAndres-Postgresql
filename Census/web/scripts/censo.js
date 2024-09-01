@@ -1,107 +1,93 @@
 $(function () {
-    $('#txtnumerocenso').blur(function () {
-        if ($('#txtnumerocenso').val().length > 0) {
-            verificarNumeroCenso($('#txtnumerocenso').val().toString().toUpperCase());
-        }
-    });
-
-    function verificarNumeroCenso(numero) {
-        var parametros = {
-            numero: numero
-        };
-        $.ajax({
-            data: parametros,
-            url: "../../verificarNumeroCenso",
-            type: "post"
-        })
-                .done(function (data) {
-                    var respuesta = data.toString();
-                    respuesta = respuesta.toString().trim();
-                    if (respuesta === 'si') {
-                        $('#txtnumerocenso').val('');
-                        $('#txtnumerocenso').focus();
-                        alert("Numero Censo ya se encuentra registrado");
-                    }
-                });
-    }
-
-
-    $('#numero_m').blur(function () {
-        if ($('#numero_m').val().length > 0 && $('#numero_m').val().eq($('#numerocenso').val())) {
-            verificarNumeroCenso($('#numero_m').val().toString().toUpperCase());
-        }
-    });
-    
-    $('#txtreferencia').blur(function () {
-        console.log('referencia:', $('#txtreferencia').val());
-        var tipoReferencia = $('#cmbtiposreferencia').val();
-        var referencia = $('#txtreferencia').val().toString().toUpperCase();
-        if (referencia.length > 0) {
-            consultarReferenciaVehiculo(tipoReferencia, referencia);
-        }
-    });
-
-    // Verificar si la referencia de vehiculo existe o no
-    function consultarReferenciaVehiculo(tiporeferencia, valorreferencia) {
-        console.log('consulta ref');
-        var parametros = {
-            tiporeferencia: tiporeferencia,
-            valorreferencia: valorreferencia,
-            opcion: 2
-        };
-        $.ajax({
-            data: parametros,
-            url: "../../verificarVehiculo",
-            type: "post"
-        })
-                .done(function (data) {
-                    var respuesta = data.toString().trim();
-                    console.log('respuesta: ', respuesta);
-                    if (respuesta === 'si') {
-                        alert("Vehiculo ya se encuentra censado");
-                        $('#txtreferencia').val('');
-                        $('#txtreferencia').focus();
-                    } else {
-                        if(respuesta === 'no'){
-                            alert("Vehiculo no se encuentra registrado");
-                            $('#txtreferencia').val('');
-                            $('#txtreferencia').focus();
-                        }
-                        $('#idvehiculo').val(respuesta);
-                    }
-                });
-    }
-
     $('#btnvolver').click(function () {
-        var id = $(this).data('id');
-        console.log("id: " + id);
         window.location.href = "listarCensos.jsp";
     });
-
-    /*function consultarNumeroCenso(numero) {
-     var parametros = {
-     "numero": numero
-     };
-     $.ajax({
-     data: parametros,
-     url: "../../consultarNumeroCenso",
-     type: "post"
-     })
-     .done(function (data) {
-     var respuesta = data.toString();
-     respuesta = respuesta.toString().trim();
-     var datos = respuesta.split(',');
-     if (datos[0] === 'si') {
-     $('#numero_m').val('');
-     $('#numero_m').focus();
-     alert("Numero Censo ya se encuentra registrado");
-     } else {
-     $('#numero_m').val(datos[1]);
-     }
-     });
-     }*/
-
 });
+
+function verificarNumeroCenso(numero) {
+    var parametros = {
+        numero: numero
+    };
+    $.ajax({
+        data: parametros,
+        url: "../../verificarNumeroCenso",
+        type: "POST",
+        dataType: "json",
+        success: function (response) {
+            if (response.status === "success") {
+                alert(response.message);
+            } else if (response.status === "fail") {
+                $('#txtnumerocenso').val('');
+                $('#txtnumerocenso').focus();
+                alert(response.message);
+            } else if (response.status === "error") {
+                alert(response.message);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de verificar numero de censo: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de verificar numero de censo.");
+        }
+    });
+}
+
+// Verificar si la referencia de vehiculo existe o no
+function consultarReferenciaVehiculo(tiporeferencia, valorreferencia) {
+    var parametros = {
+        tiporeferencia: tiporeferencia,
+        valorreferencia: valorreferencia,
+        opcion: 2
+    };
+    $.ajax({
+        data: parametros,
+        url: "../../verificarVehiculo",
+        type: "POST",
+        dataType: "json",
+        success: function (response) {
+            if (response.status === "success") {
+                $('#idvehiculo').val(response.id);
+                alert(response.message);
+            } else if (response.status === "fail") {
+                $('#txtreferencia').val('');
+                $('#txtreferencia').focus();
+                alert(response.message);
+            } else if (response.status === "error") {
+                alert(response.message);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de verificar vehiculo: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de verificar vehiculo.");
+        }
+    });
+}
+
+
+
+/*function consultarNumeroCenso(numero) {
+ var parametros = {
+ "numero": numero
+ };
+ $.ajax({
+ data: parametros,
+ url: "../../consultarNumeroCenso",
+ type: "post"
+ })
+ .done(function (data) {
+ var respuesta = data.toString();
+ respuesta = respuesta.toString().trim();
+ var datos = respuesta.split(',');
+ if (datos[0] === 'si') {
+ $('#numero_m').val('');
+ $('#numero_m').focus();
+ alert("Numero Censo ya se encuentra registrado");
+ } else {
+ $('#numero_m').val(datos[1]);
+ }
+ });
+ }*/
+
+
 
 /*function consultarNumeroCensoModificar() {
  var numerocensonew = document.getElementById('txtnumero').value.toString().toUpperCase();

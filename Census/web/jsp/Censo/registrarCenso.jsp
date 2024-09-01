@@ -76,7 +76,7 @@
 
                         <div class="container-fluid">
                             <h1 class="h3 mb-2 text-gray-800">Registrar Censo</h1>
-                            <form role="form" id="frmregistrarcenso" action="../../registrarCenso">
+                            <form role="form" id="frmregistrarcenso">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
                                         <h6 class="m-0 font-weight-bold text-primary">Datos del censo</h6>
@@ -102,15 +102,15 @@
                                             <select class="form-control" id="cmbtiposreferencia" name="cmbtiposreferencia" required="true"></select>
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Referencia Vehiculo(*)</label>
-                                                <input class="form-control" type="text" id="txtreferencia" name="txtreferencia" maxlength="10" style="text-transform: uppercase" required="true">
-                                            </div>
+                                            <label>Referencia Vehículo(*)</label>
+                                            <input class="form-control" type="text" id="txtreferencia" name="txtreferencia" maxlength="10" style="text-transform: uppercase" required="true">
+                                        </div>
                                     </div>                                       
                                 </div>
                             </div>
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary"> Datos Persona Presentó Vehiculo</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary"> Datos persona presentó vehículo</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="form-group row">
@@ -197,10 +197,10 @@
         <script src="../../template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.js" type="text/javascript"></script>
         <script src="../../template/vendor/jquery/calendario_es.js" type="text/javascript"></script>
 
+        <script src="../../scripts/censo.js" type="text/javascript"></script>
         <script src="../../scripts/registrarCenso.js" type="text/javascript"></script>
         <script src="../../scripts/validacionesCampos.js" type="text/javascript"></script>
         <script src="../../scripts/personas.js" type="text/javascript"></script>
-        <script src="../../scripts/censo.js" type="text/javascript"></script>
         <script src="../../scripts/fechas.js" type="text/javascript"></script>
 
         <link href="../../fileinput/css/fileinput.css" rel="stylesheet" type="text/css"/>

@@ -500,9 +500,9 @@ public class CensoDao extends Conexion {
         return datos;
     }
     
-    public List ListarCensos(Connection conex) throws SQLException {
+    public List<HashMap<String, Object>> ListarCensos(Connection conex) throws SQLException {
 
-        List<HashMap> lista = new LinkedList<>();
+        List<HashMap<String, Object>> lista = new LinkedList<>();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM VW_CENSOS ");
@@ -510,9 +510,9 @@ public class CensoDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<>();
+                HashMap<String, Object> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                    hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+                    hash.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
                 }
                 lista.add(hash);
             }

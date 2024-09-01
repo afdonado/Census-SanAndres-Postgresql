@@ -34,10 +34,21 @@ public class ModificarUsuario extends HttpServlet {
             Date fechaActual = new Date(new java.util.Date().getTime());
 
             long idusuario = Long.parseLong(request.getParameter("idusuario"));
-            int estado = Integer.parseInt(request.getParameter("cmbestado"));
-
+            int estado = Integer.parseInt(request.getParameter("cmbestados"));
+            
+            int tipoDocumento = Integer.parseInt(request.getParameter("cmbtiposdocumento"));
+            String documento = request.getParameter("txtdocumento");
+            
             CenUsuario cenusuario = usuarioDao.ConsultarUsuarioById(conex, idusuario);
 
+            if(!documento.isEmpty()){
+                cenusuario.setTipodocumento(tipoDocumento);
+                cenusuario.setNumerodocumento(documento);
+            } else {
+                cenusuario.setTipodocumento(0);
+                cenusuario.setNumerodocumento("");
+            }
+            
             cenusuario.setEstado(estado);
             if (estado != 1) {
                 cenusuario.setFechafin(fechaActual);
@@ -75,7 +86,7 @@ public class ModificarUsuario extends HttpServlet {
 
             out.println("<script type=\"text/javascript\">");
             out.println("alert('Usuario Modificado');");
-            out.println("location='jsp/Usuarios/verUsuario.jsp?idusuario="+idusuario+"';");
+            out.println("location='jsp/Usuarios/verUsuario.jsp?opcion=1&id="+idusuario+"';");
             out.println("</script>");
         } catch (IOException | NumberFormatException | SQLException e) {
             if (conex != null) {

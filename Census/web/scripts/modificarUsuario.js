@@ -27,6 +27,8 @@ $(function () {
                 $('#txtfechafinal').val(data.FECHA_FINAL);
                 
                 var estadoId = data.ESTADO_ID;
+                
+                $('#idusuario').val(data.USU_ID);
 
                 $.ajax({
                     url: '../../cargarPerfiles',
@@ -74,14 +76,12 @@ $(function () {
     }
     
     $('#btnguardar').click(function () {
-        var numero = $('#txtnumerocenso').val();
-        var fechainicio = $('#txtfechainicial').val();
-        var fechafinal = $('#txtfechafinal').val();
+        var nombre = $('#txtnombre').val();
 
-        if (numero.length > 0 && fechainicio.length > 0 && fechafinal.length > 0) {
+        if (nombre.length > 0) {
             $('#frmmodificarusuario').submit();
         } else {
-            alert('Debe ingresar como minimo los datos obligatorios (*)');
+            alert('Debe ingresar el nombre del usuario');
         }
     });
 

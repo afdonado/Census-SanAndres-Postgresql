@@ -315,9 +315,9 @@ public class VehiculoDao extends Conexion {
         return datosVehiculo;
     }
 
-    public List ListarVehiculos(Connection conex) throws SQLException {
+    public List<HashMap<String, Object>> ListarVehiculos(Connection conex) throws SQLException {
 
-        List<HashMap> lista = new LinkedList<>();
+        List<HashMap<String, Object>> lista = new LinkedList<>();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS ");
@@ -325,9 +325,9 @@ public class VehiculoDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<>();
+                HashMap<String, Object> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                    hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+                    hash.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
                 }
                 lista.add(hash);
             }

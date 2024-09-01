@@ -27,11 +27,14 @@ public class RegistrarUsuario extends HttpServlet {
 
         try {
 
-            if (request.getParameter("nombreusuario") != null && request.getParameter("password") != null) {
+            if (request.getParameter("txtnombre") != null && request.getParameter("txtpassword") != null) {
 
-                String nomusu = request.getParameter("nombreusuario").toUpperCase().trim();
-                String password = DigestUtils.md5Hex(request.getParameter("password"));
-                String repetirpassword = DigestUtils.md5Hex(request.getParameter("repetirpassword"));
+                String nombre = request.getParameter("txtnombre").toUpperCase().trim();
+                
+                String tipodocumento = request.getParameter("cmbtiposdocumento");
+                String documento = request.getParameter("txtdocumento").toUpperCase().trim();
+                String password = DigestUtils.md5Hex(request.getParameter("txtpassword"));
+                String repetirpassword = DigestUtils.md5Hex(request.getParameter("txtrepetirpassword"));
                 int tipoperfil = Integer.parseInt(request.getParameter("cmbperfiles"));
 
                 if (password.equals(repetirpassword)) {
@@ -45,7 +48,9 @@ public class RegistrarUsuario extends HttpServlet {
                     boolean registrado;
 
                     CenUsuario cenusuario = new CenUsuario();
-                    cenusuario.setNombre(nomusu);
+                    cenusuario.setNombre(nombre);
+                    cenusuario.setTipodocumento(Integer.parseInt(tipodocumento));
+                    cenusuario.setNumerodocumento(documento);
                     cenusuario.setPassword(password);
                     cenusuario.setEstado(1);
 
@@ -64,7 +69,7 @@ public class RegistrarUsuario extends HttpServlet {
                         conex.commit();
                         out.println("<script type=\"text/javascript\">");
                         out.println("alert('Usuario Registrado');");
-                        out.println("location='jsp/Usuarios/registrarUsuario.jsp';");
+                        out.println("location='jsp/Usuarios/verUsuario.jsp?opcion=1&id="+idUsuario+"';");
                         out.println("</script>");
                     } else {
                         conex.rollback();

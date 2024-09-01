@@ -3,11 +3,11 @@ package com.censo.controlador.censo;
 import com.censo.modelo.dao.CensoDao;
 import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,33 +20,28 @@ public class ListarCensos extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         Connection conex = null;
 
+        Map<String, Object> respuesta = new HashMap<>();
+        
         try {
 
             CensoDao censoDao = new CensoDao();
             conex = censoDao.conectar();
 
-            List<HashMap> lista = censoDao.ListarCensos(conex);
+            List<HashMap<String, Object>> lista = censoDao.ListarCensos(conex);
 
             if (!lista.isEmpty()) {
-
-                Gson gson = new Gson();
-                String json = gson.toJson(lista);
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(json);
-                
+                respuesta.put("status", "success");
+                respuesta.put("censos", lista);
             }
 
         } catch (SQLException e) {
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al listar los censos');");
-            out.println("location='jsp/Inicio.jsp';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al listas los censos");
             e.printStackTrace();
 
         } finally {
@@ -57,8 +52,10 @@ public class ListarCensos extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
+
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override

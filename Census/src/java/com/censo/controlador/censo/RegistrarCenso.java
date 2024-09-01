@@ -3,12 +3,14 @@ package com.censo.controlador.censo;
 import com.censo.modelo.dao.CensoDao;
 import com.censo.modelo.persistencia.CenCenso;
 import com.censo.modelo.persistencia.CenUsuario;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,12 +23,15 @@ public class RegistrarCenso extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         Connection conex = null;
 
+        Map<String, String> respuesta = new HashMap<>();
+
         try {
+
             CensoDao censoDao = new CensoDao();
             conex = censoDao.conectar();
             conex.setAutoCommit(false);
@@ -34,12 +39,11 @@ public class RegistrarCenso extends HttpServlet {
             CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
             CenCenso cencenso = new CenCenso();
 
-            //captura de datos del formulario
             Date fechaActual = new java.sql.Date(new java.util.Date().getTime());
             String hora = new java.text.SimpleDateFormat("HHmm").format(fechaActual);
             String numero = request.getParameter("txtnumerocenso").toUpperCase().trim();
             if (numero.length() < 6) {
-                String prefijo = "CS";
+                String prefijo = "ACS";
                 numero = prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero;
             }
             int puntoAtencion = Integer.parseInt(request.getParameter("cmbpuntosatencion"));
@@ -60,20 +64,17 @@ public class RegistrarCenso extends HttpServlet {
             cencenso.setNumero(numero);
             cencenso.setObservaciones(observaciones);
 
-            long idCenso = censoDao.adicionarCenso(conex, cencenso);
+            long idcenso = censoDao.adicionarCenso(conex, cencenso);
 
-            if (idCenso > 0) {
+            if (idcenso > 0) {
                 conex.commit();
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('Censo Registrado');");
-                out.println("location='jsp/Censo/listarCensos.jsp';");
-                out.println("</script>");
+                respuesta.put("status", "success");
+                respuesta.put("message", "Censo registrado exitosamente");
+                respuesta.put("id", String.valueOf(idcenso));
             } else {
                 conex.rollback();
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('Censo no Registrado');");
-                out.println("location='jsp/Censo/registrarCenso.jsp';");
-                out.println("</script>");
+                respuesta.put("status", "fail");
+                respuesta.put("message", "Censo no registrado");
             }
 
         } catch (SQLException | ParseException e) {
@@ -84,10 +85,8 @@ public class RegistrarCenso extends HttpServlet {
                     rollbackEx.printStackTrace();
                 }
             }
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al registrar el censo');");
-            out.println("location='jsp/Censo/registrarCenso.jsp';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al registrar el censo");
             e.printStackTrace();
         } finally {
             if (conex != null) {
@@ -97,9 +96,10 @@ public class RegistrarCenso extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
 
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override

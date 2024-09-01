@@ -59,7 +59,7 @@
                         <div class="container-fluid">
                             <h1 class="h3 mb-2 text-gray-800">Modificar Censo</h1>
 
-                            <form role="form" id="frmmodificarcenso" action="../../registrarCenso">
+                            <form role="form" id="frmmodificarcenso">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
                                         <h6 class="m-0 font-weight-bold text-primary">Datos del censo</h6>
@@ -82,24 +82,24 @@
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Tipo Referencia(*)</label>
-                                                <select class="form-control" id="cmbtiposreferencia" name="cmbtiposreferencia" required="true" onblur="consultarRefVehiculo()"></select>
+                                                <select class="form-control" id="cmbtiposreferencia" name="cmbtiposreferencia" required="true"></select><!--onblur="consultarRefVehiculo()"-->
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Referencia Vehiculo(*)</label>
-                                                <input class="form-control" type="text" id="txtreferencia" name="txtreferencia" maxlength="10" style="text-transform: uppercase" required="true" onblur="consultarRefVehiculo()">
+                                                <label>Referencia Vehículo(*)</label>
+                                                <input class="form-control" type="text" id="txtreferencia" name="txtreferencia" maxlength="10" style="text-transform: uppercase" required="true"><!--onblur="consultarRefVehiculo()"-->
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary"> Datos Persona Presentó Vehiculo</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary"> Datos persona presentó vehículo</h6>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Tipo Persona(*)</label>
-                                                <select class="form-control" id="cmbtipospersona" name="cmbpuntoatencion" required="true"></select>
+                                                <select class="form-control" id="cmbtipospersona" name="cmbtipospersona" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Tipo Documento(*)</label>
@@ -156,7 +156,7 @@
         %>
         <script type="text/javascript">
             alert("Su usuario no tiene permiso para acceder a esta pagina");
-            window.parent.location.href = "dashboard";
+            window.parent.location.href = "../dashboard";
         </script>
         <%
             }

@@ -4,14 +4,17 @@ $(function () {
     $.ajax({
         url: '../../listarCensos',
         method: 'get',
-        success: function (data) {
+        success: function (response) {
 
-            if ($.fn.DataTable.isDataTable('#dataTable')) {
-                $('#dataTable').DataTable().destroy();
-            }
+            if (response.status === "success") {
+                if ($.fn.DataTable.isDataTable('#dataTable')) {
+                    $('#dataTable').DataTable().destroy();
+                }
 
-            $.each(data, function (index, censo) {
-                var nuevoElemento = `
+                var lista = response.censos;
+
+                $.each(lista, function (index, censo) {
+                    var nuevoElemento = `
                 <tr>
                     <td>${censo.NUMERO}</td>
                     <td>${censo.FECHA}</td>
@@ -26,8 +29,17 @@ $(function () {
                     <td><button type="button" class="btn btn-danger btneditar" name="btneditar" data-id="${censo.CEN_ID}">Editar</button></td>
                     </tr>
                 `;
-                $("#lista-censos").append(nuevoElemento);
-            });
+                    $("#lista-censos").append(nuevoElemento);
+                });
+            } else if (response.status === "fail") {
+                alert(response.message);
+            } else if (response.status === "error") {
+                alert(response.message);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de listas censos: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de listas censos.");
         }
     });
 

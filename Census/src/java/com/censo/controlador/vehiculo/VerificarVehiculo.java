@@ -4,10 +4,12 @@ import com.censo.modelo.dao.CensoDao;
 import com.censo.modelo.dao.VehiculoDao;
 import com.censo.modelo.persistencia.CenCenso;
 import com.censo.modelo.persistencia.CenVehiculo;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,48 +22,108 @@ public class VerificarVehiculo extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         Connection conex = null;
 
+        Map<String, String> respuesta = new HashMap<>();
+
         try {
 
-            if (!request.getParameter("tiporeferencia").equals("") && !request.getParameter("valorreferencia").equals("")) {
+            if (request.getParameter("tiporeferencia") == null || request.getParameter("tiporeferencia").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "El 'tipo de referencia' es obligatorio");
 
-                VehiculoDao vehiculoDao = new VehiculoDao();
-                conex = vehiculoDao.conectar();
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
 
-                int tipoRef = Integer.parseInt(request.getParameter("tiporeferencia"));
-                String valorReferencia = request.getParameter("valorreferencia");
-                int opcion = Integer.parseInt(request.getParameter("opcion"));
+            if (request.getParameter("valorreferencia") == null || request.getParameter("valorreferencia").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "El 'numero de referencia' es obligatorio");
 
-                CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, tipoRef, valorReferencia);
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
 
-                if (cenvehiculo != null) {
+            if (request.getParameter("opcion") == null || request.getParameter("opcion").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "El parametro 'opcion' es obligatorio");
 
-                    if (opcion == 2) {
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
 
-                        CensoDao censoDao = new CensoDao();
-                        CenCenso cencenso = censoDao.ConsultarCensoByIdVehiculo(conex, cenvehiculo.getId());
+            int tipoReferencia = Integer.parseInt(request.getParameter("tiporeferencia"));
+            String valorReferencia = request.getParameter("valorreferencia");
+            int opcion = Integer.parseInt(request.getParameter("opcion"));
 
-                        if (cencenso == null) {
-                            out.println(cenvehiculo.getId());
-                        } else {
-                            out.println("si");
-                        }
+            VehiculoDao vehiculoDao = new VehiculoDao();
+            conex = vehiculoDao.conectar();
+
+            CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, tipoReferencia, valorReferencia);
+
+            if (cenvehiculo != null) {
+
+                if (opcion == 2) {
+
+                    CensoDao censoDao = new CensoDao();
+                    CenCenso cencenso = censoDao.ConsultarCensoByIdVehiculo(conex, cenvehiculo.getId());
+
+                    if (cencenso == null) {
+                        respuesta.put("status", "success");
+                        respuesta.put("message", "Vehiculo valido");
+                        respuesta.put("id", String.valueOf(cenvehiculo.getId()));
                     } else {
-                        out.println("si");
+                        respuesta.put("respuesta", "fail");
+                        respuesta.put("message", "Vehiculo no valido, ya se encuentra censado");
                     }
                 } else {
-                    out.println("no");
+                    respuesta.put("respuesta", "fail");
+                    if (tipoReferencia == 1) {
+                        respuesta.put("message", "Placa no valida, ya se encuentra registrada");
+                        respuesta.put("input", "#txtplaca");
+                    }
+                    if (tipoReferencia == 2) {
+                        respuesta.put("message", "Motor no valido, ya se encuentra registrado");
+                        respuesta.put("input", "#txtmotor");
+                    }
+                    if (tipoReferencia == 3) {
+                        respuesta.put("message", "Chasis no valido, ya se encuentra registrado");
+                        respuesta.put("input", "#txtchasis");
+                    }
+                    if (tipoReferencia == 4) {
+                        respuesta.put("message", "Serie no valida, ya se encuentra registrada");
+                        respuesta.put("input", "#txtserie");
+                    }
                 }
+            } else {
+                respuesta.put("status", "success");
+                if (tipoReferencia == 1) {
+                        respuesta.put("message", "Placa valida");
+                        respuesta.put("input", "#txtplaca");
+                    }
+                    if (tipoReferencia == 2) {
+                        respuesta.put("message", "Motor valido");
+                        respuesta.put("input", "#txtmotor");
+                    }
+                    if (tipoReferencia == 3) {
+                        respuesta.put("message", "Chasis valido");
+                        respuesta.put("input", "#txtchasis");
+                    }
+                    if (tipoReferencia == 4) {
+                        respuesta.put("message", "Serie valida");
+                        respuesta.put("input", "#txtserie");
+                    }
             }
+
         } catch (SQLException e) {
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al verificar el numero de censo');");
-            out.println("location='jsp/Inicio.jsp';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al verificar el vehiculo");
             e.printStackTrace();
 
         } finally {
@@ -72,8 +134,11 @@ public class VerificarVehiculo extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
+
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
+
     }
 
     @Override

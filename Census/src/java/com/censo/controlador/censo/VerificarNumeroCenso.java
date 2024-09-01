@@ -2,10 +2,12 @@ package com.censo.controlador.censo;
 
 import com.censo.modelo.dao.CensoDao;
 import com.censo.modelo.persistencia.CenCenso;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,46 +19,49 @@ public class VerificarNumeroCenso extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         
         Connection conex = null;
-        
+
+        Map<String, String> respuesta = new HashMap<>();
+
         try {
-            
-            if (!request.getParameter("numero").equals("")) {
-                
-                CensoDao censoDao = new CensoDao();
-                conex = censoDao.conectar();
 
-                String numero = request.getParameter("numero");
+            String numero = request.getParameter("numero");
+            if (numero == null || numero.isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "El 'numero censo' es obligatorio");
 
-                if (numero.length() < 6) {
-                    String prefijo = "CS";
-                    numero = prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero;
-                }
-
-                CenCenso cencenso = censoDao.ConsultarCensoByNumero(conex, numero);
-                if (cencenso != null) {
-
-                    String fechaCenso = new java.text.SimpleDateFormat("dd/MM/yyyy").format(cencenso.getFecha());
-
-                    out.println("si," + cencenso.getId() + "," + fechaCenso);
-
-                } else {
-                    out.println("no");
-                }
-            } else {
-                out.println("no");
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
             }
+
+            CensoDao censoDao = new CensoDao();
+            conex = censoDao.conectar();
+
+            if (numero.length() < 6) {
+                String prefijo = "ACS";
+                numero = prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero;
+            }
+
+            CenCenso cencenso = censoDao.ConsultarCensoByNumero(conex, numero);
+
+            if (cencenso == null) {
+                respuesta.put("status", "success");
+                respuesta.put("message", "Numero censo valido");
+            } else {
+                respuesta.put("respuesta", "fail");
+                respuesta.put("message", "Numero censo no valido, ya se encuentra registrado");
+            }
+
         } catch (SQLException e) {
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al verificar el numero de censo');");
-            out.println("location='jsp/Inicio.jsp';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al verificar el número de censo");
             e.printStackTrace();
-            
+
         } finally {
             if (conex != null) {
                 try {
@@ -65,8 +70,10 @@ public class VerificarNumeroCenso extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
+
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override

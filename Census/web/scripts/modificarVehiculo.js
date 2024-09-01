@@ -190,6 +190,10 @@ $(function () {
                     cargarTiposPersona(`#cmbtipospersona${persona.PV_ID}`, persona.TIPO_PERSONA_ID);
                     cargarTiposDocumento(`#cmbtiposdocumento${persona.PV_ID}`, persona.TIPO_DOC_ID);
                 });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de cargar datos vehiculo: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de cargar datos vehiculo.");
             }
         });
 
@@ -208,7 +212,11 @@ $(function () {
                     select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
                 });
                 select.val(tipoPersonaId);
-            }
+            },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de cargar tipos de persona: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar tipos de persona.");
+        }
         });
     }
 
@@ -223,7 +231,11 @@ $(function () {
                     select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
                 });
                 select.val(tipoDocumentoId);
-            }
+            },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de cargar tipos de documentos: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar tipos de documentos.");
+        }
         });
     }
     
@@ -269,7 +281,34 @@ $(function () {
             return false;
         }
         
-        $('#frmmodificarvehiculo').submit();
+        $('#frmmodificarvehiculo').trigger("submit");
+    });
+    
+    $("#frmmodificarvehiculo").submit(function (event) {
+        event.preventDefault();
+
+        var parametros = $(this).serialize();
+
+        $.ajax({
+            data: parametros,
+            url: "../../modificarVehiculo",
+            type: "POST",
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    alert(response.message);
+                    window.location.href = "verVehiculo.jsp?opcion=1&id=" + response.id;
+                } else if (response.status === "fail") {
+                    alert(response.message);
+                } else if (response.status === "error") {
+                    alert(response.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de modificar vehiculo: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de modificar vehiculo.");
+            }
+        });
     });
     
     $('#personas-vehiculo').on('click','.btnanular', function () {

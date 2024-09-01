@@ -19,7 +19,7 @@ $(function () {
             data: {id: id},
             success: function (data) {
                 $('#txttipodocumento').val(data.TIPO_DOCUMENTO);
-                $('#txttxtdocumento').val(data.NUMERO_DOCUMENTO);
+                $('#txtdocumento').val(data.NUMERO_DOCUMENTO);
                 $('#txtnombre').val(data.NOMBRE_USUARIO);
                 $('#txtperfil').val(data.PERFIL);
                 

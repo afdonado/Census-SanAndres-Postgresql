@@ -11,12 +11,14 @@ import com.censo.modelo.persistencia.CenMarca;
 import com.censo.modelo.persistencia.CenPersonaVehiculo;
 import com.censo.modelo.persistencia.CenUsuario;
 import com.censo.modelo.persistencia.CenVehiculo;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,14 +30,16 @@ public class RegistrarVehiculo extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         Connection conex = null;
-        
+
+        Map<String, String> respuesta = new HashMap<>();
+
         try {
-            
+
             VehiculoDao vehiculoDao = new VehiculoDao();
             conex = vehiculoDao.conectar();
             MarcaDao daoMarca = new MarcaDao();
@@ -44,7 +48,7 @@ public class RegistrarVehiculo extends HttpServlet {
             PersonaVehiculoDao daoPersonaVehiculo = new PersonaVehiculoDao();
 
             CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
-            
+
             conex.setAutoCommit(false);
 
             CenVehiculo cenvehiculo = new CenVehiculo();
@@ -85,14 +89,14 @@ public class RegistrarVehiculo extends HttpServlet {
             Date fechaMatricula = null;
             long paisMatricula = 0;
             long municipioMatricula = 0;
-            String ciudaMatricula ="";
-            if(!licenciaTransito.equals("")){
+            String ciudaMatricula = "";
+            if (!licenciaTransito.equals("")) {
                 fechaMatricula = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechamatricula")).getTime());
                 paisMatricula = Long.parseLong(request.getParameter("cmbpaismatricula"));
                 municipioMatricula = Long.parseLong(request.getParameter("cmbmunicipiomatricula"));
                 ciudaMatricula = request.getParameter("txtciudadmatricula").toUpperCase().trim();
             }
-            
+
             int tipoDocImportacion = Integer.parseInt(request.getParameter("cmbtiposimportacion"));
             String documentoImportacion = "";
             Date fechaImportacion = null;
@@ -172,19 +176,17 @@ public class RegistrarVehiculo extends HttpServlet {
                         }
                     }
                 }
-            }
 
-            if (registrado) {
-                conex.commit();
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('Vehiculo Registrado');");
-                out.println("location='jsp/Vehiculos/listarVehiculos.jsp';");
-                out.println("</script>");
-            } else {
-                conex.rollback();
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('Vehiculo no Registrado');");
-                out.println("</script>");
+                if (registrado) {
+                    conex.commit();
+                    respuesta.put("status", "success");
+                    respuesta.put("message", "Vehiculo registrado exitosamente");
+                    respuesta.put("id", String.valueOf(idVehiculo));
+                } else {
+                    conex.rollback();
+                    respuesta.put("status", "fail");
+                    respuesta.put("message", "Vehiculo no registrado");
+                }
             }
 
         } catch (NumberFormatException | SQLException | ParseException e) {
@@ -195,10 +197,8 @@ public class RegistrarVehiculo extends HttpServlet {
                     rollbackEx.printStackTrace();
                 }
             }
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al registrar el vehiculo');");
-            out.println("location='jsp/Vehiculos/registrarVehiculo.jsp';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al registrar el vehiculo");
             e.printStackTrace();
         } finally {
             if (conex != null) {
@@ -208,8 +208,10 @@ public class RegistrarVehiculo extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
+        
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override

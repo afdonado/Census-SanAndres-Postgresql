@@ -25,7 +25,7 @@ $(function () {
 
                 var tipoReferenciaId = 0;
                 var referencia = '';
-                
+
                 if (data.censo.VEH_PLACA.length > 0) {
                     tipoReferenciaId = 1;
                     referencia = data.censo.VEH_PLACA;
@@ -46,17 +46,17 @@ $(function () {
                     }
                 }
                 $('#txtreferencia').val(referencia);
-                
+
                 var tipoPersonaId = data.censo.TIPO_PERSONA_ID;
                 var tipoDocumentoId = data.censo.TDOC_ID;
                 $('#txtdocumento').val(data.censo.DOCUMENTO);
                 $('#txtnombre').val(data.censo.NOMBRE);
 
                 $('#txtobservaciones').val(data.censo.OBSERVACIONES);
-                
-                $('#idcenso').val(data.censo.PER_ID);
-                $('#idvehiculo').val(data.censo.VEH_ID);
+
                 $('#idcenso').val(data.censo.CEN_ID);
+                $('#idvehiculo').val(data.censo.VEH_ID);
+                $('#idpersona').val(data.censo.PER_ID);
                 $('#numerocenso').val(data.censo.NUMERO);
                 $('#tiporeferencia').val(tipoReferenciaId);
                 $('#referencia').val(referencia);
@@ -71,6 +71,10 @@ $(function () {
                             select.append('<option value="' + item.id + '">' + item.nombre + '</option>');
                         });
                         select.val(puntoatencionId);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error("Error en la solicitud de cargar puntos de atencion: ", textStatus, errorThrown);
+                        alert("Ocurrió un error al procesar la solicitud de cargar puntos de atencion.");
                     }
                 });
 
@@ -84,6 +88,10 @@ $(function () {
                             select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
                         });
                         select.val(tipoReferenciaId);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error("Error en la solicitud de cargar tipos de referencia: ", textStatus, errorThrown);
+                        alert("Ocurrió un error al procesar la solicitud de cargar tipos de referencia.");
                     }
                 });
 
@@ -97,6 +105,10 @@ $(function () {
                             select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
                         });
                         select.val(tipoPersonaId);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error("Error en la solicitud de cargar tipos de persona: ", textStatus, errorThrown);
+                        alert("Ocurrió un error al procesar la solicitud de cargar tipos de persona.");
                     }
                 });
 
@@ -110,26 +122,81 @@ $(function () {
                             select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
                         });
                         select.val(tipoDocumentoId);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error("Error en la solicitud de cargar tipos de documentos: ", textStatus, errorThrown);
+                        alert("Ocurrió un error al procesar la solicitud de cargar tipos de documentos.");
                     }
                 });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de cargar datos censo: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de cargar datos censo.");
             }
         });
 
     } else {
         console.log("Parámetros no encontrados en la URL");
     }
-    
+
+    $('#txtnumerocenso').blur(function () {
+        console.log('verificarNumeroCenso Modificar');
+        if ($('#txtnumerocenso').val().length > 0 && $('#txtnumerocenso').val() !== ($('#numerocenso').val())) {
+            verificarNumeroCenso($('#txtnumerocenso').val().toString().toUpperCase());
+        }
+    });
+
+    $('#txtreferencia').blur(function () {
+        console.log('consultarReferenciaVehiculo Modificar');
+        console.log('referencia:', $('#txtreferencia').val());
+        var tipoReferencia = $('#cmbtiposreferencia').val();
+        var referencia = $('#txtreferencia').val().toString().toUpperCase();
+        if (referencia.length > 0 &&
+                (!referencia.eq($('#referencia').val().toString().toUpperCase()))
+                || tipoReferencia !== $('#tiporeferencia').val()) {
+            consultarReferenciaVehiculo(tipoReferencia, referencia);
+        }
+    });
+
     $('#btnguardar').click(function () {
         var numero = $('#txtnumerocenso').val();
         var fechacenso = $('#txtfechacenso').val();
         var referencia = $('#txtreferencia').val();
         var documento = $('#txtdocumento').val();
 
-        if (numero.length > 0 && fechacenso.length > 0 && referencia.length > 0 && documento.length > 0) {
-            $('#frmregistrarcenso').submit();
+        if (numero.length === 0 && fechacenso.length === 0 && referencia.length === 0 && documento.length === 0) {
+            alert('Debe ingresar los datos obligatorios (*)');
+            return false;
         } else {
-            alert('Debe ingresar como minimo los datos obligatorios (*)');
+            $('#frmmodificarcenso').trigger("submit");
         }
+    });
+    
+    $("#frmmodificarcenso").submit(function (event) {
+        event.preventDefault();
+
+        var parametros = $(this).serialize();
+
+        $.ajax({
+            data: parametros,
+            url: "../../modificarCenso",
+            type: "POST",
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    alert(response.message);
+                    window.location.href = "verCenso.jsp?opcion=1&id=" + response.id;
+                } else if (response.status === "fail") {
+                    alert(response.message);
+                } else if (response.status === "error") {
+                    alert(response.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de modificar censo: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de modificar censo.");
+            }
+        });
     });
 
 });

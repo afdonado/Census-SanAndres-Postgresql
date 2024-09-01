@@ -2,12 +2,14 @@ package com.censo.controlador.censo;
 
 import com.censo.modelo.dao.CensoDao;
 import com.censo.modelo.persistencia.CenCenso;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,12 +21,14 @@ public class ModificarCenso extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
         Connection conex = null;
-        
+
+        Map<String, String> respuesta = new HashMap<>();
+
         try {
             CensoDao censoDao = new CensoDao();
             conex = censoDao.conectar();
@@ -32,14 +36,13 @@ public class ModificarCenso extends HttpServlet {
 
             boolean sw;
 
-            //captura de datos del formulario
             Date fechaActual = new java.sql.Date(new java.util.Date().getTime());
 
             long idcenso = Long.parseLong(request.getParameter("idcenso"));
 
-            String numero = request.getParameter("txtnumero").toUpperCase().trim();
+            String numero = request.getParameter("txtnumerocenso").toUpperCase().trim();
             if (numero.length() < 6) {
-                String prefijo = "CS";
+                String prefijo = "ACS";
                 numero = prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero;
             }
 
@@ -59,13 +62,13 @@ public class ModificarCenso extends HttpServlet {
 
                 if (sw) {
                     String hora = new java.text.SimpleDateFormat("HHmm").format(fechaActual);
-                    int puntoAtencion = Integer.parseInt(request.getParameter("cmbpuntoaten"));
+                    int puntoAtencion = Integer.parseInt(request.getParameter("cmbpuntosatencion"));
                     long idvehiculo = Long.parseLong(request.getParameter("idvehiculo"));
                     long idpersona = Long.parseLong(request.getParameter("idpersona"));
-                    int tipoPersona = Integer.parseInt(request.getParameter("cmbtipopersona"));
+                    int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona"));
                     String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
                     Date fechaCenso = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechacenso")).getTime());
-                        
+
                     cencenso.setFecha(fechaCenso);
                     cencenso.setHora(hora);
                     cencenso.setPun_id(puntoAtencion);
@@ -77,24 +80,19 @@ public class ModificarCenso extends HttpServlet {
 
                     censoDao.modificarCenso(conex, cencenso);
                     conex.commit();
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Censo Modificado');");
-                    out.println("location='jsp/Censo/verCenso.jsp?idcenso=" + idcenso + "';");
-                    out.println("</script>");
 
+                    respuesta.put("status", "success");
+                    respuesta.put("message", "Censo modificado exitosamente");
+                    respuesta.put("id", String.valueOf(idcenso));
                 } else {
                     conex.rollback();
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Censo no fue Modificado');");
-                    out.println("location='jsp/Censo/verCenso.jsp?idcenso=" + idcenso + "';");
-                    out.println("</script>");
+                    respuesta.put("status", "fail");
+                    respuesta.put("message", "Censo no modificado");
                 }
             } else {
                 conex.rollback();
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('Censo no se encuentra registrado');");
-                out.println("location='jsp/Censo/modificarCenso.jsp';");
-                out.println("</script>");
+                respuesta.put("status", "fail");
+                respuesta.put("message", "Censo no se encuentra registrado");
             }
 
         } catch (SQLException | ParseException e) {
@@ -105,10 +103,8 @@ public class ModificarCenso extends HttpServlet {
                     rollbackEx.printStackTrace();
                 }
             }
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al modificar el censo');");
-            out.println("location='jsp/Censo/registrarCenso.jsp';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al modificar el censo");
             e.printStackTrace();
         } finally {
             if (conex != null) {
@@ -118,8 +114,10 @@ public class ModificarCenso extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
+        
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override
