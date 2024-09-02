@@ -48,7 +48,7 @@ public class CargarDatosCenso extends HttpServlet {
 
             if (!datosCenso.isEmpty()) {
                 PersonaVehiculoDao personaVehiculoDao = new PersonaVehiculoDao();
-                List<HashMap<String, Object>> personasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, Long.parseLong(datosCenso."VEH_ID"));
+                List<HashMap<String, Object>> personasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, Long.parseLong(datosCenso.get("VEH_ID").toString()));
                 respuesta.put("status", "success");
                 respuesta.put("censo", datosCenso);
                 respuesta.put("personasVehiculo", personasVehiculo);

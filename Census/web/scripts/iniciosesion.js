@@ -1,18 +1,44 @@
 
-window.addEventListener('load', function(){
-        document.getElementById('btniniciar').addEventListener('click', function(){
-            
-            var usuario = document.getElementById('txtloginusuario').value.toString().toUpperCase();
-            var password = document.getElementById('txtloginpassword').value;
-            
-            if(usuario.length > 0 && password.length >0){
-                if(usuario.length>0 && password.length >5){
-                    document.getElementById('frminiciosesion').submit();
-                }else{
-                    alert('Debe ingresar un usuario y contraseña validos');
+$(function () {
+
+    $("#frminiciosesion").submit(function (event) {
+        event.preventDefault();
+
+        var parametros = $(this).serialize();
+
+        $.ajax({
+            data: parametros,
+            url: "inicioSesion",
+            type: "POST",
+            dataType: "json",
+            beforeSend: function () {
+                // Mostrar mensaje de "Cargando" o deshabilitar botón de enviar
+                $('#btniniciar').prop('disabled', true);
+            },
+            success: function (response) {
+                if (response.status === "fail" || response.status === "error") {
+                    alert(response.message);
+                } else {
+                    window.location.href = response.redirect;
                 }
-            }else{
-                alert('Debe ingresar su usuario y contraseña');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error al iniciar sesion: ", textStatus, errorThrown);
+                alert("Error al iniciar sesion");
             }
+        });
     });
+    
+    $('#btniniciar').click(function () {
+        var nombre = $('#txtloginusuario').val();
+        var password = $('#txtloginpassword').val();
+
+        if (nombre.length === 0 && password.length === 0) {
+            alert('Debe ingresar un nombre de usuario y contraseña validos');
+            return false;
+        } else {
+            $('#frminiciosesion').trigger("submit");
+        }
+    });
+
 });

@@ -2,10 +2,12 @@ package com.censo.controlador.sesion;
 
 import com.censo.modelo.dao.UsuarioDao;
 import com.censo.modelo.persistencia.CenUsuario;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,76 +21,69 @@ public class InicioSesion extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
 
-        Connection conex = null;
-        
-        try {
-            
-            if (request.getParameter("txtloginusuario") != null && request.getParameter("txtloginpassword") != null) {
-                
-                UsuarioDao usuarioDao = new UsuarioDao();
-                conex = usuarioDao.conectar();     
-                
-                String user = request.getParameter("txtloginusuario").toUpperCase();
-                String password = DigestUtils.md5Hex(request.getParameter("txtloginpassword"));
-                
-                CenUsuario cenusuario = usuarioDao.ConsultarUsuario(conex, user, password, 1);
-                if (cenusuario != null) {
-                    
-                    HttpSession sessionCensus = request.getSession();
-                    sessionCensus.setAttribute("usuario", cenusuario);
-                    sessionCensus.setAttribute("perfil", usuarioDao.ConsultarPerfilById(conex, usuarioDao.ConsultarPerfilUsuarioByIdUsuario(conex, cenusuario.getId()).getPef_id()).getNombre());
-                    sessionCensus.setAttribute("permisosUsuario", usuarioDao.ListarPermisosById(conex, cenusuario.getId()));
-                    sessionCensus.setAttribute("modulosUsuario", usuarioDao.ListarModulosByUsuario(conex, cenusuario.getId()));
-                    sessionCensus.setAttribute("modulos", usuarioDao.ListarModulos(conex));
-                    response.sendRedirect("dashboard");
-                    
-                } else {
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Datos incorrectos');");
-                    out.println("location='index';");
-                    out.println("</script>");
-                }
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-            } else {
-               out.println("<script type=\"text/javascript\">");
-                out.println("alert('Digite los datos de usuario y contraseña');");
-                out.println("location='index';");
-                out.println("</script>");
+        Map<String, String> respuesta = new HashMap<>();
+
+        UsuarioDao usuarioDao = new UsuarioDao();
+
+        try (Connection conex = usuarioDao.conectar();) {
+
+            if ((request.getParameter("txtloginusuario") == null || request.getParameter("txtloginusuario").isEmpty())
+                    && (request.getParameter("txtloginpassword") == null || request.getParameter("txtloginpassword").isEmpty())) {
+
+                respuesta.put("status", "error");
+                respuesta.put("message", "Debe ingresar un nombre de usuario y contraseña validos");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
             }
+
+            String nombre = request.getParameter("txtloginusuario").toUpperCase();
+            String password = DigestUtils.md5Hex(request.getParameter("txtloginpassword"));
+
+            CenUsuario cenusuario = usuarioDao.ConsultarUsuario(conex, nombre, password, 1);
+            if (cenusuario == null) {
+                respuesta.put("status", "fail");
+                respuesta.put("message", "Nombre de usuario o contraseña incorrectos");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            HttpSession sessionCensus = request.getSession();
+            sessionCensus.setAttribute("usuario", cenusuario);
+            sessionCensus.setAttribute("perfil", usuarioDao.ConsultarPerfilById(conex, usuarioDao.ConsultarPerfilUsuarioByIdUsuario(conex, cenusuario.getId()).getPef_id()).getNombre());
+            sessionCensus.setAttribute("permisosUsuario", usuarioDao.ListarPermisosById(conex, cenusuario.getId()));
+            sessionCensus.setAttribute("modulosUsuario", usuarioDao.ListarModulosByUsuario(conex, cenusuario.getId()));
+            sessionCensus.setAttribute("modulos", usuarioDao.ListarModulos(conex));
+            respuesta.put("status", "success");
+            respuesta.put("redirect", "dashboard");
+
         } catch (SQLException e) {
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al iniciar sesion');");
-            out.println("location='index';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al iniciar sesion");
             e.printStackTrace();
-            
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
-            out.close();
         }
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            processRequest(request, response);
+        processRequest(request, response);
 
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            processRequest(request, response);
+        processRequest(request, response);
     }
 
 }
