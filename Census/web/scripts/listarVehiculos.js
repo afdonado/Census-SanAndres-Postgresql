@@ -42,7 +42,7 @@ $(function () {
      
      $('.table-responsive').on('click', '.btneditar', function () {
      var id = $(this).data('id');
-     window.location.href = "verModificarVehiculo.jsp?opcion=2&id=" + id;
+     window.location.href = "modificarVehiculo.jsp?opcion=2&id=" + id;
      });
   
 });

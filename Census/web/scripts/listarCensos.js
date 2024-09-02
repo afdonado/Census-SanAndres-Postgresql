@@ -53,7 +53,7 @@ $(function () {
     $('.table-responsive').on('click', '.btneditar', function () {
         var id = $(this).data('id');
         console.log("id: " + id);
-        window.location.href = "verModificarCenso.jsp?opcion=2&id=" + id;
+        window.location.href = "modificarCenso.jsp?opcion=2&id=" + id;
     });
 
 });

@@ -111,9 +111,7 @@ $(function (){
                 if (response.status === "success") {
                     alert(response.message);
                     window.location.href = "verCenso.jsp?opcion=1&id=" + response.id;
-                } else if (response.status === "fail") {
-                    alert(response.message);
-                } else if (response.status === "error") {
+                } else if (response.status === "fail" || response.status === "error") {
                     alert(response.message);
                 }
             },

@@ -53,7 +53,7 @@ $(function () {
     $('.table-responsive').on('click', '.btneditar', function () {
         var id = $(this).data('id');
         console.log("id: " + id);
-        window.location.href = "verModificarPersona.jsp?opcion=2&id=" + id;
+        window.location.href = "modificarPersona.jsp?opcion=2&id=" + id;
     });
 
 });
