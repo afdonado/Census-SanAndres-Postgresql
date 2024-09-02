@@ -1,13 +1,6 @@
 
 $(function () {
 
-    $('#nombreusuario').blur(function () {
-        var nombreusuario = $('#nombreusuario').val().toString().toUpperCase();
-        if (nombreusuario.length > 0) {
-            verificarNombreUsuario(nombreusuario);
-        }
-    });
-
     $('#passwordactual').blur(function () {
         var passwordactual = $('#passwordactual').val();
         var idusuario = $('#idusuario').val();
@@ -53,28 +46,6 @@ $(function () {
         }
     }
 
-    function verificarNombreUsuario(nombre) {
-        var parametros = {
-            nombre: nombre
-        };
-        $.ajax({
-            data: parametros,
-            url: "../../verificarNombreUsuario",
-            type: "post"
-        })
-                .done(function (data) {
-                    var respuesta = data.toString();
-                    respuesta = respuesta.toString().trim();
-                    if (respuesta === 'si') {
-                        $('#nombreusuario').val('');
-                        $('#password').val('');
-                        $('#repetirpassword').val('');
-                        $('#nombreusuario').focus();
-                        alert("Nombre de usuario ya se encuentra registrado");
-                    }
-                });
-    }
-
     function validarPasswordActual(passwordactual, idusuario) {
         var parametros = {
             "idusuario": idusuario,
@@ -107,7 +78,7 @@ $(function () {
     });
 
 });
-
+/*
 function registrarUsuario() {
     var documento = document.getElementById('txtdocumento').value.toString().toUpperCase();
     var nombreusuario = document.getElementById('nombreusuario').value.toString().toUpperCase();
@@ -178,3 +149,5 @@ function restaurarPassword() {
         document.getElementById('frmconsultarusuario').submit();
     }
 }
+ * 
+ */

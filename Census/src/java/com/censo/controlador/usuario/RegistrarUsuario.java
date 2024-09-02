@@ -48,7 +48,7 @@ public class RegistrarUsuario extends HttpServlet {
 
             //Verificar que el usuario no existe para registrarlo
             CenUsuario cenusuario = usuarioDao.ConsultarUsuarioByNombre(conex, nombre);
-            if (cenusuario == null) {
+            if (cenusuario != null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Nombre de usuario no valido para registrarlo");
 

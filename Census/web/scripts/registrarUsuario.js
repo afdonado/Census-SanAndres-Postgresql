@@ -1,4 +1,33 @@
 $(function () {
+    
+    $('#txtnombre').blur(function () {
+        var nombreusuario = $('#txtnombre').val().toString().toUpperCase();
+        if (nombreusuario.length > 0) {
+            verificarNombreUsuario(nombreusuario);
+        }
+    });
+    
+    function verificarNombreUsuario(nombre) {
+        var parametros = {
+            nombre: nombre
+        };
+        $.ajax({
+            data: parametros,
+            url: "../../verificarNombreUsuario",
+            type: "post"
+        })
+                .done(function (data) {
+                    var respuesta = data.toString();
+                    respuesta = respuesta.toString().trim();
+                    if (respuesta === 'si') {
+                        $('#nombreusuario').val('');
+                        $('#password').val('');
+                        $('#repetirpassword').val('');
+                        $('#nombreusuario').focus();
+                        alert("Nombre de usuario ya se encuentra registrado");
+                    }
+                });
+    }
 
     $.ajax({
         url: '../../cargarPerfiles',

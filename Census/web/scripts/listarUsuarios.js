@@ -4,13 +4,15 @@ $(function () {
     $.ajax({
         url: '../../listarUsuarios',
         method: 'get',
-        success: function (data) {
+        success: function (response) {
 
             if ($.fn.DataTable.isDataTable('#dataTable')) {
                 $('#dataTable').DataTable().destroy();
             }
+            
+            var lista = response.usuarios;
 
-            $.each(data, function (index, usuario) {
+            $.each(lista, function (index, usuario) {
                 var nuevoElemento = `
                 <tr>
                     <td>${usuario.NOMBRE_USUARIO}</td>

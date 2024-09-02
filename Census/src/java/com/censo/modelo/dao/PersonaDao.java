@@ -65,7 +65,7 @@ public class PersonaDao extends Conexion {
         return 0;
     }
 
-    public void modificarPersona(Connection conex, CenPersona cenpersona) throws SQLException, IOException {
+    public boolean modificarPersona(Connection conex, CenPersona cenpersona) throws SQLException, IOException {
 
         try {
             pst = conex.prepareStatement("UPDATE CEN_PERSONAS SET PER_TIPODOC = ?,PER_DOCUMENTO = ?,"
@@ -92,6 +92,8 @@ public class PersonaDao extends Conexion {
             pst.setInt(17, cenpersona.getCategorialicencia());
             pst.setLong(18, cenpersona.getId());
             pst.executeUpdate();
+            
+            return true;
 
         } catch (SQLException e) {
             System.err.println("Error en modificarPersona: " + e);
@@ -107,6 +109,8 @@ public class PersonaDao extends Conexion {
                 System.out.println("Error en cierres de modificarPersona:" + e);
             }
         }
+        
+        return false;
     }
 
     public CenPersona ConsultarPersona(Connection conex, int tipodoc, String documento) throws SQLException {
@@ -164,9 +168,9 @@ public class PersonaDao extends Conexion {
         return null;
     }
 
-    public List ListarPersonas(Connection conex) throws SQLException {
+    public List<HashMap<String, Object>> ListarPersonas(Connection conex) throws SQLException {
 
-        List<HashMap> listaDatos = new LinkedList<>();
+        List<HashMap<String, Object>> lista = new LinkedList<>();
 
         try {
             pst = conex.prepareStatement("SELECT PER_ID,PER_TIPODOC,TIPO_DOC,DOCUMENTO,NOMBRE1,NOMBRE2,APELLIDO1,APELLIDO2,NOMBRE_COMPLETO,"
@@ -177,11 +181,11 @@ public class PersonaDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<>();
+                HashMap<String, Object> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
-                listaDatos.add(hash);
+                lista.add(hash);
             }
         } catch (SQLException e) {
             throw new SQLException("Error en ListarPersonas: " + e);
@@ -197,7 +201,7 @@ public class PersonaDao extends Conexion {
                 System.out.println("Error en cierres de ListarPersonas:" + e);
             }
         }
-        return listaDatos;
+        return lista;
     }
 
     public List ListarPersonasById(Connection conex, long id) throws SQLException {
@@ -351,6 +355,39 @@ public class PersonaDao extends Conexion {
             }
         }
         return listaDatos;
+    }
+    
+    public HashMap<String, Object> ConsultarDatosPersonaById(Connection conex, long id) throws SQLException {
+
+        HashMap<String, Object> datos = new HashMap<>();
+
+        try {
+            pst = conex.prepareStatement("SELECT * FROM VW_PERSONAS WHERE PER_ID = ? ");
+            pst.setLong(1, id);
+            rst = pst.executeQuery();
+
+            if (rst.next()) {
+                ResultSetMetaData rsmd = rst.getMetaData();
+                for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                    datos.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new SQLException("Error en ConsultarDatosPersonaById: " + e);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (rst != null) {
+                    rst.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error en cierres de ConsultarDatosPersonaById:" + e);
+            }
+        }
+        return datos;
     }
     
 }

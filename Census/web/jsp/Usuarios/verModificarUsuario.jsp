@@ -144,7 +144,7 @@
         <script src="${pageContext.request.contextPath}/template/vendor/jquery/calendario_es.js" type="text/javascript"></script>
         
         <script src="${pageContext.request.contextPath}/scripts/modificarUsuario.js" type="text/javascript"></script>
-        <!--<script src="${pageContext.request.contextPath}/scripts/usuarios.js" type="text/javascript"></script>-->
+        <script src="${pageContext.request.contextPath}/scripts/usuarios.js" type="text/javascript"></script>
         
     </body>
 </html>

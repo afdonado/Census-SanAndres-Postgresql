@@ -12,7 +12,6 @@ $(function () {
             type: "POST",
             dataType: "json",
             beforeSend: function () {
-                // Mostrar mensaje de "Cargando" o deshabilitar botón de enviar
                 $('#btniniciar').prop('disabled', true);
             },
             success: function (response) {

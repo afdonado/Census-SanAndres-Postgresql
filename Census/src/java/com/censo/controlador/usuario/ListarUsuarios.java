@@ -36,12 +36,12 @@ public class ListarUsuarios extends HttpServlet {
 
             if (!lista.isEmpty()) {
                 respuesta.put("status", "success");
-                respuesta.put("vehiculos", lista);
+                respuesta.put("usuarios", lista);
             }
 
         } catch (SQLException e) {
             respuesta.put("status", "error");
-            respuesta.put("message", "Error al listas los vehiculos");
+            respuesta.put("message", "Error al listas los usuarios");
             e.printStackTrace();
 
         } finally {

@@ -31,7 +31,7 @@ public class ModificarUsuario extends HttpServlet {
 
         try {
             
-            //Validar parametro idvehiculo
+            //Validar parametro idusuario
             if (request.getParameter("idusuario") == null || request.getParameter("idusuario").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'id usuario' no encontrado para modificar usuario");

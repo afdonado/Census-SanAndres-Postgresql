@@ -1,12 +1,12 @@
-package com.censo.controlador.usuario;
+package com.censo.controlador.persona;
 
-import com.censo.modelo.dao.UsuarioDao;
-import com.censo.modelo.persistencia.CenUsuario;
+import com.censo.modelo.dao.PersonaDao;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "VerificarNombreUsuario", urlPatterns = {"/verificarNombreUsuario"})
-public class VerificarNombreUsuario extends HttpServlet {
+@WebServlet(name = "CargarDatosPersona", urlPatterns = {"/cargarDatosPersona"})
+public class CargarDatosPersona extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -25,48 +25,39 @@ public class VerificarNombreUsuario extends HttpServlet {
 
         Connection conex = null;
 
-        Map<String, String> respuesta = new HashMap<>();
+        Map<String, Object> respuesta = new HashMap<>();
 
         try {
 
-            UsuarioDao usuarioDao = new UsuarioDao();
-            conex = usuarioDao.conectar();
-
-            //Validar parametro nombre
-            if (request.getParameter("nombre") == null || request.getParameter("nombre").isEmpty()) {
+            if (request.getParameter("id").equals("")) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'nombre' no encontrado para registrar usuario");
-
-                String jsonError = new Gson().toJson(respuesta);
-                response.getWriter().write(jsonError);
-                return;
-            }
-
-            String nombre = request.getParameter("nombre").toUpperCase().trim();
-
-            //Verificar que el usuario no existe para registrarlo
-            CenUsuario cenusuario = usuarioDao.ConsultarUsuarioByNombre(conex, nombre);
-            if (cenusuario != null) {
-                respuesta.put("status", "error");
-                respuesta.put("message", "Nombre de usuario no valido para registrarlo");
+                respuesta.put("message", "Parametro 'id' no encontrado para cargar datos de la persona");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
                 return;
             }
             
-            if (cenusuario == null) {
+            long idpersona = Long.parseLong(request.getParameter("id"));
+
+            PersonaDao personaDao = new PersonaDao();
+            conex = personaDao.conectar();
+
+            HashMap<String, Object> datos = personaDao.ConsultarDatosPersonaById(conex, idpersona);
+
+            if (!datos.isEmpty()) {
                 respuesta.put("status", "success");
-                respuesta.put("message", "Nombre usuario valido");
+                respuesta.put("persona", datos);
             } else {
-                respuesta.put("status", "fail");
-                respuesta.put("message", "Nombre usuario no valido");
+                respuesta.put("respuesta", "fail");
+                respuesta.put("message", "Persona no se encuentra registrada");
             }
 
         } catch (SQLException e) {
             respuesta.put("status", "error");
-            respuesta.put("message", "Error al verificar el nombre de usuario");
+            respuesta.put("message", "Error al cargar los datos de la persona");
             e.printStackTrace();
+
         } finally {
             if (conex != null) {
                 try {
@@ -76,6 +67,9 @@ public class VerificarNombreUsuario extends HttpServlet {
                 }
             }
         }
+        
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override

@@ -17,18 +17,18 @@ $(function () {
             url: '../../cargarDatosUsuario',
             method: 'get',
             data: {id: id},
-            success: function (data) {
-                var tipoDocumentoId = data.TIPO_DOCUMENTO_ID;
-                $('#txtdocumento').val(data.NUMERO_DOCUMENTO);
-                $('#txtnombre').val(data.NOMBRE_USUARIO);
+            success: function (response) {
+                var tipoDocumentoId = response.usuario.TIPO_DOCUMENTO_ID;
+                $('#txtdocumento').val(response.usuario.NUMERO_DOCUMENTO);
+                $('#txtnombre').val(response.usuario.NOMBRE_USUARIO);
                 
-                var perfilId = data.PEF_ID;
-                $('#txtfechainicial').val(data.FECHA_INICIO);
-                $('#txtfechafinal').val(data.FECHA_FINAL);
+                var perfilId = response.usuario.PEF_ID;
+                $('#txtfechainicial').val(response.usuario.FECHA_INICIO);
+                $('#txtfechafinal').val(response.usuario.FECHA_FINAL);
                 
-                var estadoId = data.ESTADO_ID;
+                var estadoId = response.usuario.ESTADO_ID;
                 
-                $('#idusuario').val(data.USU_ID);
+                $('#idusuario').val(response.usuario.USU_ID);
 
                 $.ajax({
                     url: '../../cargarPerfiles',
@@ -52,7 +52,7 @@ $(function () {
                         $.each(data, function (index, item) {
                             select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
                         });
-                        select.val(perfilId);
+                        select.val(tipoDocumentoId);
                     }
                 });
                 

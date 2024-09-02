@@ -21,14 +21,14 @@ $(function () {
 
                 if (response.status === "success") {
 
-                    $('#txttipodocumento').val(response.TIPO_DOCUMENTO);
-                    $('#txtdocumento').val(response.NUMERO_DOCUMENTO);
-                    $('#txtnombre').val(response.NOMBRE_USUARIO);
-                    $('#txtperfil').val(response.PERFIL);
+                    $('#txttipodocumento').val(response.usuario.TIPO_DOCUMENTO);
+                    $('#txtdocumento').val(response.usuario.NUMERO_DOCUMENTO);
+                    $('#txtnombre').val(response.usuario.NOMBRE_USUARIO);
+                    $('#txtperfil').val(response.usuario.PERFIL);
 
-                    $('#txtfechainicial').val(response.FECHA_INICIO);
-                    $('#txtfechafinal').val(response.FECHA_FINAL);
-                    $('#txtestado').val(response.ESTADO);
+                    $('#txtfechainicial').val(response.usuario.FECHA_INICIO);
+                    $('#txtfechafinal').val(response.usuario.FECHA_FINAL);
+                    $('#txtestado').val(response.usuario.ESTADO);
                     
                 } else if (response.status === "fail") {
                     alert(response.message);

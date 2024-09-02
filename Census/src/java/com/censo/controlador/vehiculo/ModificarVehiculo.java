@@ -370,9 +370,7 @@ public class ModificarVehiculo extends HttpServlet {
         }
 
         String json = new Gson().toJson(respuesta);
-
-        response.getWriter()
-                .write(json);
+        response.getWriter().write(json);
 
     }
 

@@ -33,8 +33,7 @@ public class RegistrarCenso extends HttpServlet {
         try {
 
             CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
-            CenCenso cencenso = new CenCenso();
-
+            
             if (request.getParameter("txtnumerocenso") == null || request.getParameter("txtnumerocenso").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'numero censo' no encontrado");
@@ -52,6 +51,19 @@ public class RegistrarCenso extends HttpServlet {
             } else {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Numero de censo no puede ser mayor a 5 digitos");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
+            CensoDao censoDao = new CensoDao();
+            conex = censoDao.conectar();            
+            CenCenso cencenso = censoDao.ConsultarCensoByNumero(conex, numero);
+            
+            if (cencenso != null) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Numero de censo no valido para registrarlo");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -122,8 +134,6 @@ public class RegistrarCenso extends HttpServlet {
             int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona"));
             String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
             
-            CensoDao censoDao = new CensoDao();
-            conex = censoDao.conectar();
             conex.setAutoCommit(false);
 
             cencenso.setFecha(fechaCenso);

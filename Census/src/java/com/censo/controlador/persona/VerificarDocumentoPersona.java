@@ -2,10 +2,12 @@ package com.censo.controlador.persona;
 
 import com.censo.modelo.dao.PersonaDao;
 import com.censo.modelo.persistencia.CenPersona;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,42 +19,63 @@ public class VerificarDocumentoPersona extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         Connection conex = null;
 
+        Map<String, String> respuesta = new HashMap<>();
+
         try {
 
-            if (!request.getParameter("tipodocumento").equals("") && !request.getParameter("documento").equals("")) {
+            //Validar parametro tipo documento
+            if (request.getParameter("tipodocumento") == null || request.getParameter("tipodocumento").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'tipo documento' no encontrado para registrar la persona");
 
-                PersonaDao personaDao = new PersonaDao();
-                conex = personaDao.conectar();
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
 
-                int tipodoc = Integer.parseInt(request.getParameter("tipodocumento"));
-                String documento = request.getParameter("documento");
+            //Validar parametro numero documento
+            if (request.getParameter("documento") == null || request.getParameter("documento").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'numero documento' no encontrado para registrar la persona");
 
-                CenPersona cenpersona = personaDao.ConsultarPersona(conex, tipodoc, documento);
-                if (cenpersona != null) {
-                    String nombreCompleto = cenpersona.getNombre1() + " " + (cenpersona.getNombre2() != null ? cenpersona.getNombre2().trim() : "")
-                            + " " + (cenpersona.getApellido1() != null ? cenpersona.getApellido1().trim() : "")
-                            + " " + (cenpersona.getApellido2() != null ? cenpersona.getApellido2().trim() : "");
-                    long idpersona = cenpersona.getId();
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
 
-                    
-                    out.println("si," + nombreCompleto + ","+idpersona);
-                } else {
-                    out.println("no");
-                }
+            int tipoDocumento = Integer.parseInt(request.getParameter("tipodocumento"));
+            String documento = request.getParameter("documento").toUpperCase().trim();
+
+            PersonaDao personaDao = new PersonaDao();
+            conex = personaDao.conectar();
+            
+            //Verificar si existe la persona con tipo y numero de documento
+            CenPersona cenPersona = personaDao.ConsultarPersona(conex, tipoDocumento, documento);
+            if (cenPersona != null) {
+                
+                String nombreCompleto = 
+                        cenPersona.getNombre1() + " " + 
+                        (cenPersona.getNombre2() != null ? cenPersona.getNombre2().trim() : "") + " " + 
+                        (cenPersona.getApellido1() != null ? cenPersona.getApellido1().trim() : "") + " " + 
+                        (cenPersona.getApellido2() != null ? cenPersona.getApellido2().trim() : "");
+                
+                respuesta.put("status", "success");
+                respuesta.put("message", "Tipo y numero de documento validos");
+                respuesta.put("nombre", nombreCompleto);
+                respuesta.put("id", String.valueOf(cenPersona.getId()));
             } else {
-                out.println("no");
+                respuesta.put("status", "fail");
+                respuesta.put("message", "Tipo y numero de documento no validos");
             }
         } catch (SQLException e) {
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al verificar el numero de documento');");
-            out.println("location='jsp/Inicio.jsp';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al verificar el numero de documento");
             e.printStackTrace();
 
         } finally {
@@ -63,8 +86,10 @@ public class VerificarDocumentoPersona extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
+        
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override
