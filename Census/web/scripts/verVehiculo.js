@@ -17,46 +17,49 @@ $(function () {
             url: '../../cargarDatosVehiculo',
             method: 'get',
             data: {id: id},
-            success: function (data) {
-                $('#txtplaca').val(data.vehiculo.VEH_PLACA);
-                $('#txtmotor').val(data.vehiculo.VEH_MOTOR);
-                $('#txtchasis').val(data.vehiculo.VEH_CHASIS);
-                $('#txtserie').val(data.vehiculo.VEH_SERIE);
+            success: function (response) {
+                
+                if (response.status === "success") {
+                    
+                $('#txtplaca').val(response.vehiculo.VEH_PLACA);
+                $('#txtmotor').val(response.vehiculo.VEH_MOTOR);
+                $('#txtchasis').val(response.vehiculo.VEH_CHASIS);
+                $('#txtserie').val(response.vehiculo.VEH_SERIE);
 
-                $('#txtclase').val(data.vehiculo.CLASE);
-                $('#txtservicio').val(data.vehiculo.SERVICIO);
-                $('#txttipouso').val(data.vehiculo.TIPO_USO);
+                $('#txtclase').val(response.vehiculo.CLASE);
+                $('#txtservicio').val(response.vehiculo.SERVICIO);
+                $('#txttipouso').val(response.vehiculo.TIPO_USO);
 
-                $('#txtcolores').val(data.vehiculo.COLOR);
-                $('#txtmarcas').val(data.vehiculo.MARCA);
-                $('#txtlineas').val(data.vehiculo.LINEA);
-                $('#txtmodelo').val(data.vehiculo.MODELO);
-                $('#txttransformado').val(data.vehiculo.TRANSFORMADO==='S'?'Si':'No');
-                $('#txtrunt').val(data.vehiculo.RUNT==='S'?'Si':'No');
-                $('#txtlicenciatransito').val(data.vehiculo.LICENCIA_TRANSITO);
-                $('#txtfechamatricula').val(data.vehiculo.FECHA_MATRICULA);
+                $('#txtcolores').val(response.vehiculo.COLOR);
+                $('#txtmarcas').val(response.vehiculo.MARCA);
+                $('#txtlineas').val(response.vehiculo.LINEA);
+                $('#txtmodelo').val(response.vehiculo.MODELO);
+                $('#txttransformado').val(response.vehiculo.TRANSFORMADO==='S'?'Si':'No');
+                $('#txtrunt').val(response.vehiculo.RUNT==='S'?'Si':'No');
+                $('#txtlicenciatransito').val(response.vehiculo.LICENCIA_TRANSITO);
+                $('#txtfechamatricula').val(response.vehiculo.FECHA_MATRICULA);
 
 
-                $('#txtpaismatricula').val(data.vehiculo.PAIS_MATRICULA);
-                $('#txtdepartamentomatricula').val(data.vehiculo.DPTO_MATRICULA);
-                $('#txtmunicipiomatricula').val(data.vehiculo.MUNI_MATRICULA);
-                $('#txtciudadmatricula').val(data.vehiculo.CIUDAD_MATRICULA);
+                $('#txtpaismatricula').val(response.vehiculo.PAIS_MATRICULA);
+                $('#txtdepartamentomatricula').val(response.vehiculo.DPTO_MATRICULA);
+                $('#txtmunicipiomatricula').val(response.vehiculo.MUNI_MATRICULA);
+                $('#txtciudadmatricula').val(response.vehiculo.CIUDAD_MATRICULA);
 
-                $('#txttipodocimportacion').val(data.vehiculo.TDOC_IMP);
-                $('#txtdocumentoimportacion').val(data.vehiculo.DOCUMENTO_IMP);
-                $('#txtfechaimportacion').val(data.vehiculo.FECHA_IMP);
-                $('#txtpaisimportacion').val(data.vehiculo.PAIS_IMP);
+                $('#txttipodocimportacion').val(response.vehiculo.TDOC_IMP);
+                $('#txtdocumentoimportacion').val(response.vehiculo.DOCUMENTO_IMP);
+                $('#txtfechaimportacion').val(response.vehiculo.FECHA_IMP);
+                $('#txtpaisimportacion').val(response.vehiculo.PAIS_IMP);
 
-                $('#txtsoat').val(data.vehiculo.SOAT==='S'?'Si':'No');
-                $('#txtfechavsoat').val(data.vehiculo.FECHAV_SOAT);
-                $('#txttecnomecanica').val(data.vehiculo.TECNO_MECANICA==='S'?'Si':'No');
-                $('#txtfechavtecnomecanica').val(data.vehiculo.FECHAV_TECNO);
+                $('#txtsoat').val(response.vehiculo.SOAT==='S'?'Si':'No');
+                $('#txtfechavsoat').val(response.vehiculo.FECHAV_SOAT);
+                $('#txttecnomecanica').val(response.vehiculo.TECNO_MECANICA==='S'?'Si':'No');
+                $('#txtfechavtecnomecanica').val(response.vehiculo.FECHAV_TECNO);
 
-                $('#txtobservaciones').val(data.vehiculo.OBSERVACIONES);
+                $('#txtobservaciones').val(response.vehiculo.OBSERVACIONES);
 
-                var personas = data.personasVehiculo;
-                var contenedor = $('#personas-vehiculo'); // El contenedor principal donde se añadirán las estructuras
-                contenedor.empty(); // Limpia el contenedor antes de añadir nuevos elementos
+                var personas = response.personasVehiculo;
+                var contenedor = $('#personas-vehiculo');
+                contenedor.empty();
 
                 $.each(personas, function (index, persona) {
                     var nuevoElemento = `
@@ -77,6 +80,15 @@ $(function () {
             `;
                     contenedor.append(nuevoElemento);
                 });
+            } else if (response.status === "fail") {
+                    alert(response.message);
+                } else if (response.status === "error") {
+                    alert(response.message);
+                }
+        },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de cargar datos vehiculo: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de cargar datos vehiculo.");
             }
         });
 

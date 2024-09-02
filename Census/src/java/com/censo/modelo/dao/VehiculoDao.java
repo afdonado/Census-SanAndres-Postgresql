@@ -282,9 +282,9 @@ public class VehiculoDao extends Conexion {
         return listaDatosVehiculo;
     }
 
-    public HashMap<String, String> ConsultarDatosVehiculoById(Connection conex, long id) throws SQLException {
+    public HashMap<String, Object> ConsultarDatosVehiculoById(Connection conex, long id) throws SQLException {
 
-        HashMap<String, String> datosVehiculo = new HashMap<>();
+        HashMap<String, Object> datos = new HashMap<>();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS WHERE VEH_ID = ? ");
@@ -294,7 +294,7 @@ public class VehiculoDao extends Conexion {
             if (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                    datosVehiculo.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+                    datos.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
                 }
             }
 
@@ -312,7 +312,7 @@ public class VehiculoDao extends Conexion {
                 System.out.println("Error en cierres de ConsultarDatosVehiculoById:" + e);
             }
         }
-        return datosVehiculo;
+        return datos;
     }
 
     public List<HashMap<String, Object>> ListarVehiculos(Connection conex) throws SQLException {

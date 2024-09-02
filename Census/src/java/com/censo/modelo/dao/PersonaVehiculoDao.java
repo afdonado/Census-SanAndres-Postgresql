@@ -140,9 +140,9 @@ public class PersonaVehiculoDao extends Conexion {
         return listaPersonaVehiculo;
     }
 
-    public List ListarHashPersonasVehiculoByIdVehiculo(Connection conex, long idvehiculo) throws SQLException {
+    public List<HashMap<String, Object>> ListarHashPersonasVehiculoByIdVehiculo(Connection conex, long idvehiculo) throws SQLException {
 
-        List<HashMap> listaPersonasVehiculo = new LinkedList<>();
+        List<HashMap<String, Object>> lista = new LinkedList<>();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM VW_PERSONA_VEHICULO WHERE VEH_ID = ? ");
@@ -151,11 +151,11 @@ public class PersonaVehiculoDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<>();
+                HashMap<String, Object> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                    hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+                    hash.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
                 }
-                listaPersonasVehiculo.add(hash);
+                lista.add(hash);
             }
         } catch (SQLException e) {
             throw new SQLException("Error en ListarHashPersonasVehiculoByIdVehiculo: " + e);
@@ -171,12 +171,12 @@ public class PersonaVehiculoDao extends Conexion {
                 System.out.println("Error en cierres de ListarHashPersonasVehiculoByIdVehiculo:" + e);
             }
         }
-        return listaPersonasVehiculo;
+        return lista;
     }
 
-    public List ListarHashPersonasVehiculoActivasByIdVehiculo(Connection conex, long idvehiculo) throws SQLException {
+    public List<HashMap<String, Object>> ListarHashPersonasVehiculoActivasByIdVehiculo(Connection conex, long idvehiculo) throws SQLException {
 
-        List<HashMap> listaPersonasVehiculo = new LinkedList<>();
+        List<HashMap<String, Object>> lista = new LinkedList<>();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM VW_PERSONA_VEHICULO WHERE EST_ID = 1 AND VEH_ID = ? ");
@@ -185,11 +185,11 @@ public class PersonaVehiculoDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<>();
+                HashMap<String, Object> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }
-                listaPersonasVehiculo.add(hash);
+                lista.add(hash);
             }
         } catch (SQLException e) {
             throw new SQLException("Error en ListarHashPersonasVehiculoByIdVehiculo: " + e);
@@ -205,15 +205,17 @@ public class PersonaVehiculoDao extends Conexion {
                 System.out.println("Error en cierres de ListarHashPersonasVehiculoByIdVehiculo:" + e);
             }
         }
-        return listaPersonasVehiculo;
+        return lista;
     }
 
-    public void anularPersonaVehiculo(Connection conex, long id) throws SQLException, IOException {
+    public boolean anularPersonaVehiculo(Connection conex, long id) throws SQLException, IOException {
 
         try {
             pst = conex.prepareStatement("UPDATE CEN_PERSONA_VEHICULO SET PV_FECHAFINAL = SYSDATE, EST_ID = 2 WHERE PV_ID = ? ");
             pst.setLong(1, id);
             pst.executeUpdate();
+            
+            return true;
 
         } catch (SQLException e) {
             System.err.println("Error en anularPersonaVehiculo: " + e);
@@ -229,6 +231,8 @@ public class PersonaVehiculoDao extends Conexion {
                 System.out.println("Error en cierres de anularPersonaVehiculo:" + e);
             }
         }
+        
+        return false;
     }
     
 }

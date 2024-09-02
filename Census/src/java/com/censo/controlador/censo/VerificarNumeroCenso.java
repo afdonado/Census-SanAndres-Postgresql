@@ -29,10 +29,23 @@ public class VerificarNumeroCenso extends HttpServlet {
 
         try {
 
-            String numero = request.getParameter("numero");
-            if (numero == null || numero.isEmpty()) {
+            
+            if (request.getParameter("numero") == null || request.getParameter("numero").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "El 'numero censo' es obligatorio");
+                respuesta.put("message", "Parametro 'numero censo' no encontrado para verificar");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
+            String numero = request.getParameter("numero");
+            if (numero.length() < 6) {
+                String prefijo = "ACS";
+                numero = prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero;
+            } else {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Numero de censo no puede ser mayor a 5 digitos");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -41,11 +54,6 @@ public class VerificarNumeroCenso extends HttpServlet {
 
             CensoDao censoDao = new CensoDao();
             conex = censoDao.conectar();
-
-            if (numero.length() < 6) {
-                String prefijo = "ACS";
-                numero = prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero;
-            }
 
             CenCenso cencenso = censoDao.ConsultarCensoByNumero(conex, numero);
 

@@ -53,9 +53,9 @@ $(function () {
         }
     }
 
-    function verificarNombreUsuario(nomusuario) {
+    function verificarNombreUsuario(nombre) {
         var parametros = {
-            "nomusuario": nomusuario
+            nombre: nombre
         };
         $.ajax({
             data: parametros,

@@ -41,23 +41,173 @@ public class ModificarVehiculo extends HttpServlet {
 
         try {
 
-            VehiculoDao vehiculoDao = new VehiculoDao();
-            conex = vehiculoDao.conectar();
-            MarcaDao daoMarca = new MarcaDao();
-            LineaDao daoLinea = new LineaDao();
-            ColorDao daoColor = new ColorDao();
-            PersonaVehiculoDao daoPersonaVehiculo = new PersonaVehiculoDao();
+            //Validar parametro idvehiculo
+            if (request.getParameter("idvehiculo") == null || request.getParameter("idvehiculo").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'id vehiculo' no encontrado para modificar vehiculo");
 
-            CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
-
-            conex.setAutoCommit(false);
-
-            long idlinea = 0;
-            long idcolor = 0;
-
-            boolean registrado;
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
 
             long idvehiculo = Long.parseLong(request.getParameter("idvehiculo"));
+
+            VehiculoDao vehiculoDao = new VehiculoDao();
+            conex = vehiculoDao.conectar();
+
+            //Verificar que el vehiculo existe para modificar
+            CenVehiculo cenVehiculo = vehiculoDao.ConsultarVehiculoById(conex, idvehiculo);
+            if (cenVehiculo == null) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Vehiculo no se encuentra registrado para modificarlo");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro placa
+            if (request.getParameter("txtplaca") == null || request.getParameter("txtplaca").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'placa' no encontrado para modificar vehiculo");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro motor
+            if (request.getParameter("txtmotor") == null || request.getParameter("txtmotor").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'motor' no encontrado para modificar vehiculo");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro chasis
+            if (request.getParameter("txtchasis") == null || request.getParameter("txtchasis").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'chasis' no encontrado para modificar vehiculo");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro serie
+            if (request.getParameter("txtserie") == null || request.getParameter("txtserie").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'serie' no encontrado para modificar vehiculo");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro clase vehiculo
+            if (request.getParameter("cmbclasevehiculo") == null || request.getParameter("cmbclasevehiculo").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'clase vehiculo' no encontrado para modificar vehiculo");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro tipo servicio
+            if (request.getParameter("cmbtiposservicio") == null || request.getParameter("cmbtiposservicio").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'tipo servicio' no encontrado para modificar vehiculo");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro tipo uso
+            if (request.getParameter("cmbtiposuso") == null || request.getParameter("cmbtiposuso").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'tipo uso' no encontrado para modificar vehiculo");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro color
+            if (request.getParameter("txtcolores") == null || request.getParameter("txtcolores").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'color' no encontrado para modificar vehiculo");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            String nombreColor = request.getParameter("txtcolores").toUpperCase().trim();
+
+            //Consultar color por nombre para obtener el id
+            ColorDao colorDao = new ColorDao();
+            CenColor cencolor = colorDao.ConsultarColorByNombre(conex, nombreColor);
+            if (cencolor == null) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Color no valido");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro marca
+            if (request.getParameter("txtmarcas") == null || request.getParameter("txtmarcas").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'marca' no encontrado para modificar vehiculo");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            String nombreMarca = request.getParameter("txtmarcas").toUpperCase().trim();
+
+            //Consultar marca por nombre para obtener el id
+            MarcaDao marcaDao = new MarcaDao();
+            CenMarca cenmarca = marcaDao.ConsultarMarcaByNombre(conex, nombreMarca);
+            if (cenmarca == null) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Marca no valida");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro linea
+            if (request.getParameter("txtlineas") == null || request.getParameter("txtlineas").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'linea' no encontrado para modificar vehiculo");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Consultar linea por nombre y idmarca para obtener el id
+            String nombreLinea = request.getParameter("txtlineas").toUpperCase().trim();
+            LineaDao lineaDao = new LineaDao();
+            CenLinea cenlinea = lineaDao.ConsultarLineaByNombreIdMarca(conex, nombreLinea, cenmarca.getId());
+            if (cenlinea == null) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Linea no valida");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
             String placa = request.getParameter("txtplaca").toUpperCase().trim();
             String motor = request.getParameter("txtmotor").toUpperCase().trim();
             String chasis = request.getParameter("txtchasis").toUpperCase().trim();
@@ -65,22 +215,6 @@ public class ModificarVehiculo extends HttpServlet {
             int claseVeh = Integer.parseInt(request.getParameter("cmbclasevehiculo"));
             int tipoServicio = Integer.parseInt(request.getParameter("cmbtiposservicio"));
             int tipoUso = Integer.parseInt(request.getParameter("cmbtiposuso"));
-            String nomcolor = request.getParameter("txtcolores").toUpperCase().trim();
-            String nommarca = request.getParameter("txtmarcas").toUpperCase().trim();
-            String nomlinea = request.getParameter("txtlineas").toUpperCase().trim();
-
-            CenMarca cenmarca = daoMarca.ConsultarMarcaByNombre(conex, nommarca);
-            if (cenmarca != null) {
-                CenLinea cenlinea = daoLinea.ConsultarLineaByNombreIdMarca(conex, nomlinea, cenmarca.getId());
-                if (cenlinea != null) {
-                    idlinea = cenlinea.getId();
-                }
-            }
-
-            CenColor cencolor = daoColor.ConsultarColorByNombre(conex, nomcolor);
-            if (cencolor != null) {
-                idcolor = cencolor.getId();
-            }
 
             long modeloveh = Long.parseLong(request.getParameter("txtmodelo"));
             String transformado = request.getParameter("cmbtransformado").toUpperCase().trim();
@@ -108,6 +242,10 @@ public class ModificarVehiculo extends HttpServlet {
             String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
             int cantpersonas = (Integer.parseInt(request.getParameter("txtcantidadpersonas")));
 
+            CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
+
+            conex.setAutoCommit(false);
+
             CenVehiculo cenvehiculo = new CenVehiculo();
             cenvehiculo.setId(idvehiculo);
             cenvehiculo.setPlaca_veh(placa);
@@ -117,8 +255,8 @@ public class ModificarVehiculo extends HttpServlet {
             cenvehiculo.setClase_veh(claseVeh);
             cenvehiculo.setTipo_servicio(tipoServicio);
             cenvehiculo.setTipo_uso(tipoUso);
-            cenvehiculo.setCol_id(idcolor);
-            cenvehiculo.setLin_id(idlinea);
+            cenvehiculo.setCol_id(cencolor.getId());
+            cenvehiculo.setLin_id(cenlinea.getId());
             cenvehiculo.setModelo(modeloveh);
             cenvehiculo.setTransformado(transformado);
             cenvehiculo.setRunt(runt);
@@ -137,11 +275,13 @@ public class ModificarVehiculo extends HttpServlet {
             cenvehiculo.setFechaven_tecno(fechaVenTecnomecanica);
             cenvehiculo.setObservaciones(observaciones);
             cenvehiculo.setEstado(1);
-            registrado = vehiculoDao.modificarVehiculo(conex, cenvehiculo);
+            boolean modificado = vehiculoDao.modificarVehiculo(conex, cenvehiculo);
 
-            if (registrado) {
+            PersonaVehiculoDao personaVehiculoDao = new PersonaVehiculoDao();
 
-                List<HashMap> listapersonasVehiculo = daoPersonaVehiculo.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, cenvehiculo.getId());
+            if (modificado) {
+
+                List<HashMap<String, Object>> listapersonasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, cenvehiculo.getId());
 
                 if (!listapersonasVehiculo.isEmpty()) {
 
@@ -149,7 +289,10 @@ public class ModificarVehiculo extends HttpServlet {
                         long idperveh = Long.parseLong(hash.get("PV_ID").toString());
                         int estadoperveh = Integer.parseInt(request.getParameter("estadoperveh" + idperveh));
                         if (estadoperveh == 2) {
-                            daoPersonaVehiculo.anularPersonaVehiculo(conex, idperveh);
+                            modificado = personaVehiculoDao.anularPersonaVehiculo(conex, idperveh);
+                            if (!modificado) {
+                                break;
+                            }
                         } else {
                             CenPersonaVehiculo cenpersonavehiculo = new CenPersonaVehiculo();
                             int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona" + idperveh));
@@ -159,15 +302,19 @@ public class ModificarVehiculo extends HttpServlet {
                             cenpersonavehiculo.setPer_id(idPersona);
                             cenpersonavehiculo.setUsu_id(cenusuario.getId());
                             cenpersonavehiculo.setId(idperveh);
-                            daoPersonaVehiculo.modificarPersonaVehiculo(conex, cenpersonavehiculo);
+                            modificado = personaVehiculoDao.modificarPersonaVehiculo(conex, cenpersonavehiculo);
+                            if (!modificado) {
+                                break;
+                            }
                         }
                     }
                 }
             }
 
-            if (registrado) {
+            if (modificado) {
 
                 if (cantpersonas > 0) {
+
                     CenPersonaVehiculo cenpersonavehiculo = new CenPersonaVehiculo();
 
                     for (int i = 1; i <= cantpersonas; i++) {
@@ -180,19 +327,17 @@ public class ModificarVehiculo extends HttpServlet {
                         cenpersonavehiculo.setVeh_id(idvehiculo);
                         cenpersonavehiculo.setUsu_id(cenusuario.getId());
                         cenpersonavehiculo.setEstado(1);
-                        long idPersonaVehiculo = daoPersonaVehiculo.adicionarPersonaVehiculo(conex, cenpersonavehiculo);
+                        long idPersonaVehiculo = personaVehiculoDao.adicionarPersonaVehiculo(conex, cenpersonavehiculo);
 
-                        if (idPersonaVehiculo == 0) {
-                            registrado = false;
+                        modificado = idPersonaVehiculo != 0;
+                        if (!modificado) {
                             break;
-                        } else {
-                            registrado = true;
                         }
                     }
                 }
             }
 
-            if (registrado) {
+            if (modificado) {
                 conex.commit();
                 respuesta.put("status", "success");
                 respuesta.put("message", "Vehiculo modificado exitosamente");
@@ -223,10 +368,12 @@ public class ModificarVehiculo extends HttpServlet {
                 }
             }
         }
-        
+
         String json = new Gson().toJson(respuesta);
-        response.getWriter().write(json);
-        
+
+        response.getWriter()
+                .write(json);
+
     }
 
     @Override

@@ -437,7 +437,7 @@ public class CensoDao extends Conexion {
         return null;
     }
 
-    public void modificarCenso(Connection conex, CenCenso cencenso) throws SQLException, IOException {
+    public boolean modificarCenso(Connection conex, CenCenso cencenso) throws SQLException, IOException {
 
         try {
             pst = conex.prepareStatement("UPDATE CEN_CENSOS SET CEN_FECHA = ?,PUN_ID = ?,VEH_ID = ?,PER_ID = ?, TPER_ID = ?,CEN_NUMERO = ?,CEN_OBSERVACIONES = ? WHERE CEN_ID = ?");
@@ -450,6 +450,8 @@ public class CensoDao extends Conexion {
             pst.setString(7, cencenso.getObservaciones());
             pst.setLong(8, cencenso.getId());
             pst.executeUpdate();
+            
+            return true;
 
         } catch (SQLException e) {
             System.err.println("Error en modificarCenso");
@@ -465,11 +467,13 @@ public class CensoDao extends Conexion {
                 System.out.println("Error en cierres de modificarCenso:" + e);
             }
         }
+        
+        return false;
     }
     
-    public HashMap<String, String> ConsultarDatosCensoById(Connection conex, long id) throws SQLException {
+    public HashMap<String, Object> ConsultarDatosCensoById(Connection conex, long id) throws SQLException {
 
-        HashMap<String, String> datos = new HashMap<>();
+        HashMap<String, Object> datos = new HashMap<>();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM VW_CENSOS WHERE CEN_ID = ? ");
@@ -479,7 +483,7 @@ public class CensoDao extends Conexion {
             if (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                    datos.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+                    datos.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
                 }
             }
 

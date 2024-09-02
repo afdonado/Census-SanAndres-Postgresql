@@ -17,15 +17,28 @@ $(function () {
             url: '../../cargarDatosUsuario',
             method: 'get',
             data: {id: id},
-            success: function (data) {
-                $('#txttipodocumento').val(data.TIPO_DOCUMENTO);
-                $('#txtdocumento').val(data.NUMERO_DOCUMENTO);
-                $('#txtnombre').val(data.NOMBRE_USUARIO);
-                $('#txtperfil').val(data.PERFIL);
-                
-                $('#txtfechainicial').val(data.FECHA_INICIO);
-                $('#txtfechafinal').val(data.FECHA_FINAL);
-                $('#txtestado').val(data.ESTADO);
+            success: function (response) {
+
+                if (response.status === "success") {
+
+                    $('#txttipodocumento').val(response.TIPO_DOCUMENTO);
+                    $('#txtdocumento').val(response.NUMERO_DOCUMENTO);
+                    $('#txtnombre').val(response.NOMBRE_USUARIO);
+                    $('#txtperfil').val(response.PERFIL);
+
+                    $('#txtfechainicial').val(response.FECHA_INICIO);
+                    $('#txtfechafinal').val(response.FECHA_FINAL);
+                    $('#txtestado').val(response.ESTADO);
+                    
+                } else if (response.status === "fail") {
+                    alert(response.message);
+                } else if (response.status === "error") {
+                    alert(response.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de cargar datos usuario: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de cargar datos usuario.");
             }
         });
 

@@ -17,117 +17,125 @@ $(function () {
             url: '../../cargarDatosCenso',
             method: 'get',
             data: {id: id},
-            success: function (data) {
-                $('#txtnumerocenso').val(data.censo.NUMERO);
-                $('#txtfechacenso').val(data.censo.FECHA);
-                var puntoatencionId = data.censo.PUN_ID;
+            success: function (response) {
+
+                if (response.status === "success") {
+                    
+                    $('#txtnumerocenso').val(response.censo.NUMERO);
+                    $('#txtfechacenso').val(response.censo.FECHA);
+                    var puntoatencionId = response.censo.PUN_ID;
 
 
-                var tipoReferenciaId = 0;
-                var referencia = '';
+                    var tipoReferenciaId = 0;
+                    var referencia = '';
 
-                if (data.censo.VEH_PLACA.length > 0) {
-                    tipoReferenciaId = 1;
-                    referencia = data.censo.VEH_PLACA;
-                } else {
-                    if (data.censo.VEH_MOTOR.length > 0) {
-                        tipoReferenciaId = 2;
-                        referencia = data.censo.VEH_MOTOR;
+                    if (response.censo.VEH_PLACA.length > 0) {
+                        tipoReferenciaId = 1;
+                        referencia = response.censo.VEH_PLACA;
                     } else {
-                        if (data.censo.VEH_CHASIS.length > 0) {
-                            tipoReferenciaId = 3;
-                            referencia = data.censo.VEH_CHASIS;
+                        if (response.censo.VEH_MOTOR.length > 0) {
+                            tipoReferenciaId = 2;
+                            referencia = response.censo.VEH_MOTOR;
                         } else {
-                            if (data.censo.VEH_SERIE.length > 0) {
-                                tipoReferenciaId = 4;
-                                referencia = data.censo.VEH_SERIE;
+                            if (response.censo.VEH_CHASIS.length > 0) {
+                                tipoReferenciaId = 3;
+                                referencia = response.censo.VEH_CHASIS;
+                            } else {
+                                if (response.censo.VEH_SERIE.length > 0) {
+                                    tipoReferenciaId = 4;
+                                    referencia = response.censo.VEH_SERIE;
+                                }
                             }
                         }
                     }
+                    $('#txtreferencia').val(referencia);
+
+                    var tipoPersonaId = response.censo.TIPO_PERSONA_ID;
+                    var tipoDocumentoId = response.censo.TDOC_ID;
+                    $('#txtdocumento').val(response.censo.DOCUMENTO);
+                    $('#txtnombre').val(response.censo.NOMBRE);
+
+                    $('#txtobservaciones').val(response.censo.OBSERVACIONES);
+
+                    $('#idcenso').val(response.censo.CEN_ID);
+                    $('#idvehiculo').val(response.censo.VEH_ID);
+                    $('#idpersona').val(response.censo.PER_ID);
+                    $('#numerocenso').val(response.censo.NUMERO);
+                    $('#tiporeferencia').val(tipoReferenciaId);
+                    $('#referencia').val(referencia);
+
+                    $.ajax({
+                        url: '../../cargarPuntosAtencion',
+                        method: 'GET',
+                        success: function (data) {
+                            var select = $('#cmbpuntosatencion');
+                            select.empty();
+                            $.each(data, function (index, item) {
+                                select.append('<option value="' + item.id + '">' + item.nombre + '</option>');
+                            });
+                            select.val(puntoatencionId);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("Error en la solicitud de cargar puntos de atencion: ", textStatus, errorThrown);
+                            alert("Ocurrió un error al procesar la solicitud de cargar puntos de atencion.");
+                        }
+                    });
+
+                    $.ajax({
+                        url: '../../cargarTiposReferencia',
+                        method: 'GET',
+                        success: function (data) {
+                            var select = $('#cmbtiposreferencia');
+                            select.empty();
+                            $.each(data, function (index, item) {
+                                select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
+                            });
+                            select.val(tipoReferenciaId);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("Error en la solicitud de cargar tipos de referencia: ", textStatus, errorThrown);
+                            alert("Ocurrió un error al procesar la solicitud de cargar tipos de referencia.");
+                        }
+                    });
+
+                    $.ajax({
+                        url: '../../cargarTiposPersona',
+                        method: 'GET',
+                        success: function (data) {
+                            var select = $('#cmbtipospersona');
+                            select.empty();
+                            $.each(data, function (index, item) {
+                                select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
+                            });
+                            select.val(tipoPersonaId);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("Error en la solicitud de cargar tipos de persona: ", textStatus, errorThrown);
+                            alert("Ocurrió un error al procesar la solicitud de cargar tipos de persona.");
+                        }
+                    });
+
+                    $.ajax({
+                        url: '../../cargarTiposDocumento',
+                        method: 'GET',
+                        success: function (data) {
+                            var select = $('#cmbtiposdocumento');
+                            select.empty();
+                            $.each(data, function (index, item) {
+                                select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
+                            });
+                            select.val(tipoDocumentoId);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("Error en la solicitud de cargar tipos de documentos: ", textStatus, errorThrown);
+                            alert("Ocurrió un error al procesar la solicitud de cargar tipos de documentos.");
+                        }
+                    });
+                } else if (response.status === "fail") {
+                    alert(response.message);
+                } else if (response.status === "error") {
+                    alert(response.message);
                 }
-                $('#txtreferencia').val(referencia);
-
-                var tipoPersonaId = data.censo.TIPO_PERSONA_ID;
-                var tipoDocumentoId = data.censo.TDOC_ID;
-                $('#txtdocumento').val(data.censo.DOCUMENTO);
-                $('#txtnombre').val(data.censo.NOMBRE);
-
-                $('#txtobservaciones').val(data.censo.OBSERVACIONES);
-
-                $('#idcenso').val(data.censo.CEN_ID);
-                $('#idvehiculo').val(data.censo.VEH_ID);
-                $('#idpersona').val(data.censo.PER_ID);
-                $('#numerocenso').val(data.censo.NUMERO);
-                $('#tiporeferencia').val(tipoReferenciaId);
-                $('#referencia').val(referencia);
-
-                $.ajax({
-                    url: '../../cargarPuntosAtencion',
-                    method: 'GET',
-                    success: function (data) {
-                        var select = $('#cmbpuntosatencion');
-                        select.empty();
-                        $.each(data, function (index, item) {
-                            select.append('<option value="' + item.id + '">' + item.nombre + '</option>');
-                        });
-                        select.val(puntoatencionId);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.error("Error en la solicitud de cargar puntos de atencion: ", textStatus, errorThrown);
-                        alert("Ocurrió un error al procesar la solicitud de cargar puntos de atencion.");
-                    }
-                });
-
-                $.ajax({
-                    url: '../../cargarTiposReferencia',
-                    method: 'GET',
-                    success: function (data) {
-                        var select = $('#cmbtiposreferencia');
-                        select.empty();
-                        $.each(data, function (index, item) {
-                            select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
-                        });
-                        select.val(tipoReferenciaId);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.error("Error en la solicitud de cargar tipos de referencia: ", textStatus, errorThrown);
-                        alert("Ocurrió un error al procesar la solicitud de cargar tipos de referencia.");
-                    }
-                });
-
-                $.ajax({
-                    url: '../../cargarTiposPersona',
-                    method: 'GET',
-                    success: function (data) {
-                        var select = $('#cmbtipospersona');
-                        select.empty();
-                        $.each(data, function (index, item) {
-                            select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
-                        });
-                        select.val(tipoPersonaId);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.error("Error en la solicitud de cargar tipos de persona: ", textStatus, errorThrown);
-                        alert("Ocurrió un error al procesar la solicitud de cargar tipos de persona.");
-                    }
-                });
-
-                $.ajax({
-                    url: '../../cargarTiposDocumento',
-                    method: 'GET',
-                    success: function (data) {
-                        var select = $('#cmbtiposdocumento');
-                        select.empty();
-                        $.each(data, function (index, item) {
-                            select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
-                        });
-                        select.val(tipoDocumentoId);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.error("Error en la solicitud de cargar tipos de documentos: ", textStatus, errorThrown);
-                        alert("Ocurrió un error al procesar la solicitud de cargar tipos de documentos.");
-                    }
-                });
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error("Error en la solicitud de cargar datos censo: ", textStatus, errorThrown);
@@ -171,7 +179,7 @@ $(function () {
             $('#frmmodificarcenso').trigger("submit");
         }
     });
-    
+
     $("#frmmodificarcenso").submit(function (event) {
         event.preventDefault();
 

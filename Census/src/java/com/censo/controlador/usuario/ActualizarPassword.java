@@ -1,10 +1,13 @@
 package com.censo.controlador.usuario;
 
 import com.censo.modelo.dao.UsuarioDao;
+import com.censo.modelo.persistencia.CenUsuario;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,38 +20,87 @@ public class ActualizarPassword extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         Connection conex = null;
 
+        Map<String, String> respuesta = new HashMap<>();
+
         try {
 
-            if (!request.getParameter("idusuario").equals("") && !request.getParameter("password").equals("")) {
-                
-                UsuarioDao usuarioDao = new UsuarioDao();
-                conex = usuarioDao.conectar();
-                conex.setAutoCommit(false);
+            if (request.getParameter("idusuario") == null || request.getParameter("idusuario").isEmpty()){ 
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'id usuario' no encontrado para actualizar password");
 
-                String nuevopassword = DigestUtils.md5Hex(request.getParameter("password"));
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
+            long idusuario = Long.parseLong(request.getParameter("idusuario"));
+            
+            UsuarioDao usuarioDao = new UsuarioDao();
+            conex = usuarioDao.conectar();
+            
+            //Verificar que el usuario existe para modificar
+            CenUsuario cenusuario = usuarioDao.ConsultarUsuarioById(conex, idusuario);
+            if (cenusuario == null) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Usuario no se encuentra registrado para actualizar el password");
 
-                long idusuario = Long.parseLong(request.getParameter("idusuario"));
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
+            //Validar parametro password
+            if (request.getParameter("txtpassword") == null || request.getParameter("txtpassword").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'password' no encontrado para actualizar password");
 
-                usuarioDao.restaurarPasswordUsuario(conex, idusuario, nuevopassword);
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
 
+            //Validar parametro repetir password
+            if (request.getParameter("txtrepetirpassword") == null || request.getParameter("txtrepetirpassword").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'repetir password' no encontrado para actualizar password");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            String password = DigestUtils.md5Hex(request.getParameter("txtpassword"));
+            String repetirpassword = DigestUtils.md5Hex(request.getParameter("txtrepetirpassword"));
+
+            //Verificar que los password coincidan
+            if (!password.equals(repetirpassword)) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Los password no coinciden");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            conex.setAutoCommit(false);
+
+            boolean modificado = usuarioDao.restaurarPasswordUsuario(conex, idusuario, password);
+
+            if (modificado) {
                 conex.commit();
-
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('Password actualizado');");
-                out.println("location='cerrarSesion';");
-                out.println("</script>");
-
+                respuesta.put("status", "success");
+                respuesta.put("message", "Password actualizado exitosamente");
+                respuesta.put("id", String.valueOf(idusuario));
             } else {
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('Datos necesarios no proporcionados');");
-                out.println("location='jsp/Inicio.jsp';");
-                out.println("</script>");
+                conex.rollback();
+                respuesta.put("status", "fail");
+                respuesta.put("message", "Password no actualizado");
             }
 
         } catch (SQLException e) {
@@ -59,10 +111,8 @@ public class ActualizarPassword extends HttpServlet {
                     rollbackEx.printStackTrace();
                 }
             }
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al actualizar el password');");
-            out.println("location='jsp/Inicio.jsp';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al actualizar el password");
             e.printStackTrace();
         } finally {
             if (conex != null) {
@@ -72,20 +122,23 @@ public class ActualizarPassword extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
+
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
+
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            processRequest(request, response);
+        processRequest(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            processRequest(request, response);
+        processRequest(request, response);
     }
 
 }

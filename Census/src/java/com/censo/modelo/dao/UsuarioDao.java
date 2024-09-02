@@ -265,7 +265,7 @@ public class UsuarioDao extends Conexion {
         return null;
     }
 
-    public void modificarUsuario(Connection conex, CenUsuario cenusuario) throws SQLException, IOException {
+    public boolean modificarUsuario(Connection conex, CenUsuario cenusuario) throws SQLException, IOException {
 
         try {
             pst = conex.prepareStatement("UPDATE CEN_USUARIOS SET USU_PASS = ?,USU_FECHAFINAL = ?,EST_ID = ? WHERE USU_ID = ? ");
@@ -274,6 +274,8 @@ public class UsuarioDao extends Conexion {
             pst.setInt(3, cenusuario.getEstado());
             pst.setLong(4, cenusuario.getId());
             pst.executeUpdate();
+            
+            return true;
 
         } catch (SQLException e) {
             System.err.println("Error en modificarUsuario: " + e);
@@ -289,19 +291,22 @@ public class UsuarioDao extends Conexion {
                 System.out.println("Error en cierres de modificarUsuario:" + e);
             }
         }
+        
+        return false;
     }
 
-    public void restaurarPasswordUsuario(Connection conex, long id, String newpassword) throws SQLException, IOException {
+    public boolean restaurarPasswordUsuario(Connection conex, long id, String newpassword) throws SQLException, IOException {
 
         try {
             pst = conex.prepareStatement("UPDATE CEN_USUARIOS SET USU_PASS = ? WHERE USU_ID = ? ");
             pst.setString(1, newpassword);
             pst.setLong(2, id);
             pst.executeUpdate();
+            
+            return true;
 
         } catch (SQLException e) {
             System.err.println("Error en restaurarPasswordUsuario: " + e);
-            throw e;
         } finally {
             try {
                 if (pst != null) {
@@ -311,6 +316,7 @@ public class UsuarioDao extends Conexion {
                 System.out.println("Error en cierres de restaurarPasswordUsuario:" + e);
             }
         }
+        return false;
     }
 
     public List ListarUsuariosByNombre(Connection conex, String nombre) throws SQLException {
@@ -536,7 +542,7 @@ public class UsuarioDao extends Conexion {
         return 0;
     }
 
-    public void modificarPerfilUsuario(Connection conex, CenPerfilUsuario cenperfilusuario) throws SQLException, IOException {
+    public boolean modificarPerfilUsuario(Connection conex, CenPerfilUsuario cenperfilusuario) throws SQLException, IOException {
 
         try {
             pst = conex.prepareStatement("UPDATE CEN_PERFIL_USUARIO SET PEF_ID = ?, PFU_FECHAFINAL = ?, EST_ID = ? WHERE PFU_ID = ? ");
@@ -545,6 +551,8 @@ public class UsuarioDao extends Conexion {
             pst.setInt(3, cenperfilusuario.getEstado());
             pst.setLong(4, cenperfilusuario.getId());
             pst.executeUpdate();
+            
+            return true;
 
         } catch (SQLException e) {
             System.err.println("Error en modificarPerfilUsuario: " + e);
@@ -560,12 +568,14 @@ public class UsuarioDao extends Conexion {
                 System.out.println("Error en cierres de modificarPerfilUsuario:" + e);
             }
         }
+        
+        return false;
     }
     
     
-    public HashMap<String, String> ConsultarDatosUsuarioById(Connection conex, long id) throws SQLException {
+    public HashMap<String, Object> ConsultarDatosUsuarioById(Connection conex, long id) throws SQLException {
 
-        HashMap<String, String> datos = new HashMap<>();
+        HashMap<String, Object> datos = new HashMap<>();
 
         try {
             pst = conex.prepareStatement("SELECT USU_ID, NOMBRE_USUARIO,TO_CHAR(FECHA_INICIO,'dd/MM/yyyy') FECHA_INICIO,NVL(TO_CHAR(FECHA_FINAL,'dd/MM/yyyy'),' ') FECHA_FINAL,"
@@ -598,9 +608,9 @@ public class UsuarioDao extends Conexion {
         return datos;
     }
     
-    public List ListarUsuarios(Connection conex) throws SQLException {
+    public List<HashMap<String, Object>> ListarUsuarios(Connection conex) throws SQLException {
 
-        List<HashMap> lista = new LinkedList<>();
+        List<HashMap<String, Object>> lista = new LinkedList<>();
 
         try {
             pst = conex.prepareStatement("SELECT USU_ID, NOMBRE_USUARIO,TO_CHAR(FECHA_INICIO,'dd/MM/yyyy') FECHA_INICIO,NVL(TO_CHAR(FECHA_FINAL,'dd/MM/yyyy'),' ') FECHA_FINAL, "
@@ -610,7 +620,7 @@ public class UsuarioDao extends Conexion {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<>();
+                HashMap<String, Object> hash = new HashMap<>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
                 }

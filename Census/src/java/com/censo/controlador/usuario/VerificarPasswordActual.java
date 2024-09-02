@@ -2,10 +2,12 @@ package com.censo.controlador.usuario;
 
 import com.censo.modelo.dao.UsuarioDao;
 import com.censo.modelo.persistencia.CenUsuario;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,39 +20,63 @@ public class VerificarPasswordActual extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        PrintWriter out = response.getWriter();
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         Connection conex = null;
 
-        try {
-            
-            if (!request.getParameter("idusuario").equals("") && !request.getParameter("passwordactual").equals("")) {
-                
-                UsuarioDao usuarioDao = new UsuarioDao();
-                conex = usuarioDao.conectar();
-                
-                long idusuario = Long.parseLong(request.getParameter("idusuario"));
+        Map<String, String> respuesta = new HashMap<>();
 
-                CenUsuario cenusuario = usuarioDao.ConsultarUsuarioById(conex, idusuario);
-                if (cenusuario != null) {
-                    String passwordactual = DigestUtils.md5Hex(request.getParameter("passwordactual"));
-                    if (passwordactual.equals(cenusuario.getPassword())) {
-                        out.println("si");
-                    } else {
-                        out.println("no");
-                    }
-                } else {
-                    out.println("no");
-                }
+        try {
+
+            if (request.getParameter("idusuario") == null || request.getParameter("idusuario").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'id usuario' no encontrado para verificar password actual");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            long idusuario = Long.parseLong(request.getParameter("idusuario"));
+
+            UsuarioDao usuarioDao = new UsuarioDao();
+            conex = usuarioDao.conectar();
+
+            //Verificar que el usuario existe
+            CenUsuario cenusuario = usuarioDao.ConsultarUsuarioById(conex, idusuario);
+            if (cenusuario == null) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Usuario no se encuentra registrado para verificar el password actual");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro password actual
+            if (request.getParameter("txtpasswordactual") == null || request.getParameter("txtpasswordactual").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'password' no encontrado para verificar password actual");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            String passwordactual = DigestUtils.md5Hex(request.getParameter("passwordactual"));
+
+            if (passwordactual.equals(cenusuario.getPassword())) {
+                respuesta.put("status", "success");
+                respuesta.put("message", "Password actual valido");
             } else {
-                out.println("no");
+                respuesta.put("status", "fail");
+                respuesta.put("message", "Password actual no valido");
             }
         } catch (SQLException e) {
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al verificar password actual');");
-            out.println("location='jsp/Usuarios/actualizarPassword.jsp';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al verificar password actual");
             e.printStackTrace();
         } finally {
             if (conex != null) {
@@ -60,7 +86,6 @@ public class VerificarPasswordActual extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
     }
 

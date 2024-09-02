@@ -33,7 +33,7 @@ public class VerificarVehiculo extends HttpServlet {
 
             if (request.getParameter("tiporeferencia") == null || request.getParameter("tiporeferencia").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "El 'tipo de referencia' es obligatorio");
+                respuesta.put("message", "Parametro 'tipo de referencia' no encontrado para verificar vehiculo");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -42,7 +42,7 @@ public class VerificarVehiculo extends HttpServlet {
 
             if (request.getParameter("valorreferencia") == null || request.getParameter("valorreferencia").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "El 'numero de referencia' es obligatorio");
+                respuesta.put("message", "Parametro 'numero de referencia' no encontrado para verificar vehiculo");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -51,7 +51,7 @@ public class VerificarVehiculo extends HttpServlet {
 
             if (request.getParameter("opcion") == null || request.getParameter("opcion").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "El parametro 'opcion' es obligatorio");
+                respuesta.put("message", "Parametro 'opcion' no encontrado para verificar vehiculo");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);

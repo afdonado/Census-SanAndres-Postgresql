@@ -4,7 +4,6 @@ import com.censo.modelo.dao.PersonaVehiculoDao;
 import com.censo.modelo.dao.VehiculoDao;
 import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -22,45 +21,45 @@ public class CargarDatosVehiculo extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         Connection conex = null;
 
+        Map<String, Object> respuesta = new HashMap<>();
+
         try {
 
-            if (!request.getParameter("id").equals("")) {
+            if (request.getParameter("id").equals("")) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'id' no encontrado para cargar datos del vehiculo");
 
-                VehiculoDao vehiculoDao = new VehiculoDao();
-                conex = vehiculoDao.conectar();
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
+            long idvehiculo = Long.parseLong(request.getParameter("id"));
 
-                long idvehiculo = Long.parseLong(request.getParameter("id"));
+            VehiculoDao vehiculoDao = new VehiculoDao();
+            conex = vehiculoDao.conectar();
 
-                HashMap<String, String> datosVehiculo = vehiculoDao.ConsultarDatosVehiculoById(conex, idvehiculo);
+            HashMap<String, Object> datosVehiculo = vehiculoDao.ConsultarDatosVehiculoById(conex, idvehiculo);
 
-                if (!datosVehiculo.isEmpty()) {
-
-                    PersonaVehiculoDao personaVehiculoDao = new PersonaVehiculoDao();
-                    List<HashMap> personasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, idvehiculo);
-
-                    Map<String, Object> responseMap = new HashMap<>();
-                    responseMap.put("vehiculo", datosVehiculo);
-                    responseMap.put("personasVehiculo", personasVehiculo);
-
-                    Gson gson = new Gson();
-                    String json = gson.toJson(responseMap);
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
-                    response.getWriter().write(json);
-
-                }
+            if (!datosVehiculo.isEmpty()) {
+                PersonaVehiculoDao personaVehiculoDao = new PersonaVehiculoDao();
+                List<HashMap<String, Object>> personasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, idvehiculo);
+                respuesta.put("status", "success");
+                respuesta.put("vehiculo", datosVehiculo);
+                respuesta.put("personasVehiculo", personasVehiculo);
+            } else {
+                respuesta.put("respuesta", "fail");
+                respuesta.put("message", "Vehiculo no se encuentra registrado");
             }
 
         } catch (SQLException e) {
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al listar los vehiculos');");
-            out.println("location='dashboard';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al cargar los datos del vehiculo");
             e.printStackTrace();
 
         } finally {
@@ -71,8 +70,10 @@ public class CargarDatosVehiculo extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
+        
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override

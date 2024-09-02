@@ -3,10 +3,10 @@ package com.censo.controlador.usuario;
 import com.censo.modelo.dao.UsuarioDao;
 import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,38 +19,42 @@ public class CargarDatosUsuario extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         Connection conex = null;
+
+        Map<String, Object> respuesta = new HashMap<>();
 
         try {
 
             if (!request.getParameter("id").equals("")) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'id' no encontrado para cargar datos del usuario");
 
-                UsuarioDao usuarioDao = new UsuarioDao();
-                conex = usuarioDao.conectar();
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
+            long idusuario = Long.parseLong(request.getParameter("id"));
 
-                long idusuario = Long.parseLong(request.getParameter("id"));
+            UsuarioDao usuarioDao = new UsuarioDao();
+            conex = usuarioDao.conectar();
 
-                HashMap<String, String> datosUsuario = usuarioDao.ConsultarDatosUsuarioById(conex, idusuario);
+            HashMap<String, Object> datos = usuarioDao.ConsultarDatosUsuarioById(conex, idusuario);
 
-                if (!datosUsuario.isEmpty()) {
-
-                    Gson gson = new Gson();
-                    String json = gson.toJson(datosUsuario);
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
-                    response.getWriter().write(json);
-
-                }
+            if (!datos.isEmpty()) {
+                respuesta.put("status", "success");
+                respuesta.put("censo", datos);
+            } else {
+                respuesta.put("respuesta", "fail");
+                respuesta.put("message", "Usuario no se encuentra registrado");
             }
 
         } catch (SQLException e) {
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al consultar los datos del usuario');");
-            out.println("location='dashboard';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al cargar los datos del usuario");
             e.printStackTrace();
 
         } finally {
@@ -61,8 +65,10 @@ public class CargarDatosUsuario extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
+        
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override

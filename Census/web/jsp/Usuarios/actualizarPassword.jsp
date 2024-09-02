@@ -58,19 +58,19 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <input type="password" class="form-control form-control-user" 
-                                                   id="passwordactual" name="passwordactual" placeholder="Contraseña Actual" 
+                                                   id="txtpasswordactual" name="txtpasswordactual" placeholder="Contraseña Actual" 
                                                    maxlength="20" required="true">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <input type="password" class="form-control form-control-user"
-                                                   id="password" name="password" placeholder="Nueva Contraseña" 
+                                                   id="txtpassword" name="txtpassword" placeholder="Nueva Contraseña" 
                                                    maxlength="20" required="true">
                                         </div>
                                         <div class="col-sm-6">
                                             <input type="password" class="form-control form-control-user"
-                                                   id="repetirpassword" name="repetirpassword" placeholder="Repetir Nueva Contraseña" 
+                                                   id="txtrepetirpassword" name="txtrepetirpassword" placeholder="Repetir Nueva Contraseña" 
                                                    maxlength="20" required="true">
                                         </div>
                                     </div>

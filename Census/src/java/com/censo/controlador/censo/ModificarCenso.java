@@ -30,69 +30,149 @@ public class ModificarCenso extends HttpServlet {
         Map<String, String> respuesta = new HashMap<>();
 
         try {
+
+            if (request.getParameter("idcenso") == null || request.getParameter("idcenso").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'idcenso' no encontrado para modificar censo");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
             CensoDao censoDao = new CensoDao();
             conex = censoDao.conectar();
-            conex.setAutoCommit(false);
-
-            boolean sw;
-
-            Date fechaActual = new java.sql.Date(new java.util.Date().getTime());
 
             long idcenso = Long.parseLong(request.getParameter("idcenso"));
+            CenCenso cencenso = censoDao.ConsultarCensoById(conex, idcenso);
+            if (cencenso == null) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Censo no se encuentra registrado para modificarlo");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            if (request.getParameter("txtnumerocenso") == null || request.getParameter("txtnumerocenso").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'numero censo' no encontrado para modificar censo");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
 
             String numero = request.getParameter("txtnumerocenso").toUpperCase().trim();
             if (numero.length() < 6) {
                 String prefijo = "ACS";
                 numero = prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero;
+            } else {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Numero de censo no puede ser mayor a 5 digitos");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
             }
 
-            CenCenso cencenso = censoDao.ConsultarCensoById(conex, idcenso);
-            if (cencenso != null) {
-                if (cencenso.getNumero().equals(numero)) {
-                    sw = true;
-                } else {
-                    cencenso = censoDao.ConsultarCensoByNumero(conex, numero);
-                    if (cencenso != null) {
-                        sw = false;
-                    } else {
-                        cencenso = censoDao.ConsultarCensoById(conex, idcenso);
-                        sw = true;
-                    }
+            if (!cencenso.getNumero().equals(numero)) {
+                CenCenso cencensonew = censoDao.ConsultarCensoByNumero(conex, numero);
+                if (cencensonew != null) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Numero de censo no valido");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
                 }
+            }
 
-                if (sw) {
-                    String hora = new java.text.SimpleDateFormat("HHmm").format(fechaActual);
-                    int puntoAtencion = Integer.parseInt(request.getParameter("cmbpuntosatencion"));
-                    long idvehiculo = Long.parseLong(request.getParameter("idvehiculo"));
-                    long idpersona = Long.parseLong(request.getParameter("idpersona"));
-                    int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona"));
-                    String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
-                    Date fechaCenso = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechacenso")).getTime());
+            if (request.getParameter("txtfechacenso") == null || request.getParameter("txtfechacenso").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'observaciones' no encontrado");
 
-                    cencenso.setFecha(fechaCenso);
-                    cencenso.setHora(hora);
-                    cencenso.setPun_id(puntoAtencion);
-                    cencenso.setVeh_id(idvehiculo);
-                    cencenso.setPer_id(idpersona);
-                    cencenso.setTper_id(tipoPersona);
-                    cencenso.setNumero(numero);
-                    cencenso.setObservaciones(observaciones);
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
 
-                    censoDao.modificarCenso(conex, cencenso);
-                    conex.commit();
+            if (request.getParameter("cmbpuntosatencion") == null || request.getParameter("cmbpuntosatencion").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'punto de atencion' no encontrado");
 
-                    respuesta.put("status", "success");
-                    respuesta.put("message", "Censo modificado exitosamente");
-                    respuesta.put("id", String.valueOf(idcenso));
-                } else {
-                    conex.rollback();
-                    respuesta.put("status", "fail");
-                    respuesta.put("message", "Censo no modificado");
-                }
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            if (request.getParameter("idvehiculo") == null || request.getParameter("idvehiculo").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'id vehiculo' no encontrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            if (request.getParameter("idpersona") == null || request.getParameter("idpersona").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'id persona' no encontrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            if (request.getParameter("cmbtipospersona") == null || request.getParameter("cmbtipospersona").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'tipo persona' no encontrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            if (request.getParameter("txtobservaciones") == null || request.getParameter("cmbtipospersona").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'observaciones' no encontrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            Date fechaCenso = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechacenso")).getTime());
+            Date fechaActual = new java.sql.Date(new java.util.Date().getTime());
+            String hora = new java.text.SimpleDateFormat("HHmm").format(fechaActual);
+            int puntoAtencion = Integer.parseInt(request.getParameter("cmbpuntosatencion"));
+            long idvehiculo = Long.parseLong(request.getParameter("idvehiculo"));
+            long idpersona = Long.parseLong(request.getParameter("idpersona"));
+            int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona"));
+            String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
+
+            conex.setAutoCommit(false);
+
+            cencenso.setFecha(fechaCenso);
+            cencenso.setHora(hora);
+            cencenso.setPun_id(puntoAtencion);
+            cencenso.setVeh_id(idvehiculo);
+            cencenso.setPer_id(idpersona);
+            cencenso.setTper_id(tipoPersona);
+            cencenso.setNumero(numero);
+            cencenso.setObservaciones(observaciones);
+
+            boolean modificado = censoDao.modificarCenso(conex, cencenso);
+
+            if (modificado) {
+                conex.commit();
+                respuesta.put("status", "success");
+                respuesta.put("message", "Censo modificado exitosamente");
+                respuesta.put("id", String.valueOf(idcenso));
             } else {
                 conex.rollback();
                 respuesta.put("status", "fail");
-                respuesta.put("message", "Censo no se encuentra registrado");
+                respuesta.put("message", "Censo no modificado");
             }
 
         } catch (SQLException | ParseException e) {
@@ -115,7 +195,7 @@ public class ModificarCenso extends HttpServlet {
                 }
             }
         }
-        
+
         String json = new Gson().toJson(respuesta);
         response.getWriter().write(json);
     }

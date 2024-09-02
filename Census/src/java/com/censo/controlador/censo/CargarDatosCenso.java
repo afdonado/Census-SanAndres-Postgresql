@@ -4,7 +4,6 @@ import com.censo.modelo.dao.CensoDao;
 import com.censo.modelo.dao.PersonaVehiculoDao;
 import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -22,45 +21,45 @@ public class CargarDatosCenso extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         Connection conex = null;
 
+        Map<String, Object> respuesta = new HashMap<>();
+
         try {
 
-            if (!request.getParameter("id").equals("")) {
+            if (request.getParameter("id").equals("")) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'id' no encontrado para cargar datos del censo");
 
-                CensoDao censoDao = new CensoDao();
-                conex = censoDao.conectar();
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
+            long idcenso = Long.parseLong(request.getParameter("id"));
 
-                long idcenso = Long.parseLong(request.getParameter("id"));
+            CensoDao censoDao = new CensoDao();
+            conex = censoDao.conectar();
 
-                HashMap<String, String> datosCenso = censoDao.ConsultarDatosCensoById(conex, idcenso);
+            HashMap<String, Object> datosCenso = censoDao.ConsultarDatosCensoById(conex, idcenso);
 
-                if (!datosCenso.isEmpty()) {
-
-                    PersonaVehiculoDao personaVehiculoDao = new PersonaVehiculoDao();
-                    List<HashMap> personasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, Long.parseLong(datosCenso.get("VEH_ID")));
-
-                    Map<String, Object> responseMap = new HashMap<>();
-                    responseMap.put("censo", datosCenso);
-                    responseMap.put("personasVehiculo", personasVehiculo);
-
-                    Gson gson = new Gson();
-                    String json = gson.toJson(responseMap);
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
-                    response.getWriter().write(json);
-
-                }
+            if (!datosCenso.isEmpty()) {
+                PersonaVehiculoDao personaVehiculoDao = new PersonaVehiculoDao();
+                List<HashMap<String, Object>> personasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, Long.parseLong(datosCenso."VEH_ID"));
+                respuesta.put("status", "success");
+                respuesta.put("censo", datosCenso);
+                respuesta.put("personasVehiculo", personasVehiculo);
+            } else {
+                respuesta.put("respuesta", "fail");
+                respuesta.put("message", "Censo no se encuentra registrado");
             }
 
         } catch (SQLException e) {
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al consultar los datos del censo');");
-            out.println("location='dashboard';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al cargar los datos del censo");
             e.printStackTrace();
 
         } finally {
@@ -71,8 +70,10 @@ public class CargarDatosCenso extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
+
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override

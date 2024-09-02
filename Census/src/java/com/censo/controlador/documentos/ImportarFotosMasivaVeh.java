@@ -4,17 +4,18 @@ import com.censo.modelo.dao.CensoDao;
 import com.censo.modelo.dao.DocumentoDigitalizadoDao;
 import com.censo.modelo.persistencia.CenDocumentosDigitalizado;
 import com.censo.modelo.persistencia.CenUsuario;
+import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,12 +28,15 @@ public class ImportarFotosMasivaVeh extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         Connection conex = null;
 
+        Map<String, Object> respuesta = new HashMap<>();
+
         try {
+            
             DocumentoDigitalizadoDao documentoDigitalizadoDao = new DocumentoDigitalizadoDao();
             conex = documentoDigitalizadoDao.conectar();
             
@@ -41,11 +45,11 @@ public class ImportarFotosMasivaVeh extends HttpServlet {
             long iddocumento = 0;
             long idcenso = 0;
 
-            List<HashMap> listaCensos = censoDao.ListarCensos(conex);
+            List<HashMap<String, Object>> lista = censoDao.ListarCensos(conex);
 
-            if (!listaCensos.isEmpty()) {
+            if (!lista.isEmpty()) {
                 conex.setAutoCommit(false);
-                for (HashMap hash : listaCensos) {
+                for (HashMap hash : lista) {
                     try {
                         idcenso = Long.parseLong(hash.get("CEN_ID").toString());
                         String numerocenso = hash.get("NUMERO").toString().trim();
@@ -96,20 +100,22 @@ public class ImportarFotosMasivaVeh extends HttpServlet {
                 conex.commit();
 
                 if (iddocumento > 0) {
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Documentos Guardados');");
-                    out.println("location='jsp/Documentos/ListarDocumentos.jsp?idcenso=" + idcenso + "';");
-                    out.println("</script>");
+                    conex.commit();
+                    respuesta.put("status", "success");
+                    respuesta.put("message", "Documentos guardados exitosamente");
+                    //out.println("location='jsp/Documentos/ListarDocumentos.jsp?idcenso=" + idcenso + "';");
                 } else {
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Documentos no Guardados');");
-                    out.println("location='jsp/Documentos/ListarDocumentos.jsp?idcenso=" + idcenso + "';");
-                    out.println("</script>");
+                    conex.rollback();
+                    respuesta.put("respuesta", "fail");
+                    respuesta.put("message", "Documentos no guardados");
                 }
 
+            } else {
+                respuesta.put("respuesta", "fail");
+                respuesta.put("message", "No se encontraros registros de censos");
             }
 
-        } catch (SQLException ex) {
+        } catch (SQLException e) {
             if (conex != null) {
                 try {
                     conex.rollback();
@@ -117,11 +123,13 @@ public class ImportarFotosMasivaVeh extends HttpServlet {
                     rollbackEx.printStackTrace();
                 }
             }
-            System.out.println("Error --> " + ex.getMessage());
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('No se cargaron los documentos seleccionados');");
-            out.println("location='jsp/Documentos/CargarDocumentos.jsp';");
-            out.println("</script>");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            respuesta.put("status", "Error al cargar los documentos del censo");
+            String jsonError = new Gson().toJson(respuesta);
+            response.getWriter().write(jsonError);
+            e.printStackTrace();
+            //out.println("location='jsp/Documentos/CargarDocumentos.jsp';");
         } finally {
             if (conex != null) {
                 try {
@@ -130,8 +138,9 @@ public class ImportarFotosMasivaVeh extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override

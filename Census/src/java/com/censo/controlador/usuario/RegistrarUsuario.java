@@ -3,10 +3,12 @@ package com.censo.controlador.usuario;
 import com.censo.modelo.dao.UsuarioDao;
 import com.censo.modelo.persistencia.CenPerfilUsuario;
 import com.censo.modelo.persistencia.CenUsuario;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,74 +22,143 @@ public class RegistrarUsuario extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         Connection conex = null;
 
+        Map<String, String> respuesta = new HashMap<>();
+
         try {
 
-            if (request.getParameter("txtnombre") != null && request.getParameter("txtpassword") != null) {
+            UsuarioDao usuarioDao = new UsuarioDao();
+            conex = usuarioDao.conectar();
 
-                String nombre = request.getParameter("txtnombre").toUpperCase().trim();
-                
-                String tipodocumento = request.getParameter("cmbtiposdocumento");
-                String documento = request.getParameter("txtdocumento").toUpperCase().trim();
-                String password = DigestUtils.md5Hex(request.getParameter("txtpassword"));
-                String repetirpassword = DigestUtils.md5Hex(request.getParameter("txtrepetirpassword"));
-                int tipoperfil = Integer.parseInt(request.getParameter("cmbperfiles"));
+            //Validar parametro nombre
+            if (request.getParameter("txtnombre") == null || request.getParameter("txtnombre").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'nombre' no encontrado para registrar usuario");
 
-                if (password.equals(repetirpassword)) {
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
 
-                    UsuarioDao usuarioDao = new UsuarioDao();
-                    conex = usuarioDao.conectar();
-                    conex.setAutoCommit(false);
+            String nombre = request.getParameter("txtnombre").toUpperCase().trim();
 
-                    CenPerfilUsuario cenperfilusuario = new CenPerfilUsuario();
+            //Verificar que el usuario no existe para registrarlo
+            CenUsuario cenusuario = usuarioDao.ConsultarUsuarioByNombre(conex, nombre);
+            if (cenusuario == null) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Nombre de usuario no valido para registrarlo");
 
-                    boolean registrado;
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
 
-                    CenUsuario cenusuario = new CenUsuario();
-                    cenusuario.setNombre(nombre);
-                    cenusuario.setTipodocumento(Integer.parseInt(tipodocumento));
-                    cenusuario.setNumerodocumento(documento);
-                    cenusuario.setPassword(password);
-                    cenusuario.setEstado(1);
+            //Validar parametro password
+            if (request.getParameter("txtpassword") == null || request.getParameter("txtpassword").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'password' no encontrado para registrar usuario");
 
-                    long idUsuario = usuarioDao.adicionarUsuario(conex, cenusuario);
-                    if (idUsuario > 0) {
-                        cenperfilusuario.setPef_id(tipoperfil);
-                        cenperfilusuario.setUsu_id(idUsuario);
-                        cenperfilusuario.setEstado(1);
-                        long idperfusu = usuarioDao.adicionarPerfilUsuario(conex, cenperfilusuario);
-                        registrado = idperfusu > 0;
-                    } else {
-                        registrado = false;
-                    }
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
 
-                    if (registrado) {
-                        conex.commit();
-                        out.println("<script type=\"text/javascript\">");
-                        out.println("alert('Usuario Registrado');");
-                        out.println("location='jsp/Usuarios/verUsuario.jsp?opcion=1&id="+idUsuario+"';");
-                        out.println("</script>");
-                    } else {
-                        conex.rollback();
-                        out.println("<script type=\"text/javascript\">");
-                        out.println("alert('Usuario no Registrado');");
-                        out.println("location='jsp/Usuarios/registrarUsuario.jsp';");
-                        out.println("</script>");
-                    }
+            //Validar parametro repetir password
+            if (request.getParameter("txtrepetirpassword") == null || request.getParameter("txtrepetirpassword").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'repetir password' no encontrado para registrar usuario");
 
-                } else {
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Los password no coinciden');");
-                    out.println("</script>");
-                }
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            String password = DigestUtils.md5Hex(request.getParameter("txtpassword"));
+            String repetirpassword = DigestUtils.md5Hex(request.getParameter("txtrepetirpassword"));
+
+            //Verificar que los password coincidan
+            if (!password.equals(repetirpassword)) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Los password no coinciden");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro tipo documento
+            if (request.getParameter("cmbtiposdocumento") == null || request.getParameter("cmbtiposdocumento").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'tipo documento' no encontrado para modificar usuario");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
+            //Validar parametro numero documento
+            if (request.getParameter("txtdocumento") == null || request.getParameter("txtdocumento").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'numero documento' no encontrado para modificar usuario");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro perfil
+            if (request.getParameter("cmbperfiles") == null || request.getParameter("cmbperfiles").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'perfil' no encontrado para modificar usuario");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
+            String tipodocumento = request.getParameter("cmbtiposdocumento");
+            String documento = request.getParameter("txtdocumento").toUpperCase().trim();
+            int tipoperfil = Integer.parseInt(request.getParameter("cmbperfiles"));
+
+            conex.setAutoCommit(false);
+
+            boolean registrado;
+
+            cenusuario = new CenUsuario();
+            cenusuario.setNombre(nombre);
+            cenusuario.setTipodocumento(Integer.parseInt(tipodocumento));
+            cenusuario.setNumerodocumento(documento);
+            cenusuario.setPassword(password);
+            cenusuario.setEstado(1);
+
+            long idusuario = usuarioDao.adicionarUsuario(conex, cenusuario);
+            
+            CenPerfilUsuario cenperfilusuario = new CenPerfilUsuario();
+            
+            if (idusuario > 0) {
+                cenperfilusuario.setPef_id(tipoperfil);
+                cenperfilusuario.setUsu_id(idusuario);
+                cenperfilusuario.setEstado(1);
+                long idperfilusuario = usuarioDao.adicionarPerfilUsuario(conex, cenperfilusuario);
+                registrado = idperfilusuario > 0;
             } else {
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('Debe ingresar como minimo los datos obligatorios (*)');");
-                out.println("</script>");
+                registrado = false;
+            }
+
+            if (registrado) {
+                conex.commit();
+                respuesta.put("status", "success");
+                respuesta.put("message", "Usuario registrado exitosamente");
+                respuesta.put("id", String.valueOf(idusuario));
+               // out.println("location='jsp/Usuarios/verUsuario.jsp?opcion=1&id=" + idUsuario + "';");
+            } else {
+                conex.rollback();
+                respuesta.put("status", "fail");
+                respuesta.put("message", "Usuario no registrado");
             }
 
         } catch (IOException | NumberFormatException | SQLException e) {
@@ -98,10 +169,8 @@ public class RegistrarUsuario extends HttpServlet {
                     rollbackEx.printStackTrace();
                 }
             }
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Error al registrar el usuario');");
-            out.println("location='jsp/Usuarios/registrarUsuario.jsp';");
-            out.println("</script>");
+            respuesta.put("status", "error");
+            respuesta.put("message", "Error al modificar el usuario");
             e.printStackTrace();
         } finally {
             if (conex != null) {
@@ -111,8 +180,10 @@ public class RegistrarUsuario extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
+        
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override
