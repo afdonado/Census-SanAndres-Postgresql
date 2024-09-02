@@ -5,6 +5,7 @@ import com.censo.modelo.dao.DocumentoDigitalizadoDao;
 import com.censo.modelo.persistencia.CenDocumentosDigitalizado;
 import com.censo.modelo.persistencia.CenCenso;
 import com.censo.modelo.persistencia.CenUsuario;
+import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -15,6 +16,8 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,215 +30,204 @@ public class ImportarDocumentos extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         Connection conex = null;
 
-        try {       
+        Map<String, String> respuesta = new HashMap<>();
 
-            if (request.getParameter("idcenso") != null && request.getParameter("txtnumerocenso") != null) {
+        try {
 
-                DocumentoDigitalizadoDao documentoDigitalizadoDao = new DocumentoDigitalizadoDao();
-                conex = documentoDigitalizadoDao.conectar();
+            if (request.getParameter("idcenso") == null || request.getParameter("idcenso").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'idcenso' no encontrado para modificar censo");
 
-                CensoDao censoDao = new CensoDao();
-
-                conex.setAutoCommit(false);
-                
-                long iddocumento = 0;
-
-                long idcenso = Long.parseLong(request.getParameter("idcenso"));
-                String numerocenso = request.getParameter("txtnumerocenso");
-
-                CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
-
-                String nombreimagenVeh = numerocenso + "_VEH.jpg";
-                String nombreimagenImp = numerocenso + "_IMP.jpg";
-                String nombreimagenLat = numerocenso + "_LAT.jpg";
-                String nombreimagenTra = numerocenso + "_TRA.jpg";
-                String directorio = "C:/DocumentosDigitalizados/Censos/" + numerocenso + "/";
-
-                File mkdir = new File(directorio);
-                if (!mkdir.exists()) {
-                    mkdir.mkdirs();
-                }
-
-                CenDocumentosDigitalizado cendocumentosdigitalizadoVeh
-                        = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoByIdCensoNombre(conex, idcenso, nombreimagenVeh);
-                if (cendocumentosdigitalizadoVeh == null) {
-
-                    /* definimos la URL de la cual vamos a leer */
-                    String rutaRemotaVeh = "http://www.lagit.com.co/censo_sap/censos/" + nombreimagenVeh;
-
-                    URL intlLogoURLVeh = new URL(rutaRemotaVeh);
-
-                    if (intlLogoURLVeh != null) {
-                        /* llamamos metodo para que lea de la URL y lo escriba en le fichero pasado */
-                        //rutaServidor = rutaServidor + "/" + numeroCenso + "/" + nombreimagenVeh;
-                        String imagenveh = directorio + nombreimagenVeh;
-                        documentoDigitalizadoDao.writeTo(intlLogoURLVeh.openStream(), new FileOutputStream(new File(imagenveh)));
-
-                        CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
-                        cendocumentosdigitalizado.setNombre(nombreimagenVeh);
-                        cendocumentosdigitalizado.setRuta(imagenveh);
-                        cendocumentosdigitalizado.setTipo(1);
-                        cendocumentosdigitalizado.setReferencia_id(idcenso);
-                        cendocumentosdigitalizado.setObservacion("Imagen cargada desde servidor remoto");
-                        cendocumentosdigitalizado.setUsu_id(cenusuario.getId());
-                        iddocumento = documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizado);
-
-                    }
-                } else {
-
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Documento " + nombreimagenVeh + " ya se encuentra Cargado');");
-                    out.println("</script>");
-
-                }
-
-                CenDocumentosDigitalizado cendocumentosdigitalizadoImp
-                        = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoByIdCensoNombre(conex, idcenso, nombreimagenImp);
-                if (cendocumentosdigitalizadoImp == null) {
-
-                    /* definimos la URL de la cual vamos a leer */
-                    String rutaRemotaImp = "http://www.lagit.com.co/censo_sap/censos/" + nombreimagenImp;
-
-                    URL intlLogoURLImp = new URL(rutaRemotaImp);
-
-                    if (intlLogoURLImp != null) {
-
-                        /* llamamos metodo para que lea de la URL y lo escriba en le fichero pasado */
-                        //rutaServidor = rutaServidor + "/" + numeroCenso + "/" + nombreimagenVeh;
-                        String imagenimp = directorio + nombreimagenImp;
-                        documentoDigitalizadoDao.writeTo(intlLogoURLImp.openStream(), new FileOutputStream(new File(imagenimp)));
-
-                        CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
-                        cendocumentosdigitalizado.setNombre(nombreimagenImp);
-                        cendocumentosdigitalizado.setRuta(imagenimp);
-                        cendocumentosdigitalizado.setTipo(1);
-                        cendocumentosdigitalizado.setReferencia_id(idcenso);
-                        cendocumentosdigitalizado.setObservacion("Imagen cargada desde servidor remoto");
-                        cendocumentosdigitalizado.setUsu_id(cenusuario.getId());
-                        iddocumento = documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizado);
-
-                    }
-                } else {
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Documento " + nombreimagenImp + " ya se encuentra Cargado');");
-                    out.println("</script>");
-                }
-
-                CenCenso cencenso = censoDao.ConsultarCensoById(conex, idcenso);
-                if (cencenso != null) {
-                    if (cencenso.getFecha().getTime() > new java.text.SimpleDateFormat("dd/MM/yyyy").parse("11/03/2018").getTime()) {
-                        CenDocumentosDigitalizado cendocumentosdigitalizadoLat
-                                = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoByIdCensoNombre(conex, idcenso, nombreimagenLat);
-                        if (cendocumentosdigitalizadoLat == null) {
-
-                            /* definimos la URL de la cual vamos a leer */
-                            String rutaRemotaLat = "http://www.lagit.com.co/censo_sap/censos/" + nombreimagenLat;
-
-                            URL intlLogoURLLat = new URL(rutaRemotaLat);
-
-                            if (intlLogoURLLat != null) {
-
-                                /* llamamos metodo para que lea de la URL y lo escriba en le fichero pasado */
-                                //rutaServidor = rutaServidor + "/" + numeroCenso + "/" + nombreimagenVeh;
-                                String imagenlat = directorio + nombreimagenLat;
-                                documentoDigitalizadoDao.writeTo(intlLogoURLLat.openStream(), new FileOutputStream(new File(imagenlat)));
-
-                                CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
-                                cendocumentosdigitalizado.setNombre(nombreimagenLat);
-                                cendocumentosdigitalizado.setRuta(imagenlat);
-                                cendocumentosdigitalizado.setTipo(1);
-                                cendocumentosdigitalizado.setReferencia_id(idcenso);
-                                cendocumentosdigitalizado.setObservacion("Imagen cargada desde servidor remoto");
-                                cendocumentosdigitalizado.setUsu_id(cenusuario.getId());
-                                iddocumento = documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizado);
-
-                            }
-                        } else {
-                            out.println("<script type=\"text/javascript\">");
-                            out.println("alert('Documento " + nombreimagenLat + " ya se encuentra Cargado');");
-                            out.println("</script>");
-                        }
-
-                        CenDocumentosDigitalizado cendocumentosdigitalizadoTra
-                                = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoByIdCensoNombre(conex, idcenso, nombreimagenTra);
-                        if (cendocumentosdigitalizadoTra == null) {
-
-                            /* definimos la URL de la cual vamos a leer */
-                            String rutaRemotaTra = "http://www.lagit.com.co/censo_sap/censos/" + nombreimagenTra;
-
-                            URL intlLogoURLTra = new URL(rutaRemotaTra);
-
-                            if (intlLogoURLTra != null) {
-
-                                /* llamamos metodo para que lea de la URL y lo escriba en le fichero pasado */
-                                //rutaServidor = rutaServidor + "/" + numeroCenso + "/" + nombreimagenVeh;
-                                String imagentra = directorio + nombreimagenTra;
-                                documentoDigitalizadoDao.writeTo(intlLogoURLTra.openStream(), new FileOutputStream(new File(imagentra)));
-
-                                CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
-                                cendocumentosdigitalizado.setNombre(nombreimagenTra);
-                                cendocumentosdigitalizado.setRuta(imagentra);
-                                cendocumentosdigitalizado.setTipo(1);
-                                cendocumentosdigitalizado.setReferencia_id(idcenso);
-                                cendocumentosdigitalizado.setObservacion("Imagen cargada desde servidor remoto");
-                                cendocumentosdigitalizado.setUsu_id(cenusuario.getId());
-                                iddocumento = documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizado);
-
-                            }
-                        } else {
-                            out.println("<script type=\"text/javascript\">");
-                            out.println("alert('Documento " + nombreimagenTra + " ya se encuentra Cargado');");
-                            out.println("</script>");
-                        }
-                    }
-                }
-
-                conex.commit();
-
-                if (iddocumento > 0) {
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Documentos Guardados');");
-                    out.println("location='jsp/Documentos/ListarDocumentos.jsp?idcenso=" + idcenso + "';");
-                    out.println("</script>");
-                } else {
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Documentos no Guardados');");
-                    out.println("location='jsp/Documentos/ListarDocumentos.jsp?idcenso=" + idcenso + "';");
-                    out.println("</script>");
-                }
-
-            } else {
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('Debe ingresar los datos obligatorios (*)');");
-                out.println("</script>");
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
             }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Direccion mal formada');");
-            out.println("location='jsp/Documentos/ConsultarDocumento.jsp';");
-            out.println("</script>");
 
-        } catch (FileNotFoundException e) {
+            CensoDao censoDao = new CensoDao();
+            conex = censoDao.conectar();
+
+            long idcenso = Long.parseLong(request.getParameter("idcenso"));
+            CenCenso cencenso = censoDao.ConsultarCensoById(conex, idcenso);
+            if (cencenso == null) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Censo no se encuentra registrado para cargarle documentos");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            if (request.getParameter("txtnumerocenso") == null || request.getParameter("txtnumerocenso").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'numero censo' no encontrado para modificar censo");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            String numerocenso = request.getParameter("txtnumerocenso");
+
+            String nombreImagenVehiculo = numerocenso + "_VEH.jpg";
+            String nombreImagenImpronta = numerocenso + "_IMP.jpg";
+            String nombreImagenLateral = numerocenso + "_LAT.jpg";
+            String nombreImagenTrasera = numerocenso + "_TRA.jpg";
+            String directorio = "C:/DocumentosDigitalizados/Censos/" + numerocenso + "/";
+
+            CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
+
+            DocumentoDigitalizadoDao documentoDigitalizadoDao = new DocumentoDigitalizadoDao();
+            CenDocumentosDigitalizado cendocumentosdigitalizadoVehiculo
+                    = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoByIdCensoNombre(conex, idcenso, nombreImagenVehiculo);
+
+            if (cendocumentosdigitalizadoVehiculo != null) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Imagen de vehiculo " + nombreImagenVehiculo + " ya se encuentra cargada");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            File mkdir = new File(directorio);
+            if (!mkdir.exists()) {
+                mkdir.mkdirs();
+            }
+
+            conex.setAutoCommit(false);
+
+            //Importar Imagen de Vehiculo
+            /* URL de la cual se importan los documentos */
+            String rutaRemotaVehiculo = "http://www.lagit.com.co/censo_sap/censos/" + nombreImagenVehiculo;
+
+            URL intlLogoURLVeh = new URL(rutaRemotaVehiculo);
+
+            /* llamamos metodo para que lea de la URL y lo escriba en el fichero pasado */
+            String imagenvehiculo = directorio + nombreImagenVehiculo;
+            documentoDigitalizadoDao.writeTo(intlLogoURLVeh.openStream(), new FileOutputStream(new File(imagenvehiculo)));
+
+            cendocumentosdigitalizadoVehiculo = new CenDocumentosDigitalizado();
+            cendocumentosdigitalizadoVehiculo.setNombre(nombreImagenVehiculo);
+            cendocumentosdigitalizadoVehiculo.setRuta(imagenvehiculo);
+            cendocumentosdigitalizadoVehiculo.setTipo(1);
+            cendocumentosdigitalizadoVehiculo.setReferencia_id(idcenso);
+            cendocumentosdigitalizadoVehiculo.setObservacion("Imagen cargada desde servidor remoto");
+            cendocumentosdigitalizadoVehiculo.setUsu_id(cenusuario.getId());
+            long iddocumentoVehiculo = documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizadoVehiculo);
+            boolean cargadaVehiculo = iddocumentoVehiculo > 0;
+
+            //Importar Imagen de Improntas
+            CenDocumentosDigitalizado cendocumentosdigitalizadoImpronta
+                    = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoByIdCensoNombre(conex, idcenso, nombreImagenImpronta);
+            if (cendocumentosdigitalizadoImpronta == null) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Imagen de impronta " + nombreImagenImpronta + " ya se encuentra cargada");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            String rutaRemotaImpronta = "http://www.lagit.com.co/censo_sap/censos/" + nombreImagenImpronta;
+
+            URL intlLogoURLImp = new URL(rutaRemotaImpronta);
+
+            String imagenimpronta = directorio + nombreImagenImpronta;
+            documentoDigitalizadoDao.writeTo(intlLogoURLImp.openStream(), new FileOutputStream(new File(imagenimpronta)));
+
+            cendocumentosdigitalizadoImpronta = new CenDocumentosDigitalizado();
+            cendocumentosdigitalizadoImpronta.setNombre(nombreImagenImpronta);
+            cendocumentosdigitalizadoImpronta.setRuta(imagenimpronta);
+            cendocumentosdigitalizadoImpronta.setTipo(1);
+            cendocumentosdigitalizadoImpronta.setReferencia_id(idcenso);
+            cendocumentosdigitalizadoImpronta.setObservacion("Imagen cargada desde servidor remoto");
+            cendocumentosdigitalizadoImpronta.setUsu_id(cenusuario.getId());
+            long iddocumentoImpronta = documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizadoImpronta);
+            boolean cargadaImpronta = iddocumentoImpronta > 0;
+
+            //Importar Imagen de Lateral
+            CenDocumentosDigitalizado cendocumentosdigitalizadoLateral
+                    = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoByIdCensoNombre(conex, idcenso, nombreImagenLateral);
+            if (cendocumentosdigitalizadoLateral == null) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Imagen lateral " + nombreImagenLateral + " ya se encuentra cargada");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            String rutaRemotaLat = "http://www.lagit.com.co/censo_sap/censos/" + nombreImagenLateral;
+
+            URL intlLogoURLLat = new URL(rutaRemotaLat);
+
+            String imagenlateral = directorio + nombreImagenLateral;
+            documentoDigitalizadoDao.writeTo(intlLogoURLLat.openStream(), new FileOutputStream(new File(imagenlateral)));
+
+            cendocumentosdigitalizadoLateral = new CenDocumentosDigitalizado();
+            cendocumentosdigitalizadoLateral.setNombre(nombreImagenLateral);
+            cendocumentosdigitalizadoLateral.setRuta(imagenlateral);
+            cendocumentosdigitalizadoLateral.setTipo(1);
+            cendocumentosdigitalizadoLateral.setReferencia_id(idcenso);
+            cendocumentosdigitalizadoLateral.setObservacion("Imagen cargada desde servidor remoto");
+            cendocumentosdigitalizadoLateral.setUsu_id(cenusuario.getId());
+            long iddocumentoLateral = documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizadoLateral);
+            boolean cargadaLateral = iddocumentoLateral > 0;
+
+            //Importar Imagen de trasera
+            CenDocumentosDigitalizado cendocumentosdigitalizadoTrasera
+                    = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoByIdCensoNombre(conex, idcenso, nombreImagenTrasera);
+            if (cendocumentosdigitalizadoTrasera == null) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Imagen trasera " + nombreImagenLateral + " ya se encuentra cargada");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            String rutaRemotaTra = "http://www.lagit.com.co/censo_sap/censos/" + nombreImagenTrasera;
+
+            URL intlLogoURLTra = new URL(rutaRemotaTra);
+
+            String imagentrasera = directorio + nombreImagenTrasera;
+            documentoDigitalizadoDao.writeTo(intlLogoURLTra.openStream(), new FileOutputStream(new File(imagentrasera)));
+
+            cendocumentosdigitalizadoTrasera = new CenDocumentosDigitalizado();
+            cendocumentosdigitalizadoTrasera.setNombre(nombreImagenTrasera);
+            cendocumentosdigitalizadoTrasera.setRuta(imagentrasera);
+            cendocumentosdigitalizadoTrasera.setTipo(1);
+            cendocumentosdigitalizadoTrasera.setReferencia_id(idcenso);
+            cendocumentosdigitalizadoTrasera.setObservacion("Imagen cargada desde servidor remoto");
+            cendocumentosdigitalizadoTrasera.setUsu_id(cenusuario.getId());
+            long iddocumentoTrasera = documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizadoTrasera);
+            boolean cargadaTrasera = iddocumentoTrasera > 0;
+
+            if (cargadaVehiculo && cargadaImpronta && cargadaLateral && cargadaTrasera) {
+                conex.commit();
+                respuesta.put("status", "success");
+                respuesta.put("message", "Documento importado exitosamente");
+                //out.println("location='jsp/Documentos/ListarDocumentos.jsp?idcenso=" + idcenso + "';");
+            } else {
+                respuesta.put("status", "fail");
+                respuesta.put("message", "Documento no importado");
+            }
+
+        } catch (MalformedURLException e) {
+            respuesta.put("status", "error");
+            respuesta.put("message", "Url de importacion incorrecta");
             e.printStackTrace();
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('No se encontraron documentos para este numero de censo');");
-            out.println("location='jsp/Documentos/ConsultarDocumento.jsp';");
-            out.println("</script>");
 
         } catch (IOException e) {
+            respuesta.put("status", "error");
+            respuesta.put("message", "No se encontraron documentos para el numero de censo");
             e.printStackTrace();
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('No se encontraron documentos para este numero de censo');");
-            out.println("location='jsp/Documentos/ConsultarDocumentoWeb.jsp';");
-            out.println("</script>");
-
-        } catch (NumberFormatException | SQLException | ParseException ex) {
+        } catch (NumberFormatException | SQLException e) {
             if (conex != null) {
                 try {
                     conex.rollback();
@@ -243,12 +235,9 @@ public class ImportarDocumentos extends HttpServlet {
                     rollbackEx.printStackTrace();
                 }
             }
-            System.out.println("Error --> " + ex.getMessage());
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('No se cargaron los documentos seleccionados');");
-            out.println("location='jsp/Documentos/ConsultarDocumento.jsp';");
-            out.println("</script>");
-            //response.sendRedirect("./paginas/jsp/visor.jsp?opcion=La Imagen No Pudo Ser Guardada Debido A:" + ex.getMessage() + "&idcomparendo=" + referencia_id);
+            respuesta.put("status", "error");
+            respuesta.put("message", "No se cargaron los documentos seleccionados");
+            e.printStackTrace();
         } finally {
             if (conex != null) {
                 try {
@@ -257,8 +246,10 @@ public class ImportarDocumentos extends HttpServlet {
                     closeEx.printStackTrace();
                 }
             }
-            out.close();
         }
+        
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override

@@ -1,6 +1,6 @@
-package com.censo.controlador.estadistica;
+package com.censo.controlador.verificacion;
 
-import com.censo.modelo.dao.EstadisticaDao;
+import com.censo.modelo.dao.CensoDao;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Connection;
@@ -14,38 +14,38 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "CargarEstadisticas", urlPatterns = "/cargarEstadisticas")
-public class CargarEstadisticas extends HttpServlet {
+@WebServlet(name = "ListarVerificaciones", urlPatterns = {"/listarVerificaciones"})
+public class ListarVerificaciones extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-
+        
         Connection conex = null;
-
+        
         Map<String, Object> respuesta = new HashMap<>();
 
         try {
 
-            EstadisticaDao estadisticaDao = new EstadisticaDao();
-            conex = estadisticaDao.conectar();
+            CensoDao censoDao = new CensoDao();
+            conex = censoDao.conectar();
+            
+            
+            List<HashMap<String, Object>> lista = censoDao.ListarCensos(conex);
 
-            List<HashMap> lista = estadisticaDao.ListarCantidadCensosClaveVehiculo(conex);
 
             if (!lista.isEmpty()) {
                 respuesta.put("status", "success");
-                for (HashMap hash : lista) {
-                    respuesta.put("CLV_DESCRIPCION", hash.get("CLV_DESCRIPCION").toString());
-                    respuesta.put("CANTIDAD", hash.get("CANTIDAD").toString());
-                }
+                respuesta.put("verificaciones", lista);
             }
 
         } catch (SQLException e) {
             respuesta.put("status", "error");
-            respuesta.put("message", "Error al consultar datos");
+            respuesta.put("message", "Error al listas las verificaciones");
             e.printStackTrace();
+
         } finally {
             if (conex != null) {
                 try {
@@ -58,7 +58,6 @@ public class CargarEstadisticas extends HttpServlet {
         
         String json = new Gson().toJson(respuesta);
         response.getWriter().write(json);
-
     }
 
     @Override

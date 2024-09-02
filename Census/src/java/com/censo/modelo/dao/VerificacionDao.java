@@ -55,7 +55,7 @@ public class VerificacionDao extends Conexion {
         return 0;
     }
 
-    public void modificarVerificacion(Connection conex, CenVerificacion cenverificacion) throws SQLException, IOException {
+    public boolean modificarVerificacion(Connection conex, CenVerificacion cenverificacion) throws SQLException, IOException {
 
         try {
             pst = conex.prepareStatement("UPDATE CEN_VERIFICACIONES SET VER_RUNT = ?,VER_DOCUMENTOS = ?,VER_FOTOS = ? ,VER_OBSERVACIONES = ?, EVER_ID = ?, USU_ID = ?, VER_FECHAPROCESO = SYSDATE WHERE VER_ID = ? ");
@@ -67,6 +67,8 @@ public class VerificacionDao extends Conexion {
             pst.setLong(6, cenverificacion.getUsu_id());
             pst.setLong(7, cenverificacion.getId());
             pst.executeUpdate();
+            
+            return true;
 
         } catch (SQLException e) {
             System.err.println("Error en modificarVerificacion: " + e);
@@ -82,8 +84,10 @@ public class VerificacionDao extends Conexion {
                 System.out.println("Error en cierres de modificarVerificacion:" + e);
             }
         }
+        
+        return false;
     }
-
+    
     public CenVerificacion ConsultarVerificacionByIdCenso(Connection conex, long id) throws SQLException {
 
         try {
@@ -106,6 +110,34 @@ public class VerificacionDao extends Conexion {
                 }
             } catch (SQLException e) {
                 System.out.println("Error en cierres de ConsultarVerificacionByIdCenso:" + e);
+            }
+        }
+        return null;
+    }
+
+
+    public CenVerificacion ConsultarVerificacionByIdVerificacion(Connection conex, long id) throws SQLException {
+
+        try {
+            pst = conex.prepareStatement("SELECT * FROM CEN_VERIFICACIONES WHERE VER_ID = ? ");
+            pst.setLong(1, id);
+            rst = pst.executeQuery();
+
+            while (rst.next()) {
+                return CenVerificacion.load(rst);
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error en ConsultarVerificacionByIdVerificacion: " + e);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (rst != null) {
+                    rst.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error en cierres de ConsultarVerificacionByIdVerificacion:" + e);
             }
         }
         return null;

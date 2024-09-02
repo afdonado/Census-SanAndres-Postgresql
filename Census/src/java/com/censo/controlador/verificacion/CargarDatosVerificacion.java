@@ -1,6 +1,8 @@
-package com.censo.controlador.estadistica;
+package com.censo.controlador.verificacion;
 
-import com.censo.modelo.dao.EstadisticaDao;
+import com.censo.controlador.censo.*;
+import com.censo.modelo.dao.CensoDao;
+import com.censo.modelo.dao.PersonaVehiculoDao;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Connection;
@@ -14,8 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "CargarEstadisticas", urlPatterns = "/cargarEstadisticas")
-public class CargarEstadisticas extends HttpServlet {
+@WebServlet(name = "CargarDatosVerificacion", urlPatterns = {"/cargarDatosVerificacion"})
+public class CargarDatosVerificacion extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -29,23 +31,35 @@ public class CargarEstadisticas extends HttpServlet {
 
         try {
 
-            EstadisticaDao estadisticaDao = new EstadisticaDao();
-            conex = estadisticaDao.conectar();
+            if (request.getParameter("id").equals("")) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'id' no encontrado para cargar datos de la verificacion");
 
-            List<HashMap> lista = estadisticaDao.ListarCantidadCensosClaveVehiculo(conex);
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
+            long idcenso = Long.parseLong(request.getParameter("id"));
 
-            if (!lista.isEmpty()) {
+            CensoDao censoDao = new CensoDao();
+            conex = censoDao.conectar();
+
+            HashMap<String, Object> datos = censoDao.ConsultarDatosCensoById(conex, idcenso);
+
+            if (!datos.isEmpty()) {
                 respuesta.put("status", "success");
-                for (HashMap hash : lista) {
-                    respuesta.put("CLV_DESCRIPCION", hash.get("CLV_DESCRIPCION").toString());
-                    respuesta.put("CANTIDAD", hash.get("CANTIDAD").toString());
-                }
+                respuesta.put("verificacion", datos);
+            } else {
+                respuesta.put("respuesta", "fail");
+                respuesta.put("message", "Verificacion no se encuentra registrado");
             }
 
         } catch (SQLException e) {
             respuesta.put("status", "error");
-            respuesta.put("message", "Error al consultar datos");
+            respuesta.put("message", "Error al cargar los datos de la Verificacion");
             e.printStackTrace();
+
         } finally {
             if (conex != null) {
                 try {
@@ -55,10 +69,9 @@ public class CargarEstadisticas extends HttpServlet {
                 }
             }
         }
-        
+
         String json = new Gson().toJson(respuesta);
         response.getWriter().write(json);
-
     }
 
     @Override
