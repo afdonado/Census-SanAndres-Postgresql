@@ -37,6 +37,8 @@ $(function () {
                     $('#txtnombrepresento').val(response.censo.NOMBRE);
 
                     $('#txtobservaciones').val(response.censo.OBSERVACIONES);
+                    
+                    $(".btneditar").attr("data-id", response.censo.CEN_ID);
 
                     var personas = response.personasVehiculo;
                     var contenedor = $('#personas-censo');
@@ -52,7 +54,7 @@ $(function () {
                         <input class="form-control" id="txttipodocumento" name="txttipodocumento" value="${persona.TIPO_DOC}" readonly="true">
                     </div>
                     <div class="col-sm-3 mb-3 mb-sm-0">
-                        <input class="form-control" type="number" id="txtdocumento" name="txtdocumento" value="${persona.DOCUMENTO}" required="true">
+                        <input class="form-control" type="text" id="txtdocumento" name="txtdocumento" value="${persona.DOCUMENTO}" readonly="true">
                     </div>
                     <div class="col-sm-5 mb-3 mb-sm-0">
                         <input class="form-control" type="text" id="txtnombre" name="txtnombre" value="${persona.NOMBRE}" readonly="true">
@@ -74,6 +76,11 @@ $(function () {
     } else {
         console.log("Parámetros no encontrados en la URL");
     }
+    
+    $('#btneditar').click(function () {
+        var id = $(this).data('id');
+        window.location.href = "modificarVerificacion.jsp?opcion=2&id=" + id;
+    });
     
     $('#btnvolver').click(function () {
         window.location.href = "listarVerificaciones.jsp";

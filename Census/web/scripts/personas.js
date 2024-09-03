@@ -41,11 +41,10 @@ function consultarDocumentoPersona(sw, nametipodocumento, namedocumento, namenom
                     $('#' + namenombre).val(response.nombre);
                     $('#' + nameidpersona).val(response.id);
                 } else if (response.status === "fail") {
-                    //alert(response.message);
                     $('#' + namenombre).val('');
                     $('#' + nameidpersona).val('');
                     if (sw) {
-                        viewModalRegPersona(tipodocumento, documento);
+                        viewModalRegistrarPersona(tipodocumento, documento);
                     }
                 } else if (response.status === "error") {
                     alert(response.message);
@@ -60,7 +59,7 @@ function consultarDocumentoPersona(sw, nametipodocumento, namedocumento, namenom
 
 
 
-function viewModalRegPersona(tipoDocumento, documento) {
+function viewModalRegistrarPersona(tipoDocumento, documento) {
 
     var src = "../Personas/registrarPersona.jsp?opcion=2&tipodoc=" + tipoDocumento + "&documento=" + documento;
     $('#registrarpersona').modal('show');

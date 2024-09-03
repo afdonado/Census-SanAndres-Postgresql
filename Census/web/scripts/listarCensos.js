@@ -22,7 +22,7 @@ $(function () {
                     <td>${censo.PUNTO_ATENCION}</td>
                     <td>${censo.ESTADO}</td>
                     <td>${censo.USUARIO}</td>
-                    <td>${censo.FECHA_PROCESO}</td>
+                    <td>${censo.FECHA_PROCESO_FORMAT} ${censo.FECHA_PROCESO_HORA}</td>
                     <td>${censo.DOCUMENTO_PDF}</td>
                     <td>${censo.FOTO}</td>
                     <td><button type="button" class="btn btn-info btnconsultar" name="btnconsultar" data-id="${censo.CEN_ID}">Consultar</button></td>
@@ -45,14 +45,12 @@ $(function () {
 
     $('.table-responsive').on('click', '.btnconsultar', function () {
         var id = $(this).data('id');
-        console.log("id: " + id);
         window.location.href = "verCenso.jsp?opcion=1&id=" + id;
 
     });
 
     $('.table-responsive').on('click', '.btneditar', function () {
         var id = $(this).data('id');
-        console.log("id: " + id);
         window.location.href = "modificarCenso.jsp?opcion=2&id=" + id;
     });
 

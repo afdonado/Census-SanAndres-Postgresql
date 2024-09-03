@@ -40,9 +40,11 @@ $(function () {
                     $('#txtemail').val(response.persona.MAIL);
 
                     $('#txtnumerolicencia').val(response.persona.LIC_CONDUCCION);
-                    $('#txtcategoria').val(response.persona.CATEGORIA_LIC);
-                    $('#txtfechaexpedicion').val(response.persona.FECHA_EXP);
-                    $('#txtfechavencimiento').val(response.persona.FECHA_VEN);
+                    $('#txtcategorialicencia').val(response.persona.CATEGORIA_LIC);
+                    $('#txtfechaexplicencia').val(response.persona.FECHA_EXP);
+                    $('#txtfechavlicencia').val(response.persona.FECHA_VEN);
+                    
+                    $(".btneditar").attr("data-id", response.persona.PER_ID);
 
                 } else if (response.status === "fail") {
                     alert(response.message);
@@ -62,6 +64,11 @@ $(function () {
     
     $('#btnvolver').click(function () {
         window.location.href = "listarPersonas.jsp";
+    });
+    
+    $('#btneditar').click(function () {
+        var id = $(this).data('id');
+        window.location.href = "modificarPersona.jsp?opcion=2&id=" + id;
     });
 
 });

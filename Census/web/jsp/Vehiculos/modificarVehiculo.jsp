@@ -118,7 +118,7 @@
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Modelo (*)</label>
-                                                <input class="form-control" type="number" id="txtmodelo" name="txtmodelo" maxlength="4" required="true">
+                                                <input class="form-control solo-numeros" type="text" id="txtmodelo" name="txtmodelo" maxlength="4" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Transformado (*)</label>

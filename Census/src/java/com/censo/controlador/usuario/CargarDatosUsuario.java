@@ -48,7 +48,7 @@ public class CargarDatosUsuario extends HttpServlet {
                 respuesta.put("status", "success");
                 respuesta.put("usuario", datos);
             } else {
-                respuesta.put("respuesta", "fail");
+                respuesta.put("status", "fail");
                 respuesta.put("message", "Usuario no se encuentra registrado");
             }
 

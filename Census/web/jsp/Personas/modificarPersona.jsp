@@ -55,7 +55,7 @@
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Documento</label>
-                                                <input class="form-control" type="number" id="txtdocumento" name="txtdocumento" maxlength="20" style="text-transform: uppercase" required="true">
+                                                <input class="form-control solo-numeros" type="text" id="txtdocumento" name="txtdocumento" maxlength="20" style="text-transform: uppercase" required="true">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -87,7 +87,7 @@
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Grupo Sanguineo(*)</label>
-                                                <select class="form-control" id="cmbgruposanguineo" name="cmbgruposanguineo" required="true"></select>
+                                                <select class="form-control" id="cmbgrupossanguineos" name="cmbgrupossanguineos" required="true"></select>
                                             </div>
                                         </div>
                                     </div>
@@ -99,26 +99,26 @@
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Departamento</label>
+                                                <label>Departamento(*)</label>
                                                 <select class="form-control" id="cmbdepartamentos" name="cmbdepartamentos" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Municipio</label>
+                                                <label>Municipio(*)</label>
                                                 <select class="form-control" id="cmbmunicipios" name="cmbmunicipios" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Dirección</label>
+                                                <label>Dirección(*)</label>
                                                 <input class="form-control" type="text" id="txtdireccion" name="txtdireccion" maxlength="80" style="text-transform: uppercase" readonly="true">
                                             </div>
                                         </div>
                                         <div class="form-group row">                                    
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Telefono</label>
-                                                <input class="form-control" type="number" id="txttelefono" name="txttelefono" maxlength="30" readonly="true">
+                                                <label>Telefono(*)</label>
+                                                <input class="form-control solo-numeros" type="text" id="txttelefono" name="txttelefono" maxlength="30" readonly="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Correo Electronico</label>
-                                                <input class="form-control" type="email" id="txtemail" name="txtemail" maxlength="100" style="text-transform: uppercase" readonly="true">
+                                                <input class="form-control validar-email" type="text" id="txtemail" name="txtemail" maxlength="100" style="text-transform: uppercase" readonly="true">
                                             </div>
                                         </div>
                                     </div>
@@ -130,11 +130,11 @@
                                             <div class="form-group row">
                                                 <div class="col-sm-3 mb-3 mb-sm-0">
                                                     <label>No. Licencia Conduccion</label>
-                                                    <input class="form-control" type="number" id="txtnumerolicencia" name="txtnumerolicencia" maxlength="30" readonly="true">
+                                                    <input class="form-control solo-numeros" type="text" id="txtnumerolicencia" name="txtnumerolicencia" maxlength="30" readonly="true">
                                                 </div>
                                                 <div class="col-sm-3 mb-3 mb-sm-0">
                                                     <label>Categoria</label>
-                                                    <select class="form-control" id="cmbcategorialicencia" name="cmbcategorialicencia" required="true"></select>
+                                                    <select class="form-control" id="cmbcategoriaslicencia" name="cmbcategoriaslicencia" required="true"></select>
                                                 </div>
                                                 <div class="col-sm-3 mb-3 mb-sm-0">
                                                     <label>Fecha Expedición</label>
@@ -142,7 +142,7 @@
                                                 </div>
                                                 <div class="col-sm-3 mb-3 mb-sm-0">
                                                     <label>Fecha Vencimiento</label>
-                                                    <input class="form-control" type="text" id="txtfechavencimiento" name="txtfechavencimiento" readonly="true">
+                                                    <input class="form-control" type="text" id="txtfechavlicencia" name="txtfechavlicencia" readonly="true">
                                                 </div>
                                             </div>
                                         </div>

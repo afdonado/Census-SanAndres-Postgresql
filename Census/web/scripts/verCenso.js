@@ -38,6 +38,8 @@ $(function () {
 
                     $('#txtobservaciones').val(response.censo.OBSERVACIONES);
 
+                    $(".btneditar").attr("data-id", response.censo.CEN_ID);
+
                     var personas = response.personasVehiculo;
                     var contenedor = $('#personas-censo');
                     contenedor.empty();
@@ -52,7 +54,7 @@ $(function () {
                         <input class="form-control" id="txttipodocumento" name="txttipodocumento" value="${persona.TIPO_DOC}" readonly="true">
                     </div>
                     <div class="col-sm-3 mb-3 mb-sm-0">
-                        <input class="form-control" type="number" id="txtdocumento" name="txtdocumento" value="${persona.DOCUMENTO}" required="true">
+                        <input class="form-control" type="text" id="txtdocumento" name="txtdocumento" value="${persona.DOCUMENTO}" readonly="true">
                     </div>
                     <div class="col-sm-5 mb-3 mb-sm-0">
                         <input class="form-control" type="text" id="txtnombre" name="txtnombre" value="${persona.NOMBRE}" readonly="true">
@@ -60,6 +62,7 @@ $(function () {
                 </div>
             `;
                         contenedor.append(nuevoElemento);
+
                     });
                 } else if (response.status === "fail") {
                     alert(response.message);
@@ -76,9 +79,14 @@ $(function () {
     } else {
         console.log("Parámetros no encontrados en la URL");
     }
-    
+
     $('#btnvolver').click(function () {
         window.location.href = "listarCensos.jsp";
+    });
+    
+    $('#btneditar').click(function () {
+        var id = $(this).data('id');
+        window.location.href = "modificarCenso.jsp?opcion=2&id="+id;
     });
 
 });

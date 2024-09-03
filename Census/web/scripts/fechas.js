@@ -19,8 +19,3 @@ $(function () {
     $("#txtfechaexplicencia").datepicker();
     $("#txtfechavlicencia").datepicker();
 });
-
-//modificar usuario
-$(function () {
-    $("#txtfechafinal").datepicker();
-});

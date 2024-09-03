@@ -56,7 +56,7 @@
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
                                             <label>Documento</label>
-                                            <input class="form-control" type="text" type="number" id="txtdocumento" name="txtdocumento" readonly="true">
+                                            <input class="form-control" type="text" type="text" id="txtdocumento" name="txtdocumento" readonly="true">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -84,7 +84,7 @@
                                 if (((java.util.LinkedList) session.getAttribute("permisosUsuario")).contains("modificarUsuario.jsp")) {
                             %>
                             <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                <button type="button" class="btn btn-lg btn-success btn-block" id="btnmodificar" name="btnmodificar">Editar</button>
+                                <button type="button" class="btn btn-lg btn-success btn-block btneditar" id="btneditar" name="btneditar">Editar</button>
                             </div>
                             <%
                                 }

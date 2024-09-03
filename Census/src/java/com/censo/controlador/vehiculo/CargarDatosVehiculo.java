@@ -53,7 +53,7 @@ public class CargarDatosVehiculo extends HttpServlet {
                 respuesta.put("vehiculo", datosVehiculo);
                 respuesta.put("personasVehiculo", personasVehiculo);
             } else {
-                respuesta.put("respuesta", "fail");
+                respuesta.put("status", "fail");
                 respuesta.put("message", "Vehiculo no se encuentra registrado");
             }
 

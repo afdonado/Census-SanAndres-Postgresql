@@ -52,7 +52,7 @@ public class ImportarDocumentosMasivo extends HttpServlet {
 
             if (lista.isEmpty()) {
             } else {
-                respuesta.put("respuesta", "fail");
+                respuesta.put("status", "fail");
                 respuesta.put("message", "No se encontraros registros de censos");
             }
 

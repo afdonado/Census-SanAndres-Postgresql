@@ -58,7 +58,7 @@
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Documento</label>
-                                                <input class="form-control" type="number" id="txtdocumento" name="txtdocumento">
+                                                <input class="form-control solo-numeros" type="text" id="txtdocumento" name="txtdocumento">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -124,6 +124,8 @@
 
         <script src="${pageContext.request.contextPath}/scripts/registrarUsuario.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/usuarios.js" type="text/javascript"></script>
+        
+        <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
         
     </body>
 </html>

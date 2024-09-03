@@ -102,8 +102,27 @@ public class VerificarVehiculo extends HttpServlet {
                     }
                 }
             } else {
-                respuesta.put("status", "success");
-                if (tipoReferencia == 1) {
+                if (opcion == 2) {
+                    respuesta.put("status", "fail");
+                    if (tipoReferencia == 1) {
+                        respuesta.put("message", "Placa no valida, no se encuentra registrada");
+                        respuesta.put("input", "#txtplaca");
+                    }
+                    if (tipoReferencia == 2) {
+                        respuesta.put("message", "Motor no valido, no se encuentra registrado");
+                        respuesta.put("input", "#txtmotor");
+                    }
+                    if (tipoReferencia == 3) {
+                        respuesta.put("message", "Chasis no valido, no se encuentra registrado");
+                        respuesta.put("input", "#txtchasis");
+                    }
+                    if (tipoReferencia == 4) {
+                        respuesta.put("message", "Serie no valida, no se encuentra registrado");
+                        respuesta.put("input", "#txtserie");
+                    }
+                } else {
+                    respuesta.put("status", "success");
+                    if (tipoReferencia == 1) {
                         respuesta.put("message", "Placa valida");
                         respuesta.put("input", "#txtplaca");
                     }
@@ -119,6 +138,8 @@ public class VerificarVehiculo extends HttpServlet {
                         respuesta.put("message", "Serie valida");
                         respuesta.put("input", "#txtserie");
                     }
+                }
+
             }
 
         } catch (SQLException e) {

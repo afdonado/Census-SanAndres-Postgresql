@@ -36,7 +36,7 @@ $(function () {
                     $('#txtmodelo').val(response.vehiculo.MODELO);
                     $('#txttransformado').val(response.vehiculo.TRANSFORMADO === 'S' ? 'Si' : 'No');
                     $('#txtrunt').val(response.vehiculo.RUNT === 'S' ? 'Si' : 'No');
-                    
+
                     var runt = response.vehiculo.RUNT;
                     $('#txtlicenciatransito').val(response.vehiculo.LICENCIA_TRANSITO);
                     $('#txtfechamatricula').val(response.vehiculo.FECHA_MATRICULA);
@@ -62,7 +62,7 @@ $(function () {
                     $('#txtdocumentoimportacion').val(response.vehiculo.DOCUMENTO_IMP);
                     $('#txtfechaimportacion').val(response.vehiculo.FECHA_IMP);
                     $('#txtpaisimportacion').val(response.vehiculo.PAIS_IMP);
-                    
+
                     var tipoImportacionId = response.vehiculo.TDOC_IMP_ID;
                     if (tipoImportacionId === 0) {
                         $('.importacion').hide();
@@ -73,19 +73,21 @@ $(function () {
                     $('#txtsoat').val(response.vehiculo.SOAT === 'S' ? 'Si' : 'No');
                     $('#txtfechavsoat').val(response.vehiculo.FECHAV_SOAT);
                     var soat = response.vehiculo.SOAT;
-                    if(soat === 'N'){
+                    if (soat === 'N') {
                         $('#txtfechavsoat').hide();
                     }
-                    
+
                     $('#txttecnomecanica').val(response.vehiculo.TECNO_MECANICA === 'S' ? 'Si' : 'No');
                     $('#txtfechavtecnomecanica').val(response.vehiculo.FECHAV_TECNO);
                     var tecnomecanica = response.vehiculo.TECNO_MECANICA;
-                    if(tecnomecanica === 'N'){
+                    if (tecnomecanica === 'N') {
                         $('#txtfechavtecnomecanica').hide();
                     }
 
                     $('#txtobservaciones').val(response.vehiculo.OBSERVACIONES);
-
+                    
+                    $(".btneditar").attr("data-id", response.vehiculo.VEH_ID);
+                    
                     var personas = response.personasVehiculo;
                     var contenedor = $('#personas-vehiculo');
                     contenedor.empty();
@@ -100,7 +102,7 @@ $(function () {
                         <input class="form-control" id="txttipodocumento" name="txttipodocumento" value="${persona.TIPO_DOC}" readonly="true">
                     </div>
                     <div class="col-sm-3 mb-3 mb-sm-0">
-                        <input class="form-control" type="number" id="txtdocumento" name="txtdocumento" value="${persona.DOCUMENTO}" required="true">
+                        <input class="form-control" type="text" id="txtdocumento" name="txtdocumento" value="${persona.DOCUMENTO}" readonly="true">
                     </div>
                     <div class="col-sm-5 mb-3 mb-sm-0">
                         <input class="form-control" type="text" id="txtnombre" name="txtnombre" value="${persona.NOMBRE}" readonly="true">
@@ -124,9 +126,14 @@ $(function () {
     } else {
         console.log("Parámetros no encontrados en la URL");
     }
-    
+
     $('#btnvolver').click(function () {
         window.location.href = "listarVehiculos.jsp";
+    });
+
+    $('#btneditar').click(function () {
+        var id = $(this).data('id');
+        window.location.href = "modificarVehiculo.jsp?opcion=2&id=" + id;
     });
 
 });

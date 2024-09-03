@@ -50,7 +50,7 @@
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label># Censo(*)</label>
-                                                <input class="form-control" type="text" id="txtnumerocenso" name="txtnumerocenso" maxlength="10" style="text-transform: uppercase" required="true">
+                                                <input class="form-control solo-numeros-censo" type="text" id="txtnumerocenso" name="txtnumerocenso" maxlength="10" style="text-transform: uppercase" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Fecha Censo (*)</label>
@@ -136,7 +136,6 @@
         <script src="${pageContext.request.contextPath}/scripts/verificaciones.js" type="text/javascript"></script>
         
         <script src="${pageContext.request.contextPath}/scripts/censo.js" type="text/javascript"></script>       
-        <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
         
     </body>
 </html>

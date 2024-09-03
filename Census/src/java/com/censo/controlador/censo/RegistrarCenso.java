@@ -136,6 +136,7 @@ public class RegistrarCenso extends HttpServlet {
             
             conex.setAutoCommit(false);
 
+            cencenso = new CenCenso();
             cencenso.setFecha(fechaCenso);
             cencenso.setHora(hora);
             cencenso.setPun_id(puntoAtencion);

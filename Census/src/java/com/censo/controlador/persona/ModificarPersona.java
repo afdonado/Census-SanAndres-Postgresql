@@ -48,8 +48,8 @@ public class ModificarPersona extends HttpServlet {
             conex = personaDao.conectar();
 
             //Verificar que la persona existe para modificar
-            CenPersona cenPersona = personaDao.ConsultarPersonaById(conex, idpersona);
-            if (cenPersona == null) {
+            CenPersona cenpersona = personaDao.ConsultarPersonaById(conex, idpersona);
+            if (cenpersona == null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "La persona no se encuentra registrada para modificarla");
 
@@ -61,7 +61,7 @@ public class ModificarPersona extends HttpServlet {
             //Validar parametro tipo documento
             if (request.getParameter("cmbtiposdocumento") == null || request.getParameter("cmbtiposdocumento").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'tipo documento' no encontrado para modificar la persona");
+                respuesta.put("message", "Parametro 'tipo documento' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -71,7 +71,7 @@ public class ModificarPersona extends HttpServlet {
             //Validar parametro numero documento
             if (request.getParameter("txtdocumento") == null || request.getParameter("txtdocumento").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'numero documento' no encontrado para modificar la persona");
+                respuesta.put("message", "Parametro 'numero documento' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -81,17 +81,7 @@ public class ModificarPersona extends HttpServlet {
             //Validar parametro txtprimernombre
             if (request.getParameter("txtprimernombre") == null || request.getParameter("txtprimernombre").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'primer nombre' no encontrado para modificar la persona");
-
-                String jsonError = new Gson().toJson(respuesta);
-                response.getWriter().write(jsonError);
-                return;
-            }
-            
-            //Validar parametro txtsegundonombre
-            if (request.getParameter("txtsegundonombre") == null || request.getParameter("txtsegundonombre").isEmpty()) {
-                respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'segundo nombre' no encontrado para modificar la persona");
+                respuesta.put("message", "Parametro 'primer nombre' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -101,17 +91,7 @@ public class ModificarPersona extends HttpServlet {
             //Validar parametro txtprimerapellido
             if (request.getParameter("txtprimerapellido") == null || request.getParameter("txtprimerapellido").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'primer apellido' no encontrado para modificar la persona");
-
-                String jsonError = new Gson().toJson(respuesta);
-                response.getWriter().write(jsonError);
-                return;
-            }
-            
-            //Validar parametro txtsegundoapellido
-            if (request.getParameter("txtsegundoapellido") == null || request.getParameter("txtsegundoapellido").isEmpty()) {
-                respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'segundo apellido' no encontrado para modificar la persona");
+                respuesta.put("message", "Parametro 'primer apellido' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -121,7 +101,27 @@ public class ModificarPersona extends HttpServlet {
             //Validar parametro txtfechanacimiento
             if (request.getParameter("txtfechanacimiento") == null || request.getParameter("txtfechanacimiento").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'fecha de nacimiento' no encontrado para modificar la persona");
+                respuesta.put("message", "Parametro 'fecha de nacimiento' no encontrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
+            //Validar parametro txtdireccion
+            if (request.getParameter("txtdireccion") == null || request.getParameter("txtdireccion").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'direccion' no encontrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
+            //Validar parametro txttelefono
+            if (request.getParameter("txttelefono") == null || request.getParameter("txttelefono").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'telefono' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -132,29 +132,36 @@ public class ModificarPersona extends HttpServlet {
             int tipoDocumento = Integer.parseInt(request.getParameter("cmbtiposdocumento"));
             String documento = request.getParameter("txtdocumento").toUpperCase().trim();
             String primerNombre = request.getParameter("txtprimernombre").toUpperCase().trim();
-            String segundoNombre = request.getParameter("txtsegundonombre").toUpperCase().trim();
+            String segundoNombre = "";
+            //Validar parametro txtsegundonombre
+            if (request.getParameter("txtsegundonombre") != null) {
+                segundoNombre = request.getParameter("txtsegundonombre").toUpperCase().trim();
+            }
             String primerApellido = request.getParameter("txtprimerapellido").toUpperCase().trim();
-            String segundoApellido = request.getParameter("txtsegundoapellido").toUpperCase().trim();
+            String segundoApellido = "";
+            //Validar parametro txtsegundoapellido
+            if (request.getParameter("txtsegundoapellido") != null) {
+                segundoApellido = request.getParameter("txtsegundoapellido").toUpperCase().trim();
+            }
             Date fechaNacimiento = new Date(new SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechanacimiento")).getTime());
             int genero = Integer.parseInt(request.getParameter("cmbgeneros"));
             long municipio = Long.parseLong(request.getParameter("cmbmunicipios"));
             String direccion = request.getParameter("txtdireccion").toUpperCase().trim();
             String telefono = request.getParameter("txttelefono").toUpperCase().trim();
             String email = request.getParameter("txtemail").toUpperCase().trim();
-            int grupoSanguineo = Integer.parseInt(request.getParameter("cmbgrupossanguineo"));
+            int grupoSanguineo = Integer.parseInt(request.getParameter("cmbgrupossanguineos"));
             String numeroLicencia = request.getParameter("txtnumerolicencia").toUpperCase().trim();
             int categoriaLicencia = 0;
             Date fechaExpLicencia = null;
             Date fechaVenLicencia = null;
             if (!numeroLicencia.equals("")) {
-                categoriaLicencia = Integer.parseInt(request.getParameter("cmdcategoriaslicencia"));
+                categoriaLicencia = Integer.parseInt(request.getParameter("cmbcategoriaslicencia"));
                 fechaExpLicencia = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechaexplicencia")).getTime());
-                fechaVenLicencia = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechavenlicencia")).getTime());
+                fechaVenLicencia = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechavlicencia")).getTime());
             }
 
             conex.setAutoCommit(false);
 
-            CenPersona cenpersona = new CenPersona();
             cenpersona.setId(idpersona);
             cenpersona.setTipodocumento(tipoDocumento);
             cenpersona.setDocumento(documento);

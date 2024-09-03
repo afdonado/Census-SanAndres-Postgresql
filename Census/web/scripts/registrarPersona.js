@@ -7,6 +7,64 @@ $(function () {
     });
 
     $.ajax({
+        url: '../../cargarTiposDocumento',
+        method: 'GET',
+        success: function (data) {
+            var select = $('#cmbtiposdocumento');
+            select.empty();
+
+            $.each(data, function (index, item) {
+                select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
+            });
+
+            var select = $('#cmbtiposdocumento1');
+            select.empty();
+
+            $.each(data, function (index, item) {
+                select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
+            });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de cargar tipos de documentos: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar tipos de documentos.");
+        }
+    });
+    
+    $.ajax({
+        url: '../../cargarGeneros',
+        method: 'GET',
+        success: function (data) {
+            var select = $('#cmbgeneros');
+            select.empty();
+
+            $.each(data, function (index, item) {
+                select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
+            });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de cargar generos: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar generos.");
+        }
+    });
+    
+    $.ajax({
+        url: '../../cargarGruposSanguineos',
+        method: 'GET',
+        success: function (data) {
+            var select = $('#cmbgrupossanguineos');
+            select.empty();
+
+            $.each(data, function (index, item) {
+                select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
+            });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud de cargar grupos sanguineos: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar grupos sanguineos.");
+        }
+    });
+
+    $.ajax({
         url: '../../cargarDepartamentos',
         method: 'GET',
         success: function (data) {
@@ -44,19 +102,12 @@ $(function () {
             alert("Ocurrió un error al procesar la solicitud de cargar municipios.");
         }
     });
-
+    
     $.ajax({
-        url: '../../cargarTiposDocumento',
+        url: '../../cargarCategoriasLicencia',
         method: 'GET',
         success: function (data) {
-            var select = $('#cmbtiposdocumento');
-            select.empty();
-
-            $.each(data, function (index, item) {
-                select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
-            });
-
-            var select = $('#cmbtiposdocumento1');
+            var select = $('#cmbcategoriaslicencia');
             select.empty();
 
             $.each(data, function (index, item) {
@@ -64,17 +115,19 @@ $(function () {
             });
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            console.error("Error en la solicitud de cargar tipos de documentos: ", textStatus, errorThrown);
-            alert("Ocurrió un error al procesar la solicitud de cargar tipos de documentos.");
+            console.error("Error en la solicitud de cargar categorias licencia: ", textStatus, errorThrown);
+            alert("Ocurrió un error al procesar la solicitud de cargar categorias licencia.");
         }
     });
+
+
 
     $('#btnguardar').click(function () {
         var documento = $('#txtdocumento').val();
         var primernombre = $('#txtprimernombre').val();
         var primerapellido = $('#txtprimerapellido').val();
 
-        var fechanacimiento = $('#txtfechanacimientos').val();
+        var fechanacimiento = $('#txtfechanacimiento').val();
         var direccion = $('#txtdireccion').val();
         var telefono = $('#txttelefono').val();
 
@@ -104,6 +157,7 @@ $(function () {
             success: function (response) {
                 if (response.status === "success") {
                     alert(response.message);
+                    $('#registrarpersona').hide();
                     window.location.href = "verPersona.jsp?opcion=1&id=" + response.id;
                 } else if (response.status === "fail") {
                     alert(response.message);
@@ -117,7 +171,7 @@ $(function () {
             }
         });
     });
-    
+
     $('#btnvolver').click(function () {
         window.location.href = "listarPersonas.jsp";
     });

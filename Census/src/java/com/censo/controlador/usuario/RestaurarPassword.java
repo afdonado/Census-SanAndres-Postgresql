@@ -54,10 +54,15 @@ public class RestaurarPassword extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
+            
+            String password;
+            if(cenusuario.getNumerodocumento() == null){
+                password = DigestUtils.md5Hex(cenusuario.getNombre());
+            } else {
+                password = DigestUtils.md5Hex(cenusuario.getNumerodocumento());
+            }
 
             conex.setAutoCommit(false);
-
-            String password = DigestUtils.md5Hex(cenusuario.getNumerodocumento());
 
             boolean modificado = usuarioDao.restaurarPasswordUsuario(conex, idusuario, password);
 
@@ -95,6 +100,9 @@ public class RestaurarPassword extends HttpServlet {
                 }
             }
         }
+        
+        String json = new Gson().toJson(respuesta);
+        response.getWriter().write(json);
     }
 
     @Override

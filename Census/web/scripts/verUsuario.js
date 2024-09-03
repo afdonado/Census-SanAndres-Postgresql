@@ -30,6 +30,8 @@ $(function () {
                     $('#txtfechafinal').val(response.usuario.FECHA_FINAL);
                     $('#txtestado').val(response.usuario.ESTADO);
                     
+                    $(".btneditar").attr("data-id", response.usuario.USU_ID);
+                    
                 } else if (response.status === "fail") {
                     alert(response.message);
                 } else if (response.status === "error") {
@@ -48,6 +50,11 @@ $(function () {
     
     $('#btnvolver').click(function () {
         window.location.href = "listarUsuarios.jsp";
+    });    
+    
+    $('#btneditar').click(function () {
+        var id = $(this).data('id');
+        window.location.href = "modificarUsuario.jsp?opcion=2&id="+id;
     });
 
 });

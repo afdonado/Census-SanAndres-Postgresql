@@ -232,13 +232,22 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                    <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
-                                </div>
+                            <%
+                                if (((java.util.LinkedList) session.getAttribute("permisosUsuario")).contains("modificarVehiculo.jsp")) {
+                            %>
+                            <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                <button type="button" class="btn btn-lg btn-success btn-block btneditar" id="btneditar" name="btneditar">Editar</button>
+                            </div>
+                            <%
+                                }
+                            %>
+                            <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
                             </div>
                         </div>
                     </div>
-                    <footer class="sticky-footer bg-white">
+                </div>
+                <footer class="sticky-footer bg-white">
                     <jsp:include page="/jsp/Footer.jsp"></jsp:include>
                     </footer>
                 </div>

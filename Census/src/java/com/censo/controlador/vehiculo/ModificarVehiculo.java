@@ -57,8 +57,8 @@ public class ModificarVehiculo extends HttpServlet {
             conex = vehiculoDao.conectar();
 
             //Verificar que el vehiculo existe para modificar
-            CenVehiculo cenVehiculo = vehiculoDao.ConsultarVehiculoById(conex, idvehiculo);
-            if (cenVehiculo == null) {
+            CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoById(conex, idvehiculo);
+            if (cenvehiculo == null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Vehiculo no se encuentra registrado");
 
@@ -409,16 +409,6 @@ public class ModificarVehiculo extends HttpServlet {
                         .parse(request.getParameter("txtfechavtecnomecanica")).getTime());
             }
 
-            //Validar parametro observacion
-            if (request.getParameter("txtobservaciones") == null || request.getParameter("txtobservaciones").isEmpty()) {
-                respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'observaciones' no encontrado");
-
-                String jsonError = new Gson().toJson(respuesta);
-                response.getWriter().write(jsonError);
-                return;
-            }
-
             //Validar parametro cantidad personas
             if (request.getParameter("txtcantidadpersonas") == null || request.getParameter("txtcantidadpersonas").isEmpty()) {
                 respuesta.put("status", "error");
@@ -429,7 +419,11 @@ public class ModificarVehiculo extends HttpServlet {
                 return;
             }
 
-            String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
+            String observaciones = "";
+            //Validar parametro observaciones
+            if (request.getParameter("txtobservaciones") != null) {
+                observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
+            }
             int cantpersonas = (Integer.parseInt(request.getParameter("txtcantidadpersonas")));
 
             CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
@@ -437,7 +431,6 @@ public class ModificarVehiculo extends HttpServlet {
             try {
                 conex.setAutoCommit(false);
 
-                CenVehiculo cenvehiculo = new CenVehiculo();
                 cenvehiculo.setId(idvehiculo);
                 cenvehiculo.setPlaca_veh(placa);
                 cenvehiculo.setChasis(chasis);

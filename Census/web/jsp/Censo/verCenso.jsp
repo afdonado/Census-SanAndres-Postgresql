@@ -142,7 +142,7 @@
                                             <input class="form-control" id="txttipodocumentopresento" name="txttipodocumentopresento" readonly="true">
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <input class="form-control" type="number" id="txtdocumentopresento" name="txtdocumentopresento" required="true">
+                                            <input class="form-control" type="text" id="txtdocumentopresento" name="txtdocumentopresento" required="true">
                                         </div>
                                         <div class="col-sm-5 mb-3 mb-sm-0">
                                             <input class="form-control" type="text" id="txtnombrepresento" name="txtnombrepresento" readonly="true">
@@ -165,20 +165,29 @@
                                 <div class="form-group col-xs-6 col-sm-2 col-md-2">
                                     <button type="button" class="btn btn-lg btn-success btn-block" id="btngenerarpdf" name="btngenerarpdf">Generar PDF</button>
                                 </div>-->
-                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                    <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
-                                </div>
+                            <%
+                                if (((java.util.LinkedList) session.getAttribute("permisosUsuario")).contains("modificarCenso.jsp")) {
+                            %>
+                            <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                <button type="button" class="btn btn-lg btn-success btn-block btneditar" id="btneditar" name="btneditar">Editar</button>
                             </div>
-                            <!--
-                                <div id="page-wrapper">
-                                    <div class="row">
-                                        <iframe src="../Documentos/ListarDocumentos.jsp?idcenso=idcenso" style="width: 100%; min-height: 1500px;" transparency="transparency" frameborder="0" ></iframe>
-                                </div>
+                            <%
+                                }
+                            %>
+                            <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
                             </div>
-                            -->
                         </div>
+                        <!--
+                            <div id="page-wrapper">
+                                <div class="row">
+                                    <iframe src="../Documentos/ListarDocumentos.jsp?idcenso=idcenso" style="width: 100%; min-height: 1500px;" transparency="transparency" frameborder="0" ></iframe>
+                            </div>
+                        </div>
+                        -->
                     </div>
-                    <footer class="sticky-footer bg-white">
+                </div>
+                <footer class="sticky-footer bg-white">
                     <jsp:include page="/jsp/Footer.jsp"></jsp:include>
                     </footer>
                 </div>

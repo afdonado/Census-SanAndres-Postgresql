@@ -61,7 +61,7 @@
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Documento</label>
-                                                <input class="form-control" type="number" id="txtdocumento" name="txtdocumento">
+                                                <input class="form-control solo-numeros" type="text" id="txtdocumento" name="txtdocumento">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -77,19 +77,15 @@
                                                 <label>Fecha Inicio</label>
                                                 <input class="form-control" type="text" id="txtfechainicial" name="txtfechainicial" readonly="true">
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Fecha Final</label>
-                                                <input class="form-control" type="text" id="txtfechafinal" name="txtfechafinal" readonly="true">
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-xs-3 col-sm-3 col-md-2">
-                                        <button type="button" class="btn btn-lg btn-success btn-block" id="btnguardar" name="btnguardar" >Guardar</button><!--onclick="modificarUsuario()"-->
+                                        <button type="button" class="btn btn-lg btn-success btn-block" id="btnguardar" name="btnguardar" >Guardar</button>
                                     </div>
                                     <div class="form-group col-xs-4 col-sm-4 col-md-4">
-                                        <button type="button" class="btn btn-lg btn-primary btn-block" id="btnrestaurar" name="btnrestaurar">Restaurar Password</button><!--onclick="restaurarPassword()"-->
+                                        <button type="button" class="btn btn-lg btn-primary btn-block restaurar" id="btnrestaurar" name="btnrestaurar">Restaurar Password</button>
                                     </div>
                                     <div class="form-group col-xs-3 col-sm-3 col-md-2">
                                         <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
@@ -139,7 +135,7 @@
         <script src="${pageContext.request.contextPath}/scripts/modificarUsuario.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/usuarios.js" type="text/javascript"></script>
         
-        <script src="${pageContext.request.contextPath}/scripts/fechas.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
         
     </body>
 </html>

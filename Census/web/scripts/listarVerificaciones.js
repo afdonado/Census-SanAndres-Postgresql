@@ -44,7 +44,7 @@ console.log('respuesta -> ',response);
 
     $('.table-responsive').on('click', '.btneditar', function () {
         var id = $(this).data('id');
-        window.location.href = "verModificarVerificacion.jsp?opcion=2&id=" + id;
+        window.location.href = "modificarVerificacion.jsp?opcion=2&id=" + id;
     });
 
 });

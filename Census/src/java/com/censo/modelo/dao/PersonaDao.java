@@ -173,10 +173,7 @@ public class PersonaDao extends Conexion {
         List<HashMap<String, Object>> lista = new LinkedList<>();
 
         try {
-            pst = conex.prepareStatement("SELECT PER_ID,PER_TIPODOC,TIPO_DOC,DOCUMENTO,NOMBRE1,NOMBRE2,APELLIDO1,APELLIDO2,NOMBRE_COMPLETO,"
-                    + "TO_CHAR(FECHA_NAC,'dd/MM/yyyy') FECHA_NAC,PER_GENERO,GENERO,DIRECCION,MUN_ID,MUNICIPIO,DEPT_ID,DEPARTAMENTO,TELEFONO,"
-                    + "MAIL,ID_GRUPOSAN,GRUPO_SANGUINEO,LIC_CONDUCCION,FECHA_EXP,FECHA_VEN,PER_CATLIC,CATEGORIA_LIC,TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO "
-                    + "FROM VW_PERSONAS ");
+            pst = conex.prepareStatement("SELECT * FROM VW_PERSONAS ");
             rst = pst.executeQuery();
 
             while (rst.next()) {

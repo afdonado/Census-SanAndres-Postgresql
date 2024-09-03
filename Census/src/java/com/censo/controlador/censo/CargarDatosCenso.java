@@ -53,7 +53,7 @@ public class CargarDatosCenso extends HttpServlet {
                 respuesta.put("censo", datosCenso);
                 respuesta.put("personasVehiculo", personasVehiculo);
             } else {
-                respuesta.put("respuesta", "fail");
+                respuesta.put("status", "fail");
                 respuesta.put("message", "Censo no se encuentra registrado");
             }
 

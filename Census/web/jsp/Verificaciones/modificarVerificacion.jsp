@@ -147,6 +147,5 @@
 
         <script src="${pageContext.request.contextPath}/scripts/verificaciones.js" type="text/javascript"></script>
         
-        <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
     </body>
 </html>

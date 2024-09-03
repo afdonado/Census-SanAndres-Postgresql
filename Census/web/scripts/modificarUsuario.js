@@ -21,14 +21,15 @@ $(function () {
                 var tipoDocumentoId = response.usuario.TIPO_DOCUMENTO_ID;
                 $('#txtdocumento').val(response.usuario.NUMERO_DOCUMENTO);
                 $('#txtnombre').val(response.usuario.NOMBRE_USUARIO);
-                
+
                 var perfilId = response.usuario.PEF_ID;
                 $('#txtfechainicial').val(response.usuario.FECHA_INICIO);
-                $('#txtfechafinal').val(response.usuario.FECHA_FINAL);
-                
+
                 var estadoId = response.usuario.ESTADO_ID;
-                
+
                 $('#idusuario').val(response.usuario.USU_ID);
+
+                $('.restaurar').attr('data-id', response.usuario.USU_ID);
 
                 $.ajax({
                     url: '../../cargarPerfiles',
@@ -42,7 +43,7 @@ $(function () {
                         select.val(perfilId);
                     }
                 });
-                
+
                 $.ajax({
                     url: '../../cargarTiposDocumento',
                     method: 'GET',
@@ -55,7 +56,7 @@ $(function () {
                         select.val(tipoDocumentoId);
                     }
                 });
-                
+
                 $.ajax({
                     url: '../../cargarEstados',
                     method: 'GET',
@@ -74,7 +75,7 @@ $(function () {
     } else {
         console.log("Parámetros no encontrados en la URL");
     }
-    
+
     $('#btnguardar').click(function () {
         var nombre = $('#txtnombre').val();
 
@@ -82,10 +83,10 @@ $(function () {
             alert('Debe ingresar el nombre del usuario');
             return false;
         }
-        
+
         $('#frmmodificarusuario').trigger("submit");
     });
-    
+
     $("#frmmodificarusuario").submit(function (event) {
         event.preventDefault();
 
@@ -112,9 +113,36 @@ $(function () {
             }
         });
     });
-    
+
     $('#btnvolver').click(function () {
         window.location.href = "listarUsuarios.jsp";
     });
+
+
+    $('#btnrestaurar').click(function () {
+        var id = $(this).data('id');
+        restaurarPassword(id);
+    });
+
+    function restaurarPassword(id) {
+        $.ajax({
+            url: "../../restaurarPassword",
+            method: "get",
+            data: {idusuario: id},
+            success: function (response) {
+                if (response.status === "success") {
+                    alert(response.message);
+                } else if (response.status === "fail") {
+                    alert(response.message);
+                } else if (response.status === "error") {
+                    alert(response.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de restaurar password: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de restaurar password.");
+            }
+        });
+    }
 
 });

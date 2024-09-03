@@ -136,13 +136,5 @@ function modificarUsuario() {
         document.getElementById('frmmodificarusuario').submit();
     }
 }
-
-function restaurarPassword() {
-    var idusuario = document.getElementById('idusuario').value.toString().toUpperCase();
-    if (idusuario > 0) {
-        document.getElementById('frmconsultarusuario').action = '../../restaurarPassword';
-        document.getElementById('frmconsultarusuario').submit();
-    }
-}
  * 
  */

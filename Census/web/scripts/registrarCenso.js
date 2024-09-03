@@ -70,7 +70,7 @@ $(function (){
     
     $('#txtnumerocenso').blur(function () {
         if ($('#txtnumerocenso').val().length > 0) {
-            verificarNumeroCenso($('#txtnumerocenso').val().toString().toUpperCase());
+            verificarNumeroCenso($('#txtnumerocenso').val());
         }
     });
     

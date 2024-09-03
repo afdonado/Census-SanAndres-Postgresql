@@ -49,7 +49,7 @@ public class CargarDatosPersona extends HttpServlet {
                 respuesta.put("status", "success");
                 respuesta.put("persona", datos);
             } else {
-                respuesta.put("respuesta", "fail");
+                respuesta.put("status", "fail");
                 respuesta.put("message", "Persona no se encuentra registrada");
             }
 

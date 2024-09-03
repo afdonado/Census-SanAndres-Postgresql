@@ -37,19 +37,10 @@
             if (sessionCensus.getAttribute("usuario") != null) {
                 if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("registrarPersona.jsp")) {
 
-                    int opcion = 0;
-                    int tipoDocumento = 0;
-                    String documento = "";
-                    String readonly = "";
-                    if (request.getParameter("opcion") != null) {
-                        opcion = Integer.parseInt(request.getParameter("opcion"));
-                    }
-
-                    if (opcion == 2) {
-                        tipoDocumento = Integer.parseInt(request.getParameter("tipodoc"));
-                        documento = request.getParameter("documento").toUpperCase().trim();
-                        readonly = "readonly";
-                    }
+                    int opcion = Integer.parseInt(request.getParameter("opcion"));
+                    int tipoDocumento = Integer.parseInt(request.getParameter("tipodoc"));
+                    String documento = request.getParameter("documento").toUpperCase().trim();
+                        
         %>
         <!--Modal Respuesta Peticion-->
         <div class="modal fade" id="respuesta" name="respuesta" role="dialog" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -69,31 +60,10 @@
         </div>
 
         <div id="wrapper">
-            <%
-                if (opcion == 1) {
-            %>
-            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-                <jsp:include page="/jsp/Menu.jsp"></jsp:include>
-                </ul>
 
                 <div id="content-wrapper" class="d-flex flex-column">
                     <div id="content">
-
-                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                        <jsp:include page="/jsp/Header.jsp"></jsp:include>
-                        </nav>
-                    <%
-                        }
-                    %>
-
-                    <div class="container-fluid">
-                        <%
-                            if (opcion == 1) {
-                        %>
-                        <h1 class="h3 mb-2 text-gray-800">Registrar Persona</h1>
-                        <%
-                            }
-                        %>
+                        <div class="container-fluid">
                         <form class="user" id="frmregistrarpersona">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
@@ -103,11 +73,11 @@
                                     <div class="form-group row">
                                         <div class="col-sm-3 mb-3 mb-sm-0">
                                             <label>Tipo Documento</label>
-                                            <select class="form-control" id="cmbtiposdocumento" name="cmbtiposdocumento" value="<%=tipoDocumento%>" <%=readonly%> required="true"></select>
+                                            <select class="form-control" id="cmbtiposdocumento" name="cmbtiposdocumento" value="<%=tipoDocumento%>" readonly="true" required="true"></select>
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
                                             <label>Documento</label>
-                                            <input class="form-control solo-numeros" type="text" id="txtdocumento" name="txtdocumento" maxlength="20" style="text-transform: uppercase" value="<%=documento%>" <%=readonly%> required="true">
+                                            <input class="form-control solo-numeros" type="text" id="txtdocumento" name="txtdocumento" maxlength="20" style="text-transform: uppercase" value="<%=documento%>" readonly="true" required="true">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -151,26 +121,26 @@
                                 <div class="card-body">
                                     <div class="form-group row">
                                         <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Departamento(*)</label>
+                                            <label>Departamento</label>
                                             <select class="form-control" id="cmbdepartamentos" name="cmbdepartamentos" required="true"></select>
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Municipio(*)</label>
+                                            <label>Municipio</label>
                                             <select class="form-control" id="cmbmunicipios" name="cmbmunicipios" required="true"></select>
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Dirección(*)</label>
-                                            <input class="form-control" type="text" id="txtdireccion" name="txtdireccion" maxlength="80" style="text-transform: uppercase" required="true">
+                                            <label>Dirección</label>
+                                            <input class="form-control" type="text" id="txtdireccion" name="txtdireccion" maxlength="80" style="text-transform: uppercase" readonly="true">
                                         </div>
                                     </div>
                                     <div class="form-group row">                                    
                                         <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Telefono(*)</label>
-                                            <input class="form-control solo-numeros" type="text" id="txttelefono" name="txttelefono" maxlength="30" required="true">
+                                            <label>Telefono</label>
+                                            <input class="form-control solo-numeros" type="text" id="txttelefono" name="txttelefono" maxlength="30" readonly="true">
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
                                             <label>Correo Electronico</label>
-                                            <input class="form-control validar-email" type="text" id="txtemail" name="txtemail" maxlength="100" style="text-transform: uppercase" required="true">
+                                            <input class="form-control" type="email" id="txtemail" name="txtemail" maxlength="100" style="text-transform: uppercase" readonly="true">
                                         </div>
                                     </div>
                                 </div>
@@ -182,11 +152,11 @@
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>No. Licencia Conduccion</label>
-                                                <input class="form-control solo-numeros" type="text" id="txtnumerolicencia" name="txtnumerolicencia" maxlength="30">
+                                                <input class="form-control solo-numeros" type="text" id="txtnumerolicencia" name="txtnumerolicencia" maxlength="30" readonly="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Categoria</label>
-                                                <select class="form-control" id="cmbcategoriaslicencia" name="cmbcategoriaslicencia"></select>
+                                                <select class="form-control" id="cmbcategoriaslicencia" name="cmbcategoriaslicencia" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Fecha Expedición</label>
@@ -204,25 +174,13 @@
                                 <div class="form-group col-xs-6 col-sm-2 col-md-2">
                                     <button type="button" class="btn btn-lg btn-success btn-block" id="btnguardar" name="btnguardar" >Guardar</button>
                                 </div>
-                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                    <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
-                                </div>
                             </div>
                             <input type="hidden" id="opcion" name="opcion" value="<%=opcion%>">
                         </form>
                     </div>
-                    <%
-                        if (opcion == 1) {
-                    %>
-                    <footer class="sticky-footer bg-white">
-                        <jsp:include page="/jsp/Footer.jsp"></jsp:include>
-                        </footer>
-                    <%
-                        }
-                    %>
+                    </div>
                 </div>
             </div>
-        </div>
         <%
         } else {
         %>

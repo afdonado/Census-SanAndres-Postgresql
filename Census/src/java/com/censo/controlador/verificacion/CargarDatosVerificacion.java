@@ -51,7 +51,7 @@ public class CargarDatosVerificacion extends HttpServlet {
                 respuesta.put("status", "success");
                 respuesta.put("verificacion", datos);
             } else {
-                respuesta.put("respuesta", "fail");
+                respuesta.put("status", "fail");
                 respuesta.put("message", "Verificacion no se encuentra registrado");
             }
 

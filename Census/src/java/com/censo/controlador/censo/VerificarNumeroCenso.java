@@ -28,7 +28,6 @@ public class VerificarNumeroCenso extends HttpServlet {
         Map<String, String> respuesta = new HashMap<>();
 
         try {
-
             
             if (request.getParameter("numero") == null || request.getParameter("numero").isEmpty()) {
                 respuesta.put("status", "error");
@@ -61,7 +60,7 @@ public class VerificarNumeroCenso extends HttpServlet {
                 respuesta.put("status", "success");
                 respuesta.put("message", "Numero censo valido");
             } else {
-                respuesta.put("respuesta", "fail");
+                respuesta.put("status", "fail");
                 respuesta.put("message", "Numero censo no valido, ya se encuentra registrado");
             }
 

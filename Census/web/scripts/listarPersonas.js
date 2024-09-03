@@ -45,14 +45,12 @@ $(function () {
 
     $('.table-responsive').on('click', '.btnconsultar', function () {
         var id = $(this).data('id');
-        console.log("id: " + id);
         window.location.href = "verPersona.jsp?opcion=1&id=" + id;
 
     });
 
     $('.table-responsive').on('click', '.btneditar', function () {
         var id = $(this).data('id');
-        console.log("id: " + id);
         window.location.href = "modificarPersona.jsp?opcion=2&id=" + id;
     });
 

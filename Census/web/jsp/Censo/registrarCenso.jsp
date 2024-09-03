@@ -85,7 +85,7 @@
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label># Censo(*)</label>
-                                                <input class="form-control" type="text" id="txtnumerocenso" name="txtnumerocenso" maxlength="10" style="text-transform: uppercase" required="true">
+                                                <input class="form-control solo-numeros" type="text" id="txtnumerocenso" name="txtnumerocenso" placeholder="Ingrese solo el numero" maxlength="10" style="text-transform: uppercase" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Fecha Censo (*)</label>
@@ -126,7 +126,7 @@
                                     <div class="form-group row">
                                         <div class="col-sm-3 mb-3 mb-sm-0">
                                             <label>Documento(*)</label>
-                                            <input class="form-control" type="number" id="txtdocumento" name="txtdocumento" maxlength="20" required="true">
+                                            <input class="form-control solo-numeros" type="text" id="txtdocumento" name="txtdocumento" maxlength="20" required="true">
                                         </div>
                                         <div class="col-sm-9 mb-9 mb-sm-0">
                                             <label>Nombre</label>
