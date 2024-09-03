@@ -45,5 +45,9 @@ $(function () {
     } else {
         console.log("Parámetros no encontrados en la URL");
     }
+    
+    $('#btnvolver').click(function () {
+        window.location.href = "listarUsuarios.jsp";
+    });
 
 });

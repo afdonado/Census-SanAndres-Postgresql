@@ -78,11 +78,43 @@ $(function () {
     $('#btnguardar').click(function () {
         var nombre = $('#txtnombre').val();
 
-        if (nombre.length > 0) {
-            $('#frmmodificarusuario').submit();
-        } else {
+        if (nombre.length === 0) {
             alert('Debe ingresar el nombre del usuario');
+            return false;
         }
+        
+        $('#frmmodificarusuario').trigger("submit");
+    });
+    
+    $("#frmmodificarusuario").submit(function (event) {
+        event.preventDefault();
+
+        var parametros = $(this).serialize();
+
+        $.ajax({
+            data: parametros,
+            url: "../../modificarUsuario",
+            type: "POST",
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    alert(response.message);
+                    window.location.href = "verUsuario.jsp?opcion=1&id=" + response.id;
+                } else if (response.status === "fail") {
+                    alert(response.message);
+                } else if (response.status === "error") {
+                    alert(response.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de modificar usuario: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de modificar usuario.");
+            }
+        });
+    });
+    
+    $('#btnvolver').click(function () {
+        window.location.href = "listarUsuarios.jsp";
     });
 
 });

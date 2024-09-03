@@ -7,69 +7,50 @@
 <%@page import="javax.servlet.http.HttpSession"%>
 <%@page import="java.sql.Date"%>
 <%@page import="java.util.List"%>
-<%@page import="com.censo.modelo.persistencia.CenDepartamento"%>
-<%@page import="com.censo.modelo.persistencia.CenMunicipio"%>
-<%@page import="com.censo.modelo.persistencia.CenGenero"%>
-<%@page import="com.censo.modelo.persistencia.CenGrupoSanguineo"%>
-<%@page import="com.censo.modelo.persistencia.CenCategoriaLicencia"%>
-<%@page import="com.censo.modelo.persistencia.CenTipoDocumento"%>
+<%@page import="javax.servlet.http.HttpSession"%>
+<%@page import="java.util.LinkedList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" />
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Registrar Persona</title>
 
-        <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <script src="../../vendor/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
-        <script src="../../vendor/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="../../scripts/Ajax.js" type="text/javascript"></script>
+        <!-- Custom fonts for this template-->
+        <link href="${pageContext.request.contextPath}/template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="${pageContext.request.contextPath}/template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
 
-        <link href="../../vendor/jquery-ui-1.12.1.Redmond/jquery-ui.css" rel="stylesheet" type="text/css"/>
-        <link href="../../vendor/jquery/calendario_es.css" rel="stylesheet" type="text/css"/>
-        <script src="../../vendor/jquery-ui-1.12.1.Redmond/jquery-ui.js" type="text/javascript"></script>
-        <script src="../../vendor/jquery/calendario_es.js" type="text/javascript"></script>
+        <!-- Custom styles for this template-->
+        <link href="${pageContext.request.contextPath}/template/css/sb-admin-2.min.css" rel="stylesheet">
 
-        <script src="../../scripts/validacionesCampos.js" type="text/javascript"></script>
-        <script src="../../scripts/personas.js" type="text/javascript"></script>
-        <script src="../../scripts/municipios.js" type="text/javascript"></script>
+        <!-- Custom styles for this page -->
+        <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
-        <script>
-            $(function () {
-                $("#txtfechanac").datepicker();
-            });
-            $(function () {
-                $("#txtfechaexplic").datepicker();
-            });
-            $(function () {
-                $("#txtfechavenlic").datepicker();
-            });
-            $(function () {
-                $("#accordion").accordion();
-            });
-        </script>
+        <link href="${pageContext.request.contextPath}/template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/template/vendor/jquery/calendario_es.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
-                if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("registrarPersona.jsp")) {
-                
-                    TipoDocumentoDao tipoDocumentoDao = new TipoDocumentoDao();
-                    GeneroDao generoDao = new GeneroDao();
-                    GrupoSanguineoDao grupoSanguineoDao = new GrupoSanguineoDao();
-                    DepartamentoDao departamentoDao = new DepartamentoDao();
-                    MunicipioDao municipioDao = new MunicipioDao();
-                    CategoriaLicenciaDao categoriaLicenciaDao = new CategoriaLicenciaDao();
-                    
+                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("registrarPersona.jsp")) {
+
                     Date fechaActual = new Date(new java.util.Date().getTime());
 
-                    CenTipoDocumento centipodocumento = new CenTipoDocumento();
                     int opcion = 0;
-                    int tipoDoc = 0;
+                    int tipoDocumento = 0;
                     String documento = "";
+                    String readonly = "";
                     if (request.getParameter("opcion") != null) {
                         opcion = Integer.parseInt(request.getParameter("opcion"));
+                    }
+
+                    if (opcion == 2) {
+                        tipoDocumento = Integer.parseInt(request.getParameter("tipodoc"));
+                        documento = request.getParameter("documento").toUpperCase().trim();
+                        readonly = "readonly";
                     }
         %>
         <!--Modal Respuesta Peticion-->
@@ -89,255 +70,155 @@
             </div>
         </div>
 
-        <div class="container-fluid">
-            <%
-                if (opcion == 1) {
-            %>
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 class="page-header">Personas - Registrar Persona</h1>
+        <div id="wrapper">
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                <jsp:include page="/jsp/Menu.jsp"></jsp:include>
+                </ul>
+
+                <div id="content-wrapper" class="d-flex flex-column">
+                    <div id="content">
+
+                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                        <jsp:include page="/jsp/Header.jsp"></jsp:include>
+                        </nav>
+
+                        <div class="container-fluid">
+                        <%
+                            if (opcion == 1) {
+                        %>
+                        <h1 class="h3 mb-2 text-gray-800">Registrar Persona</h1>
+                        <%
+                            }
+                        %>
+                        <form class="user" id="frmregistrarpersona">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos de Identificación</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Tipo Documento</label>
+                                            <select class="form-control" id="cmbtiposdocumento" name="cmbtiposdocumento" value="<%=tipoDocumento%>" <%=readonly%> required="true"></select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Documento</label>
+                                            <input class="form-control" type="number" id="txtdocumento" name="txtdocumento" maxlength="20" style="text-transform: uppercase" value="<%=documento%>" <%=readonly%> required="true">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Primer Nombre(*)</label>
+                                            <input class="form-control solo-letras" type="text" id="txtprimernombre" name="txtprimernombre" maxlength="80" style="text-transform: uppercase" required="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Segundo Nombre</label>
+                                            <input class="form-control solo-letras" type="text" id="txtsegundonombre" name="txtsegundonombre" maxlength="80" style="text-transform: uppercase">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Primer Apellido(*)</label>
+                                            <input class="form-control solo-letras" type="text" id="txtprimerapellido" name="txtprimerapellido" maxlength="80" style="text-transform: uppercase" required="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Segundo Apellido</label>
+                                            <input class="form-control solo-letras" type="text" id="txtsegundoapellido" name="txtsegundoapellido" maxlength="80" style="text-transform: uppercase">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Fecha Nacimiento(*)</label>
+                                            <input class="form-control" type="text" id="txtfechanacimiento" name="txtfechanacimiento" readonly="true" required="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Genero(*)</label>
+                                            <select class="form-control" id="cmbgeneros" name="cmbgeneros" required="true"></select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Grupo Sanguineo(*)</label>
+                                            <select class="form-control" id="cmbgruposanguineo" name="cmbgruposanguineo" required="true"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos de Contacto</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Departamento</label>
+                                            <select class="form-control" id="cmbdepartamentos" name="cmbdepartamentos" required="true"></select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Municipio</label>
+                                            <select class="form-control" id="cmbmunicipios" name="cmbmunicipios" required="true"></select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Dirección</label>
+                                            <input class="form-control" type="text" id="txtdireccion" name="txtdireccion" maxlength="80" style="text-transform: uppercase" readonly="true">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">                                    
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Telefono</label>
+                                            <input class="form-control" type="number" id="txttelefono" name="txttelefono" maxlength="30" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Correo Electronico</label>
+                                            <input class="form-control" type="email" id="txtemail" name="txtemail" maxlength="100" style="text-transform: uppercase" readonly="true">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Datos Licencia Conducción</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>No. Licencia Conduccion</label>
+                                                <input class="form-control" type="number" id="txtnumerolicencia" name="txtnumerolicencia" maxlength="30" readonly="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Categoria</label>
+                                                <select class="form-control" id="cmbcategorialicencia" name="cmbcategorialicencia" required="true"></select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Fecha Expedición</label>
+                                                <input class="form-control" type="text" id="txtfechaexplicencia" name="txtfechaexplicencia" readonly="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Fecha Vencimiento</label>
+                                                <input class="form-control" type="text" id="txtfechavlicencia" name="txtfechavlicencia" readonly="true">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                    <button type="button" class="btn btn-lg btn-success btn-block" id="btnguardar" name="btnguardar" >Guardar</button>
+                                </div>
+                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                    <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
+                                </div>
+                            </div>
+                            <input type="hidden" id="opcion" name="opcion" value="<%=opcion%>">
+                        </form>
+                    </div>
+                    <footer class="sticky-footer bg-white">
+                        <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                        </footer>
+                    </div>
                 </div>
             </div>
-            <%
-                }
-            %>
-            <form role="form" id="frmregistrarpersona" action="../../registrarPersona">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Datos Basicos
-                            </div>
-                            <div class="panel-body">
-                                <%
-                                    if (opcion == 2) {
-                                        tipoDoc = Integer.parseInt(request.getParameter("tipodoc"));
-                                        documento = request.getParameter("documento").toUpperCase().trim();
-                                        centipodocumento = tipoDocumentoDao.ConsultarTipoDocumentoById(tipoDoc);
-                                %>
-                                <div class="row form-group">
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Tipo Documento</label>
-                                        <input type="hidden" id="cmbtipodoc" name="cmbtipodoc" value="<%=tipoDoc%>"/>
-                                        <input type="text" class="form-control" id="txtdesctipodoc" name="txtdesctipodoc" onpaste="return false" value="<%=centipodocumento.getDescripcion()%>" readonly="true" />
-                                    </div>
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Documento</label>
-                                        <input type="text" class="form-control" id="txtdocumento" name="txtdocumento" onpaste="return false" value="<%=documento%>" size="20" readonly="true" />
-                                    </div>
-                                </div>
-                                <%
-                                } else {
-                                %>
-                                <div class="row form-group">
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Tipo Documento</label>
-                                        <select class="form-control" id="cmbtipodoc" name="cmbtipodoc">
-                                            <%
-                                                List listaTiposDocumento = tipoDocumentoDao.ListarTiposDocumento();
-
-                                                for (int i = 0; i < listaTiposDocumento.size(); i++) {
-                                                    centipodocumento = (CenTipoDocumento) listaTiposDocumento.get(i);
-                                                    if (centipodocumento.getId() == 1) {
-                                            %>
-                                            <option value="<%=centipodocumento.getId()%>" selected><%=centipodocumento.getDescripcion()%></option>
-                                            <% } else {%>
-                                            <option value="<%=centipodocumento.getId()%>"><%=centipodocumento.getDescripcion()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Documento (*)</label>
-                                        <input class="form-control" type="text" id="txtdocumento" name="txtdocumento" onKeyPress=" return validarNumeros(event)" onblur="consultarPersona(1)" maxlength="20" style="text-transform: uppercase" required>
-                                    </div>
-                                </div>
-                                <%
-                                    }
-                                %>
-                                <div class="row form-group">
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Primer Nombre (*)</label>
-                                        <input class="form-control" type="text" id="txtprinom" name="txtprinom" onKeyPress=" return validarLetras(event)" maxlength="80" style="text-transform: uppercase" required>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Segundo Nombre</label>
-                                        <input class="form-control" type="text" id="txtsegnom" name="txtsegnom" onKeyPress=" return validarLetras(event)" maxlength="80" style="text-transform: uppercase">
-                                    </div>
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Primer Apellido (*)</label>
-                                        <input class="form-control" type="text" id="txtpriape" name="txtpriape" onKeyPress=" return validarLetras(event)" maxlength="80" style="text-transform: uppercase" required>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Segundo Apellido</label>
-                                        <input class="form-control" type="text" id="txtsegape" name="txtsegape" onKeyPress=" return validarLetras(event)" maxlength="80" style="text-transform: uppercase">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Fecha Nacimiento (*)</label>
-                                        <input class="form-control" type="text" id="txtfechanac" name="txtfechanac" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Genero (*)</label>
-                                        <select class="form-control" id="cmbgenero" name="cmbgenero">
-                                            <%
-                                                List listaGeneros = generoDao.ListarGeneros();
-                                                for (int i = 0; i < listaGeneros.size(); i++) {
-                                                    CenGenero cengenero = (CenGenero) listaGeneros.get(i);
-                                                    if (cengenero.getId() == 1) {
-                                            %>
-                                            <option value="<%=cengenero.getId()%>" selected><%=cengenero.getDescripcion()%></option>
-                                            <% } else {%>
-                                            <option value="<%=cengenero.getId()%>"><%=cengenero.getDescripcion()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Grupo Sanguineo (*)</label>
-                                        <select class="form-control" id="cmbgrusanguineo" name="cmbgrusanguineo">
-                                            <%
-                                                List listaGruposSanguineo = grupoSanguineoDao.ListarGruposSanguineo();
-                                                for (int i = 0; i < listaGruposSanguineo.size(); i++) {
-                                                    CenGrupoSanguineo cengruposanguineo = (CenGrupoSanguineo) listaGruposSanguineo.get(i);
-                                                    if (cengruposanguineo.getId() == 1) {
-                                            %>
-                                            <option value="<%=cengruposanguineo.getId()%>" selected><%=cengruposanguineo.getDescripcion()%></option>
-                                            <% } else {%>
-                                            <option value="<%=cengruposanguineo.getId()%>"><%=cengruposanguineo.getDescripcion()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Datos Contacto
-                            </div>
-                            <div class="panel-body">
-                                <div class="row form-group">
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Departamento (*)</label>
-                                        <select class="form-control" id="cmbdepartamentodir" name="cmbdepartamentodir" onChange="consultarMunicipiosByDepto('cmbdepartamentodir', 'cmbmunicipiodir')
-                                                return false" onFocus="consultarMunicipiosByDepto('cmbdepartamentodir', 'cmbmunicipiodir')">
-                                            <%
-                                                List listaDepartamentos = departamentoDao.ListarDepartamentos();
-
-                                                for (int i = 0; i < listaDepartamentos.size(); i++) {
-                                                    CenDepartamento cendepartamento = (CenDepartamento) listaDepartamentos.get(i);
-                                                    if (cendepartamento.getId() == 4) {
-                                            %>
-                                            <option value="<%=cendepartamento.getId()%>" selected><%=cendepartamento.getNombre()%></option>
-                                            <% } else {%>
-                                            <option value="<%=cendepartamento.getId()%>"><%=cendepartamento.getNombre()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Municipio (*)</label>
-
-                                        <select class="form-control" id="cmbmunicipiodir" name="cmbmunicipiodir">
-                                            <%
-                                                java.util.List listaMunicipios = municipioDao.ListarMunicipiosByIdDepto(4);
-                                                for (int i = 0; i < listaMunicipios.size(); i++) {
-                                                    CenMunicipio cenmunicipio = (CenMunicipio) listaMunicipios.get(i);
-                                                    if (cenmunicipio.getId() == 144) {
-                                            %>
-                                            <option value="<%=cenmunicipio.getId()%>" selected><%=cenmunicipio.getNombre()%></option>
-                                            <%
-                                            } else {
-                                            %>
-                                            <option value="<%=cenmunicipio.getId()%>"><%=cenmunicipio.getNombre()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Direccion (*)</label>
-                                        <input class="form-control" type="text" id="txtdireccion" name="txtdireccion" maxlength="80" style="text-transform: uppercase" required>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Telefono (*)</label>
-                                        <input class="form-control" type="text" id="txttelefono" name="txttelefono" maxlength="30" style="text-transform: uppercase" required>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Correo Electronico</label>
-                                        <input class="form-control" type="text" id="txtmail" name="txtmail" maxlength="100" onblur="validateMail('txtmail')" style="text-transform: uppercase">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Datos Licencia Conduccion
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>No. Licencia Conduccion</label>
-                                        <input class="form-control" type="text" id="txtnumlicond" name="txtnumlicond" onKeyPress=" return validarNumeros(event)" maxlength="30" style="text-transform: uppercase">
-                                    </div>
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Categoria</label>
-                                        <select class="form-control" id="cmdcatlicencia" name="cmdcatlicencia">
-                                            <%
-                                                List listaCategoriasLicencia = categoriaLicenciaDao.ListarCategoriasLicencia();
-                                                for (int i = 0; i < listaCategoriasLicencia.size(); i++) {
-                                                    CenCategoriaLicencia cencategorialicencia = (CenCategoriaLicencia) listaCategoriasLicencia.get(i);
-                                                    if (cencategorialicencia.getId() == 1) {
-                                            %>
-                                            <option value="<%=cencategorialicencia.getId()%>" selected><%=cencategorialicencia.getDescripcion()%></option>
-                                            <% } else {%>
-                                            <option value="<%=cencategorialicencia.getId()%>"><%=cencategorialicencia.getDescripcion()%></option>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Fecha Expedicion</label>
-                                        <input class="form-control" type="text" id="txtfechaexplic" name="txtfechaexplic" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-3 col-md-3">
-                                        <label>Fecha Vencimiento</label>
-                                        <input class="form-control" type="text" id="txtfechavenlic" name="txtfechavenlic" readonly="true" value="<%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <input type="hidden" id="opcion" name="opcion" value="<%=opcion%>"/>
-                    </div>
-                </div>
-                <div class="row page-header">
-                    <div class="form-group col-xs-12 col-sm-3 col-md-3">
-                        <button type="button" class="btn btn-lg btn-success btn-block" onclick="registrarPersona()" id="btnregistrar" name="btnregistrar" >Registrar</button>
-                    </div>
-                </div>
-            </form>
-        </div>
         <%
         } else {
         %>
         <script type="text/javascript">
             alert("Su usuario no tiene permiso para acceder a esta pagina");
-            window.parent.location.href = "../Inicio.jsp";
+            window.parent.location.href = "../dashboard";
         </script>
         <%
             }
@@ -345,10 +226,29 @@
         %>
         <script type="text/javascript">
             alert("Su sesion a terminado");
-            document.location.href = "../../cerrarSesion";
+            document.location.href = "../../index.jsp";
         </script>
         <%
             }
         %>
+
+        <!-- Bootstrap core JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- Core plugin JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
+
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery/calendario_es.js" type="text/javascript"></script>
+
+        <script src="${pageContext.request.contextPath}/scripts/registrarPersona.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/personas.js" type="text/javascript"></script>
+
+        <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/fechas.js" type="text/javascript"></script>
     </body>
 </html>

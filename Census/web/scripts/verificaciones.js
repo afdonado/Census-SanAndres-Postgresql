@@ -1,10 +1,4 @@
 
-$(function () {
-    $('#btnvolver').click(function () {
-        window.location.href = "listarVerificaciones.jsp";
-    });
-});
-
 function verificar(){
     var idcenso = document.getElementById('idcenso').value;
     var numerocenso = document.getElementById('txtnumero').value.toString().toUpperCase();

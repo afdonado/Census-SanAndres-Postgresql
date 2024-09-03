@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -40,10 +41,13 @@ public class RegistrarVehiculo extends HttpServlet {
 
         try {
             
+            VehiculoDao vehiculoDao = new VehiculoDao();
+            conex = vehiculoDao.conectar();
+
             //Validar parametro placa
             if (request.getParameter("txtplaca") == null || request.getParameter("txtplaca").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'placa' no encontrado para registrar vehiculo");
+                respuesta.put("message", "Parametro 'placa' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -53,7 +57,7 @@ public class RegistrarVehiculo extends HttpServlet {
             //Validar parametro motor
             if (request.getParameter("txtmotor") == null || request.getParameter("txtmotor").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'motor' no encontrado para registrar vehiculo");
+                respuesta.put("message", "Parametro 'motor' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -63,7 +67,7 @@ public class RegistrarVehiculo extends HttpServlet {
             //Validar parametro chasis
             if (request.getParameter("txtchasis") == null || request.getParameter("txtchasis").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'chasis' no encontrado para registrar vehiculo");
+                respuesta.put("message", "Parametro 'chasis' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -73,7 +77,7 @@ public class RegistrarVehiculo extends HttpServlet {
             //Validar parametro serie
             if (request.getParameter("txtserie") == null || request.getParameter("txtserie").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'serie' no encontrado para registrar vehiculo");
+                respuesta.put("message", "Parametro 'serie' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -83,7 +87,7 @@ public class RegistrarVehiculo extends HttpServlet {
             //Validar parametro clase vehiculo
             if (request.getParameter("cmbclasevehiculo") == null || request.getParameter("cmbclasevehiculo").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'clase vehiculo' no encontrado para registrar vehiculo");
+                respuesta.put("message", "Parametro 'clase vehiculo' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -93,7 +97,7 @@ public class RegistrarVehiculo extends HttpServlet {
             //Validar parametro tipo servicio
             if (request.getParameter("cmbtiposservicio") == null || request.getParameter("cmbtiposservicio").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'tipo servicio' no encontrado para registrar vehiculo");
+                respuesta.put("message", "Parametro 'tipo servicio' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -103,7 +107,7 @@ public class RegistrarVehiculo extends HttpServlet {
             //Validar parametro tipo uso
             if (request.getParameter("cmbtiposuso") == null || request.getParameter("cmbtiposuso").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'tipo uso' no encontrado para registrar vehiculo");
+                respuesta.put("message", "Parametro 'tipo uso' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -113,7 +117,7 @@ public class RegistrarVehiculo extends HttpServlet {
             //Validar parametro color
             if (request.getParameter("txtcolores") == null || request.getParameter("txtcolores").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'color' no encontrado para registrar vehiculo");
+                respuesta.put("message", "Parametro 'color' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -137,7 +141,7 @@ public class RegistrarVehiculo extends HttpServlet {
             //Validar parametro marca
             if (request.getParameter("txtmarcas") == null || request.getParameter("txtmarcas").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'marca' no encontrado para registrar vehiculo");
+                respuesta.put("message", "Parametro 'marca' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -161,8 +165,7 @@ public class RegistrarVehiculo extends HttpServlet {
             //Validar parametro linea
             if (request.getParameter("txtlineas") == null || request.getParameter("txtlineas").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'linea' no encontrado para registrar vehiculo");
-
+                respuesta.put("message", "Parametro 'linea' no encontrado");
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
                 return;
@@ -181,9 +184,46 @@ public class RegistrarVehiculo extends HttpServlet {
                 return;
             }
 
-            VehiculoDao vehiculoDao = new VehiculoDao();
-            conex = vehiculoDao.conectar();
-            
+            //Validar parametro modelo
+            if (request.getParameter("txtmodelo") == null || request.getParameter("txtmodelo").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'modelo' no encontrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro transformado
+            if (request.getParameter("cmbtransformado") == null || request.getParameter("cmbtransformado").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'transformado' no encontrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro runt
+            if (request.getParameter("cmbrunt") == null || request.getParameter("cmbrunt").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'runt' no encontrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
+            //Validar parametro tecnomecanica
+            if (request.getParameter("cmbtecnomecanica") == null || request.getParameter("cmbtecnomecanica").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'tecnomecanica' no encontrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
             PersonaVehiculoDao daoPersonaVehiculo = new PersonaVehiculoDao();
 
             CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
@@ -192,131 +232,273 @@ public class RegistrarVehiculo extends HttpServlet {
             String motor = request.getParameter("txtmotor").toUpperCase().trim();
             String chasis = request.getParameter("txtchasis").toUpperCase().trim();
             String serie = request.getParameter("txtserie").toUpperCase().trim();
-            int claseVeh = Integer.parseInt(request.getParameter("cmbclasevehiculo"));
+            int claseVehiculo = Integer.parseInt(request.getParameter("cmbclasevehiculo"));
             int tipoServicio = Integer.parseInt(request.getParameter("cmbtiposservicio"));
             int tipoUso = Integer.parseInt(request.getParameter("cmbtiposuso"));
 
-            long modeloveh = Long.parseLong(request.getParameter("txtmodelo"));
+            long modelo = Long.parseLong(request.getParameter("txtmodelo"));
             String transformado = request.getParameter("cmbtransformado").toUpperCase().trim();
+
             String runt = request.getParameter("cmbrunt").toUpperCase().trim();
-            String licenciaTransito = request.getParameter("txtlicenciatransito").toUpperCase().trim();
             Date fechaMatricula = null;
+            String licenciaTransito = "";
             long paisMatricula = 0;
             long municipioMatricula = 0;
             String ciudaMatricula = "";
-            if (!licenciaTransito.equals("")) {
+
+            if (runt.equals("S")) {
+                //Validar parametro fecha matricula
+                if (request.getParameter("txtfechamatricula") == null || request.getParameter("txtfechamatricula").isEmpty()) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Parametro 'fecha matricula' no encontrado");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
+
+                //Validar parametro licencia de transito
+                if (request.getParameter("txtlicenciatransito") == null || request.getParameter("txtlicenciatransito").isEmpty()) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Parametro 'numero licencia transito' no encontrado");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
+
+                //Validar parametro pais matricula
+                if (request.getParameter("cmbpaismatricula") == null || request.getParameter("cmbpaismatricula").isEmpty()) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Parametro 'pais matricula' no encontrado");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
+
+                licenciaTransito = request.getParameter("txtlicenciatransito").toUpperCase().trim();
                 fechaMatricula = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechamatricula")).getTime());
                 paisMatricula = Long.parseLong(request.getParameter("cmbpaismatricula"));
-                municipioMatricula = Long.parseLong(request.getParameter("cmbmunicipiomatricula"));
-                ciudaMatricula = request.getParameter("txtciudadmatricula").toUpperCase().trim();
+
+                if (paisMatricula == 18) {
+
+                    //Validar parametro municipio matricula
+                    if (request.getParameter("cmbmunicipiomatricula") == null || request.getParameter("cmbmunicipiomatricula").isEmpty()) {
+                        respuesta.put("status", "error");
+                        respuesta.put("message", "Parametro 'municipio matricula' no encontrado");
+
+                        String jsonError = new Gson().toJson(respuesta);
+                        response.getWriter().write(jsonError);
+                        return;
+                    }
+
+                    municipioMatricula = Long.parseLong(request.getParameter("cmbmunicipiomatricula"));
+
+                } else {
+
+                    //Validar parametro ciudad matricula
+                    if (request.getParameter("txtciudadmatricula") == null || request.getParameter("txtciudadmatricula").isEmpty()) {
+                        respuesta.put("status", "error");
+                        respuesta.put("message", "Parametro 'ciudad matricula' no encontrado");
+
+                        String jsonError = new Gson().toJson(respuesta);
+                        response.getWriter().write(jsonError);
+                        return;
+                    }
+
+                    ciudaMatricula = request.getParameter("txtciudadmatricula").toUpperCase().trim();
+                }
             }
 
-            int tipoDocImportacion = Integer.parseInt(request.getParameter("cmbtiposimportacion"));
+            int tipoDocumentoImportacion = Integer.parseInt(request.getParameter("cmbtiposimportacion"));
             String documentoImportacion = "";
             Date fechaImportacion = null;
             long paisImportacion = 0;
 
-            if (tipoDocImportacion != 0) {
+            if (tipoDocumentoImportacion != 0) {
+
+                //Validar parametro fecha importacion
+                if (request.getParameter("txtfechaimportacion") == null || request.getParameter("txtfechaimportacion").isEmpty()) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Parametro 'fecha importacion' no encontrado");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
+
+                //Validar parametro numero documento importacion
+                if (request.getParameter("txtdocumentoimportacion") == null || request.getParameter("txtdocumentoimportacion").isEmpty()) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Parametro 'numero documento importacion' no encontrado");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
+
+                //Validar parametro numero documento importacion
+                if (request.getParameter("cmbpaisimportacion") == null || request.getParameter("cmbpaisimportacion").isEmpty()) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Parametro 'pais importacion' no encontrado");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
+
                 documentoImportacion = request.getParameter("txtdocumentoimportacion").toUpperCase().trim();
                 fechaImportacion = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechaimportacion")).getTime());
                 paisImportacion = Long.parseLong(request.getParameter("cmbpaisimportacion"));
             }
+
             String soat = request.getParameter("cmbsoat").toUpperCase().trim();
-            Date fechaVenSoat = null;
+            Date fechaVencimientoSoat = null;
             if (soat.equals("S")) {
-                fechaVenSoat = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechavsoat")).getTime());
+                //Validar parametro fecha vencimiento  soat
+                if (request.getParameter("txtfechavsoat") == null || request.getParameter("txtfechavsoat").isEmpty()) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Parametro 'fecha vencimiento soat' no encontrado");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
+
+                fechaVencimientoSoat = new Date(new SimpleDateFormat("dd/MM/yyyy")
+                        .parse(request.getParameter("txtfechavsoat")).getTime());
             }
+
             String tecnoMecanica = request.getParameter("cmbtecnomecanica").toUpperCase().trim();
-            Date fechaVenTecnomecanica = null;
+            Date fechaVencimientoTecnomecanica = null;
             if (tecnoMecanica.equals("S")) {
-                fechaVenTecnomecanica = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechavtecnomecanica")).getTime());
+                //Validar parametro fecha vencimiento tecnomecanica
+                if (request.getParameter("txtfechavtecnomecanica") == null || request.getParameter("txtfechavtecnomecanica").isEmpty()) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Parametro 'fecha vencimiento tecnomecanica' no encontrado");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
+
+                fechaVencimientoTecnomecanica = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy")
+                        .parse(request.getParameter("txtfechavtecnomecanica")).getTime());
             }
 
+            //Validar parametro observacion
+            if (request.getParameter("txtobservaciones") == null || request.getParameter("txtobservaciones").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'observaciones' no encontrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
+            //Validar parametro cantidad personas
+            if (request.getParameter("txtcantidadpersonas") == null || request.getParameter("txtcantidadpersonas").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'personas' no encontrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
             String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
+
             int cantpersonas = (Integer.parseInt(request.getParameter("txtcantidadpersonas")));
-            
-            conex.setAutoCommit(false);
-            
-            boolean registrado = false;
-            
+
             if (cantpersonas > 0) {
-                
-                CenVehiculo cenvehiculo = new CenVehiculo();
-                cenvehiculo.setPlaca_veh(placa);
-                cenvehiculo.setChasis(chasis);
-                cenvehiculo.setSerie(serie);
-                cenvehiculo.setMotor(motor);
-                cenvehiculo.setClase_veh(claseVeh);
-                cenvehiculo.setTipo_servicio(tipoServicio);
-                cenvehiculo.setTipo_uso(tipoUso);
-                cenvehiculo.setCol_id(cencolor.getId());
-                cenvehiculo.setLin_id(cenlinea.getId());
-                cenvehiculo.setModelo(modeloveh);
-                cenvehiculo.setTransformado(transformado);
-                cenvehiculo.setRunt(runt);
-                cenvehiculo.setLicencia_transito(licenciaTransito);
-                cenvehiculo.setFecha_matricula(fechaMatricula);
-                cenvehiculo.setPai_id_matricula(paisMatricula);
-                cenvehiculo.setMun_id_matricula(municipioMatricula);
-                cenvehiculo.setCiudad_matricula(ciudaMatricula);
-                cenvehiculo.setTipodoc_importacion(tipoDocImportacion);
-                cenvehiculo.setDoc_importacion(documentoImportacion);
-                cenvehiculo.setFecha_importacion(fechaImportacion);
-                cenvehiculo.setPai_id_origen(paisImportacion);
-                cenvehiculo.setSoat(soat);
-                cenvehiculo.setFechaven_soat(fechaVenSoat);
-                cenvehiculo.setTecno_mecanica(tecnoMecanica);
-                cenvehiculo.setFechaven_tecno(fechaVenTecnomecanica);
-                cenvehiculo.setObservaciones(observaciones);
-                cenvehiculo.setUsu_id(cenusuario.getId());
-                cenvehiculo.setEstado(1);
-                long idVehiculo = vehiculoDao.adicionarVehiculo(conex, cenvehiculo);
 
-                if (idVehiculo > 0) {
+                try {
 
-                    CenPersonaVehiculo cenpersonavehiculo = new CenPersonaVehiculo();
+                    boolean registrado = false;
 
-                    for (int i = 1; i <= cantpersonas; i++) {
+                    conex.setAutoCommit(false);
 
-                        int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona" + i));
-                        long idPersona = Long.parseLong(request.getParameter("idpersona" + i));
+                    CenVehiculo cenvehiculo = new CenVehiculo();
+                    cenvehiculo.setPlaca_veh(placa);
+                    cenvehiculo.setChasis(chasis);
+                    cenvehiculo.setSerie(serie);
+                    cenvehiculo.setMotor(motor);
+                    cenvehiculo.setClase_veh(claseVehiculo);
+                    cenvehiculo.setTipo_servicio(tipoServicio);
+                    cenvehiculo.setTipo_uso(tipoUso);
+                    cenvehiculo.setCol_id(cencolor.getId());
+                    cenvehiculo.setLin_id(cenlinea.getId());
+                    cenvehiculo.setModelo(modelo);
+                    cenvehiculo.setTransformado(transformado);
+                    cenvehiculo.setRunt(runt);
+                    cenvehiculo.setLicencia_transito(licenciaTransito);
+                    cenvehiculo.setFecha_matricula(fechaMatricula);
+                    cenvehiculo.setPai_id_matricula(paisMatricula);
+                    cenvehiculo.setMun_id_matricula(municipioMatricula);
+                    cenvehiculo.setCiudad_matricula(ciudaMatricula);
+                    cenvehiculo.setTipodoc_importacion(tipoDocumentoImportacion);
+                    cenvehiculo.setDoc_importacion(documentoImportacion);
+                    cenvehiculo.setFecha_importacion(fechaImportacion);
+                    cenvehiculo.setPai_id_origen(paisImportacion);
+                    cenvehiculo.setSoat(soat);
+                    cenvehiculo.setFechaven_soat(fechaVencimientoSoat);
+                    cenvehiculo.setTecno_mecanica(tecnoMecanica);
+                    cenvehiculo.setFechaven_tecno(fechaVencimientoTecnomecanica);
+                    cenvehiculo.setObservaciones(observaciones);
+                    cenvehiculo.setUsu_id(cenusuario.getId());
+                    cenvehiculo.setEstado(1);
+                    long idVehiculo = vehiculoDao.adicionarVehiculo(conex, cenvehiculo);
 
-                        cenpersonavehiculo.setTper_id(tipoPersona);
-                        cenpersonavehiculo.setPer_id(idPersona);
-                        cenpersonavehiculo.setVeh_id(idVehiculo);
-                        cenpersonavehiculo.setUsu_id(cenusuario.getId());
-                        cenpersonavehiculo.setEstado(1);
-                        long idPersonaVehiculo = daoPersonaVehiculo.adicionarPersonaVehiculo(conex, cenpersonavehiculo);
+                    if (idVehiculo > 0) {
 
-                        if (idPersonaVehiculo > 0) {
-                            registrado = true;
-                        } else {
-                            registrado = false;
-                            break;
+                        CenPersonaVehiculo cenpersonavehiculo = new CenPersonaVehiculo();
+
+                        for (int i = 1; i <= cantpersonas; i++) {
+
+                            int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona" + i));
+                            long idPersona = Long.parseLong(request.getParameter("idpersona" + i));
+
+                            cenpersonavehiculo.setTper_id(tipoPersona);
+                            cenpersonavehiculo.setPer_id(idPersona);
+                            cenpersonavehiculo.setVeh_id(idVehiculo);
+                            cenpersonavehiculo.setUsu_id(cenusuario.getId());
+                            cenpersonavehiculo.setEstado(1);
+                            long idPersonaVehiculo = daoPersonaVehiculo.adicionarPersonaVehiculo(conex, cenpersonavehiculo);
+
+                            if (idPersonaVehiculo > 0) {
+                                registrado = true;
+                            } else {
+                                registrado = false;
+                                break;
+                            }
                         }
                     }
-                }
 
-                if (registrado) {
-                    conex.commit();
-                    respuesta.put("status", "success");
-                    respuesta.put("message", "Vehiculo registrado exitosamente");
-                    respuesta.put("id", String.valueOf(idVehiculo));
-                } else {
-                    conex.rollback();
-                    respuesta.put("status", "fail");
-                    respuesta.put("message", "Vehiculo no registrado");
+                    if (registrado) {
+                        conex.commit();
+                        respuesta.put("status", "success");
+                        respuesta.put("message", "Vehiculo registrado exitosamente");
+                        respuesta.put("id", String.valueOf(idVehiculo));
+                    } else {
+                        conex.rollback();
+                        respuesta.put("status", "fail");
+                        respuesta.put("message", "Vehiculo no registrado");
+                    }
+
+                } catch (SQLException e) {
+                    if (conex != null) {
+                        try {
+                            conex.rollback();
+                        } catch (SQLException rollbackEx) {
+                            rollbackEx.printStackTrace();
+                        }
+                    }
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Error al registrar el vehiculo");
+                    e.printStackTrace();
                 }
             }
-
         } catch (NumberFormatException | SQLException | ParseException e) {
-            if (conex != null) {
-                try {
-                    conex.rollback();
-                } catch (SQLException rollbackEx) {
-                    rollbackEx.printStackTrace();
-                }
-            }
             respuesta.put("status", "error");
             respuesta.put("message", "Error al registrar el vehiculo");
             e.printStackTrace();
@@ -329,7 +511,7 @@ public class RegistrarVehiculo extends HttpServlet {
                 }
             }
         }
-        
+
         String json = new Gson().toJson(respuesta);
         response.getWriter().write(json);
     }

@@ -13,14 +13,17 @@
         <title>Registrar Vehiculo</title>
 
         <!-- Custom fonts for this template-->
-        <link href="../../template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-        <link href="../../template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="${pageContext.request.contextPath}/template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
 
         <!-- Custom styles for this template-->
-        <link href="../../template/css/sb-admin-2.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/template/css/sb-admin-2.min.css" rel="stylesheet">
 
         <!-- Custom styles for this page -->
-        <link href="../../template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+        
+        <link href="${pageContext.request.contextPath}/template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/template/vendor/jquery/calendario_es.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <%
@@ -39,6 +42,28 @@
                     String readonlyserie = "";
                     if (request.getParameter("opcion") != null) {
                         opcion = Integer.parseInt(request.getParameter("opcion"));
+                    }
+
+                    if (opcion == 2) {
+                        tipoRefencia = Integer.parseInt(request.getParameter("tiporeferencia"));
+                        referencia = request.getParameter("referencia").toUpperCase().trim();
+
+                        if (tipoRefencia == 1) {
+                            placa = referencia;
+                            readonlyplaca = "readonly";
+                        }
+                        if (tipoRefencia == 2) {
+                            motor = referencia;
+                            readonlymotor = "readonly";
+                        }
+                        if (tipoRefencia == 3) {
+                            chasis = referencia;
+                            readonlychasis = "readonly";
+                        }
+                        if (tipoRefencia == 4) {
+                            serie = referencia;
+                            readonlyserie = "readonly";
+                        }
                     }
         %>
         <div class="modal fade" id="registrarpersona" name="registrarpersona" role="dialog" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -75,29 +100,6 @@
                         <h1 class="h3 mb-2 text-gray-800">Registrar Vehiculo</h1>
                         <%
                             }
-
-                            if (opcion == 2) {
-                                tipoRefencia = Integer.parseInt(request.getParameter("tiporeferencia"));
-                                referencia = request.getParameter("referencia").toUpperCase().trim();
-
-                                if (tipoRefencia == 1) {
-                                    placa = referencia;
-                                    readonlyplaca = "readonly";
-                                }
-                                if (tipoRefencia == 2) {
-                                    motor = referencia;
-                                    readonlymotor = "readonly";
-                                }
-                                if (tipoRefencia == 3) {
-                                    chasis = referencia;
-                                    readonlychasis = "readonly";
-                                }
-                                if (tipoRefencia == 4) {
-                                    serie = referencia;
-                                    readonlyserie = "readonly";
-                                }
-                            }
-
                         %>
                         <form class="user" id="frmregistrarvehiculo">
                             <div class="card shadow mb-4">
@@ -335,6 +337,7 @@
                                     <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
                                 </div>
                             </div>
+                            <input type="hidden" id="opcion" name="opcion" value="<%=opcion%>">
                         </form>
                     </div>
                     <footer class="sticky-footer bg-white">
@@ -363,26 +366,25 @@
         %>
 
         <!-- Bootstrap core JavaScript-->
-        <script src="../../template/vendor/jquery/jquery.min.js"></script>
-        <script src="../../template/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
 
         <!-- Core plugin JavaScript-->
-        <script src="../../template/vendor/jquery-easing/jquery.easing.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
 
         <!-- Custom scripts for all pages-->
-        <script src="../../template/js/sb-admin-2.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
 
-        <link href="../../template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.css" rel="stylesheet" type="text/css"/>
-        <link href="../../template/vendor/jquery/calendario_es.css" rel="stylesheet" type="text/css"/>
-        <script src="../../template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.js" type="text/javascript"></script>
-        <script src="../../template/vendor/jquery/calendario_es.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery/calendario_es.js" type="text/javascript"></script>
 
-        <script src="../../scripts/registrarVehiculo.js" type="text/javascript"></script>
-        <script src="../../scripts/validacionesCampos.js" type="text/javascript"></script>
-        <script src="../../scripts/personas.js" type="text/javascript"></script>
-        <script src="../../scripts/parametros.js" type="text/javascript"></script>
-        <script src="../../scripts/vehiculos.js" type="text/javascript"></script>        
-        <script src="../../scripts/fechas.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/registrarVehiculo.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/vehiculos.js" type="text/javascript"></script>     
+
+        <script src="${pageContext.request.contextPath}/scripts/personas.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/parametros.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/fechas.js" type="text/javascript"></script>
 
     </body>
 </html>

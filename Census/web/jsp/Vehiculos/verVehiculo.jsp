@@ -118,29 +118,29 @@
                                             <label>Registrado en Runt</label>
                                             <input class="form-control" type="text" id="txtrunt" name="txtrunt" readonly="true">
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula">
                                             <label>Licencia Transito</label>
                                             <input class="form-control" type="text" id="txtlicenciatransito" name="txtlicenciatransito" readonly="true">
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula">
                                             <label>Fecha Matricula</label>
                                             <input class="form-control" type="text" id="txtfechamatricula" name="txtfechamatricula" readonly="true">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula">
                                             <label>Pais</label>
                                             <input class="form-control" type="text" id="txtpaismatricula" name="txtpaismatricula" readonly="true">
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula matricula-pais">
                                             <label>Departamento</label>
                                             <input class="form-control" type="text" id="txtdepartamentomatricula" name="txtdepartamentomatricula" readonly="true">
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula matricula-pais">
                                             <label>Municipio</label>
                                             <input class="form-control" type="text" id="txtmunicipiomatricula" name="txtmunicipiomatricula" readonly="true">
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula" id="ciudad-matricula">
                                             <label>Ciudad</label>
                                             <input class="form-control" type="text" id="txtciudadmatricula" name="txtciudadmatricula" readonly="true">
                                         </div>
@@ -157,15 +157,15 @@
                                             <label>Tipo Importacion</label>
                                             <input class="form-control" type="text" id="txttipodocimportacion" name="txttipodocimportacion" readonly="true">
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <div class="col-sm-3 mb-3 mb-sm-0 importacion">
                                             <label>Documento Importacion</label>
                                             <input class="form-control" type="text" id="txtdocumentoimportacion" name="txtdocumentoimportacion" readonly="true">
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <div class="col-sm-3 mb-3 mb-sm-0 importacion">
                                             <label>Fecha Importacion</label>
                                             <input class="form-control" type="text" id="txtfechaimportacion" name="txtfechaimportacion" readonly="true">
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <div class="col-sm-3 mb-3 mb-sm-0 importacion">
                                             <label>Pais Importacion</label>
                                             <input class="form-control" type="text" id="txtpaisimportacion" name="txtpaisimportacion" readonly="true">
                                         </div>
@@ -243,45 +243,37 @@
                     </footer>
                 </div>
             </div>
-        </div>
-    <%
-    } else {
-    %>
-    <script type="text/javascript">
-        alert("Su usuario no tiene permiso para acceder a esta pagina");
-        window.parent.location.href = "dashboard";
-    </script>
-    <%
-        }
-    } else {
-    %>
-    <script type="text/javascript">
-        alert("Su sesion a terminado");
-        document.location.href = "../../index.jsp";
-    </script>
-    <%
-        }
-    %>
+        <%
+        } else {
+        %>
+        <script type="text/javascript">
+            alert("Su usuario no tiene permiso para acceder a esta pagina");
+            window.parent.location.href = "dashboard";
+        </script>
+        <%
+            }
+        } else {
+        %>
+        <script type="text/javascript">
+            alert("Su sesion a terminado");
+            document.location.href = "../../index.jsp";
+        </script>
+        <%
+            }
+        %>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
-    <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <!-- Bootstrap core JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
+        <!-- Core plugin JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
+        <!-- Custom scripts for all pages-->
+        <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="${pageContext.request.contextPath}/template/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+        <script src="${pageContext.request.contextPath}/scripts/verVehiculo.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/vehiculos.js" type="text/javascript"></script>    
 
-    <!-- Page level custom scripts -->
-    <script src="${pageContext.request.contextPath}/template/js/demo/datatables-demo.js"></script>
-
-    <script src="${pageContext.request.contextPath}/scripts/verVehiculo.js" type="text/javascript"></script>
-    <script src="${pageContext.request.contextPath}/scripts/vehiculos.js" type="text/javascript"></script>    
-
-</body>
+    </body>
 </html>

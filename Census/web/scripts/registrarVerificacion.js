@@ -62,4 +62,8 @@ $(function (){
         });
     });
     
+    $('#btnvolver').click(function () {
+        window.location.href = "listarVerificaciones.jsp";
+    });
+    
 });

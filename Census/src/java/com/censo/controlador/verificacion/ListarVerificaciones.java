@@ -1,6 +1,6 @@
 package com.censo.controlador.verificacion;
 
-import com.censo.modelo.dao.CensoDao;
+import com.censo.modelo.dao.VerificacionDao;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Connection;
@@ -29,12 +29,10 @@ public class ListarVerificaciones extends HttpServlet {
 
         try {
 
-            CensoDao censoDao = new CensoDao();
-            conex = censoDao.conectar();
+            VerificacionDao verificacionDao = new VerificacionDao();
+            conex = verificacionDao.conectar();
             
-            
-            List<HashMap<String, Object>> lista = censoDao.ListarCensos(conex);
-
+            List<HashMap<String, Object>> lista = verificacionDao.ListarVerificaciones(conex);
 
             if (!lista.isEmpty()) {
                 respuesta.put("status", "success");

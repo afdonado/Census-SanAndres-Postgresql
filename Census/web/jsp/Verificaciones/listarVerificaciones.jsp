@@ -12,14 +12,14 @@
         <title>Listar Verificacione</title>
 
         <!-- Custom fonts for this template-->
-        <link href="../../template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-        <link href="../../template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="${pageContext.request.contextPath}/template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
 
         <!-- Custom styles for this template-->
-        <link href="../../template/css/sb-admin-2.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/template/css/sb-admin-2.min.css" rel="stylesheet">
 
         <!-- Custom styles for this page -->
-        <link href="../../template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     </head>
     <body>
@@ -116,23 +116,23 @@
         %>
 
         <!-- Bootstrap core JavaScript-->
-        <script src="../../template/vendor/jquery/jquery.min.js"></script>
-        <script src="../../template/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
 
         <!-- Core plugin JavaScript-->
-        <script src="../../template/vendor/jquery-easing/jquery.easing.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
 
         <!-- Custom scripts for all pages-->
-        <script src="../../template/js/sb-admin-2.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
 
         <!-- Page level plugins -->
-        <script src="../../template/vendor/datatables/jquery.dataTables.min.js"></script>
-        <script src="../../template/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/datatables/jquery.dataTables.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
         <!-- Page level custom scripts -->
-        <script src="../../template/js/demo/datatables-demo.js"></script>
+        <script src="${pageContext.request.contextPath}/template/js/demo/datatables-demo.js"></script>
 
-        <script src="../../scripts/listarVerificaciones.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/listarVerificaciones.js" type="text/javascript"></script>
 
     </body>
 </html>

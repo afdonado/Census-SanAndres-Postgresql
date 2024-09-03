@@ -165,6 +165,12 @@ $(function () {
             consultarReferenciaVehiculo(tipoReferencia, referencia);
         }
     });
+    
+    $('#txtdocumento').blur(function () {
+        if ($('#txtdocumento').val().length > 0) {
+            consultarDocumentoPersona(1, 'cmbtiposdocumento', 'txtdocumento', 'txtnombre', 'idpersona');
+        }
+    });
 
     $('#btnguardar').click(function () {
         var numero = $('#txtnumerocenso').val();
@@ -205,6 +211,10 @@ $(function () {
                 alert("Ocurrió un error al procesar la solicitud de modificar censo.");
             }
         });
+    });
+    
+    $('#btnvolver').click(function () {
+        window.location.href = "listarCensos.jsp";
     });
 
 });

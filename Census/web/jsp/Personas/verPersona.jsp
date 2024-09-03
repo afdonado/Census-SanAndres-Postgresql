@@ -1,178 +1,167 @@
-<%@page import="com.censo.modelo.dao.PersonaDao"%>
 <%@page import="javax.servlet.http.HttpSession"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.LinkedList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" />
-        <title>Ver Persona</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Datos Persona</title>
 
-        <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <script src="../../vendor/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
-        <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-        <script src="../../scripts/Ajax.js" type="text/javascript"></script>
+        <!-- Custom fonts for this template-->
+        <link href="${pageContext.request.contextPath}/template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="${pageContext.request.contextPath}/template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
 
-        <script src="../../scripts/personas.js" type="text/javascript"></script>
+        <!-- Custom styles for this template-->
+        <link href="${pageContext.request.contextPath}/template/css/sb-admin-2.min.css" rel="stylesheet">
+
+        <!-- Custom styles for this page -->
+        <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     </head>
     <body>
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
-                if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("consultarPersona.jsp")) {
-                    if (!request.getParameter("idpersona").equals("")) {
-                        
-                        PersonaDao personaDao = new PersonaDao();
-                    
-                        long idpersona = Long.parseLong(request.getParameter("idpersona"));
-
-                        List<HashMap> datosPersona = personaDao.ListarPersonasById(idpersona);
-
-                        if (datosPersona.size() > 0) {
-
-                            for (HashMap hash : datosPersona) {
+                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("listarPersonas.jsp")) {
         %>
-        <div class="container-fluid">
-            <form id="frmdatospersona" method="post">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Datos Persona
-                            </div>
-                            <div class="panel-body">
-                                <div class="row form-group">
-                                    <div class="col-md-3">
-                                        <label>Tipo Documento</label>
-                                        <input class="form-control" type="text" id="txttipodoc" name="txttipodoc" value="<%= hash.get("TIPO_DOC") == null ? "" : hash.get("TIPO_DOC")%>" readonly="true">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Documento</label>
-                                        <input class="form-control" type="text" id="txtdocumento" name="txtdocumento" value="<%=hash.get("DOCUMENTO") == null ? "" : hash.get("DOCUMENTO")%>" readonly="true">
-                                    </div>
+        <div id="wrapper">
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                <jsp:include page="/jsp/Menu.jsp"></jsp:include>
+                </ul>
+
+                <div id="content-wrapper" class="d-flex flex-column">
+                    <div id="content">
+
+                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                        <jsp:include page="/jsp/Header.jsp"></jsp:include>
+                        </nav>
+
+                        <div class="container-fluid">
+                            <h1 class="h3 mb-2 text-gray-800">Datos de la Persona</h1>
+
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos de Identificación</h6>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>Primer Nombre</label>
-                                        <input class="form-control" type="text" id="txtprinom" name="txtprinom" value="<%= hash.get("NOMBRE1") == null ? "" : hash.get("NOMBRE1")%>" readonly="true">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Tipo Documento</label>
+                                            <input class="form-control" type="text" id="txttipodocumento" name="txttipodocumento" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Documento</label>
+                                            <input class="form-control" type="text" id="txtdocumento" name="txtdocumento" readonly="true">
+                                        </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label>Segundo Nombre</label>
-                                        <input class="form-control" type="text" id="txtsegnom" name="txtsegnom" value="<%=hash.get("NOMBRE2") == null ? "" : hash.get("NOMBRE2")%>" readonly="true">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Primer Nombre</label>
+                                            <input class="form-control" type="text" id="txtprimernombre" name="txtprimernombre" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Segundo Nombre</label>
+                                            <input class="form-control" type="text" id="txtsegundonombre" name="txtsegundonombre" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Primer Apellido</label>
+                                            <input class="form-control" type="text" id="txtprimerapellido" name="txtprimerapellido" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Segundo Apellido</label>
+                                            <input class="form-control" type="text" id="txtsegundoapellido" name="txtsegundoapellido" readonly="true">
+                                        </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label>Primer Apellido</label>
-                                        <input class="form-control" type="text" id="txtpriape" name="txtpriape" value="<%=hash.get("APELLIDO1") == null ? "" : hash.get("APELLIDO1")%>" readonly="true">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Segundo Apellido</label>
-                                        <input class="form-control" type="text" id="txtsegape" name="txtsegape" value="<%=hash.get("APELLIDO2") == null ? "" : hash.get("APELLIDO2")%>" readonly="true">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>Fecha Nacimiento</label>
-                                        <input class="form-control" type="text" id="txtfechanac" name="txtfechanac" value="<%= hash.get("FECHA_NAC") == null ? "" : hash.get("FECHA_NAC")%>" readonly="true">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Genero</label>
-                                        <input class="form-control" type="text" id="txtgenero" name="txtgenero" value="<%= hash.get("GENERO") == null ? "" : hash.get("GENERO")%>" readonly="true">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Grupo Sanguineo</label>
-                                        <input class="form-control" type="text" id="txtgruposan" name="txtgruposan" value="<%= hash.get("GRUPO_SANGUINEO") == null ? "" : hash.get("GRUPO_SANGUINEO")%>" readonly="true">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Correo Electronico</label>
-                                        <input class="form-control" type="text" id="txtmail" name="txtmail" value="<%= hash.get("MAIL") == null ? "" : hash.get("MAIL")%>" readonly="true">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Datos Contacto
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>Departamento</label>
-                                        <input class="form-control" type="text" id="txtnomdep" name="txtnomdep" value="<%= hash.get("DEPARTAMENTO") == null ? "" : hash.get("DEPARTAMENTO")%>" readonly="true">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Municipio</label>
-                                        <input class="form-control" type="text" id="txtnommun" name="txtnommun" value="<%= hash.get("MUNICIPIO") == null ? "" : hash.get("MUNICIPIO")%>" readonly="true">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Dirección</label>
-                                        <input class="form-control" type="text" id="txtdireccion" name="txtdireccion" value="<%= hash.get("DIRECCION") == null ? "" : hash.get("DIRECCION")%>" readonly="true">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Telefono</label>
-                                        <input class="form-control" type="text" id="txttelefono" name="txttelefono" value="<%= hash.get("TELEFONO") == null ? "" : hash.get("TELEFONO")%>" readonly="true">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Fecha Nacimiento</label>
+                                            <input class="form-control" type="text" id="txtfechanacimiento" name="txtfechanacimiento" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Genero</label>
+                                            <input class="form-control" type="text" id="txtgenero" name="txtgenero" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Grupo Sanguineo</label>
+                                            <input class="form-control" type="text" id="txtgruposanguineo" name="txtgruposanguineo" readonly="true">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                Datos Licencia Conducción
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>No. Licencia Conduccion</label>
-                                        <input class="form-control" type="text" id="txtnumlicond" name="txtnumlicond" value="<%= hash.get("LIC_CONDUCCION") == null ? "" : hash.get("LIC_CONDUCCION") %>" readonly="true">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos de Contacto</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Departamento</label>
+                                            <input class="form-control" type="text" id="txtdepartamento" name="txtdepartamento" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Municipio</label>
+                                            <input class="form-control" type="text" id="txtmunicipio" name="txtmunicipio" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Dirección</label>
+                                            <input class="form-control" type="text" id="txtdireccion" name="txtdireccion" readonly="true">
+                                        </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label>Categoria</label>
-                                        <input class="form-control" type="text" id="cmdcatlicencia" name="cmdcatlicencia" value="<%= hash.get("CATEGORIA_LIC") == null ? "" : hash.get("CATEGORIA_LIC") %>" readonly="true">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Fecha Expedicion</label>
-                                        <input class="form-control" type="text" id="txtfechaexplic" name="txtfechaexplic" value="<%= hash.get("FECHA_EXP") == null ? "" : hash.get("FECHA_EXP") %>" readonly="true">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Fecha Vencimiento</label>
-                                        <input class="form-control" type="text" id="txtfechavenlic" name="txtfechavenlic" value="<%= hash.get("FECHA_VEN") == null ? "" : hash.get("FECHA_VEN") %>" readonly="true">
+                                    <div class="form-group row">                                    
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Telefono</label>
+                                            <input class="form-control" type="text" id="txttelefono" name="txttelefono" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Correo Electronico</label>
+                                            <input class="form-control" type="text" id="txtemail" name="txtemail" readonly="true">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <input type="hidden" id="idpersona" name="idpersona" value="<%=idpersona%>">
-                        <%
-                            if (((java.util.LinkedList) session.getAttribute("permisosUsuario")).contains("modificarPersona.jsp")) {
-                        %>
-                        <div class="row page-header">
-                            <div class="form-group col-xs-12 col-sm-3 col-md-3">
-                                <button type="button" class="btn btn-lg btn-info btn-block" onclick="modificarPersonaById('<%=idpersona%>')" id="btnmodificar" name="btnmodificar" >Modificar</button>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos Licencia Conducción</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>No. Licencia Conduccion</label>
+                                            <input class="form-control" type="text" id="txtnumerolicencia" name="txtnumerolicencia" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Categoria</label>
+                                            <input class="form-control" type="text" id="txtcategorialicencia" name="txtcategorialicencia" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Fecha Expedición</label>
+                                            <input class="form-control" type="text" id="txtfechaexpedicion" name="txtfechaexpedicion" readonly="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Fecha Vencimiento</label>
+                                            <input class="form-control" type="text" id="txtfechavencimiento" name="txtfechavencimiento" readonly="true">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                    <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
+                                </div>
                             </div>
                         </div>
-                        <%
-                                }
-                            }
-                        } else {
-                        %>
-                        <div class="panel panel-danger">    
-                            <div class="panel-heading">
-                                Persona no registrada
-                            </div>
-                        </div>
-                        <%
-                            }
-                        %>
                     </div>
+                    <footer class="sticky-footer bg-white">
+                    <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                    </footer>
                 </div>
-            </form>
-        </div>
-        <%
-            }
-        } else {
+            </div>
+        <%        } else {
         %>
         <script type="text/javascript">
             alert("Su usuario no tiene permiso para acceder a esta pagina");
-            window.parent.location.href = "../Inicio.jsp";
+            window.parent.location.href = "dashboard";
         </script>
         <%
             }
@@ -180,10 +169,22 @@
         %>
         <script type="text/javascript">
             alert("Su sesion a terminado");
-            document.location.href = "../../cerrarSesion";
+            document.location.href = "../../index.jsp";
         </script>
         <%
             }
         %>
+
+        <!-- Bootstrap core JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- Core plugin JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
+
+        <script src="${pageContext.request.contextPath}/scripts/verPersona.js" type="text/javascript"></script>
     </body>
 </html>

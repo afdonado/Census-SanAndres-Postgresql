@@ -10,14 +10,14 @@
         <title>Registrar Usuario</title>
 
         <!-- Custom fonts for this template-->
-        <link href="../../template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-        <link href="../../template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="${pageContext.request.contextPath}/template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
 
         <!-- Custom styles for this template-->
-        <link href="../../template/css/sb-admin-2.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/template/css/sb-admin-2.min.css" rel="stylesheet">
 
         <!-- Custom styles for this page -->
-        <link href="../../template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     </head>
     <body>
@@ -122,16 +122,6 @@
         <!-- Custom scripts for all pages-->
         <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
 
-        <!-- Page level plugins -->
-        <script src="${pageContext.request.contextPath}/template/vendor/datatables/jquery.dataTables.min.js"></script>
-        <script src="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-        <!-- Page level custom scripts -->
-        <script src="${pageContext.request.contextPath}/template/js/demo/datatables-demo.js"></script>
-
-        <script src="${pageContext.request.contextPath}/template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.js" type="text/javascript"></script>
-        <script src="${pageContext.request.contextPath}/template/vendor/jquery/calendario_es.js" type="text/javascript"></script>
-        
         <script src="${pageContext.request.contextPath}/scripts/registrarUsuario.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/usuarios.js" type="text/javascript"></script>
         

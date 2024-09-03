@@ -316,21 +316,15 @@
         <!-- Custom scripts for all pages-->
         <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
 
-        <!-- Page level plugins -->
-        <script src="${pageContext.request.contextPath}/template/vendor/datatables/jquery.dataTables.min.js"></script>
-        <script src="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-        <!-- Page level custom scripts -->
-        <script src="${pageContext.request.contextPath}/template/js/demo/datatables-demo.js"></script>
-
         <script src="${pageContext.request.contextPath}/template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/template/vendor/jquery/calendario_es.js" type="text/javascript"></script>
 
         <script src="${pageContext.request.contextPath}/scripts/modificarVehiculo.js" type="text/javascript"></script>
-        <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
-        <script src="${pageContext.request.contextPath}/scripts/personas.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/vehiculos.js" type="text/javascript"></script>
+        
+        <script src="${pageContext.request.contextPath}/scripts/personas.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/parametros.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/fechas.js" type="text/javascript"></script>        
 
     </body>

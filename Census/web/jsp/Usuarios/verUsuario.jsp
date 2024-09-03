@@ -56,7 +56,7 @@
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
                                             <label>Documento</label>
-                                            <input class="form-control" type="text" type="number" id="txtdocumento" name="txtdocumento" required="true">
+                                            <input class="form-control" type="text" type="number" id="txtdocumento" name="txtdocumento" readonly="true">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -128,13 +128,6 @@
 
         <!-- Custom scripts for all pages-->
         <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
-
-        <!-- Page level plugins -->
-        <script src="${pageContext.request.contextPath}/template/vendor/datatables/jquery.dataTables.min.js"></script>
-        <script src="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-        <!-- Page level custom scripts -->
-        <script src="${pageContext.request.contextPath}/template/js/demo/datatables-demo.js"></script>
 
         <script src="${pageContext.request.contextPath}/scripts/verUsuario.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/usuarios.js" type="text/javascript"></script>

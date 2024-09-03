@@ -79,11 +79,11 @@ public class VerificarVehiculo extends HttpServlet {
                         respuesta.put("message", "Vehiculo valido");
                         respuesta.put("id", String.valueOf(cenvehiculo.getId()));
                     } else {
-                        respuesta.put("respuesta", "fail");
+                        respuesta.put("status", "fail");
                         respuesta.put("message", "Vehiculo no valido, ya se encuentra censado");
                     }
                 } else {
-                    respuesta.put("respuesta", "fail");
+                    respuesta.put("status", "fail");
                     if (tipoReferencia == 1) {
                         respuesta.put("message", "Placa no valida, ya se encuentra registrada");
                         respuesta.put("input", "#txtplaca");

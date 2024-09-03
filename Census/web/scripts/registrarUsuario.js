@@ -1,12 +1,12 @@
 $(function () {
-    
+
     $('#txtnombre').blur(function () {
         var nombreusuario = $('#txtnombre').val().toString().toUpperCase();
         if (nombreusuario.length > 0) {
             verificarNombreUsuario(nombreusuario);
         }
     });
-    
+
     function verificarNombreUsuario(nombre) {
         var parametros = {
             nombre: nombre
@@ -53,16 +53,46 @@ $(function () {
         }
     });
 
-
-
     $('#btnguardar').click(function () {
         var nombre = $('#txtnombre').val();
 
-        if (nombre.length > 0) {
-            $('#frmregistrarusuario').submit();
-        } else {
+        if (nombre.length === 0) {
             alert('Debe ingresar el nombre del usuario');
+            return false;
         }
+
+        $('#frmregistrarusuario').trigger("submit");
+    });
+    
+    $("#frmregistrarusuario").submit(function (event) {
+        event.preventDefault();
+
+        var parametros = $(this).serialize();
+
+        $.ajax({
+            data: parametros,
+            url: "../../registrarUsuario",
+            type: "POST",
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    alert(response.message);
+                    window.location.href = "verUsuario.jsp?opcion=1&id=" + response.id;
+                } else if (response.status === "fail") {
+                    alert(response.message);
+                } else if (response.status === "error") {
+                    alert(response.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de registrar usuario: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de registrar usuario.");
+            }
+        });
+    });
+
+    $('#btnvolver').click(function () {
+        window.location.href = "listarUsuarios.jsp";
     });
 
 });

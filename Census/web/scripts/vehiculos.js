@@ -83,8 +83,20 @@ $(function () {
 
     $('#cmbtiposimportacion').on('change focus', actualizarCamposImportacion);
 
-    $('#btnvolver').click(function () {
-        var id = $(this).data('id');
-        window.location.href = "listarVehiculos.jsp";
+    $('#cmbsoat').on('change focus', function () {
+        if ($('#cmbsoat').val() === 'N') {
+            $('#txtfechavsoat').hide();
+        } else {
+            $('#txtfechavsoat').show();
+        }
     });
+
+    $('#cmbtecnomecanica').on('change focus', function () {
+        if ($('#cmbtecnomecanica').val() === 'N') {
+            $('#txtfechavtecnomecanica').hide();
+        } else {
+            $('#txtfechavtecnomecanica').show();
+        }
+    });
+    
 });

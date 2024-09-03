@@ -18,51 +18,80 @@ $(function () {
             method: 'get',
             data: {id: id},
             success: function (response) {
-                
+
                 if (response.status === "success") {
+
+                    $('#txtplaca').val(response.vehiculo.VEH_PLACA);
+                    $('#txtmotor').val(response.vehiculo.VEH_MOTOR);
+                    $('#txtchasis').val(response.vehiculo.VEH_CHASIS);
+                    $('#txtserie').val(response.vehiculo.VEH_SERIE);
+
+                    $('#txtclase').val(response.vehiculo.CLASE);
+                    $('#txtservicio').val(response.vehiculo.SERVICIO);
+                    $('#txttipouso').val(response.vehiculo.TIPO_USO);
+
+                    $('#txtcolores').val(response.vehiculo.COLOR);
+                    $('#txtmarcas').val(response.vehiculo.MARCA);
+                    $('#txtlineas').val(response.vehiculo.LINEA);
+                    $('#txtmodelo').val(response.vehiculo.MODELO);
+                    $('#txttransformado').val(response.vehiculo.TRANSFORMADO === 'S' ? 'Si' : 'No');
+                    $('#txtrunt').val(response.vehiculo.RUNT === 'S' ? 'Si' : 'No');
                     
-                $('#txtplaca').val(response.vehiculo.VEH_PLACA);
-                $('#txtmotor').val(response.vehiculo.VEH_MOTOR);
-                $('#txtchasis').val(response.vehiculo.VEH_CHASIS);
-                $('#txtserie').val(response.vehiculo.VEH_SERIE);
+                    var runt = response.vehiculo.RUNT;
+                    $('#txtlicenciatransito').val(response.vehiculo.LICENCIA_TRANSITO);
+                    $('#txtfechamatricula').val(response.vehiculo.FECHA_MATRICULA);
+                    $('#txtpaismatricula').val(response.vehiculo.PAIS_MATRICULA);
+                    $('#txtdepartamentomatricula').val(response.vehiculo.DPTO_MATRICULA);
+                    $('#txtmunicipiomatricula').val(response.vehiculo.MUNI_MATRICULA);
+                    $('#txtciudadmatricula').val(response.vehiculo.CIUDAD_MATRICULA);
+                    var paisMatriculaId = response.vehiculo.PAIS_MATRICULA_ID;
+                    if (runt === "N") {
+                        $('.matricula').hide();
+                    } else {
+                        $('.matricula').show();
+                        if (paisMatriculaId === 18) {
+                            $('.matricula-pais').show();
+                            $("#ciudad-matricula").hide();
+                        } else {
+                            $('.matricula-pais').hide();
+                            $("#ciudad-matricula").show();
+                        }
+                    }
 
-                $('#txtclase').val(response.vehiculo.CLASE);
-                $('#txtservicio').val(response.vehiculo.SERVICIO);
-                $('#txttipouso').val(response.vehiculo.TIPO_USO);
+                    $('#txttipodocimportacion').val(response.vehiculo.TDOC_IMP);
+                    $('#txtdocumentoimportacion').val(response.vehiculo.DOCUMENTO_IMP);
+                    $('#txtfechaimportacion').val(response.vehiculo.FECHA_IMP);
+                    $('#txtpaisimportacion').val(response.vehiculo.PAIS_IMP);
+                    
+                    var tipoImportacionId = response.vehiculo.TDOC_IMP_ID;
+                    if (tipoImportacionId === 0) {
+                        $('.importacion').hide();
+                    } else {
+                        $('.importacion').show();
+                    }
 
-                $('#txtcolores').val(response.vehiculo.COLOR);
-                $('#txtmarcas').val(response.vehiculo.MARCA);
-                $('#txtlineas').val(response.vehiculo.LINEA);
-                $('#txtmodelo').val(response.vehiculo.MODELO);
-                $('#txttransformado').val(response.vehiculo.TRANSFORMADO==='S'?'Si':'No');
-                $('#txtrunt').val(response.vehiculo.RUNT==='S'?'Si':'No');
-                $('#txtlicenciatransito').val(response.vehiculo.LICENCIA_TRANSITO);
-                $('#txtfechamatricula').val(response.vehiculo.FECHA_MATRICULA);
+                    $('#txtsoat').val(response.vehiculo.SOAT === 'S' ? 'Si' : 'No');
+                    $('#txtfechavsoat').val(response.vehiculo.FECHAV_SOAT);
+                    var soat = response.vehiculo.SOAT;
+                    if(soat === 'N'){
+                        $('#txtfechavsoat').hide();
+                    }
+                    
+                    $('#txttecnomecanica').val(response.vehiculo.TECNO_MECANICA === 'S' ? 'Si' : 'No');
+                    $('#txtfechavtecnomecanica').val(response.vehiculo.FECHAV_TECNO);
+                    var tecnomecanica = response.vehiculo.TECNO_MECANICA;
+                    if(tecnomecanica === 'N'){
+                        $('#txtfechavtecnomecanica').hide();
+                    }
 
+                    $('#txtobservaciones').val(response.vehiculo.OBSERVACIONES);
 
-                $('#txtpaismatricula').val(response.vehiculo.PAIS_MATRICULA);
-                $('#txtdepartamentomatricula').val(response.vehiculo.DPTO_MATRICULA);
-                $('#txtmunicipiomatricula').val(response.vehiculo.MUNI_MATRICULA);
-                $('#txtciudadmatricula').val(response.vehiculo.CIUDAD_MATRICULA);
+                    var personas = response.personasVehiculo;
+                    var contenedor = $('#personas-vehiculo');
+                    contenedor.empty();
 
-                $('#txttipodocimportacion').val(response.vehiculo.TDOC_IMP);
-                $('#txtdocumentoimportacion').val(response.vehiculo.DOCUMENTO_IMP);
-                $('#txtfechaimportacion').val(response.vehiculo.FECHA_IMP);
-                $('#txtpaisimportacion').val(response.vehiculo.PAIS_IMP);
-
-                $('#txtsoat').val(response.vehiculo.SOAT==='S'?'Si':'No');
-                $('#txtfechavsoat').val(response.vehiculo.FECHAV_SOAT);
-                $('#txttecnomecanica').val(response.vehiculo.TECNO_MECANICA==='S'?'Si':'No');
-                $('#txtfechavtecnomecanica').val(response.vehiculo.FECHAV_TECNO);
-
-                $('#txtobservaciones').val(response.vehiculo.OBSERVACIONES);
-
-                var personas = response.personasVehiculo;
-                var contenedor = $('#personas-vehiculo');
-                contenedor.empty();
-
-                $.each(personas, function (index, persona) {
-                    var nuevoElemento = `
+                    $.each(personas, function (index, persona) {
+                        var nuevoElemento = `
                 <div id="contenedor" class="form-group row">
                     <div class="col-sm-2 mb-3 mb-sm-0">
                         <input class="form-control" id="txttipopersona" name="txttipopersona" value="${persona.TIPO_PERSONA}" readonly="true">
@@ -78,22 +107,26 @@ $(function () {
                     </div>
                 </div>
             `;
-                    contenedor.append(nuevoElemento);
-                });
-            } else if (response.status === "fail") {
+                        contenedor.append(nuevoElemento);
+                    });
+                } else if (response.status === "fail") {
                     alert(response.message);
                 } else if (response.status === "error") {
                     alert(response.message);
                 }
-        },
+            },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.error("Error en la solicitud de cargar datos vehiculo: ", textStatus, errorThrown);
-                alert("Ocurrió un error al procesar la solicitud de cargar datos vehiculo.");
+                console.error("Error en la solicitud de cargar datos del vehiculo: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de cargar datos del vehiculo.");
             }
         });
 
     } else {
         console.log("Parámetros no encontrados en la URL");
     }
+    
+    $('#btnvolver').click(function () {
+        window.location.href = "listarVehiculos.jsp";
+    });
 
 });

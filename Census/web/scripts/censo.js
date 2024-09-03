@@ -1,8 +1,3 @@
-$(function () {
-    $('#btnvolver').click(function () {
-        window.location.href = "listarCensos.jsp";
-    });
-});
 
 function verificarNumeroCenso(numero) {
     var parametros = {

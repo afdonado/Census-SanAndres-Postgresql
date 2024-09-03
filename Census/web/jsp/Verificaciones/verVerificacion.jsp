@@ -28,7 +28,6 @@
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
                 if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("listarVerificacion.jsp")) {
-                    if (!request.getParameter("idcenso").equals("")) {
         %>
         <div class="modal fade" id="registrarverificacion" name="registrarverificacion" role="dialog" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
@@ -252,13 +251,6 @@
 
         <!-- Custom scripts for all pages-->
         <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
-
-        <!-- Page level plugins -->
-        <script src="${pageContext.request.contextPath}/template/vendor/datatables/jquery.dataTables.min.js"></script>
-        <script src="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-        <!-- Page level custom scripts -->
-        <script src="${pageContext.request.contextPath}/template/js/demo/datatables-demo.js"></script>
 
         <script src="${pageContext.request.contextPath}/scripts/verVerificacion.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/verificaciones.js" type="text/javascript"></script>

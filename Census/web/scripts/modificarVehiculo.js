@@ -36,24 +36,51 @@ $(function () {
                     $('#txtmodelo').val(response.vehiculo.MODELO);
                     $('#cmbtransformado').val(response.vehiculo.TRANSFORMADO);
                     $('#cmbrunt').val(response.vehiculo.RUNT);
+
+                    var runt = response.vehiculo.RUNT;
                     $('#txtlicenciatransito').val(response.vehiculo.LICENCIA_TRANSITO);
                     $('#txtfechamatricula').val(response.vehiculo.FECHA_MATRICULA);
-
-
                     var paisMatriculaId = response.vehiculo.PAIS_MATRICULA_ID;
                     var departamentoMatriculaId = response.vehiculo.DPTO_MATRICULA_ID;
                     var municipioMatriculaId = response.vehiculo.MUNI_MATRICULA_ID;
                     $('#txtciudadmatricula').val(response.vehiculo.CIUDAD_MATRICULA);
+                    if (runt === "N") {
+                        $('.matricula').hide();
+                    } else {
+                        $('.matricula').show();
+                        if (paisMatriculaId === 18) {
+                            $('.matricula-pais').show();
+                            $("#ciudad-matricula").hide();
+                        } else {
+                            $('.matricula-pais').hide();
+                            $("#ciudad-matricula").show();
+                        }
+                    }
 
                     var tipoImportacionId = response.vehiculo.TDOC_IMP_ID;
                     $('#txtdocumentoimportacion').val(response.vehiculo.DOCUMENTO_IMP);
                     $('#txtfechaimportacion').val(response.vehiculo.FECHA_IMP);
                     var paisImportacionId = response.vehiculo.PAIS_IMP_ID;
 
+                    if (tipoImportacionId === 0) {
+                        $('.importacion').hide();
+                    } else {
+                        $('.importacion').show();
+                    }
+
                     $('#cmbsoat').val(response.vehiculo.SOAT);
                     $('#txtfechavsoat').val(response.vehiculo.FECHAV_SOAT);
+                    var soat = response.vehiculo.SOAT;
+                    if(soat === 'N'){
+                        $('#txtfechavsoat').hide();
+                    }
+                    
                     $('#cmbtecnomecanica').val(response.vehiculo.TECNO_MECANICA);
                     $('#txtfechavtecnomecanica').val(response.vehiculo.FECHAV_TECNO);
+                    var tecnomecanica = response.vehiculo.TECNO_MECANICA;
+                    if(tecnomecanica === 'N'){
+                        $('#txtfechavtecnomecanica').hide();
+                    }
 
                     $('#txtobservaciones').val(response.vehiculo.OBSERVACIONES);
                     $('#idvehiculo').val(response.vehiculo.VEH_ID);
@@ -279,15 +306,6 @@ $(function () {
         var motor = $('#txtmotor').val();
         var chasis = $('#txtchasis').val();
         var modelo = $('#txtmodelo').val();
-
-        var runt = $('#cmbrunt').val();
-        var licenciaTransito = $('#txtlicenciatransito').val();
-        var paisMatricula = $('#cmbpaismatricula').val();
-        var ciudadMatricula = $('#txtciudadmatricula').val();
-
-        var tipoImportacion = $('#cmbtiposimportacion').val();
-        var documentoImportacion = $('#txtdocumentoimportacion').val();
-
         var colores = $('#txtcolores').val();
         var marcas = $('#txtmarcas').val();
         var lineas = $('#txtlineas').val();
@@ -298,21 +316,6 @@ $(function () {
         }
 
         if (colores.length === 0 && marcas.length === 0 && lineas.length === 0) {
-            alert('Debe ingresar los datos obligatorios (*)');
-            return false;
-        }
-
-        if (runt === "S" && licenciaTransito.length === 0) {
-            alert('Debe ingresar numero de Licencia de Transito');
-            return false;
-        }
-
-        if (paisMatricula !== "18" && ciudadMatricula.length === 0) {
-            alert('Debe ingresar los datos obligatorios (*)');
-            return false;
-        }
-
-        if (tipoImportacion !== "0" && documentoImportacion.length === 0) {
             alert('Debe ingresar los datos obligatorios (*)');
             return false;
         }
@@ -346,6 +349,12 @@ $(function () {
             }
         });
     });
+    
+    $('#txtdocumento').blur(function () {
+        if ($('#txtdocumento').val().length > 0) {
+            consultarDocumentoPersona(1, 'cmbtiposdocumento', 'txtdocumento', 'txtnombre', 'idpersona');
+        }
+    });
 
     $('#personas-vehiculo').on('click', '.btnanular', function () {
         var id = $(this).data('id');
@@ -356,5 +365,9 @@ $(function () {
         $('#estadoperveh' + idperveh).val(2);
         $('#contenedor' + idperveh).hide();
     }
+    
+    $('#btnvolver').click(function () {
+        window.location.href = "listarVehiculos.jsp";
+    });
 
 });

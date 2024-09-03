@@ -305,4 +305,37 @@ public class VerificacionDao extends Conexion {
         return 0;
     }
     
+    public List<HashMap<String, Object>> ListarVerificaciones(Connection conex) throws SQLException {
+
+        List<HashMap<String, Object>> lista = new LinkedList<>();
+
+        try {
+            pst = conex.prepareStatement("SELECT * FROM VW_CENSOS");
+            rst = pst.executeQuery();
+
+            while (rst.next()) {
+                ResultSetMetaData rsmd = rst.getMetaData();
+                HashMap<String, Object> hash = new HashMap<>();
+                for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                    hash.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
+                }
+                lista.add(hash);
+            }
+        } catch (Exception e) {
+            throw new SQLException("Error en ListarVerificaciones: " + e);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (rst != null) {
+                    rst.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error en cierres de ListarVerificaciones:" + e);
+            }
+        }
+        return lista;
+    }
+    
 }

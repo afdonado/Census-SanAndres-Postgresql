@@ -1,5 +1,5 @@
 
-//registrar vehiculo
+//registrar y modificar vehiculo
 $(function () {
     $("#txtfechamatricula").datepicker();
     $("#txtfechaimportacion").datepicker();
@@ -7,7 +7,20 @@ $(function () {
     $("#txtfechavtecnomecanica").datepicker();
 });
 
-//registrar censo
+//registrar y modificar censo
 $(function () {
     $("#txtfechacenso").datepicker();
+});
+
+
+//registrar y modificar persona
+$(function () {
+    $("#txtfechanacimiento").datepicker();
+    $("#txtfechaexplicencia").datepicker();
+    $("#txtfechavlicencia").datepicker();
+});
+
+//modificar usuario
+$(function () {
+    $("#txtfechafinal").datepicker();
 });

@@ -161,19 +161,20 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <!--onclick="ImprimirCensoById(idcenso)"
                                 <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                    <button type="button" class="btn btn-lg btn-success btn-block" id="btngenerarpdf" name="btngenerarpdf">Generar PDF</button><!--onclick="ImprimirCensoById(idcenso)"-->
-                                </div>
+                                    <button type="button" class="btn btn-lg btn-success btn-block" id="btngenerarpdf" name="btngenerarpdf">Generar PDF</button>
+                                </div>-->
                                 <div class="form-group col-xs-6 col-sm-2 col-md-2">
                                     <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
                                 </div>
                             </div>
                             <!--
-                                                        <div id="page-wrapper">
-                                                            <div class="row">
-                                                                <iframe src="../Documentos/ListarDocumentos.jsp?idcenso=idcenso" style="width: 100%; min-height: 1500px;" transparency="transparency" frameborder="0" ></iframe>
-                                                        </div>
-                                                    </div>
+                                <div id="page-wrapper">
+                                    <div class="row">
+                                        <iframe src="../Documentos/ListarDocumentos.jsp?idcenso=idcenso" style="width: 100%; min-height: 1500px;" transparency="transparency" frameborder="0" ></iframe>
+                                </div>
+                            </div>
                             -->
                         </div>
                     </div>
@@ -209,13 +210,6 @@
 
         <!-- Custom scripts for all pages-->
         <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
-
-        <!-- Page level plugins -->
-        <script src="${pageContext.request.contextPath}/template/vendor/datatables/jquery.dataTables.min.js"></script>
-        <script src="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-        <!-- Page level custom scripts -->
-        <script src="${pageContext.request.contextPath}/template/js/demo/datatables-demo.js"></script>
 
         <script src="${pageContext.request.contextPath}/scripts/verCenso.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/censo.js" type="text/javascript"></script>

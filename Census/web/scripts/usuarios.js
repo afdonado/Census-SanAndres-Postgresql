@@ -71,11 +71,6 @@ $(function () {
         event.preventDefault(); // Evita la navegación del enlace
         $("#frmactualizarusuario").submit(); // Envia el formulario
     });
-    
-    $('#btnvolver').click(function () {
-        var id = $(this).data('id');
-        window.location.href = "listarUsuarios.jsp";
-    });
 
 });
 /*

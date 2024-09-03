@@ -10,6 +10,7 @@ $(function () {
                 $('#dataTable').DataTable().destroy();
             }
 
+console.log('respuesta -> ',response);
             var lista = response.verificaciones;
 
             $.each(lista, function (index, verificacion) {

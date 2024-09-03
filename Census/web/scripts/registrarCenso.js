@@ -69,18 +69,22 @@ $(function (){
     });
     
     $('#txtnumerocenso').blur(function () {
-        console.log('verificarNumeroCenso Registrar');
         if ($('#txtnumerocenso').val().length > 0) {
             verificarNumeroCenso($('#txtnumerocenso').val().toString().toUpperCase());
         }
     });
     
     $('#txtreferencia').blur(function () {
-        console.log('consultarReferenciaVehiculo Registrar');
         var tipoReferencia = $('#cmbtiposreferencia').val();
         var referencia = $('#txtreferencia').val().toString().toUpperCase();
         if (referencia.length > 0) {
             consultarReferenciaVehiculo(tipoReferencia, referencia);
+        }
+    });
+    
+    $('#txtdocumento').blur(function () {
+        if ($('#txtdocumento').val().length > 0) {
+            consultarDocumentoPersona(1, 'cmbtiposdocumento', 'txtdocumento', 'txtnombre', 'idpersona');
         }
     });
     
@@ -120,6 +124,10 @@ $(function (){
                 alert("Ocurrió un error al procesar la solicitud de registrar censo.");
             }
         });
+    });
+    
+    $('#btnvolver').click(function () {
+        window.location.href = "listarCensos.jsp";
     });
     
 });
