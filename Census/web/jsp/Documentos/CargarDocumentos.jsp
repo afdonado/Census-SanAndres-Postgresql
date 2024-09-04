@@ -18,6 +18,8 @@
 
         <!-- Custom styles for this page -->
         <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+        <link href="${pageContext.request.contextPath}/fileinput/css/fileinput.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <%
@@ -50,9 +52,22 @@
                                                 <div class="col-sm-3 mb-3 mb-sm-0">
                                                     <label>Numero Censo</label>
                                                     <input class="form-control solo-numeros-censo solo-numeros" type="text" id="txtnumerocensocargar" name="txtnumerocensocargar" maxlength="5">
-                                                    <!--<button type="button" class="btn btn-md btn-primary btn-block" onclick="consultarDocumentosDigitalizadosByNumeroCenso()" id="btnconsultar" name="btnconsultar" >Consultar</button>-->
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <form role="form" id="frmseleccionardocumentos" enctype="multipart/form-data">
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header py-3">
+                                            <div class="card-body">
+                                                <div class="form-group row">
+                                                    <div id="cargardocumentos">
+                                                        <label>Seleccione los documentos</label>
+                                                        <input id="file" name="file" multiple type="file" class="file" onchange="return ValidarImagenes(this.id)" data-allowed-file-extensions='["png", "jpg", "pdf"]'>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
                                         </div>
                                     </div>
                                 </form>
@@ -64,39 +79,38 @@
                     </div>
                 </div>
             <%
-        } else {
-        %>
-        <script type="text/javascript">
-            alert("Su usuario no tiene permiso para acceder a esta pagina");
-            window.parent.location.href = "../dashboard";
-        </script>
-        <%
-            }
-        } else {
-        %>
-        <script type="text/javascript">
-            alert("Su sesion a terminado");
-            document.location.href = "../../index.jsp";
-        </script>
-        <%
-            }
-        %>
+            } else {
+            %>
+            <script type="text/javascript">
+                alert("Su usuario no tiene permiso para acceder a esta pagina");
+                window.parent.location.href = "../dashboard";
+            </script>
+            <%
+                }
+            } else {
+            %>
+            <script type="text/javascript">
+                alert("Su sesion a terminado");
+                document.location.href = "../../index.jsp";
+            </script>
+            <%
+                }
+            %>
 
 
-        <!-- Bootstrap core JavaScript-->
-        <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
-        <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
+            <!-- Bootstrap core JavaScript-->
+            <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
+            <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
 
-        <!-- Core plugin JavaScript-->
-        <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
+            <!-- Core plugin JavaScript-->
+            <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-        <!-- Custom scripts for all pages-->
-        <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
+            <!-- Custom scripts for all pages-->
+            <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
 
-        <script src="${pageContext.request.contextPath}/scripts/documentos.js" type="text/javascript"></script>
+            <script src="${pageContext.request.contextPath}/scripts/documentos.js" type="text/javascript"></script>
 
-        <link href="${pageContext.request.contextPath}/fileinput/css/fileinput.css" rel="stylesheet" type="text/css"/>
-        <script src="${pageContext.request.contextPath}/fileinput/js/fileinput.min.js" type="text/javascript"></script>
+            <script src="${pageContext.request.contextPath}/fileinput/js/fileinput.min.js" type="text/javascript"></script>
 
     </body>
 </html>

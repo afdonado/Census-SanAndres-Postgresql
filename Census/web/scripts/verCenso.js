@@ -75,6 +75,42 @@ $(function () {
                 alert("Ocurrió un error al procesar la solicitud de cargar datos censo.");
             }
         });
+        
+        $.ajax({
+            url: '../../listarDocumentos',
+            type: 'GET',
+            data: {idcenso: id},
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 'success') {
+
+                    var titulo = `<h1 class=\"h3 mb-2 text-gray-800\">Documentos de Censo "${response.numerocenso}"</h1>`;
+                    var containerTitulo = $('#titulo');
+                    containerTitulo.empty();
+                    containerTitulo.append(titulo);
+                    var imagenes = response.imagenes;
+                    var containerImagenes = $('#imagenes');
+                    containerImagenes.empty();
+                    imagenes.forEach(function (imagen) {
+                        var src;
+                        if (imagen.extension === 'pdf') {
+                            src = "../../iconos/pdf.png";
+                        } else {
+                            src = "data:image/'" + imagen.extension + "';base64," + imagen.b64;
+                        }
+
+                        var img = '<a href="../Documentos/visualizarDocumentos.jsp?iddocumento=' + imagen.iddocumento + '" target="_blank"><img src="' + src + '" class="img-responsive imagen" title="' + imagen.nombre + '" alt="' + imagen.nombre + '"></a>';
+                        containerImagenes.append(img);
+                    });
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                console.error("Error en la solicitud de consultar documentos");
+                alert("Ocurrió un error al procesar la solicitud de consultar documentos.");
+            }
+        });
 
     } else {
         console.log("Parámetros no encontrados en la URL");

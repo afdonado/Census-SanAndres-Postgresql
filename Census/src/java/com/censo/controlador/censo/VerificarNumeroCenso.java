@@ -63,6 +63,7 @@ public class VerificarNumeroCenso extends HttpServlet {
                 respuesta.put("status", "fail");
                 respuesta.put("message", "Numero censo no valido, ya se encuentra registrado");
                 respuesta.put("id", String.valueOf(cencenso.getId()));
+                respuesta.put("numero", cencenso.getNumero());
             }
 
         } catch (SQLException e) {

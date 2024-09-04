@@ -178,13 +178,18 @@
                                 <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
                             </div>
                         </div>
-                        <!--
-                            <div id="page-wrapper">
-                                <div class="row">
-                                    <iframe src="../Documentos/ListarDocumentos.jsp?idcenso=idcenso" style="width: 100%; min-height: 1500px;" transparency="transparency" frameborder="0" ></iframe>
+
+                        <div class="container-fluid">
+                            <div class="card-header py-3">
+                                <div id="titulo"></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div id="imagenes"></div>
+                                </div>
                             </div>
                         </div>
-                        -->
+
                     </div>
                 </div>
                 <footer class="sticky-footer bg-white">

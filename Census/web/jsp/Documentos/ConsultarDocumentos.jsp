@@ -54,6 +54,11 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <div id="imagenes"></div>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                         <footer class="sticky-footer bg-white">

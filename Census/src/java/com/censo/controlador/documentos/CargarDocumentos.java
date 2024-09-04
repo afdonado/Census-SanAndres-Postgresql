@@ -40,7 +40,7 @@ public class CargarDocumentos extends HttpServlet {
 
             if (request.getParameter("idcenso") == null || request.getParameter("idcenso").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'idcenso' no encontrado para modificar censo");
+                respuesta.put("message", "Parametro 'idcenso' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -54,23 +54,35 @@ public class CargarDocumentos extends HttpServlet {
             CenCenso cencenso = censoDao.ConsultarCensoById(conex, idcenso);
             if (cencenso == null) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Censo no se encuentra registrado para modificarlo");
+                respuesta.put("message", "Censo no se encuentra registrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
                 return;
             }
 
-            if (request.getParameter("numero") == null || request.getParameter("numero").isEmpty()) {
+            if (request.getParameter("numerocenso") == null || request.getParameter("numerocenso").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'numero censo' no encontrado para modificar censo");
+                respuesta.put("message", "Parametro 'numero censo' no encontrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
+            String numero = request.getParameter("numerocenso");
+            if (numero.length() < 6) {
+                String prefijo = "ACS";
+                numero = prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero;
+            } else {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Numero de censo no puede ser mayor a 5 digitos");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
                 return;
             }
 
-            String numerocenso = request.getParameter("numero");
             CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
 
             DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -110,8 +122,8 @@ public class CargarDocumentos extends HttpServlet {
                     tipo = 3;
                 }
 
-                String directorio = "C:/DocumentosDigitalizados/Censos/" + numerocenso;
-                String ruta = "C:/DocumentosDigitalizados/Censos/" + numerocenso + "/" + file.getName();
+                String directorio = "C:/DocumentosDigitalizados/Censos/" + numero;
+                String ruta = "C:/DocumentosDigitalizados/Censos/" + numero + "/" + file.getName();
 
                 File mkdir = new File(directorio);
                 if (!mkdir.exists()) {

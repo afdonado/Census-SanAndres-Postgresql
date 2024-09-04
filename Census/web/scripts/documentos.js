@@ -1,6 +1,8 @@
 
 $(function () {
 
+    $('#cargardocumentos').hide();
+
     function verificarNumeroCenso(opcion, numero) {
         $.ajax({
             data: {
@@ -14,11 +16,12 @@ $(function () {
                     alert(response.message);
                 } else if (response.status === "fail") {
                     if (opcion === 1) {
-                        window.location.href = "listarDocumentos.jsp?idcenso=" + response.id + "&numero=" + numero;
+                        consultarDocumentos(response.id);
                     } else if (opcion === 2) {
-                        window.location.href = "seleccionarDocumentos.jsp?idcenso=" + response.id + "&numero=" + numero;
+                        $('#frmseleccionardocumentos').attr('action', '../../cargarDocumentos?idcenso=' + response.id + '&numerocenso=' + numero);
+                        $('#cargardocumentos').show();
                     } else {
-                        importarDocumentosWeb(response.id, numero);
+                        importarDocumentosWeb(response.id, response.numero);
                     }
                 } else if (response.status === "error") {
                     alert(response.message);
@@ -30,6 +33,102 @@ $(function () {
             }
         });
     }
+
+    $('#txtnumerocenso').blur(function () {
+        var numero = $('#txtnumerocenso').val();
+        if (numero.length > 0 && numero.length < 6) {
+            var prefijo = "ACS";
+            numero = prefijo + ("00000".substring(0, 5 - numero.length)) + numero;
+            console.log('numero:', numero);
+            verificarNumeroCenso(1, $('#txtnumerocenso').val());
+        }
+    });
+    $('#txtnumerocensocargar').blur(function () {
+        var numero = $('#txtnumerocensocargar').val();
+        if (numero.length > 0 && numero.length < 6) {
+            var prefijo = "ACS";
+            numero = prefijo + ("00000".substring(0, 5 - numero.length)) + numero;
+            console.log('numero:', numero);
+            verificarNumeroCenso(2, $('#txtnumerocensocargar').val());
+        }
+    });
+    $('#txtnumerocensoimportar').blur(function () {
+        var numero = $('#txtnumerocensoimportar').val();
+        if (numero.length > 0 && numero.length < 6) {
+            var prefijo = "ACS";
+            numero = prefijo + ("00000".substring(0, 5 - numero.length)) + numero;
+            console.log('numero:', numero);
+            consultarNumeroCenso(3, $('#txtnumerocensoimportar').val());
+        }
+    });
+    function consultarDocumentos(id) {
+        $.ajax({
+            url: '../../listarDocumentos',
+            type: 'GET',
+            data: {idcenso: id},
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 'success') {
+
+                    var titulo = `<h1 class=\"h3 mb-2 text-gray-800\">Documentos de Censo "${response.numerocenso}"</h1>`;
+                    var containerTitulo = $('#titulo');
+                    containerTitulo.empty();
+                    containerTitulo.append(titulo);
+                    var imagenes = response.imagenes;
+                    var containerImagenes = $('#imagenes');
+                    containerImagenes.empty();
+                    imagenes.forEach(function (imagen) {
+                        var src;
+                        if (imagen.extension === 'pdf') {
+                            src = "../../iconos/pdf.png";
+                        } else {
+                            src = "data:image/'" + imagen.extension + "';base64," + imagen.b64;
+                        }
+
+                        var img = '<a href="visualizarDocumentos.jsp?iddocumento=' + imagen.iddocumento + '" target="_blank"><img src="' + src + '" class="img-responsive imagen" title="' + imagen.nombre + '" alt="' + imagen.nombre + '"></a>';
+                        containerImagenes.append(img);
+                    });
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                console.error("Error en la solicitud de consultar documentos");
+                alert("Ocurrió un error al procesar la solicitud de consultar documentos.");
+            }
+        });
+    }
+
+
+    $('#frmseleccionardocumentos').on('submit', function (e) {
+        e.preventDefault(); // Evita el envío normal del formulario
+        
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: $(this).attr('action'),
+            method: "POST",
+            data: formData,
+            processData: false, // No procesar los datos
+            contentType: false, // No establecer ningún tipo de contenido
+            beforeSend: function() {
+                checkSubmit('btncargar', 'Guardando...'); // Llamar la función para desactivar el botón o mostrar el mensaje
+            },
+            success: function (response) {
+                if (response.status === "success") {
+                    alert(response.message);
+                    window.location.href = "consultarDocumentos.jsp";
+                } else if (response.status === "fail" || response.status === "error") {
+                    alert(response.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de carga documentos: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de cargar documentos.");
+            }
+        });
+    });
+
 
     function importarDocumentosWeb(id, numero) {
         $.ajax({
@@ -56,36 +155,6 @@ $(function () {
         });
     }
 
-    $('#txtnumerocenso').blur(function () {
-        var numero = $('#txtnumerocenso').val();
-        if (numero.length > 0 && numero.length < 6) {
-            var prefijo = "ACS";
-            numero = prefijo + ("00000".substring(0, 5 - numero.length)) + numero;
-            console.log('numero:', numero);
-            verificarNumeroCenso(1, $('#txtnumerocenso').val());
-        }
-    });
-
-    $('#txtnumerocensocargar').blur(function () {
-        var numero = $('#txtnumerocensocargar').val();
-        if (numero.length > 0 && numero.length < 6) {
-            var prefijo = "ACS";
-            numero = prefijo + ("00000".substring(0, 5 - numero.length)) + numero;
-            console.log('numero:', numero);
-            verificarNumeroCenso(2, $('#txtnumerocensocargar').val());
-        }
-    });
-
-    $('#txtnumerocensoimportar').blur(function () {
-        var numero = $('#txtnumerocensoimportar').val();
-        if (numero.length > 0 && numero.length < 6) {
-            var prefijo = "ACS";
-            numero = prefijo + ("00000".substring(0, 5 - numero.length)) + numero;
-            console.log('numero:', numero);
-            consultarNumeroCenso(3, $('#txtnumerocensoimportar').val());
-        }
-    });
-
 });
 
 function checkSubmit(id, mensaje) { // Con esta funcion se deshabilita el boton tipo submit y cambia el value para dar la impresion de que se esta procesando la informacion
@@ -97,7 +166,6 @@ function checkSubmit(id, mensaje) { // Con esta funcion se deshabilita el boton 
 
 function ValidarImagenes(id) {
     var imagen = document.getElementById(id).files;
-
     if (imagen.length === 0) {
         alert("La subida de imagenes es requerida");
         document.getElementById(id).value = "";
@@ -195,7 +263,6 @@ function consultarCensoDocumento() {
 /*
  function consultarDocumentosDigitalizadosByNumeroCenso() {
  var numerocenso = document.getElementById('txtnumerocenso').value.toString().toUpperCase();
- 
  if (numerocenso.length > 0) {
  ajax = new nuevoAjax();
  ajax.open("POST", "../Gets/getVerificarNumeroCenso.jsp", true);
@@ -226,7 +293,6 @@ function DescargarDocumento() {
 
 function consultarImagenesWeb() {
     var numerocenso = document.getElementById('txtnumerocenso').value.toString().toUpperCase();
-
     if (numerocenso.length > 0) {
         ajax = new nuevoAjax();
         ajax.open("POST", "../Gets/getVerificarNumeroCenso.jsp", true);
