@@ -5,6 +5,26 @@
         auth="Container" 
         type="javax.sql.DataSource"
         driverClassName="oracle.jdbc.OracleDriver" 
+        url="jdbc:oracle:thin:@censo.c5i8gmg8gnn1.us-east-2.rds.amazonaws.com:1521:DATABASE" 
+        username="CENSO" 
+        password="a478feEd9c7327c99740003f429"
+        maxActive="5" 
+        maxIdle="1" 
+        maxWait="20000" 
+        validationQuery="SELECT 1 FROM DUAL" 
+        removeAbandoned="true" 
+        removeAbandonedTimeout="30" 
+        logAbandoned="true"
+      />
+</Context>
+<!--
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/Census">
+    <Resource 
+        name="jdbc/oracle" 
+        auth="Container" 
+        type="javax.sql.DataSource"
+        driverClassName="oracle.jdbc.OracleDriver" 
         url="jdbc:oracle:thin:@localhost:1521:ORCL" 
         username="CENSO" 
         password="desarrollo"
@@ -17,3 +37,4 @@
         logAbandoned="true"
       />
 </Context>
+-->

@@ -102,8 +102,6 @@ $(function () {
                         var img = '<a href="../Documentos/visualizarDocumentos.jsp?iddocumento=' + imagen.iddocumento + '" target="_blank"><img src="' + src + '" class="img-responsive imagen" title="' + imagen.nombre + '" alt="' + imagen.nombre + '"></a>';
                         containerImagenes.append(img);
                     });
-                } else {
-                    alert(response.message);
                 }
             },
             error: function () {
