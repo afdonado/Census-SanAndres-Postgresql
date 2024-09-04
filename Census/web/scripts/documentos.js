@@ -1,4 +1,92 @@
 
+$(function () {
+
+    function verificarNumeroCenso(opcion, numero) {
+        $.ajax({
+            data: {
+                numero: numero
+            },
+            url: "../../verificarNumeroCenso",
+            type: "POST",
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    alert(response.message);
+                } else if (response.status === "fail") {
+                    if (opcion === 1) {
+                        window.location.href = "listarDocumentos.jsp?idcenso=" + response.id + "&numero=" + numero;
+                    } else if (opcion === 2) {
+                        window.location.href = "seleccionarDocumentos.jsp?idcenso=" + response.id + "&numero=" + numero;
+                    } else {
+                        importarDocumentosWeb(response.id, numero);
+                    }
+                } else if (response.status === "error") {
+                    alert(response.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de verificar numero de censo: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de verificar numero de censo.");
+            }
+        });
+    }
+
+    function importarDocumentosWeb(id, numero) {
+        $.ajax({
+            data: {
+                idcenso: id,
+                numero: numero
+            },
+            url: "../../verificarNumeroCenso",
+            type: "POST",
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    alert(response.message);
+                } else if (response.status === "fail") {
+                    window.location.href = "listarDocumentos.jsp?idcenso=" + response.id;
+                } else if (response.status === "error") {
+                    alert(response.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de importar documentos web: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de importar documentos web.");
+            }
+        });
+    }
+
+    $('#txtnumerocenso').blur(function () {
+        var numero = $('#txtnumerocenso').val();
+        if (numero.length > 0 && numero.length < 6) {
+            var prefijo = "ACS";
+            numero = prefijo + ("00000".substring(0, 5 - numero.length)) + numero;
+            console.log('numero:', numero);
+            verificarNumeroCenso(1, $('#txtnumerocenso').val());
+        }
+    });
+
+    $('#txtnumerocensocargar').blur(function () {
+        var numero = $('#txtnumerocensocargar').val();
+        if (numero.length > 0 && numero.length < 6) {
+            var prefijo = "ACS";
+            numero = prefijo + ("00000".substring(0, 5 - numero.length)) + numero;
+            console.log('numero:', numero);
+            verificarNumeroCenso(2, $('#txtnumerocensocargar').val());
+        }
+    });
+
+    $('#txtnumerocensoimportar').blur(function () {
+        var numero = $('#txtnumerocensoimportar').val();
+        if (numero.length > 0 && numero.length < 6) {
+            var prefijo = "ACS";
+            numero = prefijo + ("00000".substring(0, 5 - numero.length)) + numero;
+            console.log('numero:', numero);
+            consultarNumeroCenso(3, $('#txtnumerocensoimportar').val());
+        }
+    });
+
+});
 
 function checkSubmit(id, mensaje) { // Con esta funcion se deshabilita el boton tipo submit y cambia el value para dar la impresion de que se esta procesando la informacion
     document.getElementById(id).value = mensaje;
@@ -10,13 +98,13 @@ function checkSubmit(id, mensaje) { // Con esta funcion se deshabilita el boton 
 function ValidarImagenes(id) {
     var imagen = document.getElementById(id).files;
 
-    if (imagen.length == 0) {
+    if (imagen.length === 0) {
         alert("La subida de imagenes es requerida");
         document.getElementById(id).value = "";
         return false;
     } else {
         for (x = 0; x < imagen.length; x++) {
-            if (imagen[x].type != "image/png" && imagen[x].type != "image/jpg" && imagen[x].type != "image/jpeg" && imagen[x].type != "application/pdf") {
+            if (imagen[x].type !== "image/png" && imagen[x].type !== "image/jpg" && imagen[x].type !== "image/jpeg" && imagen[x].type !== "application/pdf") {
                 alert("El archivo " + imagen[x].name + " Presenta Una Extension Invalida");
                 document.getElementById(id).value = "";
                 return false;
@@ -104,32 +192,32 @@ function consultarCensoDocumento() {
     window.frames[0].location.href = "SeleccionarDocumentos.jsp?numero=" + numero;
 }
 
-
-function consultarDocumentosDigitalizadosByNumeroCenso() {
-    var numerocenso = document.getElementById('txtnumerocenso').value.toString().toUpperCase();
-
-    if (numerocenso.length > 0) {
-        ajax = new nuevoAjax();
-        ajax.open("POST", "../Gets/getVerificarNumeroCenso.jsp", true);
-        ajax.onreadystatechange = function () {
-            if (ajax.readyState == 4 && ajax.status == 200) {
-                var docxml = ajax.responseXML;
-                var result = docxml.getElementsByTagName('result')[0].childNodes[0].nodeValue;
-                if (result == 'si') {
-                    var idcenso = docxml.getElementsByTagName('idcenso')[0].childNodes[0].nodeValue;
-                    window.frames[0].location.href = "ListarDocumentos.jsp?idcenso=" + idcenso;
-                } else {
-                    document.getElementById('txtnumerocenso').focus();
-                    alert("Numero de censo no se encuentra registrado");
-                }
-            }
-        }
-        ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        ajax.send("numerocenso=" + numerocenso);
-    }
-
-}
-
+/*
+ function consultarDocumentosDigitalizadosByNumeroCenso() {
+ var numerocenso = document.getElementById('txtnumerocenso').value.toString().toUpperCase();
+ 
+ if (numerocenso.length > 0) {
+ ajax = new nuevoAjax();
+ ajax.open("POST", "../Gets/getVerificarNumeroCenso.jsp", true);
+ ajax.onreadystatechange = function () {
+ if (ajax.readyState == 4 && ajax.status == 200) {
+ var docxml = ajax.responseXML;
+ var result = docxml.getElementsByTagName('result')[0].childNodes[0].nodeValue;
+ if (result == 'si') {
+ var idcenso = docxml.getElementsByTagName('idcenso')[0].childNodes[0].nodeValue;
+ window.frames[0].location.href = "ListarDocumentos.jsp?idcenso=" + idcenso;
+ } else {
+ document.getElementById('txtnumerocenso').focus();
+ alert("Numero de censo no se encuentra registrado");
+ }
+ }
+ }
+ ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+ ajax.send("numerocenso=" + numerocenso);
+ }
+ 
+ }
+ */
 function DescargarDocumento() {
     document.getElementById('frmdescargardocumento').action = '../../descargarDocumento';
     document.getElementById('frmdescargardocumento').submit();

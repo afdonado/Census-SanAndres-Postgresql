@@ -59,7 +59,7 @@ public class ImportarDocumento extends HttpServlet {
                 return;
             }
 
-            if (request.getParameter("numerocenso") == null || request.getParameter("numerocenso").isEmpty()) {
+            if (request.getParameter("numero") == null || request.getParameter("numero").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'numero censo' no encontrado para importar documento");
 

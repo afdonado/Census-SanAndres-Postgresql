@@ -1,6 +1,5 @@
 
 function verificarNumeroCenso(numero) {
-    console.log('verificarNumeroCenso');
     $.ajax({
         data: {
             numero: numero

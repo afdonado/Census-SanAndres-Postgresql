@@ -1,5 +1,4 @@
 <%@page import="javax.servlet.http.HttpSession"%>
-<%@page import="java.util.LinkedList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -7,7 +6,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Cargar Documentos Censo</title>
+        <title>Importar Documentos Censo</title>
 
         <!-- Custom fonts for this template-->
         <link href="${pageContext.request.contextPath}/template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -23,7 +22,7 @@
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
-                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("cargarDocumentos.jsp")) {
+                if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("consultarDocumentosWeb.jsp")) {
         %>
         <div id="wrapper">
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -38,32 +37,26 @@
                         </nav>
 
                         <div class="container-fluid">
-                            <div class="container-fluid">
-                                <h1 class="h3 mb-2 text-gray-800">Cargar Documentos Censo</h1>
-                                <form role="form" id="frmcargardocumentos">
-                                    <div class="card shadow mb-4">
-                                        <div class="card-header py-3">
-                                            <h6 class="m-0 font-weight-bold text-primary">Documentos Censo</h6>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="form-group row">
-                                                <div class="col-sm-3 mb-3 mb-sm-0">
-                                                    <label>Numero Censo</label>
-                                                    <input class="form-control solo-numeros-censo solo-numeros" type="text" id="txtnumerocensocargar" name="txtnumerocensocargar" maxlength="5">
-                                                    <!--<button type="button" class="btn btn-md btn-primary btn-block" onclick="consultarDocumentosDigitalizadosByNumeroCenso()" id="btnconsultar" name="btnconsultar" >Consultar</button>-->
-                                                </div>
-                                            </div>
+                            <h1 class="h3 mb-2 text-gray-800">Importar Documentos Censo</h1>
+                            <form role="form" id="frmconsultardocumentosweb">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Numero Censo</label>
+                                            <input class="form-control solo-numeros-censo solo-numeros" type="text" id="txtnumerocensoimportar" name="txtnumerocensoimportar" maxlength="5">
+                                            <!--<button type="button" class="btn btn-md btn-primary btn-block" onclick="consultarImagenesWeb()" id="btnconsultar" name="btnconsultar" >Consultar</button>-->
                                         </div>
                                     </div>
-                                </form>
-                            </div>
-                            <footer class="sticky-footer bg-white">
-                            <jsp:include page="/jsp/Footer.jsp"></jsp:include>
-                            </footer>
+                                </div>
+                            </form>
                         </div>
+                        <footer class="sticky-footer bg-white">
+                        <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                        </footer>
                     </div>
                 </div>
-            <%
+            </div>
+        <%
         } else {
         %>
         <script type="text/javascript">
@@ -81,7 +74,6 @@
         <%
             }
         %>
-
 
         <!-- Bootstrap core JavaScript-->
         <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>

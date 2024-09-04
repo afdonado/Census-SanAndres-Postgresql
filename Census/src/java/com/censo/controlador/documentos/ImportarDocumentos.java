@@ -62,7 +62,7 @@ public class ImportarDocumentos extends HttpServlet {
                 return;
             }
 
-            if (request.getParameter("txtnumerocenso") == null || request.getParameter("txtnumerocenso").isEmpty()) {
+            if (request.getParameter("numero") == null || request.getParameter("numero").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'numero censo' no encontrado para modificar censo");
 
@@ -71,7 +71,7 @@ public class ImportarDocumentos extends HttpServlet {
                 return;
             }
 
-            String numerocenso = request.getParameter("txtnumerocenso");
+            String numerocenso = request.getParameter("numero");
 
             String nombreImagenVehiculo = numerocenso + "_VEH.jpg";
             String nombreImagenImpronta = numerocenso + "_IMP.jpg";
