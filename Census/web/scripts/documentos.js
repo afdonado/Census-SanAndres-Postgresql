@@ -39,7 +39,6 @@ $(function () {
         if (numero.length > 0 && numero.length < 6) {
             var prefijo = "ACS";
             numero = prefijo + ("00000".substring(0, 5 - numero.length)) + numero;
-            console.log('numero:', numero);
             verificarNumeroCenso(1, $('#txtnumerocenso').val());
         }
     });
@@ -48,7 +47,6 @@ $(function () {
         if (numero.length > 0 && numero.length < 6) {
             var prefijo = "ACS";
             numero = prefijo + ("00000".substring(0, 5 - numero.length)) + numero;
-            console.log('numero:', numero);
             verificarNumeroCenso(2, $('#txtnumerocensocargar').val());
         }
     });
@@ -57,7 +55,6 @@ $(function () {
         if (numero.length > 0 && numero.length < 6) {
             var prefijo = "ACS";
             numero = prefijo + ("00000".substring(0, 5 - numero.length)) + numero;
-            console.log('numero:', numero);
             consultarNumeroCenso(3, $('#txtnumerocensoimportar').val());
         }
     });

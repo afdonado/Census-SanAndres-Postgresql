@@ -49,7 +49,6 @@
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Numero Censo</label>
                                                 <input class="form-control solo-numeros-censo solo-numeros" type="text" id="txtnumerocenso" name="txtnumerocenso" maxlength="5">
-                                                <!--<button type="button" class="btn btn-md btn-primary btn-block" onclick="consultarDocumentosDigitalizadosByNumeroCenso()" id="btnconsultar" name="btnconsultar" >Consultar</button>-->
                                             </div>
                                         </div>
                                     </div>
