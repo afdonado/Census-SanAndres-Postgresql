@@ -10,10 +10,12 @@ function verificarNumeroCenso(numero) {
         dataType: "json",
         success: function (response) {
             if (response.status === "success") {
+                $('#txtnumerocenso').css("background-color", "lightgreen");
                 console.log(response.message);
             } else if (response.status === "fail") {
                 $('#txtnumerocenso').val('');
                 $('#txtnumerocenso').focus();
+                $('#txtnumerocenso').css("background-color", "");
                 console.log(response.message);
             } else if (response.status === "error") {
                 alert(response.message);
@@ -41,10 +43,12 @@ function consultarReferenciaVehiculo(tiporeferencia, valorreferencia) {
         success: function (response) {
             if (response.status === "success") {
                 $('#idvehiculo').val(response.id);
+                $('#txtreferencia').css("background-color", "lightgreen");
                 console.log(response.message);
             } else if (response.status === "fail") {
                 $('#txtreferencia').val('');
                 $('#txtreferencia').focus();
+                $('#txtreferencia').css("background-color", "");
                 alert(response.message);
             } else if (response.status === "error") {
                 alert(response.message);

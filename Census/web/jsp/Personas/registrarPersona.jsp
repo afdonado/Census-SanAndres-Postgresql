@@ -36,42 +36,8 @@
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
                 if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("registrarPersona.jsp")) {
-
-                    int opcion = 0;
-                    int tipoDocumento = 0;
-                    String documento = "";
-                    String readonly = "";
-                    if (request.getParameter("opcion") != null) {
-                        opcion = Integer.parseInt(request.getParameter("opcion"));
-                    }
-
-                    if (opcion == 2) {
-                        tipoDocumento = Integer.parseInt(request.getParameter("tipodoc"));
-                        documento = request.getParameter("documento").toUpperCase().trim();
-                        readonly = "readonly";
-                    }
         %>
-        <!--Modal Respuesta Peticion-->
-        <div class="modal fade" id="respuesta" name="respuesta" role="dialog" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title">Respuesta Registro Persona</h4>
-                    </div>
-                    <div class="modal-body" id="respuestaRegistro">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div id="wrapper">
-            <%
-                if (opcion == 1) {
-            %>
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
                 <jsp:include page="/jsp/Menu.jsp"></jsp:include>
                 </ul>
@@ -82,147 +48,131 @@
                         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                         <jsp:include page="/jsp/Header.jsp"></jsp:include>
                         </nav>
-                    <%
-                        }
-                    %>
 
-                    <div class="container-fluid">
-                        <%
-                            if (opcion == 1) {
-                        %>
-                        <h1 class="h3 mb-2 text-gray-800">Registrar Persona</h1>
-                        <%
-                            }
-                        %>
-                        <form class="user" id="frmregistrarpersona">
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Datos de Identificación</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Tipo Documento</label>
-                                            <select class="form-control" id="cmbtiposdocumento" name="cmbtiposdocumento" value="<%=tipoDocumento%>" <%=readonly%> required="true"></select>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Documento</label>
-                                            <input class="form-control solo-numeros" type="text" id="txtdocumento" name="txtdocumento" maxlength="20" style="text-transform: uppercase" value="<%=documento%>" <%=readonly%> required="true">
-                                        </div>
+                        <div class="container-fluid">
+                            <h1 class="h3 mb-2 text-gray-800">Registrar Persona</h1>
+                            <form class="user" id="frmregistrarpersona">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Datos de Identificación</h6>
                                     </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Primer Nombre(*)</label>
-                                            <input class="form-control solo-letras" type="text" id="txtprimernombre" name="txtprimernombre" maxlength="80" style="text-transform: uppercase" required="true">
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Tipo Documento</label>
+                                                <select class="form-control" id="cmbtiposdocumento" name="cmbtiposdocumento" required="true"></select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Documento</label>
+                                                <input class="form-control solo-numeros" type="text" id="txtdocumento" name="txtdocumento" maxlength="20" style="text-transform: uppercase" required="true">
+                                            </div>
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Segundo Nombre</label>
-                                            <input class="form-control solo-letras" type="text" id="txtsegundonombre" name="txtsegundonombre" maxlength="80" style="text-transform: uppercase">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Primer Nombre(*)</label>
+                                                <input class="form-control solo-letras" type="text" id="txtprimernombre" name="txtprimernombre" maxlength="80" style="text-transform: uppercase" required="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Segundo Nombre</label>
+                                                <input class="form-control solo-letras" type="text" id="txtsegundonombre" name="txtsegundonombre" maxlength="80" style="text-transform: uppercase">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Primer Apellido(*)</label>
+                                                <input class="form-control solo-letras" type="text" id="txtprimerapellido" name="txtprimerapellido" maxlength="80" style="text-transform: uppercase" required="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Segundo Apellido</label>
+                                                <input class="form-control solo-letras" type="text" id="txtsegundoapellido" name="txtsegundoapellido" maxlength="80" style="text-transform: uppercase">
+                                            </div>
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Primer Apellido(*)</label>
-                                            <input class="form-control solo-letras" type="text" id="txtprimerapellido" name="txtprimerapellido" maxlength="80" style="text-transform: uppercase" required="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Segundo Apellido</label>
-                                            <input class="form-control solo-letras" type="text" id="txtsegundoapellido" name="txtsegundoapellido" maxlength="80" style="text-transform: uppercase">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Fecha Nacimiento(*)</label>
-                                            <input class="form-control" type="text" id="txtfechanacimiento" name="txtfechanacimiento" readonly="true" required="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Genero(*)</label>
-                                            <select class="form-control" id="cmbgeneros" name="cmbgeneros" required="true"></select>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Grupo Sanguineo(*)</label>
-                                            <select class="form-control" id="cmbgrupossanguineos" name="cmbgrupossanguineos" required="true"></select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Datos de Contacto</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Departamento(*)</label>
-                                            <select class="form-control" id="cmbdepartamentos" name="cmbdepartamentos" required="true"></select>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Municipio(*)</label>
-                                            <select class="form-control" id="cmbmunicipios" name="cmbmunicipios" required="true"></select>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Dirección(*)</label>
-                                            <input class="form-control" type="text" id="txtdireccion" name="txtdireccion" maxlength="80" style="text-transform: uppercase" required="true">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">                                    
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Telefono(*)</label>
-                                            <input class="form-control solo-numeros" type="text" id="txttelefono" name="txttelefono" maxlength="30" required="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Correo Electronico</label>
-                                            <input class="form-control validar-email" type="text" id="txtemail" name="txtemail" maxlength="100" style="text-transform: uppercase" required="true">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Fecha Nacimiento(*)</label>
+                                                <input class="form-control" type="text" id="txtfechanacimiento" name="txtfechanacimiento" readonly="true" required="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Genero(*)</label>
+                                                <select class="form-control" id="cmbgeneros" name="cmbgeneros" required="true"></select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Grupo Sanguineo(*)</label>
+                                                <select class="form-control" id="cmbgrupossanguineos" name="cmbgrupossanguineos" required="true"></select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Datos Licencia Conducción</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Datos de Contacto</h6>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>No. Licencia Conduccion</label>
-                                                <input class="form-control solo-numeros" type="text" id="txtnumerolicencia" name="txtnumerolicencia" maxlength="30">
+                                                <label>Departamento(*)</label>
+                                                <select class="form-control" id="cmbdepartamentos" name="cmbdepartamentos" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Categoria</label>
-                                                <select class="form-control" id="cmbcategoriaslicencia" name="cmbcategoriaslicencia"></select>
+                                                <label>Municipio(*)</label>
+                                                <select class="form-control" id="cmbmunicipios" name="cmbmunicipios" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Fecha Expedición</label>
-                                                <input class="form-control" type="text" id="txtfechaexplicencia" name="txtfechaexplicencia" readonly="true">
+                                                <label>Dirección(*)</label>
+                                                <input class="form-control" type="text" id="txtdireccion" name="txtdireccion" maxlength="80" style="text-transform: uppercase" required="true">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">                                    
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Telefono(*)</label>
+                                                <input class="form-control solo-numeros" type="text" id="txttelefono" name="txttelefono" maxlength="30" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Fecha Vencimiento</label>
-                                                <input class="form-control" type="text" id="txtfechavlicencia" name="txtfechavlicencia" readonly="true">
+                                                <label>Correo Electronico</label>
+                                                <input class="form-control validar-email" type="text" id="txtemail" name="txtemail" maxlength="100" style="text-transform: uppercase" required="true">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-primary">Datos Licencia Conducción</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group row">
+                                                <div class="col-sm-3 mb-3 mb-sm-0">
+                                                    <label>No. Licencia Conduccion</label>
+                                                    <input class="form-control solo-numeros" type="text" id="txtnumerolicencia" name="txtnumerolicencia" maxlength="30">
+                                                </div>
+                                                <div class="col-sm-3 mb-3 mb-sm-0">
+                                                    <label>Categoria</label>
+                                                    <select class="form-control" id="cmbcategoriaslicencia" name="cmbcategoriaslicencia"></select>
+                                                </div>
+                                                <div class="col-sm-3 mb-3 mb-sm-0">
+                                                    <label>Fecha Expedición</label>
+                                                    <input class="form-control" type="text" id="txtfechaexplicencia" name="txtfechaexplicencia" readonly="true">
+                                                </div>
+                                                <div class="col-sm-3 mb-3 mb-sm-0">
+                                                    <label>Fecha Vencimiento</label>
+                                                    <input class="form-control" type="text" id="txtfechavlicencia" name="txtfechavlicencia" readonly="true">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                    <button type="button" class="btn btn-lg btn-success btn-block" id="btnguardar" name="btnguardar" >Guardar</button>
+                                <div class="row">
+                                    <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                        <button type="button" class="btn btn-lg btn-success btn-block" id="btnguardar" name="btnguardar" >Guardar</button>
+                                    </div>
+                                    <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                        <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
+                                    </div>
                                 </div>
-                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                    <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
-                                </div>
-                            </div>
-                            <input type="hidden" id="opcion" name="opcion" value="<%=opcion%>">
-                        </form>
-                    </div>
-                    <%
-                        if (opcion == 1) {
-                    %>
-                    <footer class="sticky-footer bg-white">
+                            </form>
+                        </div>
+                        <footer class="sticky-footer bg-white">
                         <jsp:include page="/jsp/Footer.jsp"></jsp:include>
                         </footer>
-                    <%
-                        }
-                    %>
+                    </div>
                 </div>
             </div>
-        </div>
         <%
         } else {
         %>

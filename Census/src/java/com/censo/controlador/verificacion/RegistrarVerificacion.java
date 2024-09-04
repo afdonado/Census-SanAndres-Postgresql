@@ -33,7 +33,7 @@ public class RegistrarVerificacion extends HttpServlet {
 
         try {
 
-            if (request.getParameter("chkrunt") == null || request.getParameter("chkrunt").isEmpty()) {
+            if (request.getParameter("runt") == null || request.getParameter("runt").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'runt' no encontrado");
 
@@ -42,7 +42,7 @@ public class RegistrarVerificacion extends HttpServlet {
                 return;
             }
 
-            if (request.getParameter("chkdocumentos") == null || request.getParameter("chkdocumentos").isEmpty()) {
+            if (request.getParameter("documento") == null || request.getParameter("documento").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'documentos' no encontrado");
 
@@ -51,7 +51,7 @@ public class RegistrarVerificacion extends HttpServlet {
                 return;
             }
 
-            if (request.getParameter("chkfotos") == null || request.getParameter("chkfotos").isEmpty()) {
+            if (request.getParameter("foto") == null || request.getParameter("foto").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'fotos' no encontrado");
 
@@ -60,7 +60,7 @@ public class RegistrarVerificacion extends HttpServlet {
                 return;
             }
             
-            if (request.getParameter("cmbestadosverificacion") == null || request.getParameter("cmbestadosverificacion").isEmpty()) {
+            if (request.getParameter("estadoverificacion") == null || request.getParameter("estadoverificacion").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'estado verificacion' no encontrado");
 
@@ -69,7 +69,7 @@ public class RegistrarVerificacion extends HttpServlet {
                 return;
             }
             
-            if (request.getParameter("txtobservaciones") == null || request.getParameter("txtobservaciones").isEmpty()) {
+            if (request.getParameter("observacion") == null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'observaciones' no encontrado");
 
@@ -101,11 +101,11 @@ public class RegistrarVerificacion extends HttpServlet {
                 return;
             }
 
-            String runt = "S";
-            String documentos = "S";
-            String fotos = "S";
-            int estado = Integer.parseInt(request.getParameter("cmbestadosverificacion"));
-            String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
+            String runt = request.getParameter("runt");
+            String documentos = request.getParameter("documento");
+            String fotos = request.getParameter("foto");
+            int estado = Integer.parseInt(request.getParameter("estadoverificacion"));
+            String observaciones = request.getParameter("observacion").toUpperCase().trim();
 
             CenUsuario cenusuarioSesion = (CenUsuario) request.getSession().getAttribute("usuario");
 
@@ -141,7 +141,7 @@ public class RegistrarVerificacion extends HttpServlet {
                 conex.commit();
                 respuesta.put("status", "success");
                 respuesta.put("message", "Verificacion registrada exitosamente");
-                respuesta.put("id", String.valueOf(idverificacion));
+                respuesta.put("id", String.valueOf(idcenso));
             } else {
                 conex.rollback();
                 respuesta.put("status", "fail");

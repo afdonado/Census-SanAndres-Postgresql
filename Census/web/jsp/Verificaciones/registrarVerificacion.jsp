@@ -50,54 +50,62 @@
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label># Censo(*)</label>
-                                                <input class="form-control solo-numeros-censo" type="text" id="txtnumerocenso" name="txtnumerocenso" maxlength="10" style="text-transform: uppercase" required="true">
+                                                <input class="form-control" type="text" id="txtnumerocenso" name="txtnumerocenso" maxlength="10" style="text-transform: uppercase" readonly="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Fecha Censo (*)</label>
                                                 <input class="form-control" type="text" id="txtfechacenso" name="txtfechacenso" readonly="true">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Runt Verificado</label>
+                                                <input class="form-control" type="checkbox" id="chkrunt" name="chkrunt" value="S" required="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Documentos Verificados</label>
+                                                <input class="form-control" type="checkbox" id="chkdocumentos" name="chkdocumentos" value="S" required="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Fotos Verificadas</label>
+                                                <input class="form-control" type="checkbox" id="chkfotos" name="chkfotos" value="S" required="true">
+                                            </div>
+                                            <%
+                                                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("completarVerificacion")) {
+                                            %>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Estado</label>
+                                                <select class="form-control" id="cmbestadosverificacion" name="cmbestadosverificacion" required="true"></select>
+                                            </div>
+                                            <%
+                                                }
+                                            %>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Runt Verificado</label>
-                                            <input class="form-inline" type="checkbox" id="chkrunt" name="chkrunt" value="S" required="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Documentos Verificados</label>
-                                            <input class="form-inline" type="checkbox" id="chkdocumentos" name="chkdocumentos" value="S" required="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Fotos Verificadas</label>
-                                            <input class="form-inline" type="checkbox" id="chkfotos" name="chkfotos" value="S" required="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Estado</label>
-                                            <select class="form-control" id="cmbestadosverificacion" name="cmbestadosverificacion" required="true"></select>
+                                </div>
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" cols="3"></textarea>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" cols="3"></textarea>
+                                <div class="row">
+                                    <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                        <button type="button" class="btn btn-lg btn-success btn-block" id="btnguardar" name="btnguardar" >Guardar</button>
+                                    </div>
+                                    <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                        <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                    <button type="button" class="btn btn-lg btn-success btn-block" id="btnguardar" name="btnguardar" >Guardar</button>
-                                </div>
-                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                    <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <footer class="sticky-footer bg-white">
+                                <input type="hidden" id="idverificacion" name="idverificacion">
+                                <input type="hidden" id="idcenso" name="idcenso">
+                            </form>
+                        </div>
+                        <footer class="sticky-footer bg-white">
                         <jsp:include page="/jsp/Footer.jsp"></jsp:include>
                         </footer>
                     </div>
@@ -121,7 +129,7 @@
         <%
             }
         %>
-        
+
         <!-- Bootstrap core JavaScript-->
         <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -131,11 +139,8 @@
 
         <!-- Custom scripts for all pages-->
         <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
-        
-        <script src="${pageContext.request.contextPath}/scripts/registrarVerificacion.js" type="text/javascript"></script>
+
         <script src="${pageContext.request.contextPath}/scripts/verificaciones.js" type="text/javascript"></script>
-        
-        <script src="${pageContext.request.contextPath}/scripts/censo.js" type="text/javascript"></script>       
-        
+
     </body>
 </html>

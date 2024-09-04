@@ -27,25 +27,8 @@
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
-                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("listarVerificacion.jsp")) {
+                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("listarVerificaciones.jsp")) {
         %>
-        <div class="modal fade" id="registrarverificacion" name="registrarverificacion" role="dialog" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title">Verificacion Censo</h4>
-                    </div>
-                    <div class="modal-body">
-                        <iframe frameborder="0" style="height: 450px;width: 100%;" ></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
         <div id="wrapper">
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
                 <jsp:include page="/jsp/Menu.jsp"></jsp:include>
@@ -59,134 +42,39 @@
                         </nav>
 
                         <div class="container-fluid">
-                            <h1 class="h3 mb-2 text-gray-800">Verificacion</h1>
-
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Datos censo</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label># Censo</label>
-                                            <input class="form-control" type="text" id="txtnumerocenso" name="txtnumerocenso" readonly="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Fecha Censo</label>
-                                            <input class="form-control" type="text" id="txtfechacenso" name="txtfechacenso" readonly="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Punto de Atención</label>
-                                            <input class="form-control" id="txtpuntoatencion" name="txtpuntoatencion" readonly="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Usuario Registró</label>
-                                            <input class="form-control" id="txtusuarioregistro" name="txtusuarioregistro" readonly="true">
-                                        </div>
+                            <h1 class="h3 mb-2 text-gray-800">Verificación</h1>
+                            <form role="form" id="frmregistrarverificacion">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Datos del censo</h6>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Identificación del Vehículo</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Placa</label>
-                                            <input class="form-control" type="text" id="txtplaca" name="txtplaca" readonly="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Motor</label>
-                                            <input class="form-control" type="text" id="txtmotor" name="txtmotor" readonly="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Chasis</label>
-                                            <input class="form-control" type="text" id="txtchasis" name="txtchasis" readonly="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Serie</label>
-                                            <input class="form-control" type="text" id="txtserie" name="txtserie" readonly="true">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                    <h6 class="m-0 font-weight-bold text-primary">Personas Asociadas</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-2 mb-3 mb-sm-0">
-                                            <label>Tipo</label>
-                                        </div>
-                                        <div class="col-sm-2 mb-3 mb-sm-0">
-                                            <label>Tipo Documento</label>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Documento</label>
-                                        </div>
-                                        <div class="col-sm-5 mb-3 mb-sm-0">
-                                            <label>Nombre</label>
-                                        </div>
-                                    </div>
-                                    <div id="personas-censo">
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                    <h6 class="m-0 font-weight-bold text-primary">Datos persona presentó vehículo</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-2 mb-3 mb-sm-0">
-                                            <label>Tipo</label>
-                                        </div>
-                                        <div class="col-sm-2 mb-3 mb-sm-0">
-                                            <label>Tipo Documento</label>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Documento</label>
-                                        </div>
-                                        <div class="col-sm-5 mb-3 mb-sm-0">
-                                            <label>Nombre</label>
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label># Censo(*)</label>
+                                                <input class="form-control solo-numeros-censo" type="text" id="txtnumerocenso" name="txtnumerocenso" maxlength="10" style="text-transform: uppercase" readonly="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Fecha Censo (*)</label>
+                                                <input class="form-control" type="text" id="txtfechacenso" name="txtfechacenso" readonly="true">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-sm-2 mb-3 mb-sm-0">
-                                            <input class="form-control" id="txttipopersonapresento" name="txttipopersonapresento" readonly="true">
-                                        </div>
-                                        <div class="col-sm-2 mb-3 mb-sm-0">
-                                            <input class="form-control" id="txttipodocumentopresento" name="txttipodocumentopresento" readonly="true">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Runt Verificado</label>
+                                            <input class="form-control" type="checkbox" id="chkrunt" name="chkrunt" disabled="true" readonly="true">
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <input class="form-control" type="text" id="txtdocumentopresento" name="txtdocumentopresento" readonly="true">
-                                        </div>
-                                        <div class="col-sm-5 mb-3 mb-sm-0">
-                                            <input class="form-control" type="text" id="txtnombrepresento" name="txtnombrepresento" readonly="true">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Identificación del Vehículo</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Runt</label>
-                                            <input class="form-control" type="text" id="txtrunt" name="txtrunt" readonly="true">
+                                            <label>Documentos Verificados</label>
+                                            <input class="form-control" type="checkbox" id="chkdocumentos" name="chkdocumentos" disabled="true"  readonly="true">
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Documentos</label>
-                                            <input class="form-control" type="text" id="txtdocumentos" name="txtdocumentos" readonly="true">
+                                            <label>Fotos Verificadas</label>
+                                            <input class="form-control" type="checkbox" id="chkfotos" name="chkfotos" disabled="true" readonly="true">
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Fotos</label>
-                                            <input class="form-control" type="text" id="txtfotos" name="txtfotos" readonly="true">
+                                            <label>Estado</label>
+                                            <input class="form-control" id="txtestadoverificacion" name="txtestadoverificacion" readonly="true"></select>
                                         </div>
                                     </div>
                                 </div>
@@ -197,34 +85,19 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="form-group row">
-                                        <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" readonly="true"></textarea>
+                                        <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" cols="3"></textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                            <%
-                                if (((java.util.LinkedList) session.getAttribute("permisosUsuario")).contains("registrarVerificacion.jsp")) {
-                            %>
-                            <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                <button type="button" class="btn btn-lg btn-success btn-block btneditar" id="btneditar" name="btneditar">Editar</button>
+                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                    <button type="button" class="btn btn-lg btn-success btn-block" id="btneditar" name="btneditar">Editar</button>
+                                </div>
+                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                    <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
+                                </div>
                             </div>
-                            <%
-                                }
-                            %>
-                            <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                <button type="button" class="btn btn-lg btn-success btn-block" id="btnverificar" name="btnverificar">Verificar</button><!--onclick="ImprimirCensoById(idcenso)"-->
-                            </div>
-                            <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
-                            </div>
-                        </div>
-                        <!--
-                                                    <div id="page-wrapper">
-                                                        <div class="row">
-                                                            <iframe src="../Documentos/ListarDocumentos.jsp?idcenso=idcenso" style="width: 100%; min-height: 1500px;" transparency="transparency" frameborder="0" ></iframe>
-                                                    </div>
-                                                </div>
-                        -->
+                        </form>
                     </div>
                 </div>
                 <footer class="sticky-footer bg-white">

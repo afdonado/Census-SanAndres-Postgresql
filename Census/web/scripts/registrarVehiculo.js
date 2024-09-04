@@ -333,7 +333,7 @@ $(function () {
 
     $('#txtdocumento').blur(function () {
         if ($('#txtdocumento').val().length > 0) {
-            consultarDocumentoPersona(1, 'cmbtiposdocumento', 'txtdocumento', 'txtnombre', 'idpersona');
+            consultarDocumentoPersona('cmbtiposdocumento', 'txtdocumento', 'txtnombre', 'idpersona');
         }
     });
 

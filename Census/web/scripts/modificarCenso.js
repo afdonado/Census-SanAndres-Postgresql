@@ -20,7 +20,7 @@ $(function () {
             success: function (response) {
 
                 if (response.status === "success") {
-                    
+
                     $('#txtnumerocenso').val(response.censo.NUMERO);
                     $('#txtfechacenso').val(response.censo.FECHA);
                     var puntoatencionId = response.censo.PUN_ID;
@@ -148,15 +148,20 @@ $(function () {
     }
 
     $('#txtnumerocenso').blur(function () {
-        console.log('verificarNumeroCenso Modificar');
-        if ($('#txtnumerocenso').val().length > 0 && $('#txtnumerocenso').val() !== ($('#numerocenso').val())) {
-            verificarNumeroCenso($('#txtnumerocenso').val().toString().toUpperCase());
+        var numero = $('#txtnumerocenso').val();
+        if (numero.length > 0 && numero.length < 6) {
+            var prefijo = "ACS";
+            numero = prefijo + ("00000".substring(0, 5 - numero.length)) + numero;
+            console.log('numero:', numero);
+            if (numero !== $('#numerocenso').val()) {
+                verificarNumeroCenso($('#txtnumerocenso').val());
+            } else {
+                $('#txtnumerocenso').css("background-color", "lightgreen");
+            }
         }
     });
 
     $('#txtreferencia').blur(function () {
-        console.log('consultarReferenciaVehiculo Modificar');
-        console.log('referencia:', $('#txtreferencia').val());
         var tipoReferencia = $('#cmbtiposreferencia').val();
         var referencia = $('#txtreferencia').val().toString().toUpperCase();
         if (referencia.length > 0 &&
@@ -165,10 +170,10 @@ $(function () {
             consultarReferenciaVehiculo(tipoReferencia, referencia);
         }
     });
-    
+
     $('#txtdocumento').blur(function () {
         if ($('#txtdocumento').val().length > 0) {
-            consultarDocumentoPersona(1, 'cmbtiposdocumento', 'txtdocumento', 'txtnombre', 'idpersona');
+            consultarDocumentoPersona('cmbtiposdocumento', 'txtdocumento', 'txtnombre', 'idpersona');
         }
     });
 
@@ -212,7 +217,7 @@ $(function () {
             }
         });
     });
-    
+
     $('#btnvolver').click(function () {
         window.location.href = "listarCensos.jsp";
     });

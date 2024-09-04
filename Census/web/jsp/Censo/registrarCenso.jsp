@@ -30,38 +30,6 @@
                 if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("registrarCenso.jsp")) {
                     Date fechaActual = new Date(new Date().getTime());
         %>
-        <div class="modal fade" id="registrarpersona" name="registrarpersona" role="dialog" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title">Registrar Persona</h4>
-                    </div>
-                    <div class="modal-body">
-                        <iframe frameborder="0" style="height: 600px;width: 100%;" ></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="registrarvehiculo" name="registrarvehiculo" role="dialog" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title">Registrar Vehiculo</h4>
-                    </div>
-                    <div class="modal-body">
-                        <iframe frameborder="0" style="height: 600px;width: 100%;" ></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div id="wrapper">
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
                 <jsp:include page="/jsp/Menu.jsp"></jsp:include>

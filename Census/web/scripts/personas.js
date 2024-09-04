@@ -14,13 +14,13 @@ $(function () {
         var idPersona = 'idpersona' + idNumber;
 
         // Llamar a la función con los parámetros correctos
-        consultarDocumentoPersona(1, tipoDoc, documento, nombre, idPersona);
+        consultarDocumentoPersona(tipoDoc, documento, nombre, idPersona);
     });
 
 });
 
 
-function consultarDocumentoPersona(sw, nametipodocumento, namedocumento, namenombre, nameidpersona) {
+function consultarDocumentoPersona(nametipodocumento, namedocumento, namenombre, nameidpersona) {
     var tipodocumento = $('#' + nametipodocumento).val();
     var documento = $('#' + namedocumento).val().toUpperCase();
 
@@ -33,7 +33,6 @@ function consultarDocumentoPersona(sw, nametipodocumento, namedocumento, namenom
                 documento: documento,
                 namenombre: namenombre,
                 nameidpersona: nameidpersona
-
             },
             success: function (response) {
 
@@ -43,9 +42,6 @@ function consultarDocumentoPersona(sw, nametipodocumento, namedocumento, namenom
                 } else if (response.status === "fail") {
                     $('#' + namenombre).val('');
                     $('#' + nameidpersona).val('');
-                    if (sw) {
-                        viewModalRegistrarPersona(tipodocumento, documento);
-                    }
                 } else if (response.status === "error") {
                     alert(response.message);
                 }
@@ -54,46 +50,6 @@ function consultarDocumentoPersona(sw, nametipodocumento, namedocumento, namenom
                 console.error("Error en la solicitud: " + error);
             }
         });
-    }
-}
-
-
-
-function viewModalRegistrarPersona(tipoDocumento, documento) {
-
-    var src = "../Personas/registrarPersona.jsp?opcion=2&tipodoc=" + tipoDocumento + "&documento=" + documento;
-    $('#registrarpersona').modal('show');
-    $('#registrarpersona iframe').attr('src', src);
-
-}
-
-function registrarPersona() {
-    var documento = document.getElementById('txtdocumento').value.toString().toUpperCase();
-    var primerNombre = document.getElementById('txtprinom').value.toString().toUpperCase();
-    var primerApellido = document.getElementById('txtpriape').value.toString().toUpperCase();
-    var direccion = document.getElementById('txtdireccion').value.toString().toUpperCase();
-    var telefono = document.getElementById('txttelefono').value.toString().toUpperCase();
-
-    if (documento.length > 0 && primerNombre.length > 0 && primerApellido.length > 0 && direccion.length > 0 && telefono.length > 0) {
-        document.getElementById('frmregistrarpersona').submit();
-    } else {
-        alert('Debe ingresar como minimo los datos obligatorios (*)');
-    }
-}
-
-function modificarPersona() {
-    if (confirm("Confirma Actualizar la persona?")) {
-        var documento = document.getElementById('txtdocumento').value.toString().toUpperCase();
-        var primerNombre = document.getElementById('txtprinom').value.toString().toUpperCase();
-        var primerApellido = document.getElementById('txtpriape').value.toString().toUpperCase();
-        var direccion = document.getElementById('txtdireccion').value.toString().toUpperCase();
-        var telefono = document.getElementById('txttelefono').value.toString().toUpperCase();
-
-        if (documento.length > 0 && primerNombre.length > 0 && primerApellido.length > 0 && direccion.length > 0 && telefono.length > 0) {
-            document.getElementById('frmmodificarpersona').submit();
-        } else {
-            alert('Debe ingresar como minimo los datos obligatorios (*)');
-        }
     }
 }
 

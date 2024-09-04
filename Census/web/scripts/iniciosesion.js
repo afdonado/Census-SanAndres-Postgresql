@@ -17,6 +17,7 @@ $(function () {
             success: function (response) {
                 if (response.status === "fail" || response.status === "error") {
                     alert(response.message);
+                    $('#btniniciar').prop('disabled', false);
                 } else {
                     window.location.href = response.redirect;
                 }

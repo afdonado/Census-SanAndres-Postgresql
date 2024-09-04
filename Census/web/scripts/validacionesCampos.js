@@ -50,6 +50,7 @@ $(function () {
         // Si el campo no se ha limpiado aún, limpiarlo en la primera pulsación de tecla
         if (!yaLimpiado) {
             $(this).val(''); // Limpiar el campo de texto
+            $(this).css("background-color", "");
             yaLimpiado = true; // Marcar que ya se ha limpiado
         }
 

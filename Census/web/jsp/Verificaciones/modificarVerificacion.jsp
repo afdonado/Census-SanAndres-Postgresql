@@ -26,17 +26,6 @@
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
                 if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("registrarVerificacion.jsp")) {
-                    /*
-                        if(cenverificacion.getVerificado_runt().equals("S")){
-                            checkedRunt = "checked";
-                        }
-                        if(cenverificacion.getVerificado_doc().equals("S")){
-                            checkedDoc = "checked";
-                        }
-                        if(cenverificacion.getVerificado_foto().equals("S")){
-                            checkedFoto = "checked";
-                        }
-                     */
         %>
         <div id="wrapper">
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -51,7 +40,7 @@
                         </nav>
 
                         <div class="container-fluid">
-                            <h1 class="h3 mb-2 text-gray-800">Verificar Censo</h1>
+                            <h1 class="h3 mb-2 text-gray-800">Modificar Verificación</h1>
                             <form role="form" id="frmmodificarverificacion">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
@@ -71,20 +60,26 @@
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Runt Verificado</label>
-                                                <input class="form-inline" type="checkbox" id="chkrunt" name="chkrunt" required="true">
+                                                <input class="form-control" type="checkbox" id="chkrunt" name="chkrunt" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Documentos Verificados</label>
-                                                <input class="form-inline" type="checkbox" id="chkdocumentos" name="chkdocumentos" required="true">
+                                                <input class="form-control" type="checkbox" id="chkdocumentos" name="chkdocumentos" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Fotos Verificadas</label>
-                                                <input class="form-inline" type="checkbox" id="chkfotos" name="chkfotos" required="true">
+                                                <input class="form-control" type="checkbox" id="chkfotos" name="chkfotos" required="true">
                                             </div>
+                                            <%
+                                                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("completarVerificacion")) {
+                                            %>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Estado</label>
                                                 <select class="form-control" id="cmbestadosverificacion" name="cmbestadosverificacion" required="true"></select>
                                             </div>
+                                            <%
+                                                }
+                                            %>
                                         </div>
                                     </div>
                                 </div>

@@ -63,7 +63,7 @@ public class ModificarCenso extends HttpServlet {
                 return;
             }
 
-            String numero = request.getParameter("txtnumerocenso").toUpperCase().trim();
+            String numero = request.getParameter("txtnumerocenso");
             if (!numero.equals(cencenso.getNumero())) {
                 if (numero.length() < 6) {
                     String prefijo = "ACS";
@@ -77,17 +77,19 @@ public class ModificarCenso extends HttpServlet {
                     return;
                 }
 
-                CenCenso cencensonew = censoDao.ConsultarCensoByNumero(conex, numero);
-                if (cencensonew != null) {
-                    respuesta.put("status", "error");
-                    respuesta.put("message", "Numero de censo no valido");
+                if (!numero.equals(cencenso.getNumero())) {
+                    CenCenso cencensonew = censoDao.ConsultarCensoByNumero(conex, numero);
+                    if (cencensonew != null) {
+                        respuesta.put("status", "error");
+                        respuesta.put("message", "Numero de censo no valido");
 
-                    String jsonError = new Gson().toJson(respuesta);
-                    response.getWriter().write(jsonError);
-                    return;
+                        String jsonError = new Gson().toJson(respuesta);
+                        response.getWriter().write(jsonError);
+                        return;
+                    }
                 }
             }
-/*
+            /*
             //Se debe descomentar para cuando se vaya a editar la fecha del censo tambien
             if (request.getParameter("txtfechacenso") == null || request.getParameter("txtfechacenso").isEmpty()) {
                 respuesta.put("status", "error");
@@ -97,7 +99,7 @@ public class ModificarCenso extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-*/
+             */
 
             if (request.getParameter("cmbpuntosatencion") == null || request.getParameter("cmbpuntosatencion").isEmpty()) {
                 respuesta.put("status", "error");
@@ -177,7 +179,7 @@ public class ModificarCenso extends HttpServlet {
                 respuesta.put("message", "Censo no modificado");
             }
 
-        //} catch (SQLException | ParseException e) {
+            //} catch (SQLException | ParseException e) {
         } catch (SQLException e) {
             if (conex != null) {
                 try {

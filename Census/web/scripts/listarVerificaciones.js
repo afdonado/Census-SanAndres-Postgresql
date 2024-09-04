@@ -10,10 +10,19 @@ $(function () {
                 $('#dataTable').DataTable().destroy();
             }
 
-console.log('respuesta -> ',response);
             var lista = response.verificaciones;
 
             $.each(lista, function (index, verificacion) {
+
+                var btnaccion = '';
+
+                var idverificacion = verificacion.VERIFICACION_ID || '';
+                if (idverificacion === '') {
+                    btnaccion = `<button type="button" class="btn btn-primary btnregistrar" name="btnregistrar" data-id="${verificacion.CEN_ID}">Guardar</button>`;
+                } else {
+                    btnaccion = `<button type="button" class="btn btn-danger btneditar" name="btneditar" data-id="${verificacion.CEN_ID}">Editar</button>`;
+                }
+                
                 var nuevoElemento = `
                 <tr>
                     <td>${verificacion.NUMERO}</td>
@@ -24,11 +33,11 @@ console.log('respuesta -> ',response);
                     <td>${verificacion.USUARIO}</td>
                     <td>${verificacion.DOCUMENTO_PDF}</td>
                     <td>${verificacion.FOTO}</td>
-                    <td>${verificacion.FECHA_PROCESO}</td>
-                    <td>${verificacion.FECHA_PROCESO_VERIFICACION}</td>
+                    <td>${verificacion.FECHA_PROCESO_FORMAT}</td>
+                    <td>${verificacion.FECHA_PROCESO_VERIFICACION_FORMAT}</td>
                     <td>${verificacion.ESTADO_VERIFICACION}</td>
-                    <td><button type="button" class="btn btn-info btnconsultar" name="btnconsultar" data-id="${verificacion.VER_ID}">Consultar</button></td>
-                    <td><button type="button" class="btn btn-danger btneditar" name="btneditar" data-id="${verificacion.VER_ID}">Editar</button></td>
+                    <td><button type="button" class="btn btn-info btnconsultar" name="btnconsultar" data-id="${verificacion.CEN_ID}">Consultar</button></td>
+                    <td>${btnaccion}</td>
                     </tr>
                 `;
                 $("#lista-verificaciones").append(nuevoElemento);
@@ -36,15 +45,19 @@ console.log('respuesta -> ',response);
         }
     });
 
-    $('.table-responsive').on('click', '.btnconsultar', function () {
+    $('.table-responsive').on('click', '.btnregistrar', function () {
         var id = $(this).data('id');
-        window.location.href = "verVerificacion.jsp?opcion=1&id=" + id;
-
+        window.location.href = "registrarVerificacion.jsp?opcion=1&id=" + id;
     });
 
     $('.table-responsive').on('click', '.btneditar', function () {
         var id = $(this).data('id');
         window.location.href = "modificarVerificacion.jsp?opcion=2&id=" + id;
+    });
+    
+    $('.table-responsive').on('click', '.btnconsultar', function () {
+        var id = $(this).data('id');
+        window.location.href = "verVerificacion.jsp?opcion=1&id=" + id;
     });
 
 });
