@@ -108,17 +108,17 @@
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Dirección(*)</label>
-                                                <input class="form-control" type="text" id="txtdireccion" name="txtdireccion" maxlength="80" style="text-transform: uppercase" readonly="true">
+                                                <input class="form-control" type="text" id="txtdireccion" name="txtdireccion" maxlength="80" style="text-transform: uppercase">
                                             </div>
                                         </div>
                                         <div class="form-group row">                                    
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Telefono(*)</label>
-                                                <input class="form-control solo-numeros" type="text" id="txttelefono" name="txttelefono" maxlength="30" readonly="true">
+                                                <input class="form-control solo-numeros" type="text" id="txttelefono" name="txttelefono" maxlength="30">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Correo Electronico</label>
-                                                <input class="form-control validar-email" type="text" id="txtemail" name="txtemail" maxlength="100" style="text-transform: uppercase" readonly="true">
+                                                <input class="form-control validar-email" type="text" id="txtemail" name="txtemail" maxlength="100" style="text-transform: uppercase">
                                             </div>
                                         </div>
                                     </div>

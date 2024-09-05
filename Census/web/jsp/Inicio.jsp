@@ -36,7 +36,7 @@
                         </nav>
 
                         <div class="container-fluid">
-                            <div class="row"></div>
+                            <jsp:include page="/jsp/Info.jsp"></jsp:include>
                         </div>
 
                         <footer class="sticky-footer bg-white">
@@ -76,13 +76,11 @@
 
         <!-- Custom scripts for all pages-->
         <script src="template/js/sb-admin-2.min.js"></script>
-
-        <!-- Page level plugins -->
-        <script src="template/vendor/chart.js/Chart.min.js"></script>
-
-        <!-- Page level custom scripts -->
-        <script src="template/js/demo/chart-area-demo.js"></script>
-        <script src="template/js/demo/chart-pie-demo.js"></script>
+      
+        <script src="template/vendor/Highcharts-6.0.4/code/highcharts.js" type="text/javascript"></script>
+        <script src="template/vendor/Highcharts-6.0.4/code/highcharts-3d.js" type="text/javascript"></script>
+        <script src="template/vendor/Highcharts-6.0.4/code/modules/exporting.js" type="text/javascript"></script>
+        <script src="scripts/estadisticas.js" type="text/javascript"></script>
         
     </body>
 </html>

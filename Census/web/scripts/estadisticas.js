@@ -2,7 +2,7 @@
 $(document).ready(function () {
 
     $(function () {
-        $.getJSON('DatosEstadisticas.jsp?opcion=1', function (data) {
+        $.getJSON('jsp/DatosEstadisticas.jsp?opcion=1', function (data) {
 //$.getJSON('../cargarEstadisticas', function (data) {
             var datos = [];
             var CantidadTotal;
@@ -46,7 +46,7 @@ $(document).ready(function () {
         });
     });
     $(function () {
-        $.getJSON('DatosEstadisticas.jsp?opcion=2', function (data) {
+        $.getJSON('jsp/DatosEstadisticas.jsp?opcion=2', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -91,7 +91,7 @@ $(document).ready(function () {
 
 
     $(function () {
-        $.getJSON('DatosEstadisticas.jsp?opcion=3', function (data) {
+        $.getJSON('jsp/DatosEstadisticas.jsp?opcion=3', function (data) {
             //$.getJSON('../cargarEstadisticas', function (data) {
             var datos = [];
             var CantidadTotal;
@@ -148,7 +148,7 @@ $(document).ready(function () {
 
 
 $(function () {
-        $.getJSON('DatosEstadisticas.jsp?opcion=4', function (data) {
+        $.getJSON('jsp/DatosEstadisticas.jsp?opcion=4', function (data) {
             //$.getJSON('../cargarEstadisticas', function (data) {
             var datos = [];
             var CantidadTotal;
@@ -204,7 +204,7 @@ $(function () {
     });
     
     $(function () {
-        $.getJSON('DatosEstadisticas.jsp?opcion=5', function (data) {
+        $.getJSON('jsp/DatosEstadisticas.jsp?opcion=5', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -260,7 +260,7 @@ $(function () {
     
     
     $(function () {
-        $.getJSON('DatosEstadisticas.jsp?opcion=6', function (data) {
+        $.getJSON('jsp/DatosEstadisticas.jsp?opcion=6', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -305,7 +305,7 @@ $(function () {
 
 
 $(function () {
-        $.getJSON('DatosEstadisticas.jsp?opcion=7', function (data) {
+        $.getJSON('jsp/DatosEstadisticas.jsp?opcion=7', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
