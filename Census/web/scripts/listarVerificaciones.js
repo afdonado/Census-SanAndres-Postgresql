@@ -32,7 +32,6 @@ $(function () {
                     <td>${verificacion.ESTADO}</td>
                     <td>${verificacion.USUARIO}</td>
                     <td>${verificacion.DOCUMENTO_PDF}</td>
-                    <td>${verificacion.FOTO}</td>
                     <td>${verificacion.FECHA_PROCESO_FORMAT}</td>
                     <td>${verificacion.FECHA_PROCESO_VERIFICACION_FORMAT}</td>
                     <td>${verificacion.ESTADO_VERIFICACION}</td>

@@ -58,8 +58,7 @@
                                                     <th>Estado</th>
                                                     <th>Usuario</th>
                                                     <th>Fecha Registro</th>
-                                                    <th>PDF</th>
-                                                    <th>Fotos</th>
+                                                    <th>PDF-Fotos</th>
                                                     <th>Ver</th>
                                                     <th>Editar</th>
                                                 </tr>
@@ -73,8 +72,7 @@
                                                     <th>Estado</th>
                                                     <th>Usuario</th>
                                                     <th>Fecha Registro</th>
-                                                    <th>PDF</th>
-                                                    <th>Fotos</th>
+                                                    <th>PDF-Fotos</th>
                                                     <th>Ver</th>
                                                     <th>Editar</th>
                                                 </tr>

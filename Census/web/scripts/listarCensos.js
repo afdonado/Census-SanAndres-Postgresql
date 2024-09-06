@@ -24,7 +24,6 @@ $(function () {
                     <td>${censo.USUARIO}</td>
                     <td>${censo.FECHA_PROCESO_FORMAT} ${censo.FECHA_PROCESO_HORA}</td>
                     <td>${censo.DOCUMENTO_PDF}</td>
-                    <td>${censo.FOTO}</td>
                     <td><button type="button" class="btn btn-info btnconsultar" name="btnconsultar" data-id="${censo.CEN_ID}">Consultar</button></td>
                     <td><button type="button" class="btn btn-danger btneditar" name="btneditar" data-id="${censo.CEN_ID}">Editar</button></td>
                     </tr>

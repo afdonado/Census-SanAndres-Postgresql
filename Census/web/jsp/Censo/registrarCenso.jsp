@@ -78,33 +78,6 @@
                             </div>
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary"> Datos persona presentó vehículo</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Tipo Persona(*)</label>
-                                            <select class="form-control" id="cmbtipospersona" name="cmbtipospersona" required="true"></select>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Tipo Documento(*)</label>
-                                            <select class="form-control" id="cmbtiposdocumento" name="cmbtiposdocumento" required="true"></select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Documento(*)</label>
-                                            <input class="form-control solo-numeros" type="text" id="txtdocumento" name="txtdocumento" maxlength="20" required="true">
-                                        </div>
-                                        <div class="col-sm-9 mb-9 mb-sm-0">
-                                            <label>Nombre</label>
-                                            <input class="form-control" type="text" id="txtnombre" name="txtnombre" readonly="true">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
                                 </div>
                                 <div class="card-body">

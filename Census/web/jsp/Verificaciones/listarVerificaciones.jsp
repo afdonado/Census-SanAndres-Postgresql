@@ -58,8 +58,7 @@
                                                     <th>Punto Atención</th>
                                                     <th>Estado</th>
                                                     <th>Usuario</th>
-                                                    <th>PDF</th>
-                                                    <th>Foto</th>
+                                                    <th>PDF-Foto</th>
                                                     <th>Fecha Registro</th>
                                                     <th>Fecha Reg. Verifi.</th>
                                                     <th>Estado Verificacion</th>
@@ -75,8 +74,7 @@
                                                     <th>Punto Atención</th>
                                                     <th>Estado</th>
                                                     <th>Usuario</th>
-                                                    <th>PDF</th>
-                                                    <th>Foto</th>
+                                                    <th>PDF-Foto</th>
                                                     <th>Fecha Registro</th>
                                                     <th>Fecha Reg. Verifi.</th>
                                                     <th>Estado Verificacion</th>
