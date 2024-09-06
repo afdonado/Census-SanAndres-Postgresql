@@ -45,7 +45,7 @@ public class RegistrarVehiculo extends HttpServlet {
             conex = vehiculoDao.conectar();
 
             //Validar parametro placa
-            if (request.getParameter("txtplaca") == null || request.getParameter("txtplaca").isEmpty()) {
+            if (request.getParameter("txtplaca") == null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'placa' no encontrado");
 
@@ -105,7 +105,7 @@ public class RegistrarVehiculo extends HttpServlet {
             }
 
             //Validar parametro serie
-            if (request.getParameter("txtserie") == null || request.getParameter("txtserie").isEmpty()) {
+            if (request.getParameter("txtserie") == null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'serie' no encontrado");
 
@@ -254,6 +254,16 @@ public class RegistrarVehiculo extends HttpServlet {
                 return;
             }
 
+            //Validar parametro tecnomecanica
+            if (request.getParameter("cmbsoat") == null || request.getParameter("cmbsoat").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'soat' no encontrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
             //Validar parametro tecnomecanica
             if (request.getParameter("cmbtecnomecanica") == null || request.getParameter("cmbtecnomecanica").isEmpty()) {
                 respuesta.put("status", "error");
@@ -423,16 +433,6 @@ public class RegistrarVehiculo extends HttpServlet {
                         .parse(request.getParameter("txtfechavtecnomecanica")).getTime());
             }
 
-            //Validar parametro observacion
-            if (request.getParameter("txtobservaciones") == null || request.getParameter("txtobservaciones").isEmpty()) {
-                respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'observaciones' no encontrado");
-
-                String jsonError = new Gson().toJson(respuesta);
-                response.getWriter().write(jsonError);
-                return;
-            }
-
             //Validar parametro cantidad personas
             if (request.getParameter("txtcantidadpersonas") == null || request.getParameter("txtcantidadpersonas").isEmpty()) {
                 respuesta.put("status", "error");
@@ -443,12 +443,6 @@ public class RegistrarVehiculo extends HttpServlet {
                 return;
             }
             
-            String observaciones = "";
-            //Validar parametro observaciones
-            if (request.getParameter("txtobservaciones") != null) {
-                observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
-            }
-
             int cantpersonas = (Integer.parseInt(request.getParameter("txtcantidadpersonas")));
 
             if (cantpersonas > 0) {
@@ -485,7 +479,6 @@ public class RegistrarVehiculo extends HttpServlet {
                     cenvehiculo.setFechaven_soat(fechaVencimientoSoat);
                     cenvehiculo.setTecno_mecanica(tecnoMecanica);
                     cenvehiculo.setFechaven_tecno(fechaVencimientoTecnomecanica);
-                    cenvehiculo.setObservaciones(observaciones);
                     cenvehiculo.setUsu_id(cenusuario.getId());
                     cenvehiculo.setEstado(1);
                     long idVehiculo = vehiculoDao.adicionarVehiculo(conex, cenvehiculo);

@@ -68,4 +68,31 @@ public class TipoServicioDao extends Conexion {
         return null;
     }
     
+    public CenTipoServicio ConsultarTipoServicioByDescripcion(Connection conex, String descripcion) throws SQLException {
+
+        try {
+            pst = conex.prepareStatement("SELECT * FROM CEN_TIPOS_SERVICIO WHERE EST_ID = 1 AND TSER_DESCRIPCION = ?");
+            pst.setString(1, descripcion);
+            rst = pst.executeQuery();
+
+            while (rst.next()) {
+                return CenTipoServicio.load(rst);
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error en ConsultarTipoServicioByDescripcion: " + e);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (rst != null) {
+                    rst.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error en cierres de ConsultarTipoServicioByDescripcion:" + e);
+            }
+        }
+        return null;
+    }
+    
 }

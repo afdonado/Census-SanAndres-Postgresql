@@ -19,7 +19,7 @@ $(document).ready(function () {
                     type: 'pie'
                 },
                 title: {
-                    text: 'Porcentaje de Censos por Clase de Vehiculo. Total Vehiculos: ' + CantidadTotal
+                    text: 'Vehiculos censados por Clase de Vehiculo. Total Vehiculos: ' + CantidadTotal
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -38,7 +38,7 @@ $(document).ready(function () {
                     }
                 },
                 series: [{
-                        name: 'Porcentajes Censos',
+                        name: 'Censos',
                         colorByPoint: true,
                         data: datos
                     }]
@@ -62,7 +62,7 @@ $(document).ready(function () {
                     type: 'pie'
                 },
                 title: {
-                    text: 'Porcentaje de Censos por Punto de Atencion. Total Censos: ' + CantidadTotal
+                    text: 'Vehiculos censados por Punto de Atencion. Total Censos: ' + CantidadTotal
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -81,7 +81,7 @@ $(document).ready(function () {
                     }
                 },
                 series: [{
-                        name: 'Porcentajes Censos',
+                        name: 'Censos',
                         colorByPoint: true,
                         data: datos
                     }]
@@ -108,14 +108,14 @@ $(document).ready(function () {
                     type: 'column'
                 },
                 title: {
-                    text: 'Porcentaje de Personas censada por Genero. Total Personas: '+CantidadTotal
+                    text: 'Personas asociadas a vehiculos censados por Genero. Total Personas: '+CantidadTotal
                 },
                 xAxis: {
                     type: 'category'
                 },
                 yAxis: {
                     title: {
-                        text: 'Porcentaje personas censadas'
+                        text: 'personas asociadas a vehiculos censados'
                     }
 
                 },
@@ -165,14 +165,14 @@ $(function () {
                     type: 'column'
                 },
                 title: {
-                    text: 'Porcentaje de Personas censada Licencia. Total Personas: '+CantidadTotal
+                    text: 'Personas asociadas a vehiculos censados por Licencia. Total Personas: '+CantidadTotal
                 },
                 xAxis: {
                     type: 'category'
                 },
                 yAxis: {
                     title: {
-                        text: 'Porcentaje Personas licencia conduccion'
+                        text: 'Personas asociadas a vehiculos censados licencia conduccion'
                     }
 
                 },
@@ -220,14 +220,14 @@ $(function () {
                     type: 'column'
                 },
                 title: {
-                    text: 'Porcentaje de Vehiculos censados con o sin placa. Total Vehiculos: '+CantidadTotal
+                    text: 'Vehiculos censados con o sin placa. Total Vehiculos: '+CantidadTotal
                 },
                 xAxis: {
                     type: 'category'
                 },
                 yAxis: {
                     title: {
-                        text: 'Porcentaje Vehiculos Placa'
+                        text: 'Vehiculos Placa'
                     }
 
                 },
@@ -276,7 +276,7 @@ $(function () {
                     type: 'pie'
                 },
                 title: {
-                    text: 'Porcentaje de Vehiculos con Soat. Total Vehiculos: ' + CantidadTotal
+                    text: 'Vehiculos censados con Soat. Total Vehiculos: ' + CantidadTotal
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -295,7 +295,7 @@ $(function () {
                     }
                 },
                 series: [{
-                        name: 'Porcentajes Censos',
+                        name: 'Censos',
                         colorByPoint: true,
                         data: datos
                     }]
@@ -321,7 +321,7 @@ $(function () {
                     type: 'pie'
                 },
                 title: {
-                    text: 'Porcentaje de Vehiculos con Tecnomecanica. Total Vehiculos: ' + CantidadTotal
+                    text: 'Vehiculos censados con Tecnomecanica. Total Vehiculos: ' + CantidadTotal
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -340,7 +340,7 @@ $(function () {
                     }
                 },
                 series: [{
-                        name: 'Porcentajes Censos',
+                        name: 'Censos',
                         colorByPoint: true,
                         data: datos
                     }]

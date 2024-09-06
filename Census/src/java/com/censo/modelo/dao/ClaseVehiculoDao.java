@@ -68,4 +68,31 @@ public class ClaseVehiculoDao extends Conexion {
         return null;
     }
     
+    public CenClaseVehiculo ConsultarClaseVehiculoByDescripcion(Connection conex, String descripcion) throws SQLException {
+
+        try {
+            pst = conex.prepareStatement("SELECT * FROM CEN_CLASES_VEHICULO WHERE EST_ID = 1 AND CLV_DESCRIPCION = ?");
+            pst.setString(1, descripcion);
+            rst = pst.executeQuery();
+
+            while (rst.next()) {
+                return CenClaseVehiculo.load(rst);
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error en ConsultarClaseVehiculoByDescripcion: " + e);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (rst != null) {
+                    rst.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error en cierres de ConsultarClaseVehiculoByDescripcion:" + e);
+            }
+        }
+        return null;
+    }
+    
 }

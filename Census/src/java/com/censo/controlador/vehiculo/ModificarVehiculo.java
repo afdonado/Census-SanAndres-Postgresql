@@ -237,6 +237,16 @@ public class ModificarVehiculo extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
+            
+            //Validar parametro tecnomecanica
+            if (request.getParameter("cmbsoat") == null || request.getParameter("cmbsoat").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'soat' no encontrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
 
             //Validar parametro tecnomecanica
             if (request.getParameter("cmbtecnomecanica") == null || request.getParameter("cmbtecnomecanica").isEmpty()) {
@@ -419,11 +429,6 @@ public class ModificarVehiculo extends HttpServlet {
                 return;
             }
 
-            String observaciones = "";
-            //Validar parametro observaciones
-            if (request.getParameter("txtobservaciones") != null) {
-                observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
-            }
             int cantpersonas = (Integer.parseInt(request.getParameter("txtcantidadpersonas")));
 
             CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
@@ -457,7 +462,6 @@ public class ModificarVehiculo extends HttpServlet {
                 cenvehiculo.setFechaven_soat(fechaVencimientoSoat);
                 cenvehiculo.setTecno_mecanica(tecnoMecanica);
                 cenvehiculo.setFechaven_tecno(fechaVencimientoTecnomecanica);
-                cenvehiculo.setObservaciones(observaciones);
                 cenvehiculo.setEstado(1);
                 boolean modificado = vehiculoDao.modificarVehiculo(conex, cenvehiculo);
 

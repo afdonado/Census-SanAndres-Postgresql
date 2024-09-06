@@ -126,7 +126,7 @@
                                                 <input class="form-control solo-numeros" type="text" id="txttelefono" name="txttelefono" maxlength="30" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Correo Electronico</label>
+                                                <label>Correo Electronico(*)</label>
                                                 <input class="form-control validar-email" type="text" id="txtemail" name="txtemail" maxlength="100" style="text-transform: uppercase" required="true">
                                             </div>
                                         </div>

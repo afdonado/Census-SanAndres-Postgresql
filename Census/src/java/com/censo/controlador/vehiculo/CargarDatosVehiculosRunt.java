@@ -1,13 +1,12 @@
 package com.censo.controlador.vehiculo;
 
-import com.censo.modelo.dao.PersonaVehiculoDao;
 import com.censo.modelo.dao.VehiculoDao;
+import com.censo.modelo.persistencia.CenVehiculo;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,8 +14,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "CargarDatosVehiculo", urlPatterns = {"/cargarDatosVehiculo"})
-public class CargarDatosVehiculo extends HttpServlet {
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+@WebServlet(name = "CargarDatosVehiculosRunt", urlPatterns = {"/cargarDatosVehiculoRunt"})
+public class CargarDatosVehiculosRunt extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -30,33 +34,62 @@ public class CargarDatosVehiculo extends HttpServlet {
 
         try {
 
-            if (request.getParameter("id").equals("")) {
+            if (request.getParameter("placa") == null || request.getParameter("valorreferencia").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'id' no encontrado para cargar datos del vehiculo");
+                respuesta.put("message", "Parametro 'numero de referencia' no encontrado para verificar vehiculo");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             long idvehiculo = Long.parseLong(request.getParameter("id"));
 
             VehiculoDao vehiculoDao = new VehiculoDao();
             conex = vehiculoDao.conectar();
 
-            HashMap<String, Object> datosVehiculo = vehiculoDao.ConsultarDatosVehiculoById(conex, idvehiculo);
+            CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoById(conex, idvehiculo);
+/*
+            if (cenvehiculo != null) {
 
-            if (!datosVehiculo.isEmpty()) {
-                PersonaVehiculoDao personaVehiculoDao = new PersonaVehiculoDao();
-                List<HashMap<String, Object>> personasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, idvehiculo);
+                String urlString = "https://test.konivin.com:28183/konivin/servicio/persona/consultar?lcy=lagit&vpv=L4gIt&jor=24158996&icf=01&thy=CO&klm=ND1098XX";
+                URL url = new URL(urlString);
+
+                // Abrir conexión
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("GET");
+
+                StringBuilder content;
+                try ( // Leer respuesta
+                        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+                    String inputLine;
+                    content = new StringBuilder();
+                    while ((inputLine = in.readLine()) != null) {
+                        content.append(inputLine);
+                    }
+                    // Cerrar conexiones
+                }
+                con.disconnect();
+
+                // Procesar respuesta JSON con Gson
+                Gson gson = new Gson();
+                MiObjeto obj = gson.fromJson(content.toString(), MiObjeto.class);
+
+                // Validar si el dato existe
+                if (obj != null && obj.getDato() != null) {
+                    // Procesar el objeto como necesites
+                    System.out.println("Dato encontrado: " + obj.getDato());
+                } else {
+                    System.out.println("Dato no encontrado.");
+                }
+
                 respuesta.put("status", "success");
                 respuesta.put("vehiculo", datosVehiculo);
-                respuesta.put("personasVehiculo", personasVehiculo);
             } else {
                 respuesta.put("status", "fail");
                 respuesta.put("message", "Vehiculo no se encuentra registrado");
             }
-
+*/
         } catch (SQLException e) {
             respuesta.put("status", "error");
             respuesta.put("message", "Error al cargar los datos del vehiculo");
@@ -71,7 +104,7 @@ public class CargarDatosVehiculo extends HttpServlet {
                 }
             }
         }
-        
+
         String json = new Gson().toJson(respuesta);
         response.getWriter().write(json);
     }

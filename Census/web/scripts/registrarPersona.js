@@ -57,6 +57,7 @@ $(function () {
             $.each(data, function (index, item) {
                 select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
             });
+            select.val(5);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error("Error en la solicitud de cargar grupos sanguineos: ", textStatus, errorThrown);
@@ -74,7 +75,6 @@ $(function () {
             $.each(data, function (index, item) {
                 select.append('<option value="' + item.id + '">' + item.nombre + '</option>');
             });
-
             select.val(4);
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -113,6 +113,7 @@ $(function () {
             $.each(data, function (index, item) {
                 select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
             });
+            select.val(2);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error("Error en la solicitud de cargar categorias licencia: ", textStatus, errorThrown);

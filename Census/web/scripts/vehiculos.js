@@ -60,10 +60,8 @@ $(function () {
             var paismatricula = $("#cmbpaismatricula").val();
             if (paismatricula === "18") {
                 $('.matricula-pais').show();
-                $("#ciudad-matricula").hide();
             } else {
                 $('.matricula-pais').hide();
-                $("#ciudad-matricula").show();
             }
         }
     }
@@ -85,17 +83,17 @@ $(function () {
 
     $('#cmbsoat').on('change focus', function () {
         if ($('#cmbsoat').val() === 'N') {
-            $('#txtfechavsoat').hide();
+            $('#soatcontenedor').hide();
         } else {
-            $('#txtfechavsoat').show();
+            $('#soatcontenedor').show();
         }
     });
 
     $('#cmbtecnomecanica').on('change focus', function () {
         if ($('#cmbtecnomecanica').val() === 'N') {
-            $('#txtfechavtecnomecanica').hide();
+            $('#tecnomecanicacontenedor').hide();
         } else {
-            $('#txtfechavtecnomecanica').show();
+            $('#tecnomecanicacontenedor').show();
         }
     });
     

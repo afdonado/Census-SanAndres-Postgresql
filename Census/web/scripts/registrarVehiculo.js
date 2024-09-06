@@ -3,46 +3,149 @@ $(function () {
     $('#txtplaca').blur(function () {
         var placa = $('#txtplaca').val().toString().toUpperCase();
         if (placa.length > 0) {
-            verificarVehiculo(1, placa);
+            verificarVehiculoRunt(1, placa);
         }
     });
 
     $('#txtmotor').blur(function () {
         var motor = $('#txtmotor').val().toString().toUpperCase();
         if (motor.length > 0) {
-            verificarVehiculo(2, motor);
+            verificarVehiculo2017(2, motor);
         }
     });
 
     $('#txtchasis').blur(function () {
         var chasis = $('#txtchasis').val().toString().toUpperCase();
         if (chasis.length > 0) {
-            verificarVehiculo(3, chasis);
+            verificarVehiculo2017(3, chasis);
         }
     });
 
     $('#txtserie').blur(function () {
         var serie = $('#txtserie').val().toString().toUpperCase();
         if (serie.length > 0) {
-            verificarVehiculo(4, serie);
+            verificarVehiculo2017(4, serie);
         }
     });
 
-    // Verificar si la referencia de vehiculo existe o no
-    function verificarVehiculo(tiporeferencia, valorreferencia) {
+    // Verificar si la placa del vehiculo existe en el runt
+    function verificarVehiculoRunt(tiporeferencia, valorreferencia) {
+        console.log('verificarVehiculoRunt');
         var parametros = {
             tiporeferencia: tiporeferencia,
-            valorreferencia: valorreferencia,
-            opcion: 1
+            valorreferencia: valorreferencia
         };
         $.ajax({
             data: parametros,
-            url: "../../verificarVehiculo",
+            url: "../../verificarVehiculoRunt",
             type: "POST",
             dataType: "json",
             success: function (response) {
                 if (response.status === "success") {
-                    console.log('message:', response.message);
+                    var vehiculo = response.vehiculorunt;
+                    $('#txtmotor').val(vehiculo.motor);
+                    $('#txtchasis').val(vehiculo.chasis);
+                    $('#txtserie').val(vehiculo.serie);
+                    $('#cmbclasevehiculo').val(response.clasevehiculoId);
+                    $('#cmbtiposservicio').val(response.tiposervicioId);
+                    $('#txtcolores').val(vehiculo.color);
+                    $('#txtmarcas').val(vehiculo.marca);
+                    $('#txtlineas').val(vehiculo.linea);
+                    $('#txtmodelo').val(vehiculo.modelo);
+                    $('#txtlicenciatransito').val(vehiculo.licenciaTransito);
+                    $('#txtfechamatricula').val(vehiculo.fechaMatriculaInicial);
+                    if (vehiculo.polizaSoat.estado === 'VIGENTE') {
+                        $('#cmbsoat').val('S');
+                        $('#txtfechavsoat').val(vehiculo.polizaSoat.fechaFinVigencia);
+                    } else {
+                        $('#cmbsoat').val('N');
+                    }
+                    if (vehiculo.tecnicoMecanico.vigente === 'SI') {
+                        $('#cmbtecnomecanica').val('S');
+                        $('#txtfechavtecnomecanica').val(vehiculo.tecnicoMecanico.fechaVigencia);
+                    } else {
+                        $('#cmbtecnomecanica').val('N');
+                    }
+                } else if (response.status === "fail" || response.status === "error") {
+                    verificarVehiculo2017(tiporeferencia, valorreferencia);
+                    console.log(response.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de verificar vehiculo: ", textStatus, errorThrown);
+                //alert("Ocurrió un error al procesar la solicitud de verificar vehiculo.");
+                verificarVehiculo2017(tiporeferencia, valorreferencia);
+            }
+        });
+    }
+
+
+    // Verificar si la referencia de vehiculo existe o no
+    function verificarVehiculo2017(tiporeferencia, valorreferencia) {
+        console.log('verificarVehiculo2017');
+        var parametros = {
+            tiporeferencia: tiporeferencia,
+            valorreferencia: valorreferencia,
+            opcion: 1
+                    //opcion 1 verifica solo si el vehiculo está registrado
+                    //opcion 2 verificar si está registrado y si está censado
+        };
+        $.ajax({
+            data: parametros,
+            url: "../../verificarVehiculo2017",
+            type: "POST",
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    var vehiculo = response.vehiculo;
+                    $('#txtplaca').val(vehiculo.placa);
+                    $('#txtmotor').val(vehiculo.motor);
+                    $('#txtchasis').val(vehiculo.chasis);
+                    $('#txtserie').val(vehiculo.serie);
+                    $('#cmbclasevehiculo').val(vehiculo.claseVehiculoId);
+                    $('#cmbtiposservicio').val(vehiculo.tipoServicioId);
+                    $('#cmbtiposuso').val(vehiculo.tipoUsoId);
+                    $('#txtcolores').val(vehiculo.color);
+                    $('#txtmarcas').val(vehiculo.marca);
+                    $('#txtlineas').val(vehiculo.linea);
+                    $('#txtmodelo').val(vehiculo.modelo);
+                    $('#cmbtransformado').val(vehiculo.transformado);
+                    $('#cmbrunt').val(vehiculo.runt);
+                    $('#txtlicenciatransito').val(vehiculo.licenciaTransito);
+                    $('#txtfechamatricula').val(response.fechaNacimiento);
+                    $('#cmbpaismatricula').val(vehiculo.paisMatriculaId);
+                    $('#cmbdepartamentomatricula').val(vehiculo.departamentoMatriculaId);
+                    $('#cmbmunicipiomatricula').val(vehiculo.municipoMatriculaId);
+                    if (vehiculo.runt === 'Si') {
+                        $('.matricula').hide();
+                    } else {
+                        $('.matricula').show();
+                    }
+
+                    $('#cmbtiposimportacion').val(vehiculo.tipoImportacionId);
+                    $('#txtdocumentoimportacion').val(vehiculo.documentoImportacion);
+                    $('#txtfechaimportacion').val(response.fechaImportacion);
+                    $('#cmbpaisimportacion').val(vehiculo.paisImportacionId);
+                    if (vehiculo.tipoImportacionId === 0) {
+                        $('.importacion').hide();
+                    } else {
+                        $('.importacion').show();
+                    }
+                    
+                    if (vehiculo.soat === 'Si') {
+                        $('#cmbsoat').val('S');
+                        $('#txtfechavsoat').val(response.fechaVenSoat);
+                    } else {
+                        $('#cmbsoat').val('N');
+                        $('#txtfechavsoat').hide();
+                    }
+                    if (vehiculo.tecnomecanica === 'Si') {
+                        $('#cmbtecnomecanica').val('S');
+                        $('#txtfechavtecnomecanica').val(response.fechaVenTecnomecanica);
+                    } else {
+                        $('#cmbtecnomecanica').val('N');
+                        $('#txtfechavtecnomecanica').hide();
+                    }
                 } else if (response.status === "fail") {
                     $(response.input).val('');
                     $(response.input).focus();
@@ -52,7 +155,7 @@ $(function () {
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.error("Error en la solicitud de verificar vehiculo: ", textStatus, errorThrown);
+                console.error("Error en la solicitud de verificar vehiculo 2017: ", textStatus, errorThrown);
                 alert("Ocurrió un error al procesar la solicitud de verificar vehiculo.");
             }
         });
@@ -342,14 +445,6 @@ $(function () {
     });
 
 });
-
-function viewModalRegVehiculo(tipoReferencia, referencia) {
-
-    var src = "../Vehiculos/registrarVehiculo.jsp?opcion=2&tiporeferencia=" + tipoReferencia + "&referencia=" + referencia;
-    $('#registrarvehiculo').modal('show');
-    $('#registrarvehiculo iframe').attr('src', src);
-
-}
 
 function generarReporteVehiculo(opcion) {
 

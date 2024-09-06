@@ -23,7 +23,7 @@ $(function () {
 function consultarDocumentoPersona(nametipodocumento, namedocumento, namenombre, nameidpersona) {
     var tipodocumento = $('#' + nametipodocumento).val();
     var documento = $('#' + namedocumento).val().toUpperCase();
-
+    console.log("personas", tipodocumento + ' ' + documento);
     if (documento.length > 0) {
         $.ajax({
             type: "POST",
@@ -37,6 +37,7 @@ function consultarDocumentoPersona(nametipodocumento, namedocumento, namenombre,
             success: function (response) {
 
                 if (response.status === "success") {
+                    console.log("success", response.nombre);
                     $('#' + namenombre).val(response.nombre);
                     $('#' + nameidpersona).val(response.id);
                 } else if (response.status === "fail") {
