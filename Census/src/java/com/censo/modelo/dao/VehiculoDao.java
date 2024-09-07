@@ -17,46 +17,45 @@ public class VehiculoDao extends Conexion {
     private ResultSet rst = null;
     private PreparedStatement pst = null;
 
-    public long adicionarVehiculo(Connection conex, CenVehiculo cenvehiculo) {
+    public int adicionarVehiculo(Connection conex, CenVehiculo cenvehiculo) {
 
         try {
             pst = conex.prepareStatement("INSERT INTO CEN_VEHICULOS (VEH_PLACA,VEH_CHASIS,VEH_SERIE,VEH_MOTOR,VEH_CLASE,VEH_SERVICIO,"
                     + "COL_ID,VEH_MODELO,LIN_ID,VEH_LICTRANSITO,VEH_RUNT,VEH_SOAT,VEH_FECVENSOAT,VEH_TECNOMEC,VEH_FECVENTECNO,PAI_ID,MUN_ID,"
-                    + "VEH_CIUDADMATRICULA,VEH_TIPODOCUMENTOIMP,VEH_DOCUMENTOIMP,VEH_FECHAIMP,PAI_ID_ORIGEN,VEH_OBSERVACIONES,VEH_TIPOUSO,VEH_TRANSFORMADO,"
-                    + "USU_ID,EST_ID,VEH_FECHAPROCESO,VEH_FECMATRI) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,sysdate,?)", new String[]{"VEH_ID"});
+                    + "VEH_CIUDADMATRICULA,VEH_TIPODOCUMENTOIMP,VEH_DOCUMENTOIMP,VEH_FECHAIMP,PAI_ID_ORIGEN,VEH_TIPOUSO,VEH_TRANSFORMADO,"
+                    + "USU_ID,EST_ID,VEH_FECHAPROCESO,VEH_FECMATRI) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,sysdate,?)", new String[]{"VEH_ID"});
             pst.setString(1, cenvehiculo.getPlaca_veh());
             pst.setString(2, cenvehiculo.getChasis());
             pst.setString(3, cenvehiculo.getSerie());
             pst.setString(4, cenvehiculo.getMotor());
             pst.setInt(5, cenvehiculo.getClase_veh());
             pst.setInt(6, cenvehiculo.getTipo_servicio());
-            pst.setLong(7, cenvehiculo.getCol_id());
-            pst.setLong(8, cenvehiculo.getModelo());
-            pst.setLong(9, cenvehiculo.getLin_id());
+            pst.setInt(7, cenvehiculo.getCol_id());
+            pst.setInt(8, cenvehiculo.getModelo());
+            pst.setInt(9, cenvehiculo.getLin_id());
             pst.setString(10, cenvehiculo.getLicencia_transito());
             pst.setString(11, cenvehiculo.getRunt());
             pst.setString(12, cenvehiculo.getSoat());
             pst.setDate(13, cenvehiculo.getFechaven_soat());
             pst.setString(14, cenvehiculo.getTecno_mecanica());
             pst.setDate(15, cenvehiculo.getFechaven_tecno());
-            pst.setLong(16, cenvehiculo.getPai_id_matricula());
-            pst.setLong(17, cenvehiculo.getMun_id_matricula());
+            pst.setInt(16, cenvehiculo.getPai_id_matricula());
+            pst.setInt(17, cenvehiculo.getMun_id_matricula());
             pst.setString(18, cenvehiculo.getCiudad_matricula());
             pst.setInt(19, cenvehiculo.getTipodoc_importacion());
             pst.setString(20, cenvehiculo.getDoc_importacion());
             pst.setDate(21, cenvehiculo.getFecha_importacion());
-            pst.setLong(22, cenvehiculo.getPai_id_origen());
-            pst.setString(23, cenvehiculo.getObservaciones());
-            pst.setInt(24, cenvehiculo.getTipo_uso());
-            pst.setString(25, cenvehiculo.getTransformado());
-            pst.setLong(26, cenvehiculo.getUsu_id());
-            pst.setInt(27, cenvehiculo.getEstado());
-            pst.setDate(28, cenvehiculo.getFecha_matricula());
+            pst.setInt(22, cenvehiculo.getPai_id_origen());
+            pst.setInt(23, cenvehiculo.getTipo_uso());
+            pst.setString(24, cenvehiculo.getTransformado());
+            pst.setInt(25, cenvehiculo.getUsu_id());
+            pst.setInt(26, cenvehiculo.getEstado());
+            pst.setDate(27, cenvehiculo.getFecha_matricula());
             pst.executeUpdate();
             rst = pst.getGeneratedKeys();
             if (rst != null) {
                 if (rst.next()) {
-                    return rst.getLong(1);
+                    return rst.getInt(1);
                 }
             }
         } catch (SQLException e) {
@@ -83,7 +82,7 @@ public class VehiculoDao extends Conexion {
                     + "VEH_MOTOR = ?,VEH_CLASE = ?,VEH_SERVICIO = ?,COL_ID = ?,VEH_MODELO = ?,LIN_ID = ?, "
                     + "VEH_LICTRANSITO = ?,VEH_RUNT = ?,VEH_SOAT = ?,VEH_FECVENSOAT = ?,VEH_TECNOMEC = ?,"
                     + "VEH_FECVENTECNO = ?,PAI_ID = ?,MUN_ID = ?, VEH_CIUDADMATRICULA = ?,VEH_TIPODOCUMENTOIMP = ?,"
-                    + "VEH_DOCUMENTOIMP = ?,VEH_FECHAIMP = ?, PAI_ID_ORIGEN = ?, VEH_OBSERVACIONES = ?, "
+                    + "VEH_DOCUMENTOIMP = ?,VEH_FECHAIMP = ?, PAI_ID_ORIGEN = ?, "
                     + "VEH_TIPOUSO = ?, VEH_TRANSFORMADO = ?, EST_ID = ?, VEH_FECMATRI = ? WHERE VEH_ID = ? ");
             pst.setString(1, cenvehiculo.getPlaca_veh());
             pst.setString(2, cenvehiculo.getChasis());
@@ -91,28 +90,27 @@ public class VehiculoDao extends Conexion {
             pst.setString(4, cenvehiculo.getMotor());
             pst.setInt(5, cenvehiculo.getClase_veh());
             pst.setInt(6, cenvehiculo.getTipo_servicio());
-            pst.setLong(7, cenvehiculo.getCol_id());
-            pst.setLong(8, cenvehiculo.getModelo());
-            pst.setLong(9, cenvehiculo.getLin_id());
+            pst.setInt(7, cenvehiculo.getCol_id());
+            pst.setInt(8, cenvehiculo.getModelo());
+            pst.setInt(9, cenvehiculo.getLin_id());
             pst.setString(10, cenvehiculo.getLicencia_transito());
             pst.setString(11, cenvehiculo.getRunt());
             pst.setString(12, cenvehiculo.getSoat());
             pst.setDate(13, cenvehiculo.getFechaven_soat());
             pst.setString(14, cenvehiculo.getTecno_mecanica());
             pst.setDate(15, cenvehiculo.getFechaven_tecno());
-            pst.setLong(16, cenvehiculo.getPai_id_matricula());
-            pst.setLong(17, cenvehiculo.getMun_id_matricula());
+            pst.setInt(16, cenvehiculo.getPai_id_matricula());
+            pst.setInt(17, cenvehiculo.getMun_id_matricula());
             pst.setString(18, cenvehiculo.getCiudad_matricula());
             pst.setInt(19, cenvehiculo.getTipodoc_importacion());
             pst.setString(20, cenvehiculo.getDoc_importacion());
             pst.setDate(21, cenvehiculo.getFecha_importacion());
-            pst.setLong(22, cenvehiculo.getPai_id_origen());
-            pst.setString(23, cenvehiculo.getObservaciones());
-            pst.setInt(24, cenvehiculo.getTipo_uso());
-            pst.setString(25, cenvehiculo.getTransformado());
-            pst.setInt(26, cenvehiculo.getEstado());
-            pst.setDate(27, cenvehiculo.getFecha_matricula());
-            pst.setLong(28, cenvehiculo.getId());
+            pst.setInt(22, cenvehiculo.getPai_id_origen());
+            pst.setInt(23, cenvehiculo.getTipo_uso());
+            pst.setString(24, cenvehiculo.getTransformado());
+            pst.setInt(25, cenvehiculo.getEstado());
+            pst.setDate(26, cenvehiculo.getFecha_matricula());
+            pst.setInt(27, cenvehiculo.getId());
             pst.executeUpdate();
 
             return true;
@@ -173,11 +171,11 @@ public class VehiculoDao extends Conexion {
         return null;
     }
 
-    public CenVehiculo ConsultarVehiculoById(Connection conex, long id) throws SQLException {
+    public CenVehiculo ConsultarVehiculoById(Connection conex, int id) throws SQLException {
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_VEHICULOS WHERE VEH_ID = ? ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             while (rst.next()) {
@@ -282,13 +280,13 @@ public class VehiculoDao extends Conexion {
         return listaDatosVehiculo;
     }
 
-    public HashMap<String, Object> ConsultarDatosVehiculoById(Connection conex, long id) throws SQLException {
+    public HashMap<String, Object> ConsultarDatosVehiculoById(Connection conex, int id) throws SQLException {
 
         HashMap<String, Object> datos = new HashMap<>();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS WHERE VEH_ID = ? ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             if (rst.next()) {

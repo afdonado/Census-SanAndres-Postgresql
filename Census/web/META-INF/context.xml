@@ -19,7 +19,7 @@
 </Context>
 <!--
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/Census">
+<Context path="/Census"> 
     <Resource 
         name="jdbc/oracle" 
         auth="Container" 

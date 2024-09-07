@@ -25,9 +25,6 @@ $(function () {
                     $('#idcenso').val(response.verificacion.CEN_ID);
                     $('#txtnumerocenso').val(response.verificacion.NUMERO);
                     $('#txtfechacenso').val(response.verificacion.FECHA);
-                    if (response.verificacion.VERIFICACION_RUNT === 'S') {
-                        $('#chkrunt').prop('checked', true);
-                    }
                     if (response.verificacion.VERIFICACION_DOC === 'S') {
                         $('#chkdocumentos').prop('checked', true);
                     }
@@ -87,11 +84,6 @@ $(function () {
         
         var idcenso = $('#idcenso').val();
 
-        var runt = 'N';
-        if ($('#chkrunt').prop('checked') === true) {
-            runt = 'S';
-        }
-
         var documento = 'N';
         if ($('#chkdocumentos').prop('checked') === true) {
             documento = 'S';
@@ -107,7 +99,6 @@ $(function () {
 
         var parametros = {
             idcenso: idcenso,
-            runt: runt,
             documento: documento,
             foto: foto,
             estadoverificacion: estadoverificacion,
@@ -140,11 +131,6 @@ $(function () {
         var idverificacion = $('#idverificacion').val();
         var idcenso = $('#idcenso').val();
 
-        var runt = 'N';
-        if ($('#chkrunt').prop('checked') === true) {
-            runt = 'S';
-        }
-
         var documento = 'N';
         if ($('#chkdocumentos').prop('checked') === true) {
             documento = 'S';
@@ -161,7 +147,6 @@ $(function () {
         var parametros = {
             idcenso: idcenso,
             idverificacion: idverificacion,
-            runt: runt,
             documento: documento,
             foto: foto,
             estadoverificacion: estadoverificacion,

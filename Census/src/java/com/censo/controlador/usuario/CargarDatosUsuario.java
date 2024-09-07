@@ -37,7 +37,7 @@ public class CargarDatosUsuario extends HttpServlet {
                 return;
             }
             
-            long idusuario = Long.parseLong(request.getParameter("id"));
+            int idusuario = Integer.parseInt(request.getParameter("id"));
 
             UsuarioDao usuarioDao = new UsuarioDao();
             conex = usuarioDao.conectar();

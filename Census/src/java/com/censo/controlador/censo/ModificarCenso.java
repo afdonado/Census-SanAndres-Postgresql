@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -43,7 +42,7 @@ public class ModificarCenso extends HttpServlet {
             CensoDao censoDao = new CensoDao();
             conex = censoDao.conectar();
 
-            long idcenso = Long.parseLong(request.getParameter("idcenso"));
+            int idcenso = Integer.parseInt(request.getParameter("idcenso"));
             CenCenso cencenso = censoDao.ConsultarCensoById(conex, idcenso);
             if (cencenso == null) {
                 respuesta.put("status", "error");
@@ -119,25 +118,7 @@ public class ModificarCenso extends HttpServlet {
                 return;
             }
 
-            if (request.getParameter("idpersona") == null || request.getParameter("idpersona").isEmpty()) {
-                respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'id persona' no encontrado");
-
-                String jsonError = new Gson().toJson(respuesta);
-                response.getWriter().write(jsonError);
-                return;
-            }
-
-            if (request.getParameter("cmbtipospersona") == null || request.getParameter("cmbtipospersona").isEmpty()) {
-                respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'tipo persona' no encontrado");
-
-                String jsonError = new Gson().toJson(respuesta);
-                response.getWriter().write(jsonError);
-                return;
-            }
-
-            if (request.getParameter("txtobservaciones") == null || request.getParameter("cmbtipospersona").isEmpty()) {
+            if (request.getParameter("txtobservaciones") == null || request.getParameter("txtobservaciones").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'observaciones' no encontrado");
 
@@ -150,9 +131,7 @@ public class ModificarCenso extends HttpServlet {
             Date fechaActual = new java.sql.Date(new java.util.Date().getTime());
             String hora = new java.text.SimpleDateFormat("HHmm").format(fechaActual);
             int puntoAtencion = Integer.parseInt(request.getParameter("cmbpuntosatencion"));
-            long idvehiculo = Long.parseLong(request.getParameter("idvehiculo"));
-            long idpersona = Long.parseLong(request.getParameter("idpersona"));
-            int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona"));
+            int idvehiculo = Integer.parseInt(request.getParameter("idvehiculo"));
             String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
 
             conex.setAutoCommit(false);
@@ -161,8 +140,6 @@ public class ModificarCenso extends HttpServlet {
             cencenso.setHora(hora);
             cencenso.setPun_id(puntoAtencion);
             cencenso.setVeh_id(idvehiculo);
-            cencenso.setPer_id(idpersona);
-            cencenso.setTper_id(tipoPersona);
             cencenso.setNumero(numero);
             cencenso.setObservaciones(observaciones);
 

@@ -3,7 +3,19 @@ package com.censo.modelo.persistencia;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
 public class CenPuntoAtencion {
     
     private int id;
@@ -12,57 +24,6 @@ public class CenPuntoAtencion {
     private String telefono;
     private String consecutivo;
     private int estado;
-
-    public CenPuntoAtencion() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getConsecutivo() {
-        return consecutivo;
-    }
-
-    public void setConsecutivo(String consecutivo) {
-        this.consecutivo = consecutivo;
-    }
-
-    public int getEstado() {
-        return estado;
-    }
-
-    public void setEstado(int estado) {
-        this.estado = estado;
-    }
 
     public static CenPuntoAtencion load(ResultSet rs)throws SQLException{
         CenPuntoAtencion puntoAtencion = new CenPuntoAtencion();

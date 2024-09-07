@@ -22,12 +22,6 @@ $(function () {
 
                     $('#txtnumerocenso').val(response.verificacion.NUMERO);
                     $('#txtfechacenso').val(response.verificacion.FECHA);
-                    if (response.verificacion.VERIFICACION_RUNT === 'S') {
-                        $('#chkrunt').prop('checked', true);
-                    }
-                    if (response.verificacion.VERIFICACION_DOC === 'S') {
-                        $('#chkdocumentos').prop('checked', true);
-                    }
                     if (response.verificacion.VERIFICACION_FOTO === 'S') {
                         $('#chkfotos').prop('checked', true);
                     }

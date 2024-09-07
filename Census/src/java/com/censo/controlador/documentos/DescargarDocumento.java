@@ -43,7 +43,7 @@ public class DescargarDocumento extends HttpServlet {
             DocumentoDigitalizadoDao documentoDigitalizadoDao = new DocumentoDigitalizadoDao();
             conex = documentoDigitalizadoDao.conectar();
 
-            long iddocumento = Long.parseLong(request.getParameter("iddocumento"));
+            int iddocumento = Integer.parseInt(request.getParameter("iddocumento"));
             CenDocumentosDigitalizado cendocumentosdigitalizado = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoById(conex, iddocumento);
             if (cendocumentosdigitalizado == null) {
                 respuesta.put("status", "error");

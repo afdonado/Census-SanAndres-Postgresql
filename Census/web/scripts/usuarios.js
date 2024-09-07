@@ -73,46 +73,6 @@ $(function () {
     });
 
 });
-/*
-function registrarUsuario() {
-    var documento = document.getElementById('txtdocumento').value.toString().toUpperCase();
-    var nombreusuario = document.getElementById('nombreusuario').value.toString().toUpperCase();
-    var password = document.getElementById('password').value;
-    var repetirpassword = document.getElementById('repetirpassword').value;
-
-    if (documento.length === 0 && nombreusuario.length === 0 && password.length === 0 && repetirpassword.length === 0) {
-        alert('Debe ingresar como minimo los datos obligatorios (*)');
-    } else {
-        document.getElementById('frmregistrarusuario').submit();
-    }
-}
-
-function LimpiarCampos() {
-    document.getElementById('nombreusuario').value = "";
-    document.getElementById('password').value = "";
-}
-
-function consultarListadoUsuario(opcion) {
-    var tipoconsulta = document.getElementById("tipoconsulta").value;
-
-    switch (opcion) {
-        case 0 :
-            var nombre = document.getElementById("nombreusuario").value.toString().toUpperCase();
-            window.frames[0].location.href = "listarUsuarios.jsp?opcion=0&tipoconsulta=" + tipoconsulta + "&nombre=" + nombre;
-            break;
-
-        case 1:
-            var tipodocumento = document.getElementById('cmbtipodoc').value;
-            var documento = document.getElementById('txtdocumento').value.toString().toUpperCase();
-            window.frames[0].location.href = "listarUsuarios.jsp?opcion=1&tipoconsulta=" + tipoconsulta + "&tipodocumento=" + tipodocumento + "&documento=" + documento;
-            break;
-
-        case 2 ://General
-            var puntoatencion = document.getElementById("cmbpuntoaten").value;
-            window.frames[0].location.href = "listarUsuarios.jsp?opcion=2&tipoconsulta=" + tipoconsulta + "&puntoatencion=" + puntoatencion;
-            break;
-    }
-}
 
 function generarReporteUsuario(opcion) {
 
@@ -124,17 +84,3 @@ function generarReporteUsuario(opcion) {
     }
 
 }
-
-function modificarUsuarioById(idusuario) {
-    if (idusuario.length > 0) {
-        document.location.href = "verModificarUsuario.jsp?idusuario=" + idusuario;
-    }
-}
-
-function modificarUsuario() {
-    if (confirm("Confirma Actualizar el usuario?")) {
-        document.getElementById('frmmodificarusuario').submit();
-    }
-}
- * 
- */

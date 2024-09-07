@@ -97,24 +97,6 @@ public class RegistrarCenso extends HttpServlet {
                 return;
             }
             
-            if (request.getParameter("idpersona") == null || request.getParameter("idpersona").isEmpty()) {
-                respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'id persona' no encontrado");
-
-                String jsonError = new Gson().toJson(respuesta);
-                response.getWriter().write(jsonError);
-                return;
-            }
-            
-            if (request.getParameter("cmbtipospersona") == null || request.getParameter("cmbtipospersona").isEmpty()) {
-                respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'tipo persona' no encontrado");
-
-                String jsonError = new Gson().toJson(respuesta);
-                response.getWriter().write(jsonError);
-                return;
-            }
-            
             if (request.getParameter("txtobservaciones") == null || request.getParameter("cmbtipospersona").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'observaciones' no encontrado");
@@ -129,9 +111,7 @@ public class RegistrarCenso extends HttpServlet {
             Date fechaActual = new java.sql.Date(new java.util.Date().getTime());
             String hora = new java.text.SimpleDateFormat("HHmm").format(fechaActual);
             int puntoAtencion = Integer.parseInt(request.getParameter("cmbpuntosatencion"));
-            long idvehiculo = Long.parseLong(request.getParameter("idvehiculo"));
-            long idpersona = Long.parseLong(request.getParameter("idpersona"));
-            int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona"));
+            int idvehiculo = Integer.parseInt(request.getParameter("idvehiculo"));
             String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
             
             conex.setAutoCommit(false);
@@ -141,8 +121,6 @@ public class RegistrarCenso extends HttpServlet {
             cencenso.setHora(hora);
             cencenso.setPun_id(puntoAtencion);
             cencenso.setVeh_id(idvehiculo);
-            cencenso.setPer_id(idpersona);
-            cencenso.setTper_id(tipoPersona);
             cencenso.setUsu_id(cenusuario.getId());
             cencenso.setEstado(1);
             cencenso.setNumero(numero);

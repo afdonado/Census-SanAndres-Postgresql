@@ -82,7 +82,6 @@ $(function () {
                         $('#txtfechavtecnomecanica').hide();
                     }
 
-                    $('#txtobservaciones').val(response.vehiculo.OBSERVACIONES);
                     $('#idvehiculo').val(response.vehiculo.VEH_ID);
 
                     $.ajax({

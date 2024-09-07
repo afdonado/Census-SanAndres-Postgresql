@@ -3,30 +3,23 @@ package com.censo.modelo.persistencia;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
 public class CenDepartamento {
     
     private int id;
     private String nombre;
-
-    public CenDepartamento() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
 
     public static CenDepartamento load(ResultSet rs)throws SQLException{
         CenDepartamento departamento= new CenDepartamento();

@@ -51,7 +51,7 @@ public class ModificarVehiculo extends HttpServlet {
                 return;
             }
 
-            long idvehiculo = Long.parseLong(request.getParameter("idvehiculo"));
+            int idvehiculo = Integer.parseInt(request.getParameter("idvehiculo"));
 
             VehiculoDao vehiculoDao = new VehiculoDao();
             conex = vehiculoDao.conectar();
@@ -266,14 +266,14 @@ public class ModificarVehiculo extends HttpServlet {
             int tipoServicio = Integer.parseInt(request.getParameter("cmbtiposservicio"));
             int tipoUso = Integer.parseInt(request.getParameter("cmbtiposuso"));
 
-            long modelo = Long.parseLong(request.getParameter("txtmodelo"));
+            int modelo = Integer.parseInt(request.getParameter("txtmodelo"));
             String transformado = request.getParameter("cmbtransformado").toUpperCase().trim();
 
             String runt = request.getParameter("cmbrunt").toUpperCase().trim();
             Date fechaMatricula = null;
             String licenciaTransito = "";
-            long paisMatricula = 0;
-            long municipioMatricula = 0;
+            int paisMatricula = 0;
+            int municipioMatricula = 0;
             String ciudaMatricula = "";
 
             if (runt.equals("S")) {
@@ -310,7 +310,7 @@ public class ModificarVehiculo extends HttpServlet {
                 licenciaTransito = request.getParameter("txtlicenciatransito").toUpperCase().trim();
                 fechaMatricula = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy")
                         .parse(request.getParameter("txtfechamatricula")).getTime());
-                paisMatricula = Long.parseLong(request.getParameter("cmbpaismatricula"));
+                paisMatricula = Integer.parseInt(request.getParameter("cmbpaismatricula"));
 
                 if (paisMatricula == 18) {
 
@@ -324,7 +324,7 @@ public class ModificarVehiculo extends HttpServlet {
                         return;
                     }
 
-                    municipioMatricula = Long.parseLong(request.getParameter("cmbmunicipiomatricula"));
+                    municipioMatricula = Integer.parseInt(request.getParameter("cmbmunicipiomatricula"));
 
                 } else {
 
@@ -345,7 +345,7 @@ public class ModificarVehiculo extends HttpServlet {
             int tipoDocumentoImportacion = Integer.parseInt(request.getParameter("cmbtiposimportacion"));
             String documentoImportacion = "";
             Date fechaImportacion = null;
-            long paisImportacion = 0;
+            int paisImportacion = 0;
 
             if (tipoDocumentoImportacion != 0) {
 
@@ -382,7 +382,7 @@ public class ModificarVehiculo extends HttpServlet {
                 documentoImportacion = request.getParameter("txtdocumentoimportacion").toUpperCase().trim();
                 fechaImportacion = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy")
                         .parse(request.getParameter("txtfechaimportacion")).getTime());
-                paisImportacion = Long.parseLong(request.getParameter("cmbpaisimportacion"));
+                paisImportacion = Integer.parseInt(request.getParameter("cmbpaisimportacion"));
             }
 
             String soat = request.getParameter("cmbsoat").toUpperCase().trim();
@@ -474,7 +474,7 @@ public class ModificarVehiculo extends HttpServlet {
                     if (!listapersonasVehiculo.isEmpty()) {
 
                         for (HashMap hash : listapersonasVehiculo) {
-                            long idperveh = Long.parseLong(hash.get("PV_ID").toString());
+                            int idperveh = Integer.parseInt(hash.get("PV_ID").toString());
 
                             //Validar parametro tipo documento
                             if (request.getParameter("estadoperveh" + idperveh) == null || request.getParameter("estadoperveh" + idperveh).isEmpty()) {
@@ -516,7 +516,7 @@ public class ModificarVehiculo extends HttpServlet {
 
                                 CenPersonaVehiculo cenpersonavehiculo = new CenPersonaVehiculo();
                                 int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona" + idperveh));
-                                long idPersona = Long.parseLong(request.getParameter("idpersona" + idperveh));
+                                int idPersona = Integer.parseInt(request.getParameter("idpersona" + idperveh));
 
                                 cenpersonavehiculo.setTper_id(tipoPersona);
                                 cenpersonavehiculo.setPer_id(idPersona);
@@ -560,14 +560,14 @@ public class ModificarVehiculo extends HttpServlet {
                             }
 
                             int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona" + i));
-                            long idPersona = Long.parseLong(request.getParameter("idpersona" + i));
+                            int idPersona = Integer.parseInt(request.getParameter("idpersona" + i));
 
                             cenpersonavehiculo.setTper_id(tipoPersona);
                             cenpersonavehiculo.setPer_id(idPersona);
                             cenpersonavehiculo.setVeh_id(idvehiculo);
                             cenpersonavehiculo.setUsu_id(cenusuario.getId());
                             cenpersonavehiculo.setEstado(1);
-                            long idPersonaVehiculo = personaVehiculoDao.adicionarPersonaVehiculo(conex, cenpersonavehiculo);
+                            int idPersonaVehiculo = personaVehiculoDao.adicionarPersonaVehiculo(conex, cenpersonavehiculo);
 
                             modificado = idPersonaVehiculo != 0;
                             if (!modificado) {

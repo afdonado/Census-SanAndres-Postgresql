@@ -1,8 +1,6 @@
 
 $(function () {
 
-    $("#ciudad-matricula").hide();
-
     var identificador = 0;
     $('#agregar-campos').click(function () {
         identificador = $("#txtcantidadpersonas").val();
@@ -57,18 +55,10 @@ $(function () {
             $('.matricula').hide();
         } else {
             $('.matricula').show();
-            var paismatricula = $("#cmbpaismatricula").val();
-            if (paismatricula === "18") {
-                $('.matricula-pais').show();
-            } else {
-                $('.matricula-pais').hide();
-            }
         }
     }
 
     $('#cmbrunt').on('change focus', actualizarCamposMatricula);
-
-    $('#cmbpaismatricula').on('change', actualizarCamposMatricula);
 
     function actualizarCamposImportacion() {
         var tipoImportacion = $('#cmbtiposimportacion').val();
@@ -98,3 +88,34 @@ $(function () {
     });
     
 });
+
+
+function generarReporteVehiculo(opcion) {
+
+    ancho = 200;
+    alto = 140;
+    barra = 0;
+    izquierda = (screen.width) ? (screen.width - ancho) / 2 : 100;
+    arriba = (screen.height) ? (screen.height - alto) / 2 : 100;
+    opciones = 'toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=' + barra + ',resizable=no,width=' + ancho + ',height=' + alto + ',left=' + izquierda + ',top=' + arriba;
+    switch (opcion) {
+        case 1:
+            var tipodocumento = document.getElementById('cmbtipodoc').value;
+            var documento = document.getElementById('txtdocumento').value.toString().toUpperCase();
+            window.frames[0].location.href = "generarReporteVehiculos.jsp?opcion=2&tipodocumento=" + tipodocumento + "&documento=" + documento;
+            break;
+
+        case 2:
+            var fechaRegini = document.getElementById("txtfechaRegini").value.toString();
+            var fechaRegfin = document.getElementById("txtfechaRegfin").value.toString();
+            window.frames[0].location.href = "generarReporteVehiculos.jsp?opcion=3&fechaRegini=" + fechaRegini + "&fechaRegfin=" + fechaRegfin;
+            break;
+
+        case 4:
+            url = "generarReporteVehiculos.jsp?opcion=4";
+            break;
+    }
+
+    window.open(url, 'popUp', opciones);
+
+}

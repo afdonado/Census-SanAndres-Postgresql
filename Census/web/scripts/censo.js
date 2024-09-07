@@ -60,69 +60,24 @@ function consultarReferenciaVehiculo(tiporeferencia, valorreferencia) {
     });
 }
 
-function registrarCenso() {
-    var numero = document.getElementById('txtnumero').value;
-    var fechacenso = document.getElementById('txtfechacenso').value;
-    var referencia = document.getElementById('txtreferencia').value;
-    var documento = document.getElementById('txtdocumento').value;
-
-    if (numero.length > 0 && fechacenso.length > 0 && referencia.length > 0 && documento.length > 0) {
-        document.getElementById('frmregistrarcenso').submit();
-    } else {
-        alert('Debe ingresar como minimo los datos obligatorios (*)');
-    }
-}
-
-function modificarCenso() {
-    if (confirm("Confirma Actualizar el censo?")) {
-        var numerocenso = document.getElementById('txtnumero').value.toString().toUpperCase();
-        var fechacenso = document.getElementById('txtfechacenso').value.toString().toUpperCase();
-        var referencia = document.getElementById('txtreferencia').value.toString().toUpperCase();
-        var documento = document.getElementById('txtdocumento').value.toString().toUpperCase();
-
-        if (numerocenso.length > 4 && fechacenso.length > 0 && referencia.length > 0 && documento.length > 0) {
-            document.getElementById('frmmodificarcenso').submit();
-        } else {
-            alert('Debe ingresar como minimo los datos obligatorios (*)');
-        }
-    }
-}
-
 function generarReporteCenso(opcion) {
 
     switch (opcion) {
-        case 0 :
-            var numero = document.getElementById("txtnumero").value.toString().toUpperCase();
-            window.frames[0].location.href = "generarReporteCensos.jsp?opcion=0&numero=" + numero;
-            break;
-
-        case 1 :
-            var tiporef = document.getElementById("cmbtiporeferencia").value;
-            var referencia = document.getElementById("txtreferencia").value.toString().toUpperCase();
-            window.frames[0].location.href = "generarReporteCensos.jsp?opcion=1&tiporef=" + tiporef + "&referencia=" + referencia;
-            break;
-
-        case 2:
-            var tipodocumento = document.getElementById('cmbtipodoc').value;
-            var documento = document.getElementById('txtdocumento').value.toString().toUpperCase();
-            window.frames[0].location.href = "generarReporteCensos.jsp?opcion=2&tipodocumento=" + tipodocumento + "&documento=" + documento;
-            break;
-
-        case 3:
+        case 0:
             var fechaini = document.getElementById("txtfechaini").value.toString();
             var fechafin = document.getElementById("txtfechafin").value.toString();
             var punto = document.getElementById('cmbpuntoatenfecha').value;
             window.frames[0].location.href = "generarReporteCensos.jsp?opcion=3&fechaini=" + fechaini + "&fechafin=" + fechafin + "&punto=" + punto;
             break;
 
-        case 4:
+        case 1:
             var fechaRegini = document.getElementById("txtfechaRegini").value.toString();
             var fechaRegfin = document.getElementById("txtfechaRegfin").value.toString();
             var punto = document.getElementById('cmbpuntoatenfechareg').value;
             window.frames[0].location.href = "generarReporteCensos.jsp?opcion=4&fechaRegini=" + fechaRegini + "&fechaRegfin=" + fechaRegfin + "&punto=" + punto;
             break;
 
-        case 5 :
+        case 3 :
             window.frames[0].location.href = "generarReporteCensos.jsp?opcion=5";
             break;
     }

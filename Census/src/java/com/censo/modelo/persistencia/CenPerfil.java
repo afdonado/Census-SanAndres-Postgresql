@@ -5,7 +5,19 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
 public class CenPerfil {
     
     private int id;
@@ -14,57 +26,6 @@ public class CenPerfil {
     private Date fechafin;
     private Timestamp fechaproceso;
     private int estado;
-
-    public CenPerfil() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Date getFechaini() {
-        return fechaini;
-    }
-
-    public void setFechaini(Date fechaini) {
-        this.fechaini = fechaini;
-    }
-
-    public Date getFechafin() {
-        return fechafin;
-    }
-
-    public void setFechafin(Date fechafin) {
-        this.fechafin = fechafin;
-    }
-
-    public Timestamp getFechaproceso() {
-        return fechaproceso;
-    }
-
-    public void setFechaproceso(Timestamp fechaproceso) {
-        this.fechaproceso = fechaproceso;
-    }
-
-    public int getEstado() {
-        return estado;
-    }
-
-    public void setEstado(int estado) {
-        this.estado = estado;
-    }
     
     public static CenPerfil load(ResultSet rs)throws SQLException{
         CenPerfil perfil= new CenPerfil();

@@ -63,27 +63,13 @@ function generarReportePersona(opcion) {
     arriba = (screen.height) ? (screen.height - alto) / 2 : 100;
     opciones = 'toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=' + barra + ',resizable=no,width=' + ancho + ',height=' + alto + ',left=' + izquierda + ',top=' + arriba;
     switch (opcion) {
-        case 1:
-            var tipodocumento = document.getElementById('cmbtipodoc').value;
-            var documento = document.getElementById('txtdocumento').value.toString().toUpperCase();
-            url = "generarReportePersonas.jsp?opcion=1&tipodocumento=" + tipodocumento + "&documento=" + documento;
-            break;
-
-        case 2:
-            var prinombre = document.getElementById("txtprinom").value.toString().toUpperCase();
-            var segnombre = document.getElementById("txtsegnom").value.toString().toUpperCase();
-            var priapellido = document.getElementById("txtpriape").value.toString().toUpperCase();
-            var segapellido = document.getElementById("txtsegape").value.toString().toUpperCase();
-            url = "generarReportePersonas.jsp?opcion=2&prinombre=" + prinombre + "&segnombre=" + segnombre + "&priapellido=" + priapellido + "&segapellido=" + segapellido;
-            break;
-
-        case 3:
+        case 0:
             var fechanacini = document.getElementById("txtfechanacini").value.toString();
             var fechanacfin = document.getElementById("txtfechanacfin").value.toString();
             url = "generarReportePersonas.jsp?opcion=3&fechanacini=" + fechanacini + "&fechanacfin=" + fechanacfin;
             break;
 
-        case 4:
+        case 1:
             url = "generarReportePersonas.jsp?opcion=4";
             break;
     }

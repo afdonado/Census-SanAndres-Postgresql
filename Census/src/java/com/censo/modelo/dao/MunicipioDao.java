@@ -13,13 +13,13 @@ public class MunicipioDao extends Conexion {
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public List ListarMunicipiosByIdDepto(Connection conex, long iddepto) throws SQLException {
+    public List ListarMunicipiosByIdDepto(Connection conex, int iddepto) throws SQLException {
 
         List listaMunicipio = new LinkedList();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_MUNICIPIOS WHERE DEPT_ID = ? ORDER BY MUN_ID ");
-            pst.setLong(1, iddepto);
+            pst.setInt(1, iddepto);
             rst = pst.executeQuery();
 
             while (rst.next()) {
@@ -42,11 +42,11 @@ public class MunicipioDao extends Conexion {
         return listaMunicipio;
     }
 
-    public CenMunicipio ConsultarMunicipioById(Connection conex, long id) throws SQLException {
+    public CenMunicipio ConsultarMunicipioById(Connection conex, int id) throws SQLException {
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_MUNICIPIOS WHERE MUN_ID = ? ORDER BY MUN_ID ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             while (rst.next()) {

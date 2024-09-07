@@ -12,14 +12,14 @@ public class LineaDao extends Conexion {
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public ArrayList<String> ListarNombresLineas(Connection conex, String linea, long idmarca) throws SQLException {
+    public ArrayList<String> ListarNombresLineas(Connection conex, String linea, int idmarca) throws SQLException {
 
         ArrayList<String> nombresLinea = new ArrayList<>();
 
         try {
             pst = conex.prepareStatement("SELECT LIN_NOMBRE FROM CEN_LINEAS WHERE LIN_NOMBRE LIKE ? AND MAR_ID = ? AND ROWNUM <= 20 ORDER BY LIN_NOMBRE");
             pst.setString(1, linea + "%");
-            pst.setLong(2, idmarca);
+            pst.setInt(2, idmarca);
             rst = pst.executeQuery();
 
             while (rst.next()) {
@@ -42,12 +42,12 @@ public class LineaDao extends Conexion {
         return nombresLinea;
     }
 
-    public CenLinea ConsultarLineaByNombreIdMarca(Connection conex, String nombre, long idmarca) throws SQLException {
+    public CenLinea ConsultarLineaByNombreIdMarca(Connection conex, String nombre, int idmarca) throws SQLException {
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_LINEAS WHERE LIN_NOMBRE = ? AND MAR_ID = ? ORDER BY LIN_ID ");
             pst.setString(1, nombre);
-            pst.setLong(2, idmarca);
+            pst.setInt(2, idmarca);
             rst = pst.executeQuery();
 
             while (rst.next()) {
@@ -70,11 +70,11 @@ public class LineaDao extends Conexion {
         return null;
     }
 
-    public CenLinea ConsultarLineaById(Connection conex, long id) throws SQLException {
+    public CenLinea ConsultarLineaById(Connection conex, int id) throws SQLException {
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_LINEAS WHERE LIN_ID = ? ORDER BY LIN_ID ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             while (rst.next()) {

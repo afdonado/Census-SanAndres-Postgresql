@@ -3,7 +3,19 @@ package com.censo.modelo.persistencia;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
 public class CenTipoDocumento {
     
     private int id;
@@ -11,41 +23,6 @@ public class CenTipoDocumento {
     private String descripcion_corta;
     private int estado;
 
-    public CenTipoDocumento() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getDescripcion_corta() {
-        return descripcion_corta;
-    }
-
-    public void setDescripcion_corta(String descripcion_corta) {
-        this.descripcion_corta = descripcion_corta;
-    }
-
-    public int getEstado() {
-        return estado;
-    }
-
-    public void setEstado(int estado) {
-        this.estado = estado;
-    }
-    
     public static CenTipoDocumento load(ResultSet rs)throws SQLException{
         CenTipoDocumento tipoDocumento = new CenTipoDocumento();
         tipoDocumento.setId(rs.getInt(1));

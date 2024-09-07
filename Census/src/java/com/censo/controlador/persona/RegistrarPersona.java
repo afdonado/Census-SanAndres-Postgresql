@@ -135,7 +135,7 @@ public class RegistrarPersona extends HttpServlet {
             }
             Date fechaNacimiento = new Date(new SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechanacimiento")).getTime());
             int genero = Integer.parseInt(request.getParameter("cmbgeneros"));
-            long municipio = Long.parseLong(request.getParameter("cmbmunicipios"));
+            int municipio = Integer.parseInt(request.getParameter("cmbmunicipios"));
             
             String direccion = request.getParameter("txtdireccion").toUpperCase().trim();
             String telefono = request.getParameter("txttelefono").toUpperCase().trim();

@@ -39,7 +39,7 @@ public class ActualizarPassword extends HttpServlet {
                 return;
             }
             
-            long idusuario = Long.parseLong(request.getParameter("idusuario"));
+            int idusuario = Integer.parseInt(request.getParameter("idusuario"));
             
             UsuarioDao usuarioDao = new UsuarioDao();
             conex = usuarioDao.conectar();

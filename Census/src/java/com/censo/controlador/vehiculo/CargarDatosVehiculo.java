@@ -39,7 +39,7 @@ public class CargarDatosVehiculo extends HttpServlet {
                 return;
             }
             
-            long idvehiculo = Long.parseLong(request.getParameter("id"));
+            int idvehiculo = Integer.parseInt(request.getParameter("id"));
 
             VehiculoDao vehiculoDao = new VehiculoDao();
             conex = vehiculoDao.conectar();

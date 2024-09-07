@@ -44,20 +44,11 @@ public class ModificarVerificacion extends HttpServlet {
             VerificacionDao verificacionDao = new VerificacionDao();
             conex = verificacionDao.conectar();
 
-            long idverificacion = Long.parseLong(request.getParameter("idverificacion"));
+            int idverificacion = Integer.parseInt(request.getParameter("idverificacion"));
             CenVerificacion cenverificacion = verificacionDao.ConsultarVerificacionByIdVerificacion(conex, idverificacion);
             if (cenverificacion == null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Verificacion no se encuentra registrada para modificarla");
-
-                String jsonError = new Gson().toJson(respuesta);
-                response.getWriter().write(jsonError);
-                return;
-            }
-
-            if (request.getParameter("runt") == null || request.getParameter("runt").isEmpty()) {
-                respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'runt' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -111,7 +102,7 @@ public class ModificarVerificacion extends HttpServlet {
 
             CensoDao censoDao = new CensoDao();
 
-            long idcenso = Long.parseLong(request.getParameter("idcenso"));
+            int idcenso = Integer.parseInt(request.getParameter("idcenso"));
             CenCenso cencenso = censoDao.ConsultarCensoById(conex, idcenso);
             if (cencenso == null) {
                 respuesta.put("status", "error");
@@ -122,7 +113,6 @@ public class ModificarVerificacion extends HttpServlet {
                 return;
             }
 
-            String runt = request.getParameter("runt");
             String documentos = request.getParameter("documento");
             String fotos = request.getParameter("foto");
             int estado = Integer.parseInt(request.getParameter("estadoverificacion"));
@@ -132,7 +122,6 @@ public class ModificarVerificacion extends HttpServlet {
 
             conex.setAutoCommit(false);
 
-            cenverificacion.setVerificado_runt(runt);
             cenverificacion.setVerificado_doc(documentos);
             cenverificacion.setVerificado_foto(fotos);
             cenverificacion.setObservaciones(observaciones);

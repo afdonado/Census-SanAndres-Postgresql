@@ -17,14 +17,14 @@ public class PersonaDao extends Conexion {
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public long adicionarPersona(Connection conex, CenPersona cenpersona) {
+    public int adicionarPersona(Connection conex, CenPersona cenpersona) {
 
         try {
             pst = conex.prepareStatement("INSERT INTO CEN_PERSONAS (PER_TIPODOC,PER_DOCUMENTO,"
                     + "PER_NOMBRE1,PER_NOMBRE2,PER_APELLIDO1,PER_APELLIDO2,PER_FECHANAC,PER_GENERO,PER_DIRECCION,"
                     + "MUN_ID,PER_TELEFONO,PER_MAIL,PER_GRUPOSANGUINEO,PER_LICONDUCCION,PER_FEXPLIC,PER_FVENLIC,"
                     + "PER_CATLIC,PER_FECHAPROCESO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,sysdate)", new String[]{"PER_ID"});
-            pst.setLong(1, cenpersona.getTipodocumento());
+            pst.setInt(1, cenpersona.getTipodocumento());
             pst.setString(2, cenpersona.getDocumento());
             pst.setString(3, cenpersona.getNombre1());
             pst.setString(4, cenpersona.getNombre2());
@@ -33,7 +33,7 @@ public class PersonaDao extends Conexion {
             pst.setDate(7, cenpersona.getFechanacimiento());
             pst.setInt(8, cenpersona.getGenero());
             pst.setString(9, cenpersona.getDireccion());
-            pst.setLong(10, cenpersona.getMun_id());
+            pst.setInt(10, cenpersona.getMun_id());
             pst.setString(11, cenpersona.getTelefono());
             pst.setString(12, cenpersona.getMail());
             pst.setInt(13, cenpersona.getGruposanguineo());
@@ -45,7 +45,7 @@ public class PersonaDao extends Conexion {
             rst = pst.getGeneratedKeys();
             if (rst != null) {
                 if (rst.next()) {
-                    return rst.getLong(1);
+                    return rst.getInt(1);
                 }
             }
         } catch (SQLException e) {
@@ -73,7 +73,7 @@ public class PersonaDao extends Conexion {
                     + "PER_GENERO = ?,PER_DIRECCION = ?,MUN_ID = ?,PER_TELEFONO = ?,PER_MAIL = ?,PER_GRUPOSANGUINEO = ?,"
                     + "PER_LICONDUCCION = ?,PER_FEXPLIC = ?,PER_FVENLIC = ?,"
                     + "PER_CATLIC = ? WHERE PER_ID = ? ");
-            pst.setLong(1, cenpersona.getTipodocumento());
+            pst.setInt(1, cenpersona.getTipodocumento());
             pst.setString(2, cenpersona.getDocumento());
             pst.setString(3, cenpersona.getNombre1());
             pst.setString(4, cenpersona.getNombre2());
@@ -82,7 +82,7 @@ public class PersonaDao extends Conexion {
             pst.setDate(7, cenpersona.getFechanacimiento());
             pst.setInt(8, cenpersona.getGenero());
             pst.setString(9, cenpersona.getDireccion());
-            pst.setLong(10, cenpersona.getMun_id());
+            pst.setInt(10, cenpersona.getMun_id());
             pst.setString(11, cenpersona.getTelefono());
             pst.setString(12, cenpersona.getMail());
             pst.setInt(13, cenpersona.getGruposanguineo());
@@ -90,7 +90,7 @@ public class PersonaDao extends Conexion {
             pst.setDate(15, cenpersona.getFechaexp());
             pst.setDate(16, cenpersona.getFechaven());
             pst.setInt(17, cenpersona.getCategorialicencia());
-            pst.setLong(18, cenpersona.getId());
+            pst.setInt(18, cenpersona.getId());
             pst.executeUpdate();
             
             return true;
@@ -141,11 +141,11 @@ public class PersonaDao extends Conexion {
         return null;
     }
 
-    public CenPersona ConsultarPersonaById(Connection conex, long id) throws SQLException {
+    public CenPersona ConsultarPersonaById(Connection conex, int id) throws SQLException {
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_PERSONAS WHERE PER_ID = ? ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             while (rst.next()) {
@@ -201,7 +201,7 @@ public class PersonaDao extends Conexion {
         return lista;
     }
 
-    public List ListarPersonasById(Connection conex, long id) throws SQLException {
+    public List ListarPersonasById(Connection conex, int id) throws SQLException {
 
         List<HashMap> listaDatos = new LinkedList<>();
 
@@ -210,7 +210,7 @@ public class PersonaDao extends Conexion {
                     + "TO_CHAR(FECHA_NAC,'dd/MM/yyyy') FECHA_NAC,PER_GENERO,GENERO,DIRECCION,MUN_ID,MUNICIPIO,DEPT_ID,DEPARTAMENTO,TELEFONO,"
                     + "MAIL,ID_GRUPOSAN,GRUPO_SANGUINEO,LIC_CONDUCCION,FECHA_EXP,FECHA_VEN,PER_CATLIC,CATEGORIA_LIC,TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO "
                     + "FROM VW_PERSONAS WHERE PER_ID = ? ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             while (rst.next()) {
@@ -354,13 +354,13 @@ public class PersonaDao extends Conexion {
         return listaDatos;
     }
     
-    public HashMap<String, Object> ConsultarDatosPersonaById(Connection conex, long id) throws SQLException {
+    public HashMap<String, Object> ConsultarDatosPersonaById(Connection conex, int id) throws SQLException {
 
         HashMap<String, Object> datos = new HashMap<>();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM VW_PERSONAS WHERE PER_ID = ? ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             if (rst.next()) {

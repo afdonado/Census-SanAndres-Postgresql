@@ -5,10 +5,22 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
 public class CenPermiso {
     
-    private long id;
+    private int id;
     private String nombre;
     private String descripcion;
     private String ubicacion;
@@ -18,89 +30,6 @@ public class CenPermiso {
     private int estado;
     private int mod_id;
     private int tipo;
-
-    public CenPermiso() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
-    }
-
-    public Date getFechaini() {
-        return fechaini;
-    }
-
-    public void setFechaini(Date fechaini) {
-        this.fechaini = fechaini;
-    }
-
-    public Date getFechafin() {
-        return fechafin;
-    }
-
-    public void setFechafin(Date fechafin) {
-        this.fechafin = fechafin;
-    }
-
-    public Timestamp getFechaproceso() {
-        return fechaproceso;
-    }
-
-    public void setFechaproceso(Timestamp fechaproceso) {
-        this.fechaproceso = fechaproceso;
-    }
-
-    public int getEstado() {
-        return estado;
-    }
-
-    public void setEstado(int estado) {
-        this.estado = estado;
-    }
-
-    public int getMod_id() {
-        return mod_id;
-    }
-
-    public void setMod_id(int mod_id) {
-        this.mod_id = mod_id;
-    }
-    
-    public int getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
-    }
     
     public static CenPermiso load(ResultSet rs)throws SQLException{
         CenPermiso permisos= new CenPermiso();

@@ -1,14 +1,11 @@
 package com.censo.controlador.verificacion;
 
-import com.censo.controlador.censo.*;
 import com.censo.modelo.dao.CensoDao;
-import com.censo.modelo.dao.PersonaVehiculoDao;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,7 +37,7 @@ public class CargarDatosVerificacion extends HttpServlet {
                 return;
             }
             
-            long idcenso = Long.parseLong(request.getParameter("id"));
+            int idcenso = Integer.parseInt(request.getParameter("id"));
 
             CensoDao censoDao = new CensoDao();
             conex = censoDao.conectar();

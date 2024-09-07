@@ -61,10 +61,6 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Runt Verificado</label>
-                                            <input class="form-control" type="checkbox" id="chkrunt" name="chkrunt" disabled="true" readonly="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
                                             <label>Documentos Verificados</label>
                                             <input class="form-control" type="checkbox" id="chkdocumentos" name="chkdocumentos" disabled="true"  readonly="true">
                                         </div>

@@ -50,7 +50,7 @@ public class UsuarioDao extends Conexion {
         return null;
     }
 
-    public List ListarPermisosById(Connection conex, long id) throws SQLException, IOException {
+    public List ListarPermisosById(Connection conex, int id) throws SQLException, IOException {
         List listaPermisos = new LinkedList();
 
         try {
@@ -59,7 +59,7 @@ public class UsuarioDao extends Conexion {
                     + "INNER JOIN CEN_PERFIL_PERMISO PP ON PP.EST_ID=1 AND PP.PEF_ID=PU.PEF_ID \n"
                     + "INNER JOIN CEN_PERMISOS PM ON PM.EST_ID=1 AND PM.PRM_ID=PP.PRM_ID \n"
                     + "WHERE U.EST_ID=1 AND U.USU_ID=? ORDER BY 1");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             while (rst.next()) {
@@ -83,7 +83,7 @@ public class UsuarioDao extends Conexion {
         return listaPermisos;
     }
 
-    public List ListarModulosByUsuario(Connection conex, long id) throws SQLException, IOException {
+    public List ListarModulosByUsuario(Connection conex, int id) throws SQLException, IOException {
         List listaModulos = new LinkedList();
 
         try {
@@ -94,7 +94,7 @@ public class UsuarioDao extends Conexion {
                     + "INNER JOIN CEN_USUARIOS U ON U.EST_ID=1 AND U.USU_ID=PU.USU_ID AND U.USU_ID=? \n"
                     + "WHERE M.EST_ID=1 AND M.MOD_ID NOT IN(1) \n"
                     + "GROUP BY M.MOD_ID, M.MOD_ORDEN ORDER BY M.MOD_ORDEN");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             while (rst.next()) {
@@ -144,7 +144,7 @@ public class UsuarioDao extends Conexion {
         return listaModulos;
     }
 
-    public long adicionarUsuario(Connection conex, CenUsuario cenusuario) throws SQLException, IOException {
+    public int adicionarUsuario(Connection conex, CenUsuario cenusuario) throws SQLException, IOException {
 
         try {
             pst = conex.prepareStatement("INSERT INTO CEN_USUARIOS (USU_NOMBRE,USU_PASS,USU_FECHAINICIO,EST_ID,USU_FECHAPROCESO,TIPO_DOCUMENTO,NUMERO_DOCUMENTO) VALUES (?,?,SYSDATE,?,SYSDATE,?,?)", new String[]{"USU_ID"});
@@ -157,7 +157,7 @@ public class UsuarioDao extends Conexion {
             rst = pst.getGeneratedKeys();
             if (rst != null) {
                 if (rst.next()) {
-                    return rst.getLong(1);
+                    return rst.getInt(1);
                 }
             }
         } catch (SQLException e) {
@@ -204,7 +204,7 @@ public class UsuarioDao extends Conexion {
         return null;
     }
 
-    public List ListarPermisosByUsuarioModulo(Connection conex, long id, int idmodulo) throws SQLException {
+    public List ListarPermisosByUsuarioModulo(Connection conex, int id, int idmodulo) throws SQLException {
 
         List listaPermisos = new LinkedList();
 
@@ -214,7 +214,7 @@ public class UsuarioDao extends Conexion {
                     + "INNER JOIN CEN_PERFIL_USUARIO PU ON PU.EST_ID=1 AND PU.PEF_ID=PP.PEF_ID \n"
                     + "INNER JOIN CEN_USUARIOS U ON U.EST_ID=1 AND U.USU_ID=PU.USU_ID AND U.USU_ID=? \n"
                     + "WHERE P.EST_ID=1 AND P.PRM_TIPO=1 AND P.MOD_ID=? ORDER BY 1 ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             pst.setInt(2, idmodulo);
             rst = pst.executeQuery();
 
@@ -238,11 +238,11 @@ public class UsuarioDao extends Conexion {
         return listaPermisos;
     }
 
-    public CenUsuario ConsultarUsuarioById(Connection conex, long id) throws SQLException {
+    public CenUsuario ConsultarUsuarioById(Connection conex, int id) throws SQLException {
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_USUARIOS WHERE USU_ID = ? ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             while (rst.next()) {
@@ -272,7 +272,7 @@ public class UsuarioDao extends Conexion {
             pst.setString(1, cenusuario.getPassword());
             pst.setDate(2, cenusuario.getFechafin());
             pst.setInt(3, cenusuario.getEstado());
-            pst.setLong(4, cenusuario.getId());
+            pst.setInt(4, cenusuario.getId());
             pst.executeUpdate();
             
             return true;
@@ -295,12 +295,12 @@ public class UsuarioDao extends Conexion {
         return false;
     }
 
-    public boolean restaurarPasswordUsuario(Connection conex, long id, String newpassword) throws SQLException, IOException {
+    public boolean restaurarPasswordUsuario(Connection conex, int id, String newpassword) throws SQLException, IOException {
 
         try {
             pst = conex.prepareStatement("UPDATE CEN_USUARIOS SET USU_PASS = ? WHERE USU_ID = ? ");
             pst.setString(1, newpassword);
-            pst.setLong(2, id);
+            pst.setInt(2, id);
             pst.executeUpdate();
             
             return true;
@@ -429,11 +429,11 @@ public class UsuarioDao extends Conexion {
         return listaDatos;
     }
 
-    public CenPerfilUsuario ConsultarPerfilUsuarioByIdUsuario(Connection conex, long id) throws SQLException {
+    public CenPerfilUsuario ConsultarPerfilUsuarioByIdUsuario(Connection conex, int id) throws SQLException {
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_PERFIL_USUARIO WHERE PFU_FECHAFINAL IS NULL AND USU_ID = ? ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             while (rst.next()) {
@@ -511,18 +511,18 @@ public class UsuarioDao extends Conexion {
         return null;
     }
 
-    public long adicionarPerfilUsuario(Connection conex, CenPerfilUsuario cenperfilusuario) {
+    public int adicionarPerfilUsuario(Connection conex, CenPerfilUsuario cenperfilusuario) {
 
         try {
             pst = conex.prepareStatement("INSERT INTO CEN_PERFIL_USUARIO (PEF_ID,USU_ID,PFU_FECHAINICIAL,PFU_FECHAPROCESO,EST_ID) VALUES (?,?,SYSDATE,SYSDATE,?)", new String[]{"PFU_ID"});
-            pst.setLong(1, cenperfilusuario.getPef_id());
-            pst.setLong(2, cenperfilusuario.getUsu_id());
+            pst.setInt(1, cenperfilusuario.getPef_id());
+            pst.setInt(2, cenperfilusuario.getUsu_id());
             pst.setInt(3, cenperfilusuario.getEstado());
             pst.executeUpdate();
             rst = pst.getGeneratedKeys();
             if (rst != null) {
                 if (rst.next()) {
-                    return rst.getLong(1);
+                    return rst.getInt(1);
                 }
             }
         } catch (SQLException e) {
@@ -546,10 +546,10 @@ public class UsuarioDao extends Conexion {
 
         try {
             pst = conex.prepareStatement("UPDATE CEN_PERFIL_USUARIO SET PEF_ID = ?, PFU_FECHAFINAL = ?, EST_ID = ? WHERE PFU_ID = ? ");
-            pst.setLong(1, cenperfilusuario.getPef_id());
+            pst.setInt(1, cenperfilusuario.getPef_id());
             pst.setDate(2, cenperfilusuario.getFechafin());
             pst.setInt(3, cenperfilusuario.getEstado());
-            pst.setLong(4, cenperfilusuario.getId());
+            pst.setInt(4, cenperfilusuario.getId());
             pst.executeUpdate();
             
             return true;
@@ -573,7 +573,7 @@ public class UsuarioDao extends Conexion {
     }
     
     
-    public HashMap<String, Object> ConsultarDatosUsuarioById(Connection conex, long id) throws SQLException {
+    public HashMap<String, Object> ConsultarDatosUsuarioById(Connection conex, int id) throws SQLException {
 
         HashMap<String, Object> datos = new HashMap<>();
 
@@ -582,7 +582,7 @@ public class UsuarioDao extends Conexion {
                     + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PEF_ID,PERFIL, TIPO_DOCUMENTO_ID, TIPO_DOCUMENTO, TIPO_DOCUMENTO_CORTO,"
                     + "NUMERO_DOCUMENTO, ESTADO_ID, ESTADO FROM VW_USUARIOS "
                     + "WHERE USU_ID = ? ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             if (rst.next()) {

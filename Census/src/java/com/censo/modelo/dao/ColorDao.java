@@ -98,11 +98,11 @@ public class ColorDao extends Conexion {
         return null;
     }
 
-    public CenColor ConsultarColorById(Connection conex, long id) throws SQLException {
+    public CenColor ConsultarColorById(Connection conex, int id) throws SQLException {
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_COLORES WHERE COL_ID = ? ORDER BY COL_ID ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             while (rst.next()) {

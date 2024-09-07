@@ -16,21 +16,21 @@ public class PersonaVehiculoDao extends Conexion {
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public long adicionarPersonaVehiculo(Connection conex, CenPersonaVehiculo cenpersonasvehiculo) {
+    public int adicionarPersonaVehiculo(Connection conex, CenPersonaVehiculo cenpersonasvehiculo) {
 
         try {
             pst = conex.prepareStatement("INSERT INTO CEN_PERSONA_VEHICULO (TPER_ID,PER_ID,VEH_ID,"
                     + "PV_FECHAINICIO,PV_FECHAFINAL,USU_ID,EST_ID,PV_FECHAPROCESO) VALUES (?,?,?,sysdate,null,?,?,sysdate)", new String[]{"PV_ID"});
             pst.setInt(1, cenpersonasvehiculo.getTper_id());
-            pst.setLong(2, cenpersonasvehiculo.getPer_id());
-            pst.setLong(3, cenpersonasvehiculo.getVeh_id());
-            pst.setLong(4, cenpersonasvehiculo.getUsu_id());
+            pst.setInt(2, cenpersonasvehiculo.getPer_id());
+            pst.setInt(3, cenpersonasvehiculo.getVeh_id());
+            pst.setInt(4, cenpersonasvehiculo.getUsu_id());
             pst.setInt(5, cenpersonasvehiculo.getEstado());
             pst.executeUpdate();
             rst = pst.getGeneratedKeys();
             if (rst != null) {
                 if (rst.next()) {
-                    return rst.getLong(1);
+                    return rst.getInt(1);
                 }
             }
         } catch (SQLException e) {
@@ -56,10 +56,10 @@ public class PersonaVehiculoDao extends Conexion {
 
         try {
             pst = conex.prepareStatement("UPDATE CEN_PERSONA_VEHICULO SET TPER_ID = ?, PER_ID = ?, USU_ID = ?, PV_FECHAPROCESO = sysdate WHERE PV_ID = ? ");
-            pst.setLong(1, cenpersonasvehiculo.getTper_id());
-            pst.setLong(2, cenpersonasvehiculo.getPer_id());
-            pst.setLong(3, cenpersonasvehiculo.getUsu_id());
-            pst.setLong(4, cenpersonasvehiculo.getId());
+            pst.setInt(1, cenpersonasvehiculo.getTper_id());
+            pst.setInt(2, cenpersonasvehiculo.getPer_id());
+            pst.setInt(3, cenpersonasvehiculo.getUsu_id());
+            pst.setInt(4, cenpersonasvehiculo.getId());
             pst.executeUpdate();
 
             return true;
@@ -82,13 +82,13 @@ public class PersonaVehiculoDao extends Conexion {
         return false;
     }
 
-    public List ListarPersonasVehiculoByIdVehiculo(Connection conex, long idvehiculo) throws SQLException {
+    public List ListarPersonasVehiculoByIdVehiculo(Connection conex, int idvehiculo) throws SQLException {
 
         List listaPersonaVehiculo = new LinkedList();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_PERSONA_VEHICULO WHERE VEH_ID = ? ORDER BY PV_FECHAINICIO,TPER_ID  ");
-            pst.setLong(1, idvehiculo);
+            pst.setInt(1, idvehiculo);
             rst = pst.executeQuery();
 
             while (rst.next()) {
@@ -111,13 +111,13 @@ public class PersonaVehiculoDao extends Conexion {
         return listaPersonaVehiculo;
     }
 
-    public List ListarPersonasVehiculoByIdPersona(Connection conex, long idpersona) throws SQLException {
+    public List ListarPersonasVehiculoByIdPersona(Connection conex, int idpersona) throws SQLException {
 
         List listaPersonaVehiculo = new LinkedList();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_PERSONA_VEHICULO WHERE PER_ID = ? ORDER BY PV_FECHAINICIO,TPER_ID ");
-            pst.setLong(1, idpersona);
+            pst.setInt(1, idpersona);
             rst = pst.executeQuery();
 
             while (rst.next()) {
@@ -140,13 +140,13 @@ public class PersonaVehiculoDao extends Conexion {
         return listaPersonaVehiculo;
     }
 
-    public List<HashMap<String, Object>> ListarHashPersonasVehiculoByIdVehiculo(Connection conex, long idvehiculo) throws SQLException {
+    public List<HashMap<String, Object>> ListarHashPersonasVehiculoByIdVehiculo(Connection conex, int idvehiculo) throws SQLException {
 
         List<HashMap<String, Object>> lista = new LinkedList<>();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM VW_PERSONA_VEHICULO WHERE VEH_ID = ? ");
-            pst.setLong(1, idvehiculo);
+            pst.setInt(1, idvehiculo);
             rst = pst.executeQuery();
 
             while (rst.next()) {
@@ -174,13 +174,13 @@ public class PersonaVehiculoDao extends Conexion {
         return lista;
     }
 
-    public List<HashMap<String, Object>> ListarHashPersonasVehiculoActivasByIdVehiculo(Connection conex, long idvehiculo) throws SQLException {
+    public List<HashMap<String, Object>> ListarHashPersonasVehiculoActivasByIdVehiculo(Connection conex, int idvehiculo) throws SQLException {
 
         List<HashMap<String, Object>> lista = new LinkedList<>();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM VW_PERSONA_VEHICULO WHERE EST_ID = 1 AND VEH_ID = ? ");
-            pst.setLong(1, idvehiculo);
+            pst.setInt(1, idvehiculo);
             rst = pst.executeQuery();
 
             while (rst.next()) {
@@ -208,11 +208,11 @@ public class PersonaVehiculoDao extends Conexion {
         return lista;
     }
 
-    public boolean anularPersonaVehiculo(Connection conex, long id) throws SQLException, IOException {
+    public boolean anularPersonaVehiculo(Connection conex, int id) throws SQLException, IOException {
 
         try {
             pst = conex.prepareStatement("UPDATE CEN_PERSONA_VEHICULO SET PV_FECHAFINAL = SYSDATE, EST_ID = 2 WHERE PV_ID = ? ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             pst.executeUpdate();
             
             return true;

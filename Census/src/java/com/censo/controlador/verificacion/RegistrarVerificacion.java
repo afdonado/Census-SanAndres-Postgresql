@@ -33,15 +33,6 @@ public class RegistrarVerificacion extends HttpServlet {
 
         try {
 
-            if (request.getParameter("runt") == null || request.getParameter("runt").isEmpty()) {
-                respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'runt' no encontrado");
-
-                String jsonError = new Gson().toJson(respuesta);
-                response.getWriter().write(jsonError);
-                return;
-            }
-
             if (request.getParameter("documento") == null || request.getParameter("documento").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'documentos' no encontrado");
@@ -90,7 +81,7 @@ public class RegistrarVerificacion extends HttpServlet {
             CensoDao censoDao = new CensoDao();
             conex = censoDao.conectar();
 
-            long idcenso = Long.parseLong(request.getParameter("idcenso"));
+            int idcenso = Integer.parseInt(request.getParameter("idcenso"));
             CenCenso cencenso = censoDao.ConsultarCensoById(conex, idcenso);
             if (cencenso == null) {
                 respuesta.put("status", "error");
@@ -101,7 +92,6 @@ public class RegistrarVerificacion extends HttpServlet {
                 return;
             }
 
-            String runt = request.getParameter("runt");
             String documentos = request.getParameter("documento");
             String fotos = request.getParameter("foto");
             int estado = Integer.parseInt(request.getParameter("estadoverificacion"));
@@ -114,13 +104,12 @@ public class RegistrarVerificacion extends HttpServlet {
 
             CenVerificacion cenverificacion = new CenVerificacion();
             cenverificacion.setCen_id(idcenso);
-            cenverificacion.setVerificado_runt(runt);
             cenverificacion.setVerificado_doc(documentos);
             cenverificacion.setVerificado_foto(fotos);
             cenverificacion.setObservaciones(observaciones);
             cenverificacion.setEstado(estado);
             cenverificacion.setUsu_id(cenusuarioSesion.getId());
-            long idverificacion = verificacionDao.adicionarVerificacion(conex, cenverificacion);
+            int idverificacion = verificacionDao.adicionarVerificacion(conex, cenverificacion);
 
             boolean registrado = false;
 
@@ -131,7 +120,7 @@ public class RegistrarVerificacion extends HttpServlet {
                 cenhistoriaverificacion.setEstado(estado);
                 cenhistoriaverificacion.setUsu_id(cenusuarioSesion.getId());
                 cenhistoriaverificacion.setObservaciones(observaciones);
-                long idhistorialverificacion = verificacionDao.adicionarHistorialVerificacion(conex, cenhistoriaverificacion);
+                int idhistorialverificacion = verificacionDao.adicionarHistorialVerificacion(conex, cenhistoriaverificacion);
 
                 registrado = idhistorialverificacion > 0;
 

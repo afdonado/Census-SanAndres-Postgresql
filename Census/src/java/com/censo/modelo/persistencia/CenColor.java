@@ -3,34 +3,27 @@ package com.censo.modelo.persistencia;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
 public class CenColor {
     
-    private long id;
+    private int id;
     private String nombre;
 
-    public CenColor() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    
     public static CenColor load(ResultSet rs)throws SQLException{
         CenColor color = new CenColor();
-        color.setId(rs.getLong(1));
+        color.setId(rs.getInt(1));
         color.setNombre(rs.getString(2));
         return color;
     }

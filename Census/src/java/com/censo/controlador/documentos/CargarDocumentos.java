@@ -50,7 +50,7 @@ public class CargarDocumentos extends HttpServlet {
             CensoDao censoDao = new CensoDao();
             conex = censoDao.conectar();
 
-            long idcenso = Long.parseLong(request.getParameter("idcenso"));
+            int idcenso = Integer.parseInt(request.getParameter("idcenso"));
             CenCenso cencenso = censoDao.ConsultarCensoById(conex, idcenso);
             if (cencenso == null) {
                 respuesta.put("status", "error");

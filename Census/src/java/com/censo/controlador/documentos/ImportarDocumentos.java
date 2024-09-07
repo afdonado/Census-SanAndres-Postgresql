@@ -7,15 +7,12 @@ import com.censo.modelo.persistencia.CenCenso;
 import com.censo.modelo.persistencia.CenUsuario;
 import com.google.gson.Gson;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -51,7 +48,7 @@ public class ImportarDocumentos extends HttpServlet {
             CensoDao censoDao = new CensoDao();
             conex = censoDao.conectar();
 
-            long idcenso = Long.parseLong(request.getParameter("idcenso"));
+            int idcenso = Integer.parseInt(request.getParameter("idcenso"));
             CenCenso cencenso = censoDao.ConsultarCensoById(conex, idcenso);
             if (cencenso == null) {
                 respuesta.put("status", "error");

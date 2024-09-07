@@ -41,11 +41,11 @@ public class PaisDao extends Conexion {
         return listaPais;
     }
 
-    public CenPais ConsultarPaisById(Connection conex, long id) throws SQLException {
+    public CenPais ConsultarPaisById(Connection conex, int id) throws SQLException {
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_PAISES WHERE PAI_ID = ? ORDER BY PAI_ID ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             while (rst.next()) {

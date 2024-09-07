@@ -3,34 +3,27 @@ package com.censo.modelo.persistencia;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
 public class CenPais {
     
-    private long id;
+    private int id;
     private String nombre;
 
-    public CenPais() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    
     public static CenPais load(ResultSet rs)throws SQLException{
         CenPais pais = new CenPais();
-        pais.setId(rs.getLong(1));
+        pais.setId(rs.getInt(1));
         pais.setNombre(rs.getString(2));
         return pais;
     }

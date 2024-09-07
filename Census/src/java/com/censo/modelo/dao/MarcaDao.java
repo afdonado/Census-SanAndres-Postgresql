@@ -68,11 +68,11 @@ public class MarcaDao extends Conexion {
         return null;
     }
 
-    public CenMarca ConsultarMarcaById(Connection conex, long id) throws SQLException {
+    public CenMarca ConsultarMarcaById(Connection conex, int id) throws SQLException {
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_MARCAS WHERE MAR_ID = ? ORDER BY MAR_ID ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             while (rst.next()) {

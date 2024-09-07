@@ -84,8 +84,6 @@ $(function () {
                         $('#txtfechavtecnomecanica').hide();
                     }
 
-                    $('#txtobservaciones').val(response.vehiculo.OBSERVACIONES);
-                    
                     $(".btneditar").attr("data-id", response.vehiculo.VEH_ID);
                     
                     var personas = response.personasVehiculo;

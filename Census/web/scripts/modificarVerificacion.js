@@ -65,11 +65,10 @@ $(function () {
     $('#btnguardar').click(function () {
         var numero = $('#txtnumerocenso').val();
         var fechacenso = $('#txtfechacenso').val();
-        var runt = $('#chkrunt').val();
         var documentos = $('#chkdocumentos').val();
         var fotos = $('#chkfotos').val();
 
-        if (numero.length === 0 && fechacenso.length === 0 && runt.length === 0 && documentos.length === 0 && fotos.length === 0) {
+        if (numero.length === 0 && fechacenso.length === 0 && documentos.length === 0 && fotos.length === 0) {
             alert('Debe ingresar los datos obligatorios (*)');
             return false;
         } else {

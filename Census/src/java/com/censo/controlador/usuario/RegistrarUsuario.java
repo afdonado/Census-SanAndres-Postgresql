@@ -135,7 +135,7 @@ public class RegistrarUsuario extends HttpServlet {
             cenusuario.setPassword(password);
             cenusuario.setEstado(1);
 
-            long idusuario = usuarioDao.adicionarUsuario(conex, cenusuario);
+            int idusuario = usuarioDao.adicionarUsuario(conex, cenusuario);
             
             CenPerfilUsuario cenperfilusuario = new CenPerfilUsuario();
             
@@ -143,7 +143,7 @@ public class RegistrarUsuario extends HttpServlet {
                 cenperfilusuario.setPef_id(tipoperfil);
                 cenperfilusuario.setUsu_id(idusuario);
                 cenperfilusuario.setEstado(1);
-                long idperfilusuario = usuarioDao.adicionarPerfilUsuario(conex, cenperfilusuario);
+                int idperfilusuario = usuarioDao.adicionarPerfilUsuario(conex, cenperfilusuario);
                 registrado = idperfilusuario > 0;
             } else {
                 registrado = false;

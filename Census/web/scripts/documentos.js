@@ -257,31 +257,6 @@ function consultarCensoDocumento() {
     window.frames[0].location.href = "SeleccionarDocumentos.jsp?numero=" + numero;
 }
 
-/*
- function consultarDocumentosDigitalizadosByNumeroCenso() {
- var numerocenso = document.getElementById('txtnumerocenso').value.toString().toUpperCase();
- if (numerocenso.length > 0) {
- ajax = new nuevoAjax();
- ajax.open("POST", "../Gets/getVerificarNumeroCenso.jsp", true);
- ajax.onreadystatechange = function () {
- if (ajax.readyState == 4 && ajax.status == 200) {
- var docxml = ajax.responseXML;
- var result = docxml.getElementsByTagName('result')[0].childNodes[0].nodeValue;
- if (result == 'si') {
- var idcenso = docxml.getElementsByTagName('idcenso')[0].childNodes[0].nodeValue;
- window.frames[0].location.href = "ListarDocumentos.jsp?idcenso=" + idcenso;
- } else {
- document.getElementById('txtnumerocenso').focus();
- alert("Numero de censo no se encuentra registrado");
- }
- }
- }
- ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
- ajax.send("numerocenso=" + numerocenso);
- }
- 
- }
- */
 function DescargarDocumento() {
     document.getElementById('frmdescargardocumento').action = '../../descargarDocumento';
     document.getElementById('frmdescargardocumento').submit();

@@ -282,14 +282,14 @@ public class RegistrarVehiculo extends HttpServlet {
             int tipoServicio = Integer.parseInt(request.getParameter("cmbtiposservicio"));
             int tipoUso = Integer.parseInt(request.getParameter("cmbtiposuso"));
 
-            long modelo = Long.parseLong(request.getParameter("txtmodelo"));
+            int modelo = Integer.parseInt(request.getParameter("txtmodelo"));
             String transformado = request.getParameter("cmbtransformado").toUpperCase().trim();
 
             String runt = request.getParameter("cmbrunt").toUpperCase().trim();
             Date fechaMatricula = null;
             String licenciaTransito = "";
-            long paisMatricula = 0;
-            long municipioMatricula = 0;
+            int paisMatricula = 0;
+            int municipioMatricula = 0;
             String ciudaMatricula = "";
 
             if (runt.equals("S")) {
@@ -325,7 +325,7 @@ public class RegistrarVehiculo extends HttpServlet {
 
                 licenciaTransito = request.getParameter("txtlicenciatransito").toUpperCase().trim();
                 fechaMatricula = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechamatricula")).getTime());
-                paisMatricula = Long.parseLong(request.getParameter("cmbpaismatricula"));
+                paisMatricula = Integer.parseInt(request.getParameter("cmbpaismatricula"));
 
                 if (paisMatricula == 18) {
 
@@ -339,7 +339,7 @@ public class RegistrarVehiculo extends HttpServlet {
                         return;
                     }
 
-                    municipioMatricula = Long.parseLong(request.getParameter("cmbmunicipiomatricula"));
+                    municipioMatricula = Integer.parseInt(request.getParameter("cmbmunicipiomatricula"));
 
                 } else {
 
@@ -360,7 +360,7 @@ public class RegistrarVehiculo extends HttpServlet {
             int tipoDocumentoImportacion = Integer.parseInt(request.getParameter("cmbtiposimportacion"));
             String documentoImportacion = "";
             Date fechaImportacion = null;
-            long paisImportacion = 0;
+            int paisImportacion = 0;
 
             if (tipoDocumentoImportacion != 0) {
 
@@ -396,7 +396,7 @@ public class RegistrarVehiculo extends HttpServlet {
 
                 documentoImportacion = request.getParameter("txtdocumentoimportacion").toUpperCase().trim();
                 fechaImportacion = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechaimportacion")).getTime());
-                paisImportacion = Long.parseLong(request.getParameter("cmbpaisimportacion"));
+                paisImportacion = Integer.parseInt(request.getParameter("cmbpaisimportacion"));
             }
 
             String soat = request.getParameter("cmbsoat").toUpperCase().trim();
@@ -481,7 +481,7 @@ public class RegistrarVehiculo extends HttpServlet {
                     cenvehiculo.setFechaven_tecno(fechaVencimientoTecnomecanica);
                     cenvehiculo.setUsu_id(cenusuario.getId());
                     cenvehiculo.setEstado(1);
-                    long idVehiculo = vehiculoDao.adicionarVehiculo(conex, cenvehiculo);
+                    int idVehiculo = vehiculoDao.adicionarVehiculo(conex, cenvehiculo);
 
                     if (idVehiculo > 0) {
 
@@ -490,14 +490,14 @@ public class RegistrarVehiculo extends HttpServlet {
                         for (int i = 1; i <= cantpersonas; i++) {
 
                             int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona" + i));
-                            long idPersona = Long.parseLong(request.getParameter("idpersona" + i));
+                            int idPersona = Integer.parseInt(request.getParameter("idpersona" + i));
 
                             cenpersonavehiculo.setTper_id(tipoPersona);
                             cenpersonavehiculo.setPer_id(idPersona);
                             cenpersonavehiculo.setVeh_id(idVehiculo);
                             cenpersonavehiculo.setUsu_id(cenusuario.getId());
                             cenpersonavehiculo.setEstado(1);
-                            long idPersonaVehiculo = daoPersonaVehiculo.adicionarPersonaVehiculo(conex, cenpersonavehiculo);
+                            int idPersonaVehiculo = daoPersonaVehiculo.adicionarPersonaVehiculo(conex, cenpersonavehiculo);
 
                             if (idPersonaVehiculo > 0) {
                                 registrado = true;

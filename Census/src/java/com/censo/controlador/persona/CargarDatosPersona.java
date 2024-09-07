@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,7 +37,7 @@ public class CargarDatosPersona extends HttpServlet {
                 return;
             }
             
-            long idpersona = Long.parseLong(request.getParameter("id"));
+            int idpersona = Integer.parseInt(request.getParameter("id"));
 
             PersonaDao personaDao = new PersonaDao();
             conex = personaDao.conectar();

@@ -24,21 +24,21 @@ public class DocumentoDigitalizadoDao extends Conexion {
     private ResultSet rst = null;
     private PreparedStatement pst = null;
     
-    public long adicionarDocumentoDigitalizado(Connection conex, CenDocumentosDigitalizado cendocumentosdigitalizado) {
+    public int adicionarDocumentoDigitalizado(Connection conex, CenDocumentosDigitalizado cendocumentosdigitalizado) {
 
         try {
             pst = conex.prepareStatement("INSERT INTO CEN_DOCUMENTOS_DIGITALIZADOS (DDIG_NOMBRE,DDIG_RUTA,DDIG_TIPO,DDIG_REFERENCIA,DDIG_OBSERVACIONES,DDIG_FECHAPROCESO,USU_ID) VALUES (?,?,?,?,?,SYSDATE,?)", new String[]{"DDIG_ID"});
             pst.setString(1, cendocumentosdigitalizado.getNombre());
             pst.setString(2, cendocumentosdigitalizado.getRuta());
             pst.setInt(3, cendocumentosdigitalizado.getTipo());
-            pst.setLong(4, cendocumentosdigitalizado.getReferencia_id());
+            pst.setInt(4, cendocumentosdigitalizado.getReferencia_id());
             pst.setString(5, cendocumentosdigitalizado.getObservacion());
-            pst.setLong(6, cendocumentosdigitalizado.getUsu_id());
+            pst.setInt(6, cendocumentosdigitalizado.getUsu_id());
             pst.executeUpdate();
             rst = pst.getGeneratedKeys();
             if (rst != null) {
                 if (rst.next()) {
-                    return rst.getLong(1);
+                    return rst.getInt(1);
                 }
             }
         } catch (SQLException e) {
@@ -58,13 +58,13 @@ public class DocumentoDigitalizadoDao extends Conexion {
         return 0;
     }
 
-    public List ListarDocumentosDigitalizados(Connection conex, long idcenso) throws SQLException {
+    public List ListarDocumentosDigitalizados(Connection conex, int idcenso) throws SQLException {
         
         LinkedList listaDocumentos = new LinkedList();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_DOCUMENTOS_DIGITALIZADOS WHERE DDIG_REFERENCIA = ? ORDER BY 1");
-            pst.setLong(1, idcenso);
+            pst.setInt(1, idcenso);
             rst = pst.executeQuery();
             while (rst.next()) {
                 listaDocumentos.add(CenDocumentosDigitalizado.load(rst));
@@ -123,11 +123,11 @@ public class DocumentoDigitalizadoDao extends Conexion {
         return listar_imagenes;
     }
 
-    public CenDocumentosDigitalizado ConsultarDocumentoDigitalizadoById(Connection conex, long id) throws SQLException {
+    public CenDocumentosDigitalizado ConsultarDocumentoDigitalizadoById(Connection conex, int id) throws SQLException {
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_DOCUMENTOS_DIGITALIZADOS WHERE DDIG_ID = ? ORDER BY 1");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             rst = pst.executeQuery();
 
             while (rst.next()) {
@@ -175,11 +175,11 @@ public class DocumentoDigitalizadoDao extends Conexion {
         return;
     }
 
-    public CenDocumentosDigitalizado ConsultarDocumentoDigitalizadoByIdCensoNombre(Connection conex, long idcenso, String nombreImagen) throws SQLException {
+    public CenDocumentosDigitalizado ConsultarDocumentoDigitalizadoByIdCensoNombre(Connection conex, int idcenso, String nombreImagen) throws SQLException {
 
         try {
             pst = conex.prepareStatement("SELECT * FROM CEN_DOCUMENTOS_DIGITALIZADOS WHERE DDIG_REFERENCIA = ? AND DDIG_NOMBRE = ? ORDER BY 1");
-            pst.setLong(1, idcenso);
+            pst.setInt(1, idcenso);
             pst.setString(2, nombreImagen);
             rst = pst.executeQuery();
 
@@ -203,11 +203,11 @@ public class DocumentoDigitalizadoDao extends Conexion {
         return null;
     }
 
-    public void eliminarDocumentoById(Connection conex, long id) throws SQLException, IOException {
+    public void eliminarDocumentoById(Connection conex, int id) throws SQLException, IOException {
 
         try {
             pst = conex.prepareStatement("DELETE CEN_DOCUMENTOS_DIGITALIZADOS WHERE DDIG_ID = ? ");
-            pst.setLong(1, id);
+            pst.setInt(1, id);
             pst.executeUpdate();
 
         } catch (SQLException e) {

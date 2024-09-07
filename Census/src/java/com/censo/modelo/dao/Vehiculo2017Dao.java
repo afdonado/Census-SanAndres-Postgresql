@@ -121,13 +121,13 @@ public class Vehiculo2017Dao extends Conexion {
         return null;
     }
 
-    public HashMap<String, Object> ConsultarDatosVehiculo2017ByPlaca(Connection conex, long id) throws SQLException {
+    public HashMap<String, Object> ConsultarDatosVehiculo2017ByPlaca(Connection conex, String placa) throws SQLException {
 
         HashMap<String, Object> datos = new HashMap<>();
 
         try {
             pst = conex.prepareStatement("SELECT * FROM VEHICULOS_2017 WHERE PLACA = ? ");
-            pst.setLong(1, id);
+            pst.setString(1, placa);
             rst = pst.executeQuery();
 
             if (rst.next()) {

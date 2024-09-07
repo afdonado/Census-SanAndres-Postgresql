@@ -50,16 +50,10 @@ $(function () {
                     }
                     $('#txtreferencia').val(referencia);
 
-                    var tipoPersonaId = response.censo.TIPO_PERSONA_ID;
-                    var tipoDocumentoId = response.censo.TDOC_ID;
-                    $('#txtdocumento').val(response.censo.DOCUMENTO);
-                    $('#txtnombre').val(response.censo.NOMBRE);
-
                     $('#txtobservaciones').val(response.censo.OBSERVACIONES);
 
                     $('#idcenso').val(response.censo.CEN_ID);
                     $('#idvehiculo').val(response.censo.VEH_ID);
-                    $('#idpersona').val(response.censo.PER_ID);
                     $('#numerocenso').val(response.censo.NUMERO);
                     $('#tiporeferencia').val(tipoReferenciaId);
                     $('#referencia').val(referencia);
@@ -98,39 +92,6 @@ $(function () {
                         }
                     });
 
-                    $.ajax({
-                        url: '../../cargarTiposPersona',
-                        method: 'GET',
-                        success: function (data) {
-                            var select = $('#cmbtipospersona');
-                            select.empty();
-                            $.each(data, function (index, item) {
-                                select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
-                            });
-                            select.val(tipoPersonaId);
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.error("Error en la solicitud de cargar tipos de persona: ", textStatus, errorThrown);
-                            alert("Ocurrió un error al procesar la solicitud de cargar tipos de persona.");
-                        }
-                    });
-
-                    $.ajax({
-                        url: '../../cargarTiposDocumento',
-                        method: 'GET',
-                        success: function (data) {
-                            var select = $('#cmbtiposdocumento');
-                            select.empty();
-                            $.each(data, function (index, item) {
-                                select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
-                            });
-                            select.val(tipoDocumentoId);
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.error("Error en la solicitud de cargar tipos de documentos: ", textStatus, errorThrown);
-                            alert("Ocurrió un error al procesar la solicitud de cargar tipos de documentos.");
-                        }
-                    });
                 } else if (response.status === "fail") {
                     alert(response.message);
                 } else if (response.status === "error") {
