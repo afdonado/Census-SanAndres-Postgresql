@@ -9,6 +9,10 @@
 
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
+    
+    <li class="nav-item d-flex align-items-center">
+        <img src="${pageContext.request.contextPath}/logos/censo-logo-mobile.jpg" alt="CENSO" style="width: 150px; height: 50px;">
+    </li>
 
     <div class="topbar-divider d-none d-sm-block"></div>
 

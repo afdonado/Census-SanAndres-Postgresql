@@ -27,10 +27,10 @@
                         <div class="card-body p-0">
                             <div class="row justify-content-center">
                                 <div class="d-lg-none d-md-block">
-                                    <img src="logos/censo-logo.jpg" alt="CENSO" style="margin-top: 20px; width: 230px; height: 130px">
+                                    <img src="logos/censo-logo-mobile.jpg" alt="CENSO" style="margin-top: 20px;">
                                 </div>
                                 <div class="d-none d-lg-block bg-login-image">
-                                    <img src="logos/censo-logo.jpg" alt="CENSO" style="margin-top: 30px; width: 400px; height: 200px;">
+                                    <img src="logos/censo-logo-web.jpg" alt="CENSO" style="margin-top: 30px;">
                                 </div>
                             </div>
                             <div class="row justify-content-center">
@@ -56,16 +56,16 @@
                             </div>
                             <div class="row justify-content-center">
                                 <div class="d-lg-none d-md-block align-content-center">
-                                    <img class="mx-auto d-block" src="logos/gobernacion-logo.jpg" alt="GOBERNACION" style="margin-top: 0px; width: 220px; height: 200px">
+                                    <img class="mx-auto d-block" src="logos/gobernacion-logo-mobile.jpg" alt="GOBERNACION" style="margin-top: 0px;">
                                 </div>
                                 <div class="d-lg-none d-md-block">
-                                    <img class="mx-auto d-block" src="logos/movisai-logo.jpg" alt="MOVISAI" style="margin-top: 0px; width: 400px; height: 130px">
+                                    <img class="mx-auto d-block" src="logos/movisai-logo-mobile.jpg" alt="MOVISAI" style="margin-top: 50px;">
                                 </div>
                                 <div class="col-lg-5 d-none d-lg-block bg-login-image">
-                                    <img class="mx-auto d-block" src="logos/gobernacion-logo.jpg" alt="GOBERNACION" style="margin-top: 0px; width: 220px; height: 200px;">
+                                    <img class="mx-auto d-block" src="logos/gobernacion-logo-web.jpg" alt="GOBERNACION" style="margin-top: 0px;">
                                 </div>
                                 <div class="col-lg-7 d-none d-lg-block bg-login-image">
-                                    <img class="mx-auto d-block" src="logos/movisai-logo.jpg" alt="MOVISAI" style="margin-top: 0px; width: 400px; height: 130px;">
+                                    <img class="mx-auto d-block" src="logos/movisai-logo-web.jpg" alt="MOVISAI" style="margin-top: 50px;">
                                 </div>
                             </div>
                         </div>
