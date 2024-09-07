@@ -20,7 +20,7 @@
         <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     </head>
-    <body>
+    <body id="page-top">
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
@@ -87,12 +87,15 @@
                                 </div>
                             </form>
                         </div>
-                        <footer class="sticky-footer bg-white">
-                        <jsp:include page="/jsp/Footer.jsp"></jsp:include>
-                        </footer>
                     </div>
+                    <footer class="sticky-footer bg-white">
+                    <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                    </footer>
                 </div>
             </div>
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
         <%
         } else {
         %>
@@ -111,7 +114,7 @@
         <%
             }
         %>
-        
+
         <!-- Bootstrap core JavaScript-->
         <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -124,9 +127,9 @@
 
         <script src="${pageContext.request.contextPath}/scripts/registrarUsuario.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/usuarios.js" type="text/javascript"></script>
-        
+
         <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
-        
+
     </body>
 </html>
 

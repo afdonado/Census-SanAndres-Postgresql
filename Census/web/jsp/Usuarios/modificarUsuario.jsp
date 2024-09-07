@@ -23,7 +23,7 @@
         <link href="${pageContext.request.contextPath}/template/vendor/jquery/calendario_es.css" rel="stylesheet" type="text/css"/>
 
     </head>
-    <body>
+    <body id="page-top">
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
@@ -94,12 +94,15 @@
                                 <input type="hidden" id="idusuario" name="idusuario">
                             </form>
                         </div>
-                        <footer class="sticky-footer bg-white">
-                        <jsp:include page="/jsp/Footer.jsp"></jsp:include>
-                        </footer>
                     </div>
+                    <footer class="sticky-footer bg-white">
+                    <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                    </footer>
                 </div>
             </div>
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
         <%
         } else {
         %>
@@ -118,7 +121,7 @@
         <%
             }
         %>
-        
+
         <!-- Bootstrap core JavaScript-->
         <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -131,11 +134,11 @@
 
         <script src="${pageContext.request.contextPath}/template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/template/vendor/jquery/calendario_es.js" type="text/javascript"></script>
-        
+
         <script src="${pageContext.request.contextPath}/scripts/modificarUsuario.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/usuarios.js" type="text/javascript"></script>
-        
+
         <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
-        
+
     </body>
 </html>

@@ -1,17 +1,57 @@
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" />
-        <title>Pagina de Error</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>404</title>
+
+        <!-- Custom fonts for this template-->
+        <link href="${pageContext.request.contextPath}/template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="${pageContext.request.contextPath}/template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
+
+        <!-- Custom styles for this template-->
+        <link href="${pageContext.request.contextPath}/template/css/sb-admin-2.min.css" rel="stylesheet">
     </head>
     <body>
-        <p style="text-shadow:2px 0px 4px rgba(59,7,7,1);font-weight:bold;color:#C22727;letter-spacing:1pt;word-spacing:-11pt;font-size:1.7em;text-align:center;font-family:verdana, sans-serif;line-height:1;margin:0px;padding:0px;">
-            HTTP-500
-        </p>
-        <p style="padding-top: 50px;font-weight:normal;color:#000000;letter-spacing:1pt;word-spacing:2pt;font-size:18px;text-align:center;font-family:verdana, sans-serif;line-height:1;">
-            Ha ocurrido un problema con la aplicación.
-        </p>
+        <div id="wrapper">
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                <jsp:include page="/jsp/Menu.jsp"></jsp:include>
+                </ul>
+
+                <div id="content-wrapper" class="d-flex flex-column">
+                    <div id="content">
+
+                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                        <jsp:include page="/jsp/Header.jsp"></jsp:include>
+                        </nav>
+
+                        <div class="container-fluid">
+                            <div class="text-center">
+                                <div class="error mx-auto" data-text="500">500</div>
+                                <p class="lead text-gray-800 mb-5">Ha ocurrido un error en la aplicación </p>
+                                <a href="index.html">&larr; Vuelva a Dashboard</a>
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="sticky-footer bg-white">
+                    <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                    </footer>
+                </div>
+            </div>
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
+
+            <!-- Bootstrap core JavaScript-->
+            <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
+            <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+            <!-- Core plugin JavaScript-->
+            <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+            <!-- Custom scripts for all pages-->
+            <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
     </body>
 </html>

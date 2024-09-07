@@ -21,7 +21,7 @@
         <!-- Custom styles for this page -->
         <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     </head>
-    <body>
+    <body id="page-top">
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
@@ -66,47 +66,50 @@
                                                 <label>Fotos Verificadas</label>
                                                 <input class="form-control" type="checkbox" id="chkfotos" name="chkfotos" required="true">
                                             </div>
-                                            <%
-                                                if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("completarVerificacion")) {
-                                            %>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Estado</label>
-                                                <select class="form-control" id="cmbestadosverificacion" name="cmbestadosverificacion" required="true"></select>
-                                            </div>
-                                            <%
-                                                }
-                                            %>
+                                        <%
+                                            if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("completarVerificacion")) {
+                                        %>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Estado</label>
+                                            <select class="form-control" id="cmbestadosverificacion" name="cmbestadosverificacion" required="true"></select>
                                         </div>
+                                        <%
+                                            }
+                                        %>
                                     </div>
                                 </div>
-                                <div class="card shadow mb-4">
-                                    <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="form-group row">
-                                            <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" cols="3"></textarea>
-                                        </div>
+                            </div>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" cols="3"></textarea>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                        <button type="button" class="btn btn-lg btn-success btn-block" id="btnguardar" name="btnguardar" >Guardar</button><!--onclick="modificarVerificacion()"-->
-                                    </div>
-                                    <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                        <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
-                                    </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                    <button type="button" class="btn btn-lg btn-success btn-block" id="btnguardar" name="btnguardar" >Guardar</button><!--onclick="modificarVerificacion()"-->
                                 </div>
-                                <input type="hidden" id="idverificacion" name="idverificacion">
-                                <input type="hidden" id="idcenso" name="idcenso">
-                            </form>
-                        </div>
-                        <footer class="sticky-footer bg-white">
-                        <jsp:include page="/jsp/Footer.jsp"></jsp:include>
-                        </footer>
+                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                    <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
+                                </div>
+                            </div>
+                            <input type="hidden" id="idverificacion" name="idverificacion">
+                            <input type="hidden" id="idcenso" name="idcenso">
+                        </form>
                     </div>
                 </div>
+                <footer class="sticky-footer bg-white">
+                    <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                    </footer>
+                </div>
             </div>
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
         <%
         } else {
         %>
@@ -125,7 +128,7 @@
         <%
             }
         %>
-        
+
         <!-- Bootstrap core JavaScript-->
         <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -137,6 +140,6 @@
         <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
 
         <script src="${pageContext.request.contextPath}/scripts/verificaciones.js" type="text/javascript"></script>
-        
+
     </body>
 </html>

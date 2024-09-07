@@ -21,11 +21,11 @@
 
         <!-- Custom styles for this page -->
         <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-        
+
         <link href="${pageContext.request.contextPath}/template/vendor/jquery-ui-1.12.1.Redmond/jquery-ui.css" rel="stylesheet" type="text/css"/>
         <link href="${pageContext.request.contextPath}/template/vendor/jquery/calendario_es.css" rel="stylesheet" type="text/css"/>
     </head>
-    <body>
+    <body id="page-top">
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
@@ -45,99 +45,99 @@
                         </nav>
 
                         <div class="container-fluid">
-                        <h1 class="h3 mb-2 text-gray-800">Registrar Vehiculo</h1>
-                        <form class="user" id="frmregistrarvehiculo">
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Datos de Identificación</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Placa</label>
-                                            <input class="form-control" type="text" id="txtplaca" name="txtplaca" maxlength="10" style="text-transform: uppercase">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Motor (*)</label>
-                                            <input class="form-control" type="text" id="txtmotor" name="txtmotor" maxlength="30" style="text-transform: uppercase" required="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Chasis (*)</label>
-                                            <input class="form-control" type="text" id="txtchasis" name="txtchasis" maxlength="30"style="text-transform: uppercase" required="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Serie</label>
-                                            <input class="form-control" type="text" id="txtserie" name="txtserie" maxlength="30" style="text-transform: uppercase">
+                            <h1 class="h3 mb-2 text-gray-800">Registrar Vehiculo</h1>
+                            <form class="user" id="frmregistrarvehiculo">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Datos de Identificación</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Placa</label>
+                                                <input class="form-control" type="text" id="txtplaca" name="txtplaca" maxlength="10" style="text-transform: uppercase">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Motor (*)</label>
+                                                <input class="form-control" type="text" id="txtmotor" name="txtmotor" maxlength="30" style="text-transform: uppercase" required="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Chasis (*)</label>
+                                                <input class="form-control" type="text" id="txtchasis" name="txtchasis" maxlength="30"style="text-transform: uppercase" required="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Serie</label>
+                                                <input class="form-control" type="text" id="txtserie" name="txtserie" maxlength="30" style="text-transform: uppercase">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Datos Generales</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Clase Vehículo(*)</label>
-                                            <select class="form-control" id="cmbclasevehiculo" name="cmbclasevehiculo" required="true"></select>
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Datos Generales</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Clase Vehículo(*)</label>
+                                                <select class="form-control" id="cmbclasevehiculo" name="cmbclasevehiculo" required="true"></select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Servicio(*)</label>
+                                                <select class="form-control" id="cmbtiposservicio" name="cmbtiposservicio" required="true"></select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-uso">
+                                                <label>Tipo de Uso</label>
+                                                <select class="form-control" id="cmbtiposuso" name="cmbtiposuso" required="true"></select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Color(*)</label>
+                                                <input class="form-control" id="txtcolores" name="txtcolores" style="text-transform: uppercase">
+                                            </div>
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Servicio(*)</label>
-                                            <select class="form-control" id="cmbtiposservicio" name="cmbtiposservicio" required="true"></select>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-uso">
-                                            <label>Tipo de Uso</label>
-                                            <select class="form-control" id="cmbtiposuso" name="cmbtiposuso" required="true"></select>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Color(*)</label>
-                                            <input class="form-control" id="txtcolores" name="txtcolores" style="text-transform: uppercase">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Marca(*)</label>
+                                                <input class="form-control" id="txtmarcas" name="txtmarcas" style="text-transform: uppercase">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Linea(*)</label>
+                                                <input class="form-control" id="txtlineas" name="txtlineas" style="text-transform: uppercase">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Modelo (*)</label>
+                                                <input class="form-control solo-numeros" type="text" id="txtmodelo" name="txtmodelo" maxlength="4" required>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Transformado (*)</label>
+                                                <select class="form-control" id="cmbtransformado" name="cmbtransformado">
+                                                    <option value="S">Si</option>
+                                                    <option value="N" selected>No</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Marca(*)</label>
-                                            <input class="form-control" id="txtmarcas" name="txtmarcas" style="text-transform: uppercase">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Linea(*)</label>
-                                            <input class="form-control" id="txtlineas" name="txtlineas" style="text-transform: uppercase">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Modelo (*)</label>
-                                            <input class="form-control solo-numeros" type="text" id="txtmodelo" name="txtmodelo" maxlength="4" required>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Transformado (*)</label>
-                                            <select class="form-control" id="cmbtransformado" name="cmbtransformado">
-                                                <option value="S">Si</option>
-                                                <option value="N" selected>No</option>
-                                            </select>
-                                        </div>
+                                </div>
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Datos Registro Inicial</h6>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Datos Registro Inicial</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Registrado en Runt (*)</label>
-                                            <select class="form-control" id="cmbrunt" name="cmbrunt">
-                                                <option value="S" selected>Si</option>
-                                                <option value="N">No</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula">
-                                            <label>Licencia Transito</label>
-                                            <input class="form-control" type="text" id="txtlicenciatransito" name="txtlicenciatransito" value="" style="text-transform: uppercase"/>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula">
-                                            <label>Fecha Matricula</label>
-                                            <input class="form-control" type="text" id="txtfechamatricula" name="txtfechamatricula" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>">
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Registrado en Runt (*)</label>
+                                                <select class="form-control" id="cmbrunt" name="cmbrunt">
+                                                    <option value="S" selected>Si</option>
+                                                    <option value="N">No</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0 matricula">
+                                                <label>Licencia Transito</label>
+                                                <input class="form-control" type="text" id="txtlicenciatransito" name="txtlicenciatransito" value="" style="text-transform: uppercase"/>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0 matricula">
+                                                <label>Fecha Matricula</label>
+                                                <input class="form-control" type="text" id="txtfechamatricula" name="txtfechamatricula" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -269,12 +269,15 @@
                             </div>
                         </form>
                     </div>
-                    <footer class="sticky-footer bg-white">
-                        <jsp:include page="/jsp/Footer.jsp"></jsp:include>
-                        </footer>
-                    </div>
+                </div>
+                <footer class="sticky-footer bg-white">
+                    <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                    </footer>
                 </div>
             </div>
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
         <%
         } else {
         %>

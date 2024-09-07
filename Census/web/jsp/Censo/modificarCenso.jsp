@@ -23,7 +23,7 @@
         <link href="${pageContext.request.contextPath}/template/vendor/jquery/calendario_es.css" rel="stylesheet" type="text/css"/>
 
     </head>
-    <body>
+    <body id="page-top">
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
@@ -130,12 +130,15 @@
 
                             </form>
                         </div>
-                        <footer class="sticky-footer bg-white">
-                        <jsp:include page="/jsp/Footer.jsp"></jsp:include>
-                        </footer>
                     </div>
+                    <footer class="sticky-footer bg-white">
+                    <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                    </footer>
                 </div>
             </div>
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
         <%
         } else {
         %>
@@ -170,7 +173,7 @@
 
         <script src="${pageContext.request.contextPath}/scripts/modificarCenso.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/censo.js" type="text/javascript"></script>
-        
+
         <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/personas.js" type="text/javascript"></script>
         <!--Se descomenta si se quiere editar la fecha del censo-->

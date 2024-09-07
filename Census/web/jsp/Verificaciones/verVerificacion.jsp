@@ -23,7 +23,7 @@
 
 
     </head>
-    <body>
+    <body id="page-top">
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
@@ -57,50 +57,53 @@
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Fecha Censo (*)</label>
                                                 <input class="form-control" type="text" id="txtfechacenso" name="txtfechacenso" readonly="true">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Documentos Verificados</label>
+                                                <input class="form-control" type="checkbox" id="chkdocumentos" name="chkdocumentos" disabled="true"  readonly="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Fotos Verificadas</label>
+                                                <input class="form-control" type="checkbox" id="chkfotos" name="chkfotos" disabled="true" readonly="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Estado</label>
+                                                <input class="form-control" id="txtestadoverificacion" name="txtestadoverificacion" readonly="true"></select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Documentos Verificados</label>
-                                            <input class="form-control" type="checkbox" id="chkdocumentos" name="chkdocumentos" disabled="true"  readonly="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Fotos Verificadas</label>
-                                            <input class="form-control" type="checkbox" id="chkfotos" name="chkfotos" disabled="true" readonly="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Estado</label>
-                                            <input class="form-control" id="txtestadoverificacion" name="txtestadoverificacion" readonly="true"></select>
+                                </div>
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" cols="3"></textarea>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" cols="3"></textarea>
+                                <div class="row">
+                                    <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                        <button type="button" class="btn btn-lg btn-success btn-block" id="btneditar" name="btneditar">Editar</button>
+                                    </div>
+                                    <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                        <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                    <button type="button" class="btn btn-lg btn-success btn-block" id="btneditar" name="btneditar">Editar</button>
-                                </div>
-                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                    <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
-                </div>
-                <footer class="sticky-footer bg-white">
+                    <footer class="sticky-footer bg-white">
                     <jsp:include page="/jsp/Footer.jsp"></jsp:include>
                     </footer>
                 </div>
             </div>
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
         <%
         } else {
         %>

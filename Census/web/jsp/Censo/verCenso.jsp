@@ -20,7 +20,7 @@
         <!-- Custom styles for this page -->
         <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     </head>
-    <body>
+    <body id="page-top">
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
@@ -192,41 +192,45 @@
 
                     </div>
                 </div>
-                <footer class="sticky-footer bg-white">
-                    <jsp:include page="/jsp/Footer.jsp"></jsp:include>
-                    </footer>
-                </div>
             </div>
-        <%                        } else {
-        %>
-        <script type="text/javascript">
-            alert("Su usuario no tiene permiso para acceder a esta pagina");
-            window.parent.location.href = "../dashboard";
-        </script>
-        <%
-            }
-        } else {
-        %>
-        <script type="text/javascript">
-            alert("Su sesion a terminado");
-            document.location.href = "../../index.jsp";
-        </script>
-        <%
-            }
-        %>
+            <footer class="sticky-footer bg-white">
+                <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                </footer>
+            </div>
+        </div>
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
+    <%                        } else {
+    %>
+    <script type="text/javascript">
+        alert("Su usuario no tiene permiso para acceder a esta pagina");
+        window.parent.location.href = "../dashboard";
+    </script>
+    <%
+        }
+    } else {
+    %>
+    <script type="text/javascript">
+        alert("Su sesion a terminado");
+        document.location.href = "../../index.jsp";
+    </script>
+    <%
+        }
+    %>
 
-        <!-- Bootstrap core JavaScript-->
-        <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
-        <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
 
-        <!-- Core plugin JavaScript-->
-        <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-        <!-- Custom scripts for all pages-->
-        <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
 
-        <script src="${pageContext.request.contextPath}/scripts/verCenso.js" type="text/javascript"></script>
-        <script src="${pageContext.request.contextPath}/scripts/censo.js" type="text/javascript"></script>
+    <script src="${pageContext.request.contextPath}/scripts/verCenso.js" type="text/javascript"></script>
+    <script src="${pageContext.request.contextPath}/scripts/censo.js" type="text/javascript"></script>
 
-    </body>
+</body>
 </html>

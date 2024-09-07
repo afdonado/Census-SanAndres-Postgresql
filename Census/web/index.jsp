@@ -5,9 +5,9 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        
+
         <title>Inicio Sesion - Census</title>
-        
+
         <!-- Custom fonts for this template-->
         <link href="template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="template/css/fonts-google.css" rel="stylesheet" type="text/css"/>
@@ -15,7 +15,7 @@
         <!-- Custom styles for this template-->
         <link href="template/css/sb-admin-2.min.css" rel="stylesheet">
 
-        
+
     </head>
     <body>
         <div class="container">
@@ -23,16 +23,17 @@
             <div class="row justify-content-center">
 
                 <div class="col-xl-10 col-lg-12 col-md-9">
-
                     <div class="card o-hidden border-0 shadow-lg my-5">
                         <div class="card-body p-0">
-                            <div class="row">
+                            <div class="row justify-content-center">
                                 <div class="d-lg-none d-md-block">
-                                    <img src="template/logo/movisai-logo.jpg" alt="MOVISAI" style="margin-top: 60px; width: 280px; height: 92px">
+                                    <img src="logos/censo-logo.jpg" alt="CENSO" style="margin-top: 20px; width: 230px; height: 130px">
                                 </div>
-                                <div class="col-lg-6 d-none d-lg-block bg-login-image">
-                                    <img src="template/logo/movisai-logo.jpg" alt="MOVISAI" style="margin-top: 100px; margin-left: 20px; width: 400px; height: 120px;">
+                                <div class="d-none d-lg-block bg-login-image">
+                                    <img src="logos/censo-logo.jpg" alt="CENSO" style="margin-top: 30px; width: 400px; height: 200px;">
                                 </div>
+                            </div>
+                            <div class="row justify-content-center">
                                 <div class="col-lg-6">
                                     <div class="p-5">
                                         <div class="text-center">
@@ -45,21 +46,37 @@
                                             <div class="form-group">
                                                 <input class="form-control form-control-user" type="password"  id="txtloginpassword" name="txtloginpassword" placeholder="CONTRASEÑA">
                                             </div>
-                                            <button type="button" class="btn btn-primary btn-user btn-block" name="btniniciar" id="btniniciar">Iniciar</button>
+                                            <div class="d-flex justify-content-center">
+                                                <button type="button" class="btn btn-primary btn-user btn-block" name="btniniciar" id="btniniciar">Iniciar</button>
+                                            </div>
                                             <hr>
                                         </form>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row justify-content-center">
+                                <div class="d-lg-none d-md-block align-content-center">
+                                    <img class="mx-auto d-block" src="logos/gobernacion-logo.jpg" alt="GOBERNACION" style="margin-top: 0px; width: 220px; height: 200px">
+                                </div>
+                                <div class="d-lg-none d-md-block">
+                                    <img class="mx-auto d-block" src="logos/movisai-logo.jpg" alt="MOVISAI" style="margin-top: 0px; width: 400px; height: 130px">
+                                </div>
+                                <div class="col-lg-5 d-none d-lg-block bg-login-image">
+                                    <img class="mx-auto d-block" src="logos/gobernacion-logo.jpg" alt="GOBERNACION" style="margin-top: 0px; width: 220px; height: 200px;">
+                                </div>
+                                <div class="col-lg-7 d-none d-lg-block bg-login-image">
+                                    <img class="mx-auto d-block" src="logos/movisai-logo.jpg" alt="MOVISAI" style="margin-top: 0px; width: 400px; height: 130px;">
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    
+
                 </div>
-                
+
             </div>
-            
+
         </div>
-        
+
         <!-- Bootstrap core JavaScript-->
         <script src="template/vendor/jquery/jquery.min.js"></script>
         <script src="template/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -69,7 +86,7 @@
 
         <!-- Custom scripts for all pages-->
         <script src="template/js/sb-admin-2.min.js"></script>
-        
+
         <script src="scripts/iniciosesion.js" type="text/javascript"></script>
     </body>
 </html>

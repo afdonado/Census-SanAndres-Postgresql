@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <head>
+    <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -21,7 +21,7 @@
         <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     </head>
-    <body>
+    <body id="page-top">
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
@@ -41,7 +41,7 @@
 
                         <div class="container-fluid">
                             <h1 class="h3 mb-2 text-gray-800">Censos</h1>
-                            
+
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">Lista de Censos</h6>
@@ -82,13 +82,16 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
                     <footer class="sticky-footer bg-white">
-                        <jsp:include page="/jsp/Footer.jsp"></jsp:include>
-                        </footer>
-                    </div>
+                    <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                    </footer>
                 </div>
             </div>
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
         <%
         } else {
         %>
@@ -123,7 +126,7 @@
 
         <!-- Page level custom scripts -->
         <script src="${pageContext.request.contextPath}/template/js/demo/datatables-demo.js"></script>
-        
+
         <script src="${pageContext.request.contextPath}/scripts/listarCensos.js" type="text/javascript"></script>
     </body>
 </html>

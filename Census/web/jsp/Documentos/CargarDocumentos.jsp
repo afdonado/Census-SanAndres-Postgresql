@@ -21,7 +21,7 @@
 
         <link href="${pageContext.request.contextPath}/fileinput/css/fileinput.css" rel="stylesheet" type="text/css"/>
     </head>
-    <body>
+    <body id="page-top">
         <%
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
@@ -72,12 +72,15 @@
                                     </div>
                                 </form>
                             </div>
-                            <footer class="sticky-footer bg-white">
-                            <jsp:include page="/jsp/Footer.jsp"></jsp:include>
-                            </footer>
                         </div>
+                        <footer class="sticky-footer bg-white">
+                        <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                        </footer>
                     </div>
                 </div>
+                <a class="scroll-to-top rounded" href="#page-top">
+                    <i class="fas fa-angle-up"></i>
+                </a>
             <%
             } else {
             %>
