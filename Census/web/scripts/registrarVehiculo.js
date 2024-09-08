@@ -100,9 +100,9 @@ $(function () {
             type: "POST",
             dataType: "json",
             success: function (response) {
-                if (response.status === "success") {
+                if (response.status === "success2017") {
                     var vehiculo = response.vehiculo;
-                    $('#txtplaca').val(vehiculo.placa);
+                    $('#txtplaca').val(response.vehiculo.placa);
                     $('#txtmotor').val(vehiculo.motor);
                     $('#txtchasis').val(vehiculo.chasis);
                     $('#txtserie').val(vehiculo.serie);

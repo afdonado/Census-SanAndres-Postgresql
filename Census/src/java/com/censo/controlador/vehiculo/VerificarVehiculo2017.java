@@ -115,9 +115,11 @@ public class VerificarVehiculo2017 extends HttpServlet {
                 if (opcion == 1) {
 
                     Vehiculo2017Dao vehiculo2017Dao = new Vehiculo2017Dao();
-                    Vehiculo2017 vehiculo2017;
+                    Vehiculo2017 vehiculo2017 = new Vehiculo2017();
 
-                    respuesta.put("status", "success");
+                    SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                    Date fechaActual = new Date(new Date().getTime());
+
                     if (tipoReferencia == 1) {
                         vehiculo2017 = vehiculo2017Dao.ConsultarVehiculo2017ByPlaca(conex, valorReferencia);
 
@@ -125,21 +127,7 @@ public class VerificarVehiculo2017 extends HttpServlet {
                             respuesta.put("message", "Placa valida");
                             respuesta.put("input", "#txtplaca");
                         } else {
-
-                            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-                            Date fechaActual = new Date(new Date().getTime());
-                            
-                            String fechaMatricula = vehiculo2017.getFechaMatricula() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaMatricula());
-                            String fechaVenSoat = vehiculo2017.getFechaVenSoat() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaVenSoat());
-                            String fechaVenTecnomecanica = vehiculo2017.getFechaVenTecnomecanica() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaVenTecnomecanica());
-                            String fechaImportacion = vehiculo2017.getFechaImportacion() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaImportacion());
-
-                            respuesta.put("message", "Placa encontrada en censo 2017");
-                            respuesta.put("vehiculo", vehiculo2017);
-                            respuesta.put("fechaMatricula", fechaMatricula);
-                            respuesta.put("fechaVenSoat", fechaVenSoat);
-                            respuesta.put("fechaVenTecnomecanica", fechaVenTecnomecanica);
-                            respuesta.put("fechaImportacion", fechaImportacion);
+                            respuesta.put("message", "Placa encontrada en vehiculos 2017");
                         }
                     }
 
@@ -150,8 +138,7 @@ public class VerificarVehiculo2017 extends HttpServlet {
                             respuesta.put("message", "Motor valido");
                             respuesta.put("input", "#txtmotor");
                         } else {
-                            respuesta.put("message", "Motor encontrado en censo 2017");
-                            respuesta.put("vehiculo", vehiculo2017);
+                            respuesta.put("message", "Motor encontrado en vehiculos 2017");
                         }
                     }
 
@@ -162,8 +149,7 @@ public class VerificarVehiculo2017 extends HttpServlet {
                             respuesta.put("message", "Chasis valido");
                             respuesta.put("input", "#txtchasis");
                         } else {
-                            respuesta.put("message", "Chasis encontrado en censo 2017");
-                            respuesta.put("vehiculo", vehiculo2017);
+                            respuesta.put("message", "Chasis encontrado en vehiculos 2017");
                         }
                     }
 
@@ -174,9 +160,26 @@ public class VerificarVehiculo2017 extends HttpServlet {
                             respuesta.put("message", "Serie valido");
                             respuesta.put("input", "#txtserie");
                         } else {
-                            respuesta.put("message", "Serie encontrada en censo 2017");
-                            respuesta.put("vehiculo", vehiculo2017);
+                            respuesta.put("message", "Serie encontrada en vehiculos 2017");
                         }
+                    }
+
+                    if (vehiculo2017 != null) {
+
+                        String fechaMatricula = vehiculo2017.getFechaMatricula() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaMatricula());
+                        String fechaVenSoat = vehiculo2017.getFechaVenSoat() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaVenSoat());
+                        String fechaVenTecnomecanica = vehiculo2017.getFechaVenTecnomecanica() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaVenTecnomecanica());
+                        String fechaImportacion = vehiculo2017.getFechaImportacion() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaImportacion());
+
+                        respuesta.put("status", "success2017");
+                        respuesta.put("vehiculo", vehiculo2017);
+                        respuesta.put("fechaMatricula", fechaMatricula);
+                        respuesta.put("fechaVenSoat", fechaVenSoat);
+                        respuesta.put("fechaVenTecnomecanica", fechaVenTecnomecanica);
+                        respuesta.put("fechaImportacion", fechaImportacion);
+
+                    } else {
+                        respuesta.put("status", "success");
                     }
 
                 }

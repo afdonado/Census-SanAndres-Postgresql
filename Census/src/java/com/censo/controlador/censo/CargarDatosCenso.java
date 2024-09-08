@@ -2,6 +2,7 @@ package com.censo.controlador.censo;
 
 import com.censo.modelo.dao.CensoDao;
 import com.censo.modelo.dao.PersonaVehiculoDao;
+import com.censo.modelo.persistencia.CenCenso;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Connection;
@@ -51,6 +52,7 @@ public class CargarDatosCenso extends HttpServlet {
                 List<HashMap<String, Object>> personasVehiculo = personaVehiculoDao.ListarHashPersonasVehiculoActivasByIdVehiculo(conex, Integer.parseInt(datosCenso.get("VEH_ID").toString()));
                 respuesta.put("status", "success");
                 respuesta.put("censo", datosCenso);
+                //respuesta.put("numerocenso", ) //devolver solo el numero del censo 
                 respuesta.put("personasVehiculo", personasVehiculo);
             } else {
                 respuesta.put("status", "fail");

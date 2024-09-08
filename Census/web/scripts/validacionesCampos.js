@@ -48,11 +48,11 @@ $(function () {
     // Evento para limpiar el campo y permitir solo números
     $(".solo-numeros-censo").on("keydown", function(event) {
         // Si el campo no se ha limpiado aún, limpiarlo en la primera pulsación de tecla
-        if (!yaLimpiado) {
+        /*if (!yaLimpiado) {
             $(this).val(''); // Limpiar el campo de texto
             $(this).css("background-color", "");
             yaLimpiado = true; // Marcar que ya se ha limpiado
-        }
+        }*/
 
         // Permitir solo números y teclas de control
         if (
@@ -71,10 +71,10 @@ $(function () {
     // Evento para asegurarse de que solo hay números en caso de pegado o entrada no controlada
     $(".solo-numeros").on("input", function() {
         // Si el campo no se ha limpiado aún, limpiarlo en el primer cambio
-        if (!yaLimpiado) {
+        /*if (!yaLimpiado) {
             $(this).val(''); // Limpiar el campo de texto
             yaLimpiado = true; // Marcar que ya se ha limpiado
-        }
+        }*/
 
         // Mantener solo los caracteres numéricos en el campo
         this.value = this.value.replace(/[^0-9]/g, ''); // Reemplazar cualquier carácter que no sea un número

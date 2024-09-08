@@ -10,6 +10,8 @@ $(function () {
                 $('#dataTable').DataTable().destroy();
             }
             
+            $("#lista-vehiculos").empty();
+
             var lista = response.usuarios;
 
             $.each(lista, function (index, usuario) {
@@ -25,6 +27,11 @@ $(function () {
                     </tr>
                 `;
                 $("#lista-usuarios").append(nuevoElemento);
+            });
+
+            $('#dataTable').DataTable({
+                responsive: true,
+                autoWidth: false
             });
         }
     });

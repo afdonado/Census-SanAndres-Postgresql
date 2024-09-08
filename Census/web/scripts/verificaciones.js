@@ -18,7 +18,6 @@ $(function () {
             method: 'get',
             data: {id: id},
             success: function (response) {
-                console.log("response: ", response);
                 if (response.status === "success") {
 
                     $('#idverificacion').val(response.verificacion.VERIFICACION_ID || '');

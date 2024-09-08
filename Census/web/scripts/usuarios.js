@@ -94,7 +94,7 @@ $(function () {
             success: function (response) {
                 if (response.status === "success") {
                     alert(response.message);
-                    window.location.href = "../../dashboard";
+                    window.location.href = "../../cerrarSesion";
                 } else if (response.status === "fail") {
                     alert(response.message);
                 } else if (response.status === "error") {

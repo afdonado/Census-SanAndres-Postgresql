@@ -10,7 +10,9 @@ $(function () {
                 if ($.fn.DataTable.isDataTable('#dataTable')) {
                     $('#dataTable').DataTable().destroy();
                 }
-
+                
+                $("#lista-vehiculos").empty();
+                
                 var lista = response.personas;
 
                 $.each(lista, function (index, persona) {
@@ -31,6 +33,12 @@ $(function () {
                 `;
                     $("#lista-personas").append(nuevoElemento);
                 });
+
+                $('#dataTable').DataTable({
+                    responsive: true,
+                    autoWidth: false
+                });
+                
             } else if (response.status === "fail") {
                 alert(response.message);
             } else if (response.status === "error") {

@@ -9,6 +9,8 @@ $(function () {
             if ($.fn.DataTable.isDataTable('#dataTable')) {
                 $('#dataTable').DataTable().destroy();
             }
+            
+            $("#lista-vehiculos").empty();
 
             var lista = response.verificaciones;
 
@@ -41,6 +43,12 @@ $(function () {
                 `;
                 $("#lista-verificaciones").append(nuevoElemento);
             });
+            
+            $('#dataTable').DataTable({
+                responsive: true,
+                autoWidth: false
+            });
+            
         }
     });
 
