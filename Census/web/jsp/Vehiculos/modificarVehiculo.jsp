@@ -138,21 +138,14 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <input type="hidden" class="form-control" id="cmbpaismatricula" name="cmbpaismatricula" required="true" value="18">
                                             <div class="col-sm-3 mb-3 mb-sm-0 matricula">
-                                                <label>Pais Matricula</label>
-                                                <select class="form-control" id="cmbpaismatricula" name="cmbpaismatricula" required="true"></select>
-                                            </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0 matricula matricula-pais">
                                                 <label>Departamento Matricula</label>
                                                 <select class="form-control" id="cmbdepartamentomatricula" name="cmbdepartamentomatricula"></select>
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0 matricula matricula-pais">
+                                            <div class="col-sm-3 mb-3 mb-sm-0 matricula">
                                                 <label>Municipio Matricula</label>
                                                 <select class="form-control" id="cmbmunicipiomatricula" name="cmbmunicipiomatricula"></select>
-                                            </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0 matricula" id="ciudad-matricula">
-                                                <label>Ciudad Matricula</label>
-                                                <input class="form-control" type="text" id="txtciudadmatricula" name="txtciudadmatricula" maxlength="80" style="text-transform: uppercase">
                                             </div>
                                         </div>
                                     </div>
@@ -196,7 +189,7 @@
                                                     <option value="N">No</option>
                                                 </select>
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <div class="col-sm-3 mb-3 mb-sm-0" id="soatcontenedor">
                                                 <label>Fecha Venc. Soat</label>
                                                 <input class="form-control" type="text" id="txtfechavsoat" name="txtfechavsoat" readonly="true">
                                             </div>
@@ -207,7 +200,7 @@
                                                     <option value="N">No</option>
                                                 </select>
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <div class="col-sm-3 mb-3 mb-sm-0" id="tecnomecanicacontenedor">
                                                 <label>Fecha Venc. Tecnomecanica</label>
                                                 <input class="form-control" type="text" id="txtfechavtecnomecanica" name="txtfechavtecnomecanica" readonly="true">
                                             </div>
@@ -243,17 +236,6 @@
 
                                     </div>
                                     <input type="hidden" id="txtcantidadpersonas" name="txtcantidadpersonas" value="0">
-                                </div>
-
-                                <div class="card shadow mb-4">
-                                    <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="form-group row">
-                                            <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" cols="3"></textarea>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-xs-6 col-sm-2 col-md-2">
@@ -310,7 +292,7 @@
         <script src="${pageContext.request.contextPath}/scripts/modificarVehiculo.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/vehiculos.js" type="text/javascript"></script>
 
-        <script src="${pageContext.request.contextPath}/scripts/personas.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/persona_vehiculo.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/parametros.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/fechas.js" type="text/javascript"></script>        

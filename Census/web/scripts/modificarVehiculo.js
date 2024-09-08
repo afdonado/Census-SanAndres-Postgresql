@@ -35,26 +35,17 @@ $(function () {
                     $('#txtlineas').val(response.vehiculo.LINEA);
                     $('#txtmodelo').val(response.vehiculo.MODELO);
                     $('#cmbtransformado').val(response.vehiculo.TRANSFORMADO);
-                    $('#cmbrunt').val(response.vehiculo.RUNT);
-
-                    var runt = response.vehiculo.RUNT;
+                    $('#cmbrunt').val(response.vehiculo.RUNT);                    
                     $('#txtlicenciatransito').val(response.vehiculo.LICENCIA_TRANSITO);
                     $('#txtfechamatricula').val(response.vehiculo.FECHA_MATRICULA);
                     var paisMatriculaId = response.vehiculo.PAIS_MATRICULA_ID;
                     var departamentoMatriculaId = response.vehiculo.DPTO_MATRICULA_ID;
                     var municipioMatriculaId = response.vehiculo.MUNI_MATRICULA_ID;
-                    $('#txtciudadmatricula').val(response.vehiculo.CIUDAD_MATRICULA);
+                    var runt = response.vehiculo.RUNT;
                     if (runt === "N") {
                         $('.matricula').hide();
                     } else {
                         $('.matricula').show();
-                        if (paisMatriculaId === 18) {
-                            $('.matricula-pais').show();
-                            $("#ciudad-matricula").hide();
-                        } else {
-                            $('.matricula-pais').hide();
-                            $("#ciudad-matricula").show();
-                        }
                     }
 
                     var tipoImportacionId = response.vehiculo.TDOC_IMP_ID;
@@ -72,14 +63,18 @@ $(function () {
                     $('#txtfechavsoat').val(response.vehiculo.FECHAV_SOAT);
                     var soat = response.vehiculo.SOAT;
                     if(soat === 'N'){
-                        $('#txtfechavsoat').hide();
+                        $('#soatcontenedor').hide();
+                    } else {
+                        $('#soatcontenedor').show();
                     }
                     
                     $('#cmbtecnomecanica').val(response.vehiculo.TECNO_MECANICA);
                     $('#txtfechavtecnomecanica').val(response.vehiculo.FECHAV_TECNO);
                     var tecnomecanica = response.vehiculo.TECNO_MECANICA;
                     if(tecnomecanica === 'N'){
-                        $('#txtfechavtecnomecanica').hide();
+                        $('#tecnomecanicacontenedor').hide();
+                    } else {
+                        $('#tecnomecanicacontenedor').show();
                     }
 
                     $('#idvehiculo').val(response.vehiculo.VEH_ID);
@@ -223,16 +218,16 @@ $(function () {
                         var nuevoElemento = `
                 <div id="contenedor${persona.PV_ID}" class="form-group row">
                     <div class="col-sm-2 mb-3 mb-sm-0">
-                        <select class="form-control" id="cmbtipospersona${persona.PV_ID}" name="cmbtipospersona${persona.PV_ID}" required="true"></select>
+                        <select class="form-control" id="cmbtipospersona${persona.PV_ID}" name="cmbtipospersona${persona.PV_ID}"></select>
                     </div>
                     <div class="col-sm-2 mb-3 mb-sm-0">
-                        <select class="form-control" id="cmbtiposdocumento${persona.PV_ID}" name="cmbtiposdocumento${persona.PV_ID}" required="true"></select>
+                        <select class="form-control" id="cmbtiposdocumento${persona.PV_ID}" name="cmbtiposdocumento${persona.PV_ID}"></select>
                     </div>
                     <div class="col-sm-3 mb-3 mb-sm-0">
-                        <input class="form-control solo-numeros" type="number" id="txtdocumento${persona.PV_ID}" name="txtdocumento${persona.PV_ID}" maxlength="20" value="${persona.DOCUMENTO}" required="true">
+                        <input class="form-control solo-numeros" type="number" id="txtdocumento${persona.PV_ID}" name="txtdocumento${persona.PV_ID}" maxlength="20" value="${persona.DOCUMENTO}">
                     </div>
                     <div class="col-sm-4 mb-2 mb-sm-0">
-                        <input class="form-control" type="text" id="txtnombre${persona.PV_ID}" name="txtnombre${persona.PV_ID}" value="${persona.NOMBRE}" readonly="true">
+                        <input class="form-control" type="text" id="txtnombre${persona.PV_ID}" name="txtnombre${persona.PV_ID}" value="${persona.NOMBRE}">
                     </div>
                     <div class="col-sm-1 mb-1 mb-sm-0">
                         <button type="button" class="btn btn-danger btnanular" id="btnanular${persona.PV_ID}" name="btnanular${persona.PV_ID}" data-id="${persona.PV_ID}">X</button>
@@ -351,7 +346,7 @@ $(function () {
     
     $('#txtdocumento').blur(function () {
         if ($('#txtdocumento').val().length > 0) {
-            consultarDocumentoPersona('cmbtiposdocumento', 'txtdocumento', 'txtnombre', 'idpersona');
+            consultarDocumentoPersonaVehiculo('cmbtiposdocumento', 'txtdocumento', 'txtnombre', 'idpersona');
         }
     });
 
@@ -368,5 +363,35 @@ $(function () {
     $('#btnvolver').click(function () {
         window.location.href = "listarVehiculos.jsp";
     });
+    
+    $('#cmbdepartamentomatricula').change(function () {
+        cargarMunicipiosByDepartamento($('#cmbdepartamentomatricula').val());
+    });
+
+    $('#cmbdepartamentomatricula').focus(function () {
+        cargarMunicipiosByDepartamento($('#cmbdepartamentomatricula').val());
+    });
+
+    function cargarMunicipiosByDepartamento(iddepartamento) {
+        $.ajax({
+            data: {
+                iddepartamento: iddepartamento
+            },
+            url: '../../cargarMunicipios',
+            method: 'GET',
+            success: function (data) {
+                var select = $('#cmbmunicipiomatricula');
+                select.empty();
+
+                $.each(data, function (index, item) {
+                    select.append('<option value="' + item.id + '">' + item.nombre + '</option>');
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de cargar municipios por departamento: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de cargar municipios por departamento.");
+            }
+        });
+    }
 
 });

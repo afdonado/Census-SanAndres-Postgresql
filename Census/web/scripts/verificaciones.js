@@ -10,7 +10,7 @@ $(function () {
 
     var opcion = getParameterByName('opcion');
     var id = getParameterByName('id');
-    
+
     if (opcion && id) {
 
         $.ajax({
@@ -18,9 +18,9 @@ $(function () {
             method: 'get',
             data: {id: id},
             success: function (response) {
-
+                console.log("response: ", response);
                 if (response.status === "success") {
-                    
+
                     $('#idverificacion').val(response.verificacion.VERIFICACION_ID || '');
                     $('#idcenso').val(response.verificacion.CEN_ID);
                     $('#txtnumerocenso').val(response.verificacion.NUMERO);
@@ -28,9 +28,11 @@ $(function () {
                     if (response.verificacion.VERIFICACION_DOC === 'S') {
                         $('#chkdocumentos').prop('checked', true);
                     }
-                    if (response.verificacion.VERIFICACION_FOTO === 'S') {
+                    if (response.verificacion.VERIFICACION_FOTOS === 'S') {
                         $('#chkfotos').prop('checked', true);
                     }
+                    var estadoverificacionId = response.verificacion.ESTADO_VERIFICACION_ID || 1;
+                    $('#txtobservaciones').val(response.verificacion.OBSERVACIONES);
 
                     $.ajax({
                         url: '../../cargarEstadosVerificacion',
@@ -38,10 +40,10 @@ $(function () {
                         success: function (data) {
                             var select = $('#cmbestadosverificacion');
                             select.empty();
-
                             $.each(data, function (index, item) {
                                 select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
                             });
+                            select.val(estadoverificacionId);
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             console.error("Error en la solicitud de cargar los estados de verificacion: ", textStatus, errorThrown);
@@ -69,11 +71,11 @@ $(function () {
         var idverificacion = $('#idverificacion').val();
 
         if (numero.length > 0 && fechacenso.length > 0 && idcenso > 0) {
-            if(idverificacion === ''){
-            $('#frmregistrarverificacion').trigger("submit");
-        } else {
-            $('#frmmodificarverificacion').trigger("submit");
-        }
+            if (idverificacion === '') {
+                $('#frmregistrarverificacion').trigger("submit");
+            } else {
+                $('#frmmodificarverificacion').trigger("submit");
+            }
         } else {
             alert('Debe ingresar los datos obligatorios (*)');
         }
@@ -81,7 +83,7 @@ $(function () {
 
     $("#frmregistrarverificacion").submit(function (event) {
         event.preventDefault();
-        
+
         var idcenso = $('#idcenso').val();
 
         var documento = 'N';
@@ -124,10 +126,10 @@ $(function () {
             }
         });
     });
-    
+
     $("#frmmodificarverificacion").submit(function (event) {
         event.preventDefault();
-        
+
         var idverificacion = $('#idverificacion').val();
         var idcenso = $('#idcenso').val();
 
@@ -181,32 +183,32 @@ $(function () {
 
 
 function generarReporteVerificacion(opcion) {
-    
+
     var fechaini;
     var fechafin;
     var punto;
-            
+
     switch (opcion) {
         case 1:
             fechaini = document.getElementById("txtfechainicenso").value.toString();
             fechafin = document.getElementById("txtfechafincenso").value.toString();
             punto = document.getElementById('cmbpuntoatencenso').value;
-            window.frames[0].location.href = "generarReporteVerificacion.jsp?opcion="+opcion+"&fechaini=" + fechaini + "&fechafin=" + fechafin + "&punto="+punto;
+            window.frames[0].location.href = "generarReporteVerificacion.jsp?opcion=" + opcion + "&fechaini=" + fechaini + "&fechafin=" + fechafin + "&punto=" + punto;
             break;
 
         case 2:
             fechaini = document.getElementById("txtfechainiregistro").value.toString();
             fechafin = document.getElementById("txtfechafinregistro").value.toString();
             punto = document.getElementById('cmbpuntoatenregistro').value;
-            window.frames[0].location.href = "generarReporteVerificacion.jsp?opcion="+opcion+"&fechaini=" + fechaini + "&fechafin=" + fechafin + "&punto="+punto;
+            window.frames[0].location.href = "generarReporteVerificacion.jsp?opcion=" + opcion + "&fechaini=" + fechaini + "&fechafin=" + fechafin + "&punto=" + punto;
             break;
         case 3:
             var numero = document.getElementById("txtnumero").value.toString().toUpperCase();
-            window.frames[0].location.href = "generarReporteVerificacion.jsp?opcion="+opcion+"&numero=" + numero;
+            window.frames[0].location.href = "generarReporteVerificacion.jsp?opcion=" + opcion + "&numero=" + numero;
             break;
     }
 }
 
-function consultarRegistroById(idcenso){
+function consultarRegistroById(idcenso) {
     document.location.href = "../Verificaciones/verRegistro.jsp?idcenso=" + idcenso;
 }

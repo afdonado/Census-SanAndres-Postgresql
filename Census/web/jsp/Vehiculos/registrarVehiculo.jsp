@@ -141,15 +141,12 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula">
-                                            <label>Pais Matricula</label>
-                                            <select class="form-control" id="cmbpaismatricula" name="cmbpaismatricula" readonly="true"></select>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula matricula-pais" id="departamento-matricula">
+                                        <input type="hidden" class="form-control" id="cmbpaismatricula" name="cmbpaismatricula" required="true" value="18">
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula" id="departamento-matricula">
                                             <label>Departamento Matricula</label>
                                             <select class="form-control" id="cmbdepartamentomatricula" name="cmbdepartamentomatricula" required="true"></select>
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula matricula-pais">
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula">
                                             <label>Municipio Matricula</label>
                                             <select class="form-control" id="cmbmunicipiomatricula" name="cmbmunicipiomatricula" required="true"></select>
                                         </div>
@@ -199,14 +196,14 @@
                                             <label>Fecha Venc. Soat</label>
                                             <input class="form-control" type="text" id="txtfechavsoat" name="txtfechavsoat" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="tecnomecanicacontenedor">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
                                             <label>Tecnomecanica (*)</label>
                                             <select class="form-control" id="cmbtecnomecanica" name="cmbtecnomecanica">
                                                 <option value="S" selected>Si</option>
                                                 <option value="N">No</option>
                                             </select>
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="tecnomecanicacontenedor">
                                             <label>Fecha Venc. Tecnomecanica</label>
                                             <input class="form-control" type="text" id="txtfechavtecnomecanica" name="txtfechavtecnomecanica" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
                                         </div>
@@ -313,7 +310,7 @@
         <script src="${pageContext.request.contextPath}/scripts/registrarVehiculo.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/vehiculos.js" type="text/javascript"></script>     
 
-        <script src="${pageContext.request.contextPath}/scripts/personas.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/persona_vehiculo.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/parametros.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/fechas.js" type="text/javascript"></script>

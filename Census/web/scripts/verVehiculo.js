@@ -44,18 +44,10 @@ $(function () {
                     $('#txtdepartamentomatricula').val(response.vehiculo.DPTO_MATRICULA);
                     $('#txtmunicipiomatricula').val(response.vehiculo.MUNI_MATRICULA);
                     $('#txtciudadmatricula').val(response.vehiculo.CIUDAD_MATRICULA);
-                    var paisMatriculaId = response.vehiculo.PAIS_MATRICULA_ID;
                     if (runt === "N") {
                         $('.matricula').hide();
                     } else {
                         $('.matricula').show();
-                        if (paisMatriculaId === 18) {
-                            $('.matricula-pais').show();
-                            $("#ciudad-matricula").hide();
-                        } else {
-                            $('.matricula-pais').hide();
-                            $("#ciudad-matricula").show();
-                        }
                     }
 
                     $('#txttipodocimportacion').val(response.vehiculo.TDOC_IMP);
@@ -74,14 +66,18 @@ $(function () {
                     $('#txtfechavsoat').val(response.vehiculo.FECHAV_SOAT);
                     var soat = response.vehiculo.SOAT;
                     if (soat === 'N') {
-                        $('#txtfechavsoat').hide();
+                        $('#soatcontenedor').hide();
+                    } else {
+                        $('#soatcontenedor').show();
                     }
 
                     $('#txttecnomecanica').val(response.vehiculo.TECNO_MECANICA === 'S' ? 'Si' : 'No');
                     $('#txtfechavtecnomecanica').val(response.vehiculo.FECHAV_TECNO);
                     var tecnomecanica = response.vehiculo.TECNO_MECANICA;
                     if (tecnomecanica === 'N') {
-                        $('#txtfechavtecnomecanica').hide();
+                        $('#tecnomecanicacontenedor').hide();
+                    } else {
+                        $('#tecnomecanicacontenedor').show();
                     }
 
                     $(".btneditar").attr("data-id", response.vehiculo.VEH_ID);

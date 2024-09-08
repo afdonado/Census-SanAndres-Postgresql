@@ -57,14 +57,18 @@ $(function () {
                     if (vehiculo.polizaSoat.estado === 'VIGENTE') {
                         $('#cmbsoat').val('S');
                         $('#txtfechavsoat').val(vehiculo.polizaSoat.fechaFinVigencia);
+                        $('#soatcontenedor').show();
                     } else {
                         $('#cmbsoat').val('N');
+                        $('#soatcontenedor').hide();
                     }
                     if (vehiculo.tecnicoMecanico.vigente === 'SI') {
                         $('#cmbtecnomecanica').val('S');
                         $('#txtfechavtecnomecanica').val(vehiculo.tecnicoMecanico.fechaVigencia);
+                        $('#tecnomecanicacontenedor').show();
                     } else {
                         $('#cmbtecnomecanica').val('N');
+                        $('#tecnomecanicacontenedor').hide();
                     }
                 } else if (response.status === "fail" || response.status === "error") {
                     verificarVehiculo2017(tiporeferencia, valorreferencia);
@@ -112,11 +116,11 @@ $(function () {
                     $('#cmbtransformado').val(vehiculo.transformado);
                     $('#cmbrunt').val(vehiculo.runt);
                     $('#txtlicenciatransito').val(vehiculo.licenciaTransito);
-                    $('#txtfechamatricula').val(response.fechaNacimiento);
+                    $('#txtfechamatricula').val(response.fechaMatricula);
                     $('#cmbpaismatricula').val(vehiculo.paisMatriculaId);
                     $('#cmbdepartamentomatricula').val(vehiculo.departamentoMatriculaId);
                     $('#cmbmunicipiomatricula').val(vehiculo.municipoMatriculaId);
-                    if (vehiculo.runt === 'Si') {
+                    if (vehiculo.runt === 'N') {
                         $('.matricula').hide();
                     } else {
                         $('.matricula').show();
@@ -132,19 +136,20 @@ $(function () {
                         $('.importacion').show();
                     }
                     
-                    if (vehiculo.soat === 'Si') {
-                        $('#cmbsoat').val('S');
-                        $('#txtfechavsoat').val(response.fechaVenSoat);
+                    $('#cmbsoat').val(vehiculo.soat);
+                    $('#txtfechavsoat').val(response.fechaVenSoat);
+                    if (vehiculo.soat === 'S') {
+                        $('#soatcontenedor').show();
                     } else {
-                        $('#cmbsoat').val('N');
-                        $('#txtfechavsoat').hide();
+                        $('#soatcontenedor').hide();
                     }
-                    if (vehiculo.tecnomecanica === 'Si') {
-                        $('#cmbtecnomecanica').val('S');
-                        $('#txtfechavtecnomecanica').val(response.fechaVenTecnomecanica);
+                    
+                    $('#cmbtecnomecanica').val(vehiculo.tecnomecanica);
+                    $('#txtfechavtecnomecanica').val(response.fechaVenTecnomecanica);
+                    if (vehiculo.tecnomecanica === 'S') {                        
+                        $('#tecnomecanicacontenedor').show();
                     } else {
-                        $('#cmbtecnomecanica').val('N');
-                        $('#txtfechavtecnomecanica').hide();
+                        $('#tecnomecanicacontenedor').hide();
                     }
                 } else if (response.status === "fail") {
                     $(response.input).val('');
@@ -436,7 +441,7 @@ $(function () {
 
     $('#txtdocumento').blur(function () {
         if ($('#txtdocumento').val().length > 0) {
-            consultarDocumentoPersona('cmbtiposdocumento', 'txtdocumento', 'txtnombre', 'idpersona');
+            consultarDocumentoPersonaVehiculo('cmbtiposdocumento', 'txtdocumento', 'txtnombre', 'idpersona');
         }
     });
 

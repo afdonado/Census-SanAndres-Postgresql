@@ -116,41 +116,6 @@
                                 </div>
                             </div>
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                    <h6 class="m-0 font-weight-bold text-primary">Datos persona presentó vehículo</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-2 mb-3 mb-sm-0">
-                                            <label>Tipo</label>
-                                        </div>
-                                        <div class="col-sm-2 mb-3 mb-sm-0">
-                                            <label>Tipo Documento</label>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Documento</label>
-                                        </div>
-                                        <div class="col-sm-5 mb-3 mb-sm-0">
-                                            <label>Nombre</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-2 mb-3 mb-sm-0">
-                                            <input class="form-control" id="txttipopersonapresento" name="txttipopersonapresento" readonly="true">
-                                        </div>
-                                        <div class="col-sm-2 mb-3 mb-sm-0">
-                                            <input class="form-control" id="txttipodocumentopresento" name="txttipodocumentopresento" readonly="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <input class="form-control" type="text" id="txtdocumentopresento" name="txtdocumentopresento" required="true">
-                                        </div>
-                                        <div class="col-sm-5 mb-3 mb-sm-0">
-                                            <input class="form-control" type="text" id="txtnombrepresento" name="txtnombrepresento" readonly="true">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
                                 </div>

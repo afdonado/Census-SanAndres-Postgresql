@@ -132,17 +132,13 @@
                                             <label>Pais</label>
                                             <input class="form-control" type="text" id="txtpaismatricula" name="txtpaismatricula" readonly="true">
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula matricula-pais">
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula">
                                             <label>Departamento</label>
                                             <input class="form-control" type="text" id="txtdepartamentomatricula" name="txtdepartamentomatricula" readonly="true">
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula matricula-pais">
+                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula">
                                             <label>Municipio</label>
                                             <input class="form-control" type="text" id="txtmunicipiomatricula" name="txtmunicipiomatricula" readonly="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula" id="ciudad-matricula">
-                                            <label>Ciudad</label>
-                                            <input class="form-control" type="text" id="txtciudadmatricula" name="txtciudadmatricula" readonly="true">
                                         </div>
                                     </div>
                                 </div>
@@ -182,7 +178,7 @@
                                             <label>SOAT</label>
                                             <input class="form-control" type="text" id="txtsoat" name="txtsoat" readonly="true">
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="soatcontenedor">
                                             <label>Fecha Venc. Soat</label>
                                             <input class="form-control" type="text" id="txtfechavsoat" name="txtfechavsoat" readonly="true">
                                         </div>
@@ -190,20 +186,10 @@
                                             <label>Tecnomecanica</label>
                                             <input class="form-control" type="text" id="txttecnomecanica" name="txttecnomecanica" readonly="true">
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="tecnomecanicacontenedor">
                                             <label>Fecha Venc. Tecnomecanica</label>
                                             <input class="form-control" type="text" id="txtfechavtecnomecanica" name="txtfechavtecnomecanica" readonly="true">
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" readonly="true"></textarea>
                                     </div>
                                 </div>
                             </div>

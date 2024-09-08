@@ -25,8 +25,20 @@ $(function () {
                     $('#txtfechacenso').val(response.verificacion.FECHA);
                     var estadoverificacionId = response.verificacion.ESTADO_VERIFICACION;
 
-                    $('#txtobservaciones').val(response.verificacion.OBSERVACIONES);
+                    if (response.verificacion.VERIFICACION_DOC === 'S') {
+                        $('#chkdocumentos').prop('checked', true);
+                    } else {
+                        $('#chkdocumentos').prop('checked', false);
+                    }
                     
+                    if (response.verificacion.VERIFICACION_FOTOS === 'S') {
+                        $('#chkfotos').prop('checked', true);
+                    } else {
+                        $('#chkfotos').prop('checked', false);
+                    }
+
+                    $('#txtobservaciones').val(response.verificacion.OBSERVACIONES);
+
                     $('#idverificacion').val(response.verificacion.VERIFICACION_ID);
                     $('#idcenso').val(response.verificacion.CEN_ID);
 
@@ -100,7 +112,7 @@ $(function () {
             }
         });
     });
-    
+
     $('#btnvolver').click(function () {
         window.location.href = "listarVerificaciones.jsp";
     });

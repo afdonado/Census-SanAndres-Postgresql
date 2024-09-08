@@ -66,10 +66,46 @@ $(function () {
                     }
                 });
     }
+    
+    $('#btnguardar').click(function () {
+        var passaactual = $('#txtpasswordactual').val();
+        var pass = $('#txtpassword').val();
+        var reppass = $('#txtrepetirpassword').val();
 
-    $("#guardar").click(function (event) {
-        event.preventDefault(); // Evita la navegación del enlace
-        $("#frmactualizarusuario").submit(); // Envia el formulario
+        if (passaactual.length === 0 && pass.length === 0 && reppass.length === 0) {
+            alert('Debe ingresar los datos obligatorios (*)');
+            return false;
+        } else {
+            $('#frmactualizarusuario').trigger("submit");
+        }
+    });
+    
+    $("#frmactualizarusuario").submit(function (event) {
+        console.log("usuario act pass");
+        event.preventDefault();
+
+        var parametros = $(this).serialize();
+
+        $.ajax({
+            data: parametros,
+            url: "../../actualizarPassword",
+            type: "POST",
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    alert(response.message);
+                    window.location.href = "../../dashboard";
+                } else if (response.status === "fail") {
+                    alert(response.message);
+                } else if (response.status === "error") {
+                    alert(response.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de actualizar contraseña: ", textStatus, errorThrown);
+                alert("Ocurrió un error al procesar la solicitud de actualizar contraseña.");
+            }
+        });
     });
 
 });

@@ -57,18 +57,9 @@ public class VerificarDocumentoPersona extends HttpServlet {
             
             //Verificar si existe la persona con tipo y numero de documento
             CenPersona cenPersona = personaDao.ConsultarPersona(conex, tipoDocumento, documento);
-            if (cenPersona != null) {
-                
-                String nombreCompleto = 
-                        cenPersona.getNombre1() + " " + 
-                        (cenPersona.getNombre2() != null ? cenPersona.getNombre2().trim() : "") + " " + 
-                        (cenPersona.getApellido1() != null ? cenPersona.getApellido1().trim() : "") + " " + 
-                        (cenPersona.getApellido2() != null ? cenPersona.getApellido2().trim() : "");
-                
+            if (cenPersona == null) {
                 respuesta.put("status", "success");
                 respuesta.put("message", "Tipo y numero de documento validos");
-                respuesta.put("nombre", nombreCompleto);
-                respuesta.put("id", String.valueOf(cenPersona.getId()));
             } else {
                 respuesta.put("status", "fail");
                 respuesta.put("message", "Tipo y numero de documento no validos");

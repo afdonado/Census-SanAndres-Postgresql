@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +69,7 @@ public class ModificarVehiculo extends HttpServlet {
             }
 
             //Validar parametro placa
-            if (request.getParameter("txtplaca") == null || request.getParameter("txtplaca").isEmpty()) {
+            if (request.getParameter("txtplaca") == null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'placa' no encontrado");
 
@@ -98,7 +99,7 @@ public class ModificarVehiculo extends HttpServlet {
             }
 
             //Validar parametro serie
-            if (request.getParameter("txtserie") == null || request.getParameter("txtserie").isEmpty()) {
+            if (request.getParameter("txtserie") == null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'serie' no encontrado");
 
@@ -274,7 +275,6 @@ public class ModificarVehiculo extends HttpServlet {
             String licenciaTransito = "";
             int paisMatricula = 0;
             int municipioMatricula = 0;
-            String ciudaMatricula = "";
 
             if (runt.equals("S")) {
                 //Validar parametro fecha matricula
@@ -326,19 +326,6 @@ public class ModificarVehiculo extends HttpServlet {
 
                     municipioMatricula = Integer.parseInt(request.getParameter("cmbmunicipiomatricula"));
 
-                } else {
-
-                    //Validar parametro ciudad matricula
-                    if (request.getParameter("txtciudadmatricula") == null || request.getParameter("txtciudadmatricula").isEmpty()) {
-                        respuesta.put("status", "error");
-                        respuesta.put("message", "Parametro 'ciudad matricula' no encontrado");
-
-                        String jsonError = new Gson().toJson(respuesta);
-                        response.getWriter().write(jsonError);
-                        return;
-                    }
-
-                    ciudaMatricula = request.getParameter("txtciudadmatricula").toUpperCase().trim();
                 }
             }
 
@@ -389,7 +376,7 @@ public class ModificarVehiculo extends HttpServlet {
             Date fechaVencimientoSoat = null;
             if (soat.equals("S")) {
                 //Validar parametro fecha vencimiento  soat
-                if (request.getParameter("txtfechavsoat") == null || request.getParameter("txtfechavsoat").isEmpty()) {
+                if (request.getParameter("txtfechavsoat") == null) {
                     respuesta.put("status", "error");
                     respuesta.put("message", "Parametro 'fecha vencimiento soat' no encontrado");
 
@@ -398,7 +385,7 @@ public class ModificarVehiculo extends HttpServlet {
                     return;
                 }
 
-                fechaVencimientoSoat = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy")
+                fechaVencimientoSoat = request.getParameter("txtfechavsoat").isEmpty() ? null : new Date(new SimpleDateFormat("dd/MM/yyyy")
                         .parse(request.getParameter("txtfechavsoat")).getTime());
             }
 
@@ -406,7 +393,7 @@ public class ModificarVehiculo extends HttpServlet {
             Date fechaVencimientoTecnomecanica = null;
             if (soat.equals("S")) {
                 //Validar parametro fecha vencimiento tecnomecanica
-                if (request.getParameter("txtfechavtecnomecanica") == null || request.getParameter("txtfechavtecnomecanica").isEmpty()) {
+                if (request.getParameter("txtfechavtecnomecanica") == null) {
                     respuesta.put("status", "error");
                     respuesta.put("message", "Parametro 'fecha vencimiento tecnomecanica' no encontrado");
 
@@ -415,7 +402,7 @@ public class ModificarVehiculo extends HttpServlet {
                     return;
                 }
 
-                fechaVencimientoTecnomecanica = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy")
+                fechaVencimientoTecnomecanica = request.getParameter("txtfechavtecnomecanica").isEmpty() ? null : new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy")
                         .parse(request.getParameter("txtfechavtecnomecanica")).getTime());
             }
 
@@ -453,7 +440,6 @@ public class ModificarVehiculo extends HttpServlet {
                 cenvehiculo.setFecha_matricula(fechaMatricula);
                 cenvehiculo.setPai_id_matricula(paisMatricula);
                 cenvehiculo.setMun_id_matricula(municipioMatricula);
-                cenvehiculo.setCiudad_matricula(ciudaMatricula);
                 cenvehiculo.setTipodoc_importacion(tipoDocumentoImportacion);
                 cenvehiculo.setDoc_importacion(documentoImportacion);
                 cenvehiculo.setFecha_importacion(fechaImportacion);

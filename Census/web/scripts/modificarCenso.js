@@ -132,12 +132,6 @@ $(function () {
         }
     });
 
-    $('#txtdocumento').blur(function () {
-        if ($('#txtdocumento').val().length > 0) {
-            consultarDocumentoPersona('cmbtiposdocumento', 'txtdocumento', 'txtnombre', 'idpersona');
-        }
-    });
-
     $('#btnguardar').click(function () {
         var numero = $('#txtnumerocenso').val();
         var fechacenso = $('#txtfechacenso').val();

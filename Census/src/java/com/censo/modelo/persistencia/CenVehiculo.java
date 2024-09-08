@@ -44,6 +44,7 @@ public class CenVehiculo {
     private String doc_importacion;
     private Date fecha_importacion;
     private int pai_id_origen;
+    private String observaciones;
     private int tipo_uso;
     private String transformado;
     private int usu_id;
@@ -76,12 +77,13 @@ public class CenVehiculo {
         vehiculo.setDoc_importacion(rs.getString(21));
         vehiculo.setFecha_importacion(rs.getDate(22));
         vehiculo.setPai_id_origen(rs.getInt(23));
-        vehiculo.setTipo_uso(rs.getInt(24));
-        vehiculo.setTransformado(rs.getString(25));
-        vehiculo.setUsu_id(rs.getInt(26));
-        vehiculo.setEstado(rs.getInt(27));
-        vehiculo.setFechaproceso(rs.getTimestamp(28));
-        vehiculo.setFecha_matricula(rs.getDate(29));
+        vehiculo.setObservaciones(rs.getString(24));
+        vehiculo.setTipo_uso(rs.getInt(25));
+        vehiculo.setTransformado(rs.getString(26));
+        vehiculo.setUsu_id(rs.getInt(27));
+        vehiculo.setEstado(rs.getInt(28));
+        vehiculo.setFechaproceso(rs.getTimestamp(29));
+        vehiculo.setFecha_matricula(rs.getDate(30));
         return vehiculo;
     }
     

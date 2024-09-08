@@ -290,7 +290,6 @@ public class RegistrarVehiculo extends HttpServlet {
             String licenciaTransito = "";
             int paisMatricula = 0;
             int municipioMatricula = 0;
-            String ciudaMatricula = "";
 
             if (runt.equals("S")) {
                 //Validar parametro fecha matricula
@@ -341,19 +340,6 @@ public class RegistrarVehiculo extends HttpServlet {
 
                     municipioMatricula = Integer.parseInt(request.getParameter("cmbmunicipiomatricula"));
 
-                } else {
-
-                    //Validar parametro ciudad matricula
-                    if (request.getParameter("txtciudadmatricula") == null || request.getParameter("txtciudadmatricula").isEmpty()) {
-                        respuesta.put("status", "error");
-                        respuesta.put("message", "Parametro 'ciudad matricula' no encontrado");
-
-                        String jsonError = new Gson().toJson(respuesta);
-                        response.getWriter().write(jsonError);
-                        return;
-                    }
-
-                    ciudaMatricula = request.getParameter("txtciudadmatricula").toUpperCase().trim();
                 }
             }
 
@@ -403,7 +389,7 @@ public class RegistrarVehiculo extends HttpServlet {
             Date fechaVencimientoSoat = null;
             if (soat.equals("S")) {
                 //Validar parametro fecha vencimiento  soat
-                if (request.getParameter("txtfechavsoat") == null || request.getParameter("txtfechavsoat").isEmpty()) {
+                if (request.getParameter("txtfechavsoat") == null) {
                     respuesta.put("status", "error");
                     respuesta.put("message", "Parametro 'fecha vencimiento soat' no encontrado");
 
@@ -412,7 +398,7 @@ public class RegistrarVehiculo extends HttpServlet {
                     return;
                 }
 
-                fechaVencimientoSoat = new Date(new SimpleDateFormat("dd/MM/yyyy")
+                fechaVencimientoSoat = request.getParameter("txtfechavsoat").isEmpty() ? null : new Date(new SimpleDateFormat("dd/MM/yyyy")
                         .parse(request.getParameter("txtfechavsoat")).getTime());
             }
 
@@ -420,7 +406,7 @@ public class RegistrarVehiculo extends HttpServlet {
             Date fechaVencimientoTecnomecanica = null;
             if (tecnoMecanica.equals("S")) {
                 //Validar parametro fecha vencimiento tecnomecanica
-                if (request.getParameter("txtfechavtecnomecanica") == null || request.getParameter("txtfechavtecnomecanica").isEmpty()) {
+                if (request.getParameter("txtfechavtecnomecanica") == null) {
                     respuesta.put("status", "error");
                     respuesta.put("message", "Parametro 'fecha vencimiento tecnomecanica' no encontrado");
 
@@ -429,7 +415,7 @@ public class RegistrarVehiculo extends HttpServlet {
                     return;
                 }
 
-                fechaVencimientoTecnomecanica = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy")
+                fechaVencimientoTecnomecanica = request.getParameter("txtfechavtecnomecanica").isEmpty() ? null : new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy")
                         .parse(request.getParameter("txtfechavtecnomecanica")).getTime());
             }
 
@@ -470,7 +456,6 @@ public class RegistrarVehiculo extends HttpServlet {
                     cenvehiculo.setFecha_matricula(fechaMatricula);
                     cenvehiculo.setPai_id_matricula(paisMatricula);
                     cenvehiculo.setMun_id_matricula(municipioMatricula);
-                    cenvehiculo.setCiudad_matricula(ciudaMatricula);
                     cenvehiculo.setTipodoc_importacion(tipoDocumentoImportacion);
                     cenvehiculo.setDoc_importacion(documentoImportacion);
                     cenvehiculo.setFecha_importacion(fechaImportacion);

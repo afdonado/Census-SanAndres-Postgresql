@@ -31,11 +31,6 @@ $(function () {
                     $('#txtchasis').val(response.censo.VEH_CHASIS);
                     $('#txtserie').val(response.censo.VEH_SERIE);
 
-                    $('#txttipopersonapresento').val(response.censo.TIPO_DOC);
-                    $('#txttipodocumentopresento').val(response.censo.TIPO_PERSONA);
-                    $('#txtdocumentopresento').val(response.censo.DOCUMENTO);
-                    $('#txtnombrepresento').val(response.censo.NOMBRE);
-
                     $('#txtobservaciones').val(response.censo.OBSERVACIONES);
 
                     $(".btneditar").attr("data-id", response.censo.CEN_ID);

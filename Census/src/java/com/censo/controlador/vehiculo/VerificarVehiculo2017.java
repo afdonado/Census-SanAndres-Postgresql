@@ -1,27 +1,17 @@
 package com.censo.controlador.vehiculo;
 
 import com.censo.modelo.dao.CensoDao;
-import com.censo.modelo.dao.ClaseVehiculoDao;
-import com.censo.modelo.dao.TipoServicioDao;
 import com.censo.modelo.dao.Vehiculo2017Dao;
 import com.censo.modelo.dao.VehiculoDao;
-import com.censo.modelo.dao.VehiculoRuntDao;
 import com.censo.modelo.persistencia.CenCenso;
-import com.censo.modelo.persistencia.CenClaseVehiculo;
-import com.censo.modelo.persistencia.CenTipoServicio;
 import com.censo.modelo.persistencia.CenVehiculo;
-import com.censo.modelo.persistencia.ResponseVehiculoRunt;
 import com.censo.modelo.persistencia.Vehiculo2017;
-import com.censo.modelo.persistencia.VehiculoRunt;
 import com.google.gson.Gson;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -124,15 +114,9 @@ public class VerificarVehiculo2017 extends HttpServlet {
 
                 if (opcion == 1) {
 
-                    //Se consulta en la tabla de Vehiculos2017
-                    //Se devuelve la info en la respuesta de la peticion para ser mostrada o sugerida en el formulario
-                    System.out.println("Vehiculo buscado en 2017.");
-
                     Vehiculo2017Dao vehiculo2017Dao = new Vehiculo2017Dao();
                     Vehiculo2017 vehiculo2017;
 
-                    //si no está en Vehiculos2017
-                    //Se da la respuesta para para continuar el proceso de registro del vehiculo
                     respuesta.put("status", "success");
                     if (tipoReferencia == 1) {
                         vehiculo2017 = vehiculo2017Dao.ConsultarVehiculo2017ByPlaca(conex, valorReferencia);
@@ -143,15 +127,16 @@ public class VerificarVehiculo2017 extends HttpServlet {
                         } else {
 
                             SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                            Date fechaActual = new Date(new Date().getTime());
                             
-                            String fechaNacimiento = formato.format(vehiculo2017.getFechaMatricula());
-                            String fechaVenSoat = formato.format(vehiculo2017.getFechaVenSoat());
-                            String fechaVenTecnomecanica = formato.format(vehiculo2017.getFechaVenTecnomecanica());
-                            String fechaImportacion = formato.format(vehiculo2017.getFechaImportacion());
+                            String fechaMatricula = vehiculo2017.getFechaMatricula() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaMatricula());
+                            String fechaVenSoat = vehiculo2017.getFechaVenSoat() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaVenSoat());
+                            String fechaVenTecnomecanica = vehiculo2017.getFechaVenTecnomecanica() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaVenTecnomecanica());
+                            String fechaImportacion = vehiculo2017.getFechaImportacion() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaImportacion());
 
                             respuesta.put("message", "Placa encontrada en censo 2017");
                             respuesta.put("vehiculo", vehiculo2017);
-                            respuesta.put("fechaNacimiento", fechaNacimiento);
+                            respuesta.put("fechaMatricula", fechaMatricula);
                             respuesta.put("fechaVenSoat", fechaVenSoat);
                             respuesta.put("fechaVenTecnomecanica", fechaVenTecnomecanica);
                             respuesta.put("fechaImportacion", fechaImportacion);

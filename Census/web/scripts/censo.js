@@ -36,7 +36,7 @@ function consultarReferenciaVehiculo(tiporeferencia, valorreferencia) {
     };
     $.ajax({
         data: parametros,
-        url: "../../verificarVehiculo",
+        url: "../../verificarVehiculo2017",
         type: "POST",
         dataType: "json",
         success: function (response) {

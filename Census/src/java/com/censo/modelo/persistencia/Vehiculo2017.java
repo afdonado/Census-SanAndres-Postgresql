@@ -1,6 +1,6 @@
 package com.censo.modelo.persistencia;
 
-import java.sql.Date;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import lombok.AllArgsConstructor;

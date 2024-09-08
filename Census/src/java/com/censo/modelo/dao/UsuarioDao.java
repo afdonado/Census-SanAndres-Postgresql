@@ -268,11 +268,13 @@ public class UsuarioDao extends Conexion {
     public boolean modificarUsuario(Connection conex, CenUsuario cenusuario) throws SQLException, IOException {
 
         try {
-            pst = conex.prepareStatement("UPDATE CEN_USUARIOS SET USU_PASS = ?,USU_FECHAFINAL = ?,EST_ID = ? WHERE USU_ID = ? ");
+            pst = conex.prepareStatement("UPDATE CEN_USUARIOS SET USU_PASS = ?,USU_FECHAFINAL = ?,EST_ID = ?, TIPO_DOCUMENTO = ?, NUMERO_DOCUMENTO = ? WHERE USU_ID = ? ");
             pst.setString(1, cenusuario.getPassword());
             pst.setDate(2, cenusuario.getFechafin());
             pst.setInt(3, cenusuario.getEstado());
-            pst.setInt(4, cenusuario.getId());
+            pst.setInt(4, cenusuario.getTipodocumento());
+            pst.setString(5, cenusuario.getNumerodocumento());
+            pst.setInt(6, cenusuario.getId());
             pst.executeUpdate();
             
             return true;

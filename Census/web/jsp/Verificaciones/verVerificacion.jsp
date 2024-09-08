@@ -87,9 +87,6 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                        <button type="button" class="btn btn-lg btn-success btn-block" id="btneditar" name="btneditar">Editar</button>
-                                    </div>
-                                    <div class="form-group col-xs-6 col-sm-2 col-md-2">
                                         <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
                                     </div>
                                 </div>

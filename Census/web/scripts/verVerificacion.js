@@ -17,12 +17,14 @@ $(function () {
             method: 'get',
             data: {id: id},
             success: function (response) {
-
                 if (response.status === "success") {
 
                     $('#txtnumerocenso').val(response.verificacion.NUMERO);
                     $('#txtfechacenso').val(response.verificacion.FECHA);
-                    if (response.verificacion.VERIFICACION_FOTO === 'S') {
+                    if (response.verificacion.VERIFICACION_DOCUMENTOS === 'S') {
+                        $('#chkdocumentos').prop('checked', true);
+                    }
+                    if (response.verificacion.VERIFICACION_FOTOS === 'S') {
                         $('#chkfotos').prop('checked', true);
                     }
 

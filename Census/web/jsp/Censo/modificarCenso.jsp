@@ -78,33 +78,6 @@
                                 </div>
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary"> Datos persona presentó vehículo</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="form-group row">
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Tipo Persona(*)</label>
-                                                <select class="form-control" id="cmbtipospersona" name="cmbtipospersona" required="true"></select>
-                                            </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Tipo Documento(*)</label>
-                                                <select class="form-control solo-numeros" id="cmbtiposdocumento" name="cmbtiposdocumento" required="true"></select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Documento(*)</label>
-                                                <input class="form-control solo-numeros" type="text" id="txtdocumento" name="txtdocumento" maxlength="20" required="true">
-                                            </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Nombre</label>
-                                                <input class="form-control" type="text" id="txtnombre" name="txtnombre" readonly="true">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card shadow mb-4">
-                                    <div class="card-header py-3">
                                         <h6 class="m-0 font-weight-bold text-primary">Observaciones</h6>
                                     </div>
                                     <div class="card-body">
@@ -122,7 +95,6 @@
                                     </div>
                                 </div>
                                 <input type="hidden" id="idcenso" name="idcenso">
-                                <input type="hidden" id="idpersona" name="idpersona">
                                 <input type="hidden" id="idvehiculo" name="idvehiculo">
                                 <input type="hidden" id="numerocenso" name="numerocenso">
                                 <input type="hidden" id="tiporeferencia" name="tiporeferencia">
@@ -175,7 +147,6 @@
         <script src="${pageContext.request.contextPath}/scripts/censo.js" type="text/javascript"></script>
 
         <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
-        <script src="${pageContext.request.contextPath}/scripts/personas.js" type="text/javascript"></script>
         <!--Se descomenta si se quiere editar la fecha del censo-->
         <!--<script src="${pageContext.request.contextPath}/scripts/fechas.js" type="text/javascript"></script>-->
 

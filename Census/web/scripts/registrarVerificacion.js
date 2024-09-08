@@ -99,10 +99,10 @@ $(function () {
 
         var parametros = {
             idcenso: idcenso,
-            documento: documento,
-            foto: foto,
-            estadoverificacion: estadoverificacion,
-            observacion: observacion
+            chkdocumentos: documento,
+            chkfotos: foto,
+            cmbestadosverificacion: estadoverificacion,
+            txtobservaciones: observacion
         };
 
         $.ajax({

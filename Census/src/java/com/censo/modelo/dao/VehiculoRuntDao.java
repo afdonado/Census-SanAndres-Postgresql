@@ -15,10 +15,14 @@ public class VehiculoRuntDao extends Conexion {
 
     public boolean adicionarVehiculoRunt(Connection conex, VehiculoRunt vehiculoRunt) throws SQLException {
 
-        String sql = "INSERT INTO VEHICULOS_RUNT (PLACA,VEH_CHASIS,VEH_SERIE,VEH_MOTOR,VEH_CLASE,VEH_SERVICIO,"
-                    + "COL_ID,VEH_MODELO,LIN_ID,VEH_LICTRANSITO,VEH_RUNT,VEH_SOAT,VEH_FECVENSOAT,VEH_TECNOMEC,VEH_FECVENTECNO,PAI_ID,MUN_ID,"
-                    + "VEH_CIUDADMATRICULA,VEH_TIPODOCUMENTOIMP,VEH_DOCUMENTOIMP,VEH_FECHAIMP,PAI_ID_ORIGEN,VEH_OBSERVACIONES,VEH_TIPOUSO,VEH_TRANSFORMADO,"
-                    + "USU_ID,EST_ID,VEH_FECHAPROCESO,VEH_FECMATRI) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,sysdate,?)";
+        String sql = "INSERT INTO VEHICULOS_RUNT (PLACA,LICENCIA_TRANSITO,ESTADO,TIPO_SERVICIO,CLASE_VEHICULO,"
+                    + "MARCA,LINEA,MODELO,COLOR,SERIE,MOTOR,CHASIS,VIN,CILINDRAJE,TIPO_CARROCERIA,TIPO_COMBUSTIBLE,"
+                    + "FECHA_MATRICULA,AUTORIDAD_TRANSITO,GRAVAMENES_PROPIEDAD,CLASICO_ANTIGUO,REPOTENCIADO,"
+                    + "REGRABACION_MOTOR,REGRABACION_CHASIS,REGRABACION_SERIE,REGRABACION_VIN,CAPACIDAD_CARGA,"
+                    + "PESO_BRUTO_VEHICULAR,CAPACIDAD_PASAJEROS,CAPACIDAD_PASAJEROS_SENTADOS,NRO_EJES,NUMERO_POLIZA,"
+                    + "FECHA_EXPEDICION_SOAT,FECHA_INICIO_VIGENCIA,FECHA_FIN_VIGENCIA,ENTIDAD_SOAT,ESTADO_SOAT,TIPO_REVISION,"
+                    + "FECHA_EXPEDICION_TECNO,FECHA_VIGENCIA,CDA_EXPIDE,VIGENTE,FECHA_CONSULTA) "
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         
         try {
             pst = conex.prepareStatement(sql);
@@ -63,12 +67,12 @@ public class VehiculoRuntDao extends Conexion {
             pst.setString(39, vehiculoRunt.getTecnicoMecanico().getFechaVigencia());
             pst.setString(40, vehiculoRunt.getTecnicoMecanico().getCdaExpide());
             pst.setString(41, vehiculoRunt.getTecnicoMecanico().getVigente());
+            pst.setString(42, vehiculoRunt.getFechaConsulta());
             pst.executeUpdate();
-            rst = pst.getGeneratedKeys();
             
             return true;
         } catch (SQLException e) {
-            System.err.println("Error en adicionarVehiculo: " + e);
+            System.err.println("Error en adicionarVehiculoRunt: " + e);
         } finally {
             try {
                 if (pst != null) {
@@ -78,13 +82,13 @@ public class VehiculoRuntDao extends Conexion {
                     rst.close();
                 }
             } catch (SQLException e) {
-                System.err.println("Error en cierres de adicionarVehiculo: " + e);
+                System.err.println("Error en cierres de adicionarVehiculoRunt: " + e);
             }
         }
         return false;
     }
 
-    public VehiculoRunt ConsultarVehiculoByPlaca(Connection conex, String placa) throws SQLException {
+    public VehiculoRunt ConsultarVehiculoRuntByPlaca(Connection conex, String placa) throws SQLException {
 
         try {
                 pst = conex.prepareStatement("SELECT * FROM VEHICULOS_RUNT WHERE PLACA = ? ");
@@ -95,7 +99,7 @@ public class VehiculoRuntDao extends Conexion {
                 return VehiculoRunt.load(rst);
             }
         } catch (SQLException e) {
-            throw new SQLException("Error en ConsultarVehiculoByPlaca: " + e);
+            throw new SQLException("Error en ConsultarVehiculoRuntByPlaca: " + e);
         } finally {
             try {
                 if (pst != null) {
@@ -105,7 +109,7 @@ public class VehiculoRuntDao extends Conexion {
                     rst.close();
                 }
             } catch (SQLException e) {
-                System.out.println("Error en cierres de ConsultarVehiculoByPlaca:" + e);
+                System.out.println("Error en cierres de ConsultarVehiculoRuntByPlaca:" + e);
             }
         }
         return null;

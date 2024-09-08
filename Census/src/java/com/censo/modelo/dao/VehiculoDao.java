@@ -22,8 +22,8 @@ public class VehiculoDao extends Conexion {
         try {
             pst = conex.prepareStatement("INSERT INTO CEN_VEHICULOS (VEH_PLACA,VEH_CHASIS,VEH_SERIE,VEH_MOTOR,VEH_CLASE,VEH_SERVICIO,"
                     + "COL_ID,VEH_MODELO,LIN_ID,VEH_LICTRANSITO,VEH_RUNT,VEH_SOAT,VEH_FECVENSOAT,VEH_TECNOMEC,VEH_FECVENTECNO,PAI_ID,MUN_ID,"
-                    + "VEH_CIUDADMATRICULA,VEH_TIPODOCUMENTOIMP,VEH_DOCUMENTOIMP,VEH_FECHAIMP,PAI_ID_ORIGEN,VEH_TIPOUSO,VEH_TRANSFORMADO,"
-                    + "USU_ID,EST_ID,VEH_FECHAPROCESO,VEH_FECMATRI) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,sysdate,?)", new String[]{"VEH_ID"});
+                    + "VEH_TIPODOCUMENTOIMP,VEH_DOCUMENTOIMP,VEH_FECHAIMP,PAI_ID_ORIGEN,VEH_TIPOUSO,VEH_TRANSFORMADO,"
+                    + "USU_ID,EST_ID,VEH_FECHAPROCESO,VEH_FECMATRI) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,sysdate,?)", new String[]{"VEH_ID"});
             pst.setString(1, cenvehiculo.getPlaca_veh());
             pst.setString(2, cenvehiculo.getChasis());
             pst.setString(3, cenvehiculo.getSerie());
@@ -41,16 +41,15 @@ public class VehiculoDao extends Conexion {
             pst.setDate(15, cenvehiculo.getFechaven_tecno());
             pst.setInt(16, cenvehiculo.getPai_id_matricula());
             pst.setInt(17, cenvehiculo.getMun_id_matricula());
-            pst.setString(18, cenvehiculo.getCiudad_matricula());
-            pst.setInt(19, cenvehiculo.getTipodoc_importacion());
-            pst.setString(20, cenvehiculo.getDoc_importacion());
-            pst.setDate(21, cenvehiculo.getFecha_importacion());
-            pst.setInt(22, cenvehiculo.getPai_id_origen());
-            pst.setInt(23, cenvehiculo.getTipo_uso());
-            pst.setString(24, cenvehiculo.getTransformado());
-            pst.setInt(25, cenvehiculo.getUsu_id());
-            pst.setInt(26, cenvehiculo.getEstado());
-            pst.setDate(27, cenvehiculo.getFecha_matricula());
+            pst.setInt(18, cenvehiculo.getTipodoc_importacion());
+            pst.setString(19, cenvehiculo.getDoc_importacion());
+            pst.setDate(20, cenvehiculo.getFecha_importacion());
+            pst.setInt(21, cenvehiculo.getPai_id_origen());
+            pst.setInt(22, cenvehiculo.getTipo_uso());
+            pst.setString(23, cenvehiculo.getTransformado());
+            pst.setInt(24, cenvehiculo.getUsu_id());
+            pst.setInt(25, cenvehiculo.getEstado());
+            pst.setDate(26, cenvehiculo.getFecha_matricula());
             pst.executeUpdate();
             rst = pst.getGeneratedKeys();
             if (rst != null) {
@@ -81,7 +80,7 @@ public class VehiculoDao extends Conexion {
             pst = conex.prepareStatement("UPDATE CEN_VEHICULOS SET VEH_PLACA = ?,VEH_CHASIS = ?,VEH_SERIE = ?,"
                     + "VEH_MOTOR = ?,VEH_CLASE = ?,VEH_SERVICIO = ?,COL_ID = ?,VEH_MODELO = ?,LIN_ID = ?, "
                     + "VEH_LICTRANSITO = ?,VEH_RUNT = ?,VEH_SOAT = ?,VEH_FECVENSOAT = ?,VEH_TECNOMEC = ?,"
-                    + "VEH_FECVENTECNO = ?,PAI_ID = ?,MUN_ID = ?, VEH_CIUDADMATRICULA = ?,VEH_TIPODOCUMENTOIMP = ?,"
+                    + "VEH_FECVENTECNO = ?,PAI_ID = ?,MUN_ID = ?, VEH_TIPODOCUMENTOIMP = ?,"
                     + "VEH_DOCUMENTOIMP = ?,VEH_FECHAIMP = ?, PAI_ID_ORIGEN = ?, "
                     + "VEH_TIPOUSO = ?, VEH_TRANSFORMADO = ?, EST_ID = ?, VEH_FECMATRI = ? WHERE VEH_ID = ? ");
             pst.setString(1, cenvehiculo.getPlaca_veh());
@@ -101,16 +100,15 @@ public class VehiculoDao extends Conexion {
             pst.setDate(15, cenvehiculo.getFechaven_tecno());
             pst.setInt(16, cenvehiculo.getPai_id_matricula());
             pst.setInt(17, cenvehiculo.getMun_id_matricula());
-            pst.setString(18, cenvehiculo.getCiudad_matricula());
-            pst.setInt(19, cenvehiculo.getTipodoc_importacion());
-            pst.setString(20, cenvehiculo.getDoc_importacion());
-            pst.setDate(21, cenvehiculo.getFecha_importacion());
-            pst.setInt(22, cenvehiculo.getPai_id_origen());
-            pst.setInt(23, cenvehiculo.getTipo_uso());
-            pst.setString(24, cenvehiculo.getTransformado());
-            pst.setInt(25, cenvehiculo.getEstado());
-            pst.setDate(26, cenvehiculo.getFecha_matricula());
-            pst.setInt(27, cenvehiculo.getId());
+            pst.setInt(18, cenvehiculo.getTipodoc_importacion());
+            pst.setString(19, cenvehiculo.getDoc_importacion());
+            pst.setDate(20, cenvehiculo.getFecha_importacion());
+            pst.setInt(21, cenvehiculo.getPai_id_origen());
+            pst.setInt(22, cenvehiculo.getTipo_uso());
+            pst.setString(23, cenvehiculo.getTransformado());
+            pst.setInt(24, cenvehiculo.getEstado());
+            pst.setDate(25, cenvehiculo.getFecha_matricula());
+            pst.setInt(26, cenvehiculo.getId());
             pst.executeUpdate();
 
             return true;

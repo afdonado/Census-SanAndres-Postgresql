@@ -94,7 +94,6 @@
                                     <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
                                 </div>
                             </div>
-                            <input type="hidden" id="idpersona" name="idpersona">
                             <input type="hidden" id="idvehiculo" name="idvehiculo">
                         </form>
                     </div>
@@ -144,7 +143,6 @@
         <script src="${pageContext.request.contextPath}/scripts/registrarCenso.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/censo.js" type="text/javascript"></script>
 
-        <script src="${pageContext.request.contextPath}/scripts/personas.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/scripts/fechas.js" type="text/javascript"></script>
 
