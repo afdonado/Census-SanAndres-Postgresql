@@ -2,8 +2,7 @@
 $(document).ready(function () {
 
     $(function () {
-        $.getJSON('DatosEstadisticasSanAndres.jsp?opcion=1', function (data) {
-//$.getJSON('../cargarEstadisticas', function (data) {
+        $.getJSON('../../cargarEstadisticasSanAndres?opcion=1', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -19,7 +18,7 @@ $(document).ready(function () {
                     type: 'pie'
                 },
                 title: {
-                    text: 'Porcentaje de Censos por Clase de Vehiculo. Total Vehiculos: ' + CantidadTotal
+                    text: 'Vehiculos censados por Clase de Vehiculo. Total Vehiculos: ' + CantidadTotal
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -38,7 +37,7 @@ $(document).ready(function () {
                     }
                 },
                 series: [{
-                        name: 'Porcentajes Censos',
+                        name: 'Censos',
                         colorByPoint: true,
                         data: datos
                     }]
@@ -46,7 +45,7 @@ $(document).ready(function () {
         });
     });
     $(function () {
-        $.getJSON('DatosEstadisticasSanAndres.jsp?opcion=2', function (data) {
+        $.getJSON('../../cargarEstadisticasSanAndres?opcion=2', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -62,7 +61,7 @@ $(document).ready(function () {
                     type: 'pie'
                 },
                 title: {
-                    text: 'Porcentaje de Censos por Punto de Atencion. Total Censos: ' + CantidadTotal
+                    text: 'Vehiculos censados por Punto de Atencion. Total Censos: ' + CantidadTotal
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -81,7 +80,7 @@ $(document).ready(function () {
                     }
                 },
                 series: [{
-                        name: 'Porcentajes Censos',
+                        name: 'Censos',
                         colorByPoint: true,
                         data: datos
                     }]
@@ -91,8 +90,7 @@ $(document).ready(function () {
 
 
     $(function () {
-        $.getJSON('DatosEstadisticasSanAndres.jsp?opcion=3', function (data) {
-            //$.getJSON('../cargarEstadisticas', function (data) {
+        $.getJSON('../../cargarEstadisticasSanAndres?opcion=3', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -108,14 +106,14 @@ $(document).ready(function () {
                     type: 'column'
                 },
                 title: {
-                    text: 'Porcentaje de Personas censada por Genero. Total Personas: '+CantidadTotal
+                    text: 'Personas asociadas a vehiculos censados por Genero. Total Personas: ' + CantidadTotal
                 },
                 xAxis: {
                     type: 'category'
                 },
                 yAxis: {
                     title: {
-                        text: 'Porcentaje personas censadas'
+                        text: 'Personas asociadas a vehiculos censados'
                     }
 
                 },
@@ -138,7 +136,7 @@ $(document).ready(function () {
                 },
 
                 series: [{
-                        name: 'Personas Censadas',
+                        name: 'Personas asociadas a vehiculos',
                         colorByPoint: true,
                         data: datos
                     }]
@@ -147,9 +145,8 @@ $(document).ready(function () {
     });
 
 
-$(function () {
-        $.getJSON('DatosEstadisticasSanAndres.jsp?opcion=4', function (data) {
-            //$.getJSON('../cargarEstadisticas', function (data) {
+    $(function () {
+        $.getJSON('../../cargarEstadisticasSanAndres?opcion=4', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -165,14 +162,14 @@ $(function () {
                     type: 'column'
                 },
                 title: {
-                    text: 'Porcentaje de Personas censada Licencia. Total Personas: '+CantidadTotal
+                    text: 'Personas asociadas a vehiculos censados por Licencia. Total Personas: ' + CantidadTotal
                 },
                 xAxis: {
                     type: 'category'
                 },
                 yAxis: {
                     title: {
-                        text: 'Porcentaje Personas licencia conduccion'
+                        text: 'Personas asociadas a vehiculos censados licencia conduccion'
                     }
 
                 },
@@ -195,16 +192,16 @@ $(function () {
                 },
 
                 series: [{
-                        name: 'Personas Censadas',
+                        name: 'Personas asociadas a vehiculos',
                         colorByPoint: true,
                         data: datos
                     }]
             });
         });
     });
-    
+
     $(function () {
-        $.getJSON('DatosEstadisticasSanAndres.jsp?opcion=5', function (data) {
+        $.getJSON('../../cargarEstadisticasSanAndres?opcion=5', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -220,14 +217,14 @@ $(function () {
                     type: 'column'
                 },
                 title: {
-                    text: 'Porcentaje de Vehiculos censados con o sin placa. Total Vehiculos: '+CantidadTotal
+                    text: 'Vehiculos censados con o sin placa. Total Vehiculos: ' + CantidadTotal
                 },
                 xAxis: {
                     type: 'category'
                 },
                 yAxis: {
                     title: {
-                        text: 'Porcentaje Vehiculos Placa'
+                        text: 'Vehiculos Placa'
                     }
 
                 },
@@ -257,9 +254,9 @@ $(function () {
             });
         });
     });
-    
-     $(function () {
-        $.getJSON('DatosEstadisticasSanAndres.jsp?opcion=6', function (data) {
+
+    $(function () {
+        $.getJSON('../../cargarEstadisticasSanAndres?opcion=6', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -275,7 +272,7 @@ $(function () {
                     type: 'pie'
                 },
                 title: {
-                    text: 'Porcentaje de Vehiculos con Soat. Total Vehiculos: ' + CantidadTotal
+                    text: 'Vehiculos censados con o sin placa. Total Vehiculos: ' + CantidadTotal
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -294,7 +291,7 @@ $(function () {
                     }
                 },
                 series: [{
-                        name: 'Porcentajes Censos',
+                        name: 'Censos',
                         colorByPoint: true,
                         data: datos
                     }]
@@ -303,8 +300,8 @@ $(function () {
     });
 
 
-$(function () {
-        $.getJSON('DatosEstadisticasSanAndres.jsp?opcion=7', function (data) {
+    $(function () {
+        $.getJSON('../../cargarEstadisticasSanAndres?opcion=7', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -320,7 +317,7 @@ $(function () {
                     type: 'pie'
                 },
                 title: {
-                    text: 'Porcentaje de Vehiculos con Tecnomecanica. Total Vehiculos: ' + CantidadTotal
+                    text: 'Vehiculos censados con Tecnomecanica. Total Vehiculos: ' + CantidadTotal
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -339,7 +336,7 @@ $(function () {
                     }
                 },
                 series: [{
-                        name: 'Porcentajes Censos',
+                        name: 'Censos',
                         colorByPoint: true,
                         data: datos
                     }]
@@ -347,5 +344,5 @@ $(function () {
         });
     });
 
-    
+
 });

@@ -16,8 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@WebServlet(name = "CargarEstadisticas", urlPatterns = "/cargarEstadisticas")
-public class CargarEstadisticas extends HttpServlet {
+@WebServlet(name = "CargarEstadisticasProvidencia", urlPatterns = "/cargarEstadisticasProvidencia")
+public class CargarEstadisticasProvidencia extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -40,7 +40,7 @@ public class CargarEstadisticas extends HttpServlet {
 
                 switch (opcion) {
                     case 1://Cantidad Censos por Clase de Vehiculo
-                        lista = estadisticaDao.ListarCantidadCensosClaveVehiculo(conex);
+                        lista = estadisticaDao.ListarCantidadCensosClaveVehiculoProvidencia(conex);
                         if (!lista.isEmpty()) {
                             for (HashMap hash : lista) {
                                 JSONObject detalleJson = new JSONObject();
@@ -70,7 +70,7 @@ public class CargarEstadisticas extends HttpServlet {
 
                     case 3://Cantidad Personas Censadas por Genero
 
-                        lista = estadisticaDao.ListarCantidadPersonasCensadasGenero(conex);
+                        lista = estadisticaDao.ListarCantidadPersonasCensadasGeneroProvidencia(conex);
                         if (!lista.isEmpty()) {
                             for (HashMap hash : lista) {
                                 JSONObject detalleJson = new JSONObject();
@@ -85,7 +85,7 @@ public class CargarEstadisticas extends HttpServlet {
 
                     case 4://Cantidad Personas Censadas por Licencia
 
-                        lista = estadisticaDao.ListarCantidadPersonasCensadasLicencia(conex);
+                        lista = estadisticaDao.ListarCantidadPersonasCensadasLicenciaProvidencia(conex);
                         if (!lista.isEmpty()) {
                             for (HashMap hash : lista) {
                                 JSONObject detalleJson = new JSONObject();
@@ -101,7 +101,7 @@ public class CargarEstadisticas extends HttpServlet {
 
                     case 5://Cantidad Vehiculos Censados por Placa
 
-                        lista = estadisticaDao.ListarCantidadVehiculosPlaca(conex);
+                        lista = estadisticaDao.ListarCantidadVehiculosPlacaProvidencia(conex);
                         if (!lista.isEmpty()) {
                             for (HashMap hash : lista) {
                                 JSONObject detalleJson = new JSONObject();
@@ -116,7 +116,7 @@ public class CargarEstadisticas extends HttpServlet {
                         break;
 
                     case 6://Cantidad Vehiculos con Soat
-                        lista = estadisticaDao.ListarCantidadVehiculosSoat(conex);
+                        lista = estadisticaDao.ListarCantidadVehiculosSoatProvidencia(conex);
                         if (!lista.isEmpty()) {
                             for (HashMap hash : lista) {
                                 JSONObject detalleJson = new JSONObject();
@@ -130,7 +130,7 @@ public class CargarEstadisticas extends HttpServlet {
                         break;
 
                     case 7://Cantidad Vehiculos con Tecno
-                        lista = estadisticaDao.ListarCantidadVehiculosTecno(conex);
+                        lista = estadisticaDao.ListarCantidadVehiculosTecnoProvidencia(conex);
                         if (!lista.isEmpty()) {
                             for (HashMap hash : lista) {
                                 JSONObject detalleJson = new JSONObject();

@@ -1,3 +1,4 @@
+<%@page import="java.sql.SQLException"%>
 <%@page import="javax.servlet.http.HttpSession"%>
 <%@page import="java.util.LinkedList"%>
 <%@page import="java.sql.Connection"%>
@@ -11,7 +12,6 @@
 <%
     HttpSession sessionCensus = request.getSession();
     CenUsuario cenusuario = (CenUsuario) sessionCensus.getAttribute("usuario");
-    if (cenusuario != null) {
 %>
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Dashboard - Census</h1>
@@ -32,12 +32,14 @@
 </div>
 
 <%
-    if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("estadisticas")) {
+    if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("estadisticas")) {
 
         Connection conex = null;
 
-        EstadisticaDao estadisticaDao = new EstadisticaDao();
-        conex = estadisticaDao.conectar();
+        try {
+
+            EstadisticaDao estadisticaDao = new EstadisticaDao();
+            conex = estadisticaDao.conectar();
 %>
 <div class="row">
     <div id="graficaClaseVeh" class="col-md-8"></div>
@@ -50,7 +52,7 @@
             </thead>
             <tbody>
                 <%
-                    List<HashMap> datosClaseVeh = estadisticaDao.ListarCantidadCensosClaveVehiculo(conex);
+                    List<HashMap<String, Object>> datosClaseVeh = estadisticaDao.ListarCantidadCensosClaveVehiculo(conex);
 
                     if (datosClaseVeh.size() > 0) {
                         int contador = 0;
@@ -267,6 +269,17 @@
     </div>
 </div>
 <%
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+            if (conex != null) {
+                try {
+                    conex.close();
+                } catch (SQLException closeEx) {
+                    closeEx.printStackTrace();
+                }
+            }
         }
     }
 %>

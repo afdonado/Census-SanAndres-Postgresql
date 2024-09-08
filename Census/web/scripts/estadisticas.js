@@ -2,8 +2,7 @@
 $(document).ready(function () {
 
     $(function () {
-        $.getJSON('jsp/DatosEstadisticas.jsp?opcion=1', function (data) {
-//$.getJSON('../cargarEstadisticas', function (data) {
+        $.getJSON('cargarEstadisticas?opcion=1', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -45,8 +44,9 @@ $(document).ready(function () {
             });
         });
     });
+
     $(function () {
-        $.getJSON('jsp/DatosEstadisticas.jsp?opcion=2', function (data) {
+        $.getJSON('cargarEstadisticas?opcion=2', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -91,8 +91,7 @@ $(document).ready(function () {
 
 
     $(function () {
-        $.getJSON('jsp/DatosEstadisticas.jsp?opcion=3', function (data) {
-            //$.getJSON('../cargarEstadisticas', function (data) {
+        $.getJSON('cargarEstadisticas?opcion=3', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -108,14 +107,14 @@ $(document).ready(function () {
                     type: 'column'
                 },
                 title: {
-                    text: 'Personas asociadas a vehiculos censados por Genero. Total Personas: '+CantidadTotal
+                    text: 'Personas asociadas a vehiculos censados por Genero. Total Personas: ' + CantidadTotal
                 },
                 xAxis: {
                     type: 'category'
                 },
                 yAxis: {
                     title: {
-                        text: 'personas asociadas a vehiculos censados'
+                        text: 'Personas asociadas a vehiculos censados'
                     }
 
                 },
@@ -138,7 +137,7 @@ $(document).ready(function () {
                 },
 
                 series: [{
-                        name: 'Personas Censadas',
+                        name: 'Personas asociadas a vehiculos',
                         colorByPoint: true,
                         data: datos
                     }]
@@ -147,9 +146,8 @@ $(document).ready(function () {
     });
 
 
-$(function () {
-        $.getJSON('jsp/DatosEstadisticas.jsp?opcion=4', function (data) {
-            //$.getJSON('../cargarEstadisticas', function (data) {
+    $(function () {
+        $.getJSON('cargarEstadisticas?opcion=4', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -165,7 +163,7 @@ $(function () {
                     type: 'column'
                 },
                 title: {
-                    text: 'Personas asociadas a vehiculos censados por Licencia. Total Personas: '+CantidadTotal
+                    text: 'Personas asociadas a vehiculos censados por Licencia. Total Personas: ' + CantidadTotal
                 },
                 xAxis: {
                     type: 'category'
@@ -195,16 +193,16 @@ $(function () {
                 },
 
                 series: [{
-                        name: 'Personas Censadas',
+                        name: 'Personas asociadas a vehiculos',
                         colorByPoint: true,
                         data: datos
                     }]
             });
         });
     });
-    
+
     $(function () {
-        $.getJSON('jsp/DatosEstadisticas.jsp?opcion=5', function (data) {
+        $.getJSON('cargarEstadisticas?opcion=5', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -220,7 +218,7 @@ $(function () {
                     type: 'column'
                 },
                 title: {
-                    text: 'Vehiculos censados con o sin placa. Total Vehiculos: '+CantidadTotal
+                    text: 'Vehiculos censados con o sin placa. Total Vehiculos: ' + CantidadTotal
                 },
                 xAxis: {
                     type: 'category'
@@ -257,10 +255,10 @@ $(function () {
             });
         });
     });
-    
-    
+
+
     $(function () {
-        $.getJSON('jsp/DatosEstadisticas.jsp?opcion=6', function (data) {
+        $.getJSON('cargarEstadisticas?opcion=6', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -276,7 +274,7 @@ $(function () {
                     type: 'pie'
                 },
                 title: {
-                    text: 'Vehiculos censados con Soat. Total Vehiculos: ' + CantidadTotal
+                    text: 'Vehiculos con Soat. Total Vehiculos: ' + CantidadTotal
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -304,8 +302,8 @@ $(function () {
     });
 
 
-$(function () {
-        $.getJSON('jsp/DatosEstadisticas.jsp?opcion=7', function (data) {
+    $(function () {
+        $.getJSON('cargarEstadisticas?opcion=7', function (data) {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
@@ -347,5 +345,5 @@ $(function () {
             });
         });
     });
-    
+
 });
