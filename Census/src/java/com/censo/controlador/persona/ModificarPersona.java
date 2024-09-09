@@ -166,34 +166,56 @@ public class ModificarPersona extends HttpServlet {
             String telefono = request.getParameter("txttelefono").toUpperCase().trim();
             String email = request.getParameter("txtemail").toUpperCase().trim();
             int grupoSanguineo = Integer.parseInt(request.getParameter("cmbgrupossanguineos"));
-            String numeroLicencia = request.getParameter("txtnumerolicencia").toUpperCase().trim();
+            
+            String numeroLicencia = "";
             int categoriaLicencia = 0;
             LocalDate fechaExpLicencia = null;
             LocalDate fechaVenLicencia = null;
-            if (!numeroLicencia.equals("")) {
+            String licenciaConduccion = request.getParameter("cmblicenciaconduccion");
+            if (licenciaConduccion.equals("S")) {
+
+                if (request.getParameter("txtnumerolicencia") == null || request.getParameter("txtnumerolicencia").isEmpty()) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Parametro 'numero licencia conduccion' no encontrado");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
+                numeroLicencia = request.getParameter("cmbcategoriaslicencia").toUpperCase().trim();
+                
+                if (request.getParameter("cmbcategoriaslicencia") == null || request.getParameter("cmbcategoriaslicencia").isEmpty()) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Parametro 'categoria licencia conduccion' no encontrado");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
                 categoriaLicencia = Integer.parseInt(request.getParameter("cmbcategoriaslicencia"));
                 
+                if (request.getParameter("txtfechaexplicencia") == null || request.getParameter("txtfechaexplicencia").isEmpty()) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Parametro 'fecha expedición licencia conduccion' no encontrado");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
                 fechaExpLicencia = LocalDate.parse(request.getParameter("txtfechaexplicencia"), formatter);
+                
                 if (fechaExpLicencia.equals(fechaActual)) {
                     respuesta.put("status", "error");
-                    respuesta.put("message", "Verifique la 'fecha de EXPEDICIÓN de licendia'");
+                    respuesta.put("message", "Verifique la fecha de 'EXPEDICIÓN' de licendia");
 
                     String jsonError = new Gson().toJson(respuesta);
                     response.getWriter().write(jsonError);
                     return;
                 }
-
-                fechaVenLicencia = LocalDate.parse(request.getParameter("txtfechavlicencia"), formatter);
-                if (fechaVenLicencia.equals(fechaActual)) {
-                    respuesta.put("status", "error");
-                    respuesta.put("message", "Verifique la fecha de VENCIMIENTO de licendia");
-
-                    String jsonError = new Gson().toJson(respuesta);
-                    response.getWriter().write(jsonError);
-                    return;
-                }
+                
+                fechaVenLicencia = fechaExpLicencia.plusYears(10);
             }
-
+            
             conex.setAutoCommit(false);
 
             cenpersona.setId(idpersona);
@@ -210,8 +232,9 @@ public class ModificarPersona extends HttpServlet {
             cenpersona.setTelefono(telefono);
             cenpersona.setMail(email);
             cenpersona.setGruposanguineo(grupoSanguineo);
+            cenpersona.setLicenciaconduccion(licenciaConduccion);
             if (!numeroLicencia.equals("")) {
-                cenpersona.setLicenciaconduccion(numeroLicencia);
+                cenpersona.setNumerolicenciaconduccion(numeroLicencia);
                 cenpersona.setFechaexp(fechaExpLicencia == null ? null : Date.valueOf(fechaExpLicencia));
                 cenpersona.setFechaven(fechaVenLicencia == null ? null : Date.valueOf(fechaVenLicencia));
                 cenpersona.setCategorialicencia(categoriaLicencia);

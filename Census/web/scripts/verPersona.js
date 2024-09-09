@@ -39,11 +39,19 @@ $(function () {
                     $('#txttelefono').val(response.persona.TELEFONO);
                     $('#txtemail').val(response.persona.MAIL);
 
-                    $('#txtnumerolicencia').val(response.persona.LIC_CONDUCCION);
-                    $('#txtcategorialicencia').val(response.persona.CATEGORIA_LIC);
-                    $('#txtfechaexplicencia').val(response.persona.FECHA_EXP);
-                    $('#txtfechavlicencia').val(response.persona.FECHA_VEN);
-                    
+                    if (response.persona.LICENCIA_CONDUCCION === 'S') {
+                        $('#txtnumerolicencia').val(response.persona.LIC_CONDUCCION);
+                        $('#txtcategorialicencia').val(response.persona.CATEGORIA_LIC);
+                        $('#txtfechaexplicencia').val(response.persona.FECHA_EXP);
+                        $('#txtfechavlicencia').val(response.persona.FECHA_VEN);
+                        $('.licencia-conduccion').show();
+                    } else {
+                        $('#txtnumerolicencia').val('');
+                        $('#txtcategorialicencia').val('');
+                        $('#txtfechaexplicencia').val('');
+                        $('#txtfechavlicencia').val('');
+                        $('.licencia-conduccion').hide();
+                    }
                     $(".btneditar").attr("data-id", response.persona.PER_ID);
 
                 } else if (response.status === "fail") {
@@ -61,11 +69,11 @@ $(function () {
     } else {
         console.log("Parámetros no encontrados en la URL");
     }
-    
+
     $('#btnvolver').click(function () {
         window.location.href = "listarPersonas.jsp";
     });
-    
+
     $('#btneditar').click(function () {
         var id = $(this).data('id');
         window.location.href = "modificarPersona.jsp?opcion=2&id=" + id;

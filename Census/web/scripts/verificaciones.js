@@ -31,7 +31,7 @@ $(function () {
                         $('#chkfotos').prop('checked', true);
                     }
                     var estadoverificacionId = response.verificacion.ESTADO_VERIFICACION_ID || 1;
-                    $('#txtobservaciones').val(response.verificacion.OBSERVACIONES);
+                    $('#txtobservaciones').val(response.verificacion.OBSERVACIONES_VERIFICACION);
 
                     $.ajax({
                         url: '../../cargarEstadosVerificacion',

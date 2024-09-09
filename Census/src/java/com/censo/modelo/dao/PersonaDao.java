@@ -23,7 +23,7 @@ public class PersonaDao extends Conexion {
             pst = conex.prepareStatement("INSERT INTO CEN_PERSONAS (PER_TIPODOC,PER_DOCUMENTO,"
                     + "PER_NOMBRE1,PER_NOMBRE2,PER_APELLIDO1,PER_APELLIDO2,PER_FECHANAC,PER_GENERO,PER_DIRECCION,"
                     + "MUN_ID,PER_TELEFONO,PER_MAIL,PER_GRUPOSANGUINEO,PER_LICONDUCCION,PER_FEXPLIC,PER_FVENLIC,"
-                    + "PER_CATLIC,PER_FECHAPROCESO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,sysdate)", new String[]{"PER_ID"});
+                    + "PER_CATLIC,PER_FECHAPROCESO, LICENCIA_CONDUCCION) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,sysdate,?)", new String[]{"PER_ID"});
             pst.setInt(1, cenpersona.getTipodocumento());
             pst.setString(2, cenpersona.getDocumento());
             pst.setString(3, cenpersona.getNombre1());
@@ -37,10 +37,11 @@ public class PersonaDao extends Conexion {
             pst.setString(11, cenpersona.getTelefono());
             pst.setString(12, cenpersona.getMail());
             pst.setInt(13, cenpersona.getGruposanguineo());
-            pst.setString(14, cenpersona.getLicenciaconduccion());
+            pst.setString(14, cenpersona.getNumerolicenciaconduccion());
             pst.setDate(15, cenpersona.getFechaexp());
             pst.setDate(16, cenpersona.getFechaven());
             pst.setInt(17, cenpersona.getCategorialicencia());
+            pst.setString(18, cenpersona.getLicenciaconduccion());
             pst.executeUpdate();
             rst = pst.getGeneratedKeys();
             if (rst != null) {
@@ -72,7 +73,7 @@ public class PersonaDao extends Conexion {
                     + "PER_NOMBRE1 = ?,PER_NOMBRE2 = ?,PER_APELLIDO1 = ?,PER_APELLIDO2 = ?,PER_FECHANAC = ?,"
                     + "PER_GENERO = ?,PER_DIRECCION = ?,MUN_ID = ?,PER_TELEFONO = ?,PER_MAIL = ?,PER_GRUPOSANGUINEO = ?,"
                     + "PER_LICONDUCCION = ?,PER_FEXPLIC = ?,PER_FVENLIC = ?,"
-                    + "PER_CATLIC = ? WHERE PER_ID = ? ");
+                    + "PER_CATLIC = ?, LICENCIA_CONDUCCION = ? WHERE PER_ID = ? ");
             pst.setInt(1, cenpersona.getTipodocumento());
             pst.setString(2, cenpersona.getDocumento());
             pst.setString(3, cenpersona.getNombre1());
@@ -86,11 +87,12 @@ public class PersonaDao extends Conexion {
             pst.setString(11, cenpersona.getTelefono());
             pst.setString(12, cenpersona.getMail());
             pst.setInt(13, cenpersona.getGruposanguineo());
-            pst.setString(14, cenpersona.getLicenciaconduccion());
+            pst.setString(14, cenpersona.getNumerolicenciaconduccion());
             pst.setDate(15, cenpersona.getFechaexp());
             pst.setDate(16, cenpersona.getFechaven());
             pst.setInt(17, cenpersona.getCategorialicencia());
-            pst.setInt(18, cenpersona.getId());
+            pst.setString(18, cenpersona.getLicenciaconduccion());
+            pst.setInt(19, cenpersona.getId());
             pst.executeUpdate();
             
             return true;

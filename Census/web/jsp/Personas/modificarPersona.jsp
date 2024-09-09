@@ -129,20 +129,23 @@
                                         <div class="card-body">
                                             <div class="form-group row">
                                                 <div class="col-sm-3 mb-3 mb-sm-0">
+                                                    <label>Tiene licencia de conducción?(*)</label>
+                                                    <select class="form-control" id="cmblicenciaconduccion" name="cmblicenciaconduccion">
+                                                        <option value="S">Si</option>
+                                                        <option value="N">No</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-3 mb-3 mb-sm-0 licencia-conduccion">
                                                     <label>No. Licencia Conduccion</label>
                                                     <input class="form-control solo-numeros" type="text" id="txtnumerolicencia" name="txtnumerolicencia" maxlength="30" readonly="true">
                                                 </div>
-                                                <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <div class="col-sm-3 mb-3 mb-sm-0 licencia-conduccion">
                                                     <label>Categoria</label>
                                                     <select class="form-control" id="cmbcategoriaslicencia" name="cmbcategoriaslicencia" required="true"></select>
                                                 </div>
-                                                <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <div class="col-sm-3 mb-3 mb-sm-0 licencia-conduccion">
                                                     <label>Fecha Expedición</label>
                                                     <input class="form-control" type="text" id="txtfechaexplicencia" name="txtfechaexplicencia" readonly="true">
-                                                </div>
-                                                <div class="col-sm-3 mb-3 mb-sm-0">
-                                                    <label>Fecha Vencimiento</label>
-                                                    <input class="form-control" type="text" id="txtfechavlicencia" name="txtfechavlicencia" readonly="true">
                                                 </div>
                                             </div>
                                         </div>

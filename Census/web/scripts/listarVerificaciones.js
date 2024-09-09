@@ -9,7 +9,7 @@ $(function () {
             if ($.fn.DataTable.isDataTable('#dataTable')) {
                 $('#dataTable').DataTable().destroy();
             }
-            
+
             $("#lista-vehiculos").empty();
 
             var lista = response.verificaciones;
@@ -24,7 +24,7 @@ $(function () {
                 } else {
                     btnaccion = `<button type="button" class="btn btn-danger btneditar" name="btneditar" data-id="${verificacion.CEN_ID}">Editar</button>`;
                 }
-                
+
                 var nuevoElemento = `
                 <tr>
                     <td>${verificacion.NUMERO}</td>
@@ -33,7 +33,8 @@ $(function () {
                     <td>${verificacion.PUNTO_ATENCION}</td>
                     <td>${verificacion.ESTADO}</td>
                     <td>${verificacion.USUARIO}</td>
-                    <td>${verificacion.DOCUMENTO_PDF}</td>
+                    <td>${verificacion.VERIFICACION_DOC === 'S' ? 'Si': 'No'}</td>
+                    <td>${verificacion.VERIFICACION_FOTOS === 'S' ? 'Si' : 'No'}</td>
                     <td>${verificacion.FECHA_PROCESO_FORMAT}</td>
                     <td>${verificacion.FECHA_PROCESO_VERIFICACION_FORMAT}</td>
                     <td>${verificacion.ESTADO_VERIFICACION}</td>
@@ -43,12 +44,12 @@ $(function () {
                 `;
                 $("#lista-verificaciones").append(nuevoElemento);
             });
-            
+
             $('#dataTable').DataTable({
                 responsive: true,
                 autoWidth: false
             });
-            
+
         }
     });
 
@@ -61,7 +62,7 @@ $(function () {
         var id = $(this).data('id');
         window.location.href = "modificarVerificacion.jsp?opcion=2&id=" + id;
     });
-    
+
     $('.table-responsive').on('click', '.btnconsultar', function () {
         var id = $(this).data('id');
         window.location.href = "verVerificacion.jsp?opcion=1&id=" + id;

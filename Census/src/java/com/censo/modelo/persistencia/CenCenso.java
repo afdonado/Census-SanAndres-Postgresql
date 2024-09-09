@@ -38,11 +38,11 @@ public class CenCenso {
         censo.setHora(rs.getString(3));
         censo.setPun_id(rs.getInt(4));
         censo.setVeh_id(rs.getInt(5));
-        censo.setUsu_id(rs.getInt(7));
-        censo.setEstado(rs.getInt(8));
-        censo.setFechaproceso(rs.getTimestamp(9));
-        censo.setNumero(rs.getString(10));
-        censo.setObservaciones(rs.getString(11));
+        censo.setUsu_id(rs.getInt(6));
+        censo.setEstado(rs.getInt(7));
+        censo.setFechaproceso(rs.getTimestamp(8));
+        censo.setNumero(rs.getString(9));
+        censo.setObservaciones(rs.getString(10));
         return censo;
     }
 

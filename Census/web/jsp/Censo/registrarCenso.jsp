@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
                                             <label>Referencia Vehículo(*)</label>
-                                            <input class="form-control" type="text" id="txtreferencia" name="txtreferencia" maxlength="10" style="text-transform: uppercase" required="true">
+                                            <input class="form-control" type="text" id="txtreferencia" name="txtreferencia" maxlength="40" style="text-transform: uppercase" required="true">
                                         </div>
                                     </div>                                       
                                 </div>
@@ -84,7 +84,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="form-group row">
-                                        <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" cols="3"></textarea>
+                                        <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%; text-transform: uppercase" cols="3"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -146,7 +146,6 @@
         <script src="${pageContext.request.contextPath}/scripts/censo.js" type="text/javascript"></script>
 
         <script src="${pageContext.request.contextPath}/scripts/validacionesCampos.js" type="text/javascript"></script>
-        <script src="${pageContext.request.contextPath}/scripts/fechas.js" type="text/javascript"></script>
 
         <link href="${pageContext.request.contextPath}/fileinput/css/fileinput.css" rel="stylesheet" type="text/css"/>
         <script src="${pageContext.request.contextPath}/fileinput/js/fileinput.min.js" type="text/javascript"></script>

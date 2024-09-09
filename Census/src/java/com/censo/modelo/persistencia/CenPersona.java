@@ -34,12 +34,13 @@ public class CenPersona {
     private String telefono;
     private String mail;
     private int gruposanguineo;
-    private String licenciaconduccion;
+    private String numerolicenciaconduccion;
     private Date fechaexp;
     private Date fechaven;
     private int categorialicencia;
     private Timestamp fechaproceso;
     private int usu_id;    
+    private String licenciaconduccion;
     
     public static CenPersona load(ResultSet rs)throws SQLException{
         CenPersona persona= new CenPersona();
@@ -57,12 +58,13 @@ public class CenPersona {
         persona.setTelefono(rs.getString(12));
         persona.setMail(rs.getString(13));
         persona.setGruposanguineo(rs.getInt(14));
-        persona.setLicenciaconduccion(rs.getString(15));
+        persona.setNumerolicenciaconduccion(rs.getString(15));
         persona.setFechaexp(rs.getDate(16));
         persona.setFechaven(rs.getDate(17));
         persona.setCategorialicencia(rs.getInt(18));
         persona.setFechaproceso(rs.getTimestamp(19));
         persona.setUsu_id(rs.getInt(20));
+        persona.setLicenciaconduccion(rs.getString(21));
         return persona;
     }
     

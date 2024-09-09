@@ -39,10 +39,19 @@ $(function () {
                     $('#txtdireccion').val(response.persona.DIRECCION);
                     $('#txttelefono').val(response.persona.TELEFONO);
                     $('#txtemail').val(response.persona.MAIL);
+                    
+                    var categoriaId;
+                    $('#cmblicenciaconduccion').val(response.persona.LICENCIA_CONDUCCION);
+                    if ($('#cmblicenciaconduccion').val() === 'S') {
+                        $('#txtnumerolicencia').val(response.persona.LIC_CONDUCCION);
+                        categoriaId = response.persona.PER_CATLIC;
+                        $('#txtfechaexplicencia').val(response.persona.FECHA_EXP);
+                        $('.licencia-conduccion').show();
+                    } else {
+                        $('#txtnumerolicencia').val('');
+                        $('.licencia-conduccion').hide();
+                    }
 
-                    $('#txtnumerolicencia').val(response.persona.LIC_CONDUCCION);
-                    var categoriaId = response.persona.PER_CATLIC;
-                    $('#txtfechaexplicencia').val(response.persona.FECHA_EXP);
                     $('#txtfechavlicencia').val(response.persona.FECHA_VEN);
 
                     $('#idpersona').val(response.persona.PER_ID);

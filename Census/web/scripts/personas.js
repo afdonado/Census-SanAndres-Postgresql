@@ -1,3 +1,15 @@
+$(function(){
+    function actualizarCamposLicencia() {
+        var runt = $('#cmblicenciaconduccion').val();
+        if (runt === "N") {
+            $('.licencia-conduccion').hide();
+        } else {
+            $('.licencia-conduccion').show();
+        }
+    }
+    
+    $('#cmblicenciaconduccion').on('change focus', actualizarCamposLicencia);
+});
 
 function consultarDocumentoPersona(tipodocumento, documento) {
     if (documento.length > 0) {
@@ -14,9 +26,10 @@ function consultarDocumentoPersona(tipodocumento, documento) {
                     console.log("success", response.message);
                 } else if (response.status === "fail") {
                     $('#txtdocumento').val('');
+                    alert('Documento digitado no esta registrado');
                 } else if (response.status === "error") {
-                    alert(response.message);
                     $('#txtdocumento').val('');
+                    alert(response.message);
                 }
             },
             error: function (xhr, status, error) {

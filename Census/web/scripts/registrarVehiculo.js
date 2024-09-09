@@ -206,6 +206,7 @@ $(function () {
             $.each(data, function (index, item) {
                 select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
             });
+            select.select(10);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error("Error en la solicitud de cargar clases vehiculo: ", textStatus, errorThrown);

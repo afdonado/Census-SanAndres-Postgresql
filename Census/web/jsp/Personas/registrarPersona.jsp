@@ -30,9 +30,9 @@
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
                 if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("registrarPersona.jsp")) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                LocalDate fecha = LocalDate.now();
-                String fechaActual = fecha.format(formatter);
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    LocalDate fecha = LocalDate.now();
+                    String fechaActual = fecha.format(formatter);
         %>
         <div id="wrapper">
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -86,86 +86,89 @@
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Fecha Nacimiento(*)</label>
                                                 <input class="form-control" type="text" id="txtfechanacimiento" name="txtfechanacimiento" readonly="true" value="<%=fechaActual%>" required="true">
-                                            </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Genero(*)</label>
-                                                <select class="form-control" id="cmbgeneros" name="cmbgeneros" required="true"></select>
-                                            </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Grupo Sanguineo(*)</label>
-                                                <select class="form-control" id="cmbgrupossanguineos" name="cmbgrupossanguineos" required="true"></select>
-                                            </div>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Genero(*)</label>
+                                            <select class="form-control" id="cmbgeneros" name="cmbgeneros" required="true"></select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Grupo Sanguineo(*)</label>
+                                            <select class="form-control" id="cmbgrupossanguineos" name="cmbgrupossanguineos" required="true"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Datos de Contacto</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Departamento(*)</label>
+                                            <select class="form-control" id="cmbdepartamentos" name="cmbdepartamentos" required="true"></select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Municipio(*)</label>
+                                            <select class="form-control" id="cmbmunicipios" name="cmbmunicipios" required="true"></select>
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Dirección(*)</label>
+                                            <input class="form-control" type="text" id="txtdireccion" name="txtdireccion" maxlength="80" style="text-transform: uppercase" required="true">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">                                    
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Telefono(*)</label>
+                                            <input class="form-control solo-numeros" type="text" id="txttelefono" name="txttelefono" maxlength="30" required="true">
+                                        </div>
+                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <label>Correo Electronico(*)</label>
+                                            <input class="form-control validar-email" type="text" id="txtemail" name="txtemail" maxlength="100" style="text-transform: uppercase" required="true">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Datos de Contacto</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Datos Licencia Conducción</h6>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Departamento(*)</label>
-                                                <select class="form-control" id="cmbdepartamentos" name="cmbdepartamentos" required="true"></select>
+                                                <label>Tiene licencia de conducción?(*)</label>
+                                                <select class="form-control" id="cmblicenciaconduccion" name="cmblicenciaconduccion">
+                                                    <option value="S" selected>Si</option>
+                                                    <option value="N">No</option>
+                                                </select>
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Municipio(*)</label>
-                                                <select class="form-control" id="cmbmunicipios" name="cmbmunicipios" required="true"></select>
+                                            <div class="col-sm-3 mb-3 mb-sm-0 licencia-conduccion">
+                                                <label>No. Licencia Conduccion</label>
+                                                <input class="form-control solo-numeros" type="text" id="txtnumerolicencia" name="txtnumerolicencia" maxlength="30">
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Dirección(*)</label>
-                                                <input class="form-control" type="text" id="txtdireccion" name="txtdireccion" maxlength="80" style="text-transform: uppercase" required="true">
+                                            <div class="col-sm-3 mb-3 mb-sm-0 licencia-conduccion">
+                                                <label>Categoria</label>
+                                                <select class="form-control" id="cmbcategoriaslicencia" name="cmbcategoriaslicencia"></select>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">                                    
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Telefono(*)</label>
-                                                <input class="form-control solo-numeros" type="text" id="txttelefono" name="txttelefono" maxlength="30" required="true">
-                                            </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Correo Electronico(*)</label>
-                                                <input class="form-control validar-email" type="text" id="txtemail" name="txtemail" maxlength="100" style="text-transform: uppercase" required="true">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card shadow mb-4">
-                                        <div class="card-header py-3">
-                                            <h6 class="m-0 font-weight-bold text-primary">Datos Licencia Conducción</h6>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="form-group row">
-                                                <div class="col-sm-3 mb-3 mb-sm-0">
-                                                    <label>No. Licencia Conduccion</label>
-                                                    <input class="form-control solo-numeros" type="text" id="txtnumerolicencia" name="txtnumerolicencia" maxlength="30">
-                                                </div>
-                                                <div class="col-sm-3 mb-3 mb-sm-0">
-                                                    <label>Categoria</label>
-                                                    <select class="form-control" id="cmbcategoriaslicencia" name="cmbcategoriaslicencia"></select>
-                                                </div>
-                                                <div class="col-sm-3 mb-3 mb-sm-0">
-                                                    <label>Fecha Expedición</label>
-                                                    <input class="form-control" type="text" id="txtfechaexplicencia" name="txtfechaexplicencia" readonly="true" value="<%=fechaActual%>">
-                                                </div>
-                                                <div class="col-sm-3 mb-3 mb-sm-0">
-                                                    <label>Fecha Vencimiento</label>
-                                                    <input class="form-control" type="text" id="txtfechavlicencia" name="txtfechavlicencia" readonly="true" value="<%=fechaActual%>">
-                                                </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0 licencia-conduccion">
+                                                <label>Fecha Expedición</label>
+                                                <input class="form-control" type="text" id="txtfechaexplicencia" name="txtfechaexplicencia" readonly="true" value="<%=fechaActual%>">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                        <button type="button" class="btn btn-lg btn-success btn-block" id="btnguardar" name="btnguardar" >Guardar</button>
-                                    </div>
-                                    <div class="form-group col-xs-6 col-sm-2 col-md-2">
-                                        <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
-                                    </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                    <button type="button" class="btn btn-lg btn-success btn-block" id="btnguardar" name="btnguardar" >Guardar</button>
                                 </div>
-                            </form>
-                        </div>
+                                <div class="form-group col-xs-6 col-sm-2 col-md-2">
+                                    <button type="button" class="btn btn-lg btn-danger btn-block" id="btnvolver" name="btnvolver">Volver</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <footer class="sticky-footer bg-white">
+                </div>
+                <footer class="sticky-footer bg-white">
                     <jsp:include page="/jsp/Footer.jsp"></jsp:include>
                     </footer>
                 </div>
