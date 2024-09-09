@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -106,10 +108,13 @@ public class RegistrarCenso extends HttpServlet {
                 return;
             }
             
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate fechaCenso = LocalDate.parse(request.getParameter("txtfechacenso"),formatter);
             
-            Date fechaCenso = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechacenso")).getTime());
-            Date fechaActual = new java.sql.Date(new java.util.Date().getTime());
-            String hora = new java.text.SimpleDateFormat("HHmm").format(fechaActual);
+            DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime horaActual = LocalTime.now();
+            String hora = horaActual.format(formatterHora);
+            
             int puntoAtencion = Integer.parseInt(request.getParameter("cmbpuntosatencion"));
             int idvehiculo = Integer.parseInt(request.getParameter("idvehiculo"));
             String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
@@ -117,7 +122,7 @@ public class RegistrarCenso extends HttpServlet {
             conex.setAutoCommit(false);
 
             cencenso = new CenCenso();
-            cencenso.setFecha(fechaCenso);
+            cencenso.setFecha(fechaCenso == null ? null : Date.valueOf(fechaCenso));
             cencenso.setHora(hora);
             cencenso.setPun_id(puntoAtencion);
             cencenso.setVeh_id(idvehiculo);
@@ -139,7 +144,7 @@ public class RegistrarCenso extends HttpServlet {
                 respuesta.put("message", "Censo no registrado");
             }
 
-        } catch (SQLException | ParseException e) {
+        } catch (SQLException e) {
             if (conex != null) {
                 try {
                     conex.rollback();

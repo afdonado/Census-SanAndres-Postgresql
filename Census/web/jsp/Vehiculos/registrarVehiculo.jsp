@@ -1,7 +1,7 @@
 <%@page import="javax.servlet.http.HttpSession"%>
-<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="java.time.LocalDate"%>
 <%@page import="java.util.LinkedList"%>
-<%@page import="java.util.Date"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -30,7 +30,9 @@
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
                 if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("registrarVehiculo.jsp")) {
-                    Date fechaActual = new Date(new Date().getTime());
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    LocalDate fecha = LocalDate.now();
+                    String fechaActual = fecha.format(formatter);
         %>
         <div id="wrapper">
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -137,7 +139,7 @@
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0 matricula">
                                                 <label>Fecha Matricula</label>
-                                                <input class="form-control" type="text" id="txtfechamatricula" name="txtfechamatricula" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>">
+                                                <input class="form-control" type="text" id="txtfechamatricula" name="txtfechamatricula" readonly="true" value="<%=fechaActual%>">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -169,7 +171,7 @@
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0 importacion">
                                             <label>Fecha Importación</label>
-                                            <input class="form-control" type="text" id="txtfechaimportacion" name="txtfechaimportacion" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
+                                            <input class="form-control" type="text" id="txtfechaimportacion" name="txtfechaimportacion" readonly="true" value="<%=fechaActual%>"/>
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0 importacion">
                                             <label>Pais Importación</label>
@@ -194,7 +196,7 @@
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0" id="soatcontenedor">
                                             <label>Fecha Venc. Soat</label>
-                                            <input class="form-control" type="text" id="txtfechavsoat" name="txtfechavsoat" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
+                                            <input class="form-control" type="text" id="txtfechavsoat" name="txtfechavsoat" readonly="true" value="<%=fechaActual%>"/>
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0">
                                             <label>Tecnomecanica (*)</label>
@@ -205,7 +207,7 @@
                                         </div>
                                         <div class="col-sm-3 mb-3 mb-sm-0" id="tecnomecanicacontenedor">
                                             <label>Fecha Venc. Tecnomecanica</label>
-                                            <input class="form-control" type="text" id="txtfechavtecnomecanica" name="txtfechavtecnomecanica" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>"/>
+                                            <input class="form-control" type="text" id="txtfechavtecnomecanica" name="txtfechavtecnomecanica" readonly="true" value="<%=fechaActual%>"/>
                                         </div>
                                     </div>
                                 </div>

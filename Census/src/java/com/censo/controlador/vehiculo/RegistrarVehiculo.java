@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -263,7 +263,7 @@ public class RegistrarVehiculo extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             //Validar parametro tecnomecanica
             if (request.getParameter("cmbtecnomecanica") == null || request.getParameter("cmbtecnomecanica").isEmpty()) {
                 respuesta.put("status", "error");
@@ -286,10 +286,13 @@ public class RegistrarVehiculo extends HttpServlet {
             String transformado = request.getParameter("cmbtransformado").toUpperCase().trim();
 
             String runt = request.getParameter("cmbrunt").toUpperCase().trim();
-            Date fechaMatricula = null;
+            LocalDate fechaMatricula = null;
             String licenciaTransito = "";
             int paisMatricula = 0;
             int municipioMatricula = 0;
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate fechaActual = LocalDate.now();
 
             if (runt.equals("S")) {
                 //Validar parametro fecha matricula
@@ -323,7 +326,17 @@ public class RegistrarVehiculo extends HttpServlet {
                 }
 
                 licenciaTransito = request.getParameter("txtlicenciatransito").toUpperCase().trim();
-                fechaMatricula = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechamatricula")).getTime());
+
+                fechaMatricula = LocalDate.parse(request.getParameter("txtfechamatricula"), formatter);
+                if (fechaMatricula.equals(fechaActual)) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Verifique la fecha de MATRICULA");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
+
                 paisMatricula = Integer.parseInt(request.getParameter("cmbpaismatricula"));
 
                 if (paisMatricula == 18) {
@@ -345,7 +358,7 @@ public class RegistrarVehiculo extends HttpServlet {
 
             int tipoDocumentoImportacion = Integer.parseInt(request.getParameter("cmbtiposimportacion"));
             String documentoImportacion = "";
-            Date fechaImportacion = null;
+            LocalDate fechaImportacion = null;
             int paisImportacion = 0;
 
             if (tipoDocumentoImportacion != 0) {
@@ -381,12 +394,22 @@ public class RegistrarVehiculo extends HttpServlet {
                 }
 
                 documentoImportacion = request.getParameter("txtdocumentoimportacion").toUpperCase().trim();
-                fechaImportacion = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechaimportacion")).getTime());
+
+                fechaImportacion = LocalDate.parse(request.getParameter("txtfechaimportacion"), formatter);
+                if (fechaImportacion.equals(fechaActual)) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Verifique la fecha de IMPORTACIÓN");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
+
                 paisImportacion = Integer.parseInt(request.getParameter("cmbpaisimportacion"));
             }
 
             String soat = request.getParameter("cmbsoat").toUpperCase().trim();
-            Date fechaVencimientoSoat = null;
+            LocalDate fechaVencimientoSoat = null;
             if (soat.equals("S")) {
                 //Validar parametro fecha vencimiento  soat
                 if (request.getParameter("txtfechavsoat") == null) {
@@ -398,12 +421,20 @@ public class RegistrarVehiculo extends HttpServlet {
                     return;
                 }
 
-                fechaVencimientoSoat = request.getParameter("txtfechavsoat").isEmpty() ? null : new Date(new SimpleDateFormat("dd/MM/yyyy")
-                        .parse(request.getParameter("txtfechavsoat")).getTime());
+                fechaVencimientoSoat = request.getParameter("txtfechavsoat").isEmpty()
+                        ? null : LocalDate.parse(request.getParameter("txtfechavsoat"), formatter);
+                if (fechaVencimientoSoat != null && fechaVencimientoSoat.equals(fechaActual)) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Verifique la fecha de VENCIMIENTO del SOAT");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
             }
 
             String tecnoMecanica = request.getParameter("cmbtecnomecanica").toUpperCase().trim();
-            Date fechaVencimientoTecnomecanica = null;
+            LocalDate fechaVencimientoTecnomecanica = null;
             if (tecnoMecanica.equals("S")) {
                 //Validar parametro fecha vencimiento tecnomecanica
                 if (request.getParameter("txtfechavtecnomecanica") == null) {
@@ -415,8 +446,16 @@ public class RegistrarVehiculo extends HttpServlet {
                     return;
                 }
 
-                fechaVencimientoTecnomecanica = request.getParameter("txtfechavtecnomecanica").isEmpty() ? null : new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy")
-                        .parse(request.getParameter("txtfechavtecnomecanica")).getTime());
+                fechaVencimientoTecnomecanica = request.getParameter("txtfechavtecnomecanica").isEmpty()
+                        ? null : LocalDate.parse(request.getParameter("txtfechavtecnomecanica"), formatter);
+                if (fechaVencimientoTecnomecanica != null && fechaVencimientoTecnomecanica.equals(fechaActual)) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Verifique la fecha de VENCIMIENTO de la TECNICO MECANICA");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
             }
 
             //Validar parametro cantidad personas
@@ -428,7 +467,7 @@ public class RegistrarVehiculo extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             int cantpersonas = (Integer.parseInt(request.getParameter("txtcantidadpersonas")));
 
             if (cantpersonas > 0) {
@@ -453,17 +492,17 @@ public class RegistrarVehiculo extends HttpServlet {
                     cenvehiculo.setTransformado(transformado);
                     cenvehiculo.setRunt(runt);
                     cenvehiculo.setLicencia_transito(licenciaTransito);
-                    cenvehiculo.setFecha_matricula(fechaMatricula);
+                    cenvehiculo.setFecha_matricula(fechaMatricula == null ? null : Date.valueOf(fechaMatricula));
                     cenvehiculo.setPai_id_matricula(paisMatricula);
                     cenvehiculo.setMun_id_matricula(municipioMatricula);
                     cenvehiculo.setTipodoc_importacion(tipoDocumentoImportacion);
                     cenvehiculo.setDoc_importacion(documentoImportacion);
-                    cenvehiculo.setFecha_importacion(fechaImportacion);
+                    cenvehiculo.setFecha_importacion(fechaImportacion == null ? null : Date.valueOf(fechaImportacion));
                     cenvehiculo.setPai_id_origen(paisImportacion);
                     cenvehiculo.setSoat(soat);
-                    cenvehiculo.setFechaven_soat(fechaVencimientoSoat);
+                    cenvehiculo.setFechaven_soat(fechaVencimientoSoat == null ? null : Date.valueOf(fechaVencimientoSoat));
                     cenvehiculo.setTecno_mecanica(tecnoMecanica);
-                    cenvehiculo.setFechaven_tecno(fechaVencimientoTecnomecanica);
+                    cenvehiculo.setFechaven_tecno(fechaVencimientoTecnomecanica == null ? null : Date.valueOf(fechaVencimientoTecnomecanica));
                     cenvehiculo.setUsu_id(cenusuario.getId());
                     cenvehiculo.setEstado(1);
                     int idVehiculo = vehiculoDao.adicionarVehiculo(conex, cenvehiculo);
@@ -473,6 +512,26 @@ public class RegistrarVehiculo extends HttpServlet {
                         CenPersonaVehiculo cenpersonavehiculo = new CenPersonaVehiculo();
 
                         for (int i = 1; i <= cantpersonas; i++) {
+
+                            //Validar parametro cantidad personas
+                            if (request.getParameter("cmbtipospersona"+i) == null || request.getParameter("cmbtipospersona"+i).isEmpty()) {
+                                respuesta.put("status", "error");
+                                respuesta.put("message", "Parametro 'tipo persona' no encontrado");
+
+                                String jsonError = new Gson().toJson(respuesta);
+                                response.getWriter().write(jsonError);
+                                return;
+                            }
+                            
+                            //Validar parametro cantidad personas
+                            if (request.getParameter("idpersona"+i) == null || request.getParameter("idpersona"+i).isEmpty()) {
+                                respuesta.put("status", "error");
+                                respuesta.put("message", "Parametro 'documento persona' no encontrado");
+
+                                String jsonError = new Gson().toJson(respuesta);
+                                response.getWriter().write(jsonError);
+                                return;
+                            }
 
                             int tipoPersona = Integer.parseInt(request.getParameter("cmbtipospersona" + i));
                             int idPersona = Integer.parseInt(request.getParameter("idpersona" + i));
@@ -517,7 +576,7 @@ public class RegistrarVehiculo extends HttpServlet {
                     e.printStackTrace();
                 }
             }
-        } catch (NumberFormatException | SQLException | ParseException e) {
+        } catch (NumberFormatException | SQLException e) {
             respuesta.put("status", "error");
             respuesta.put("message", "Error al registrar el vehiculo");
             e.printStackTrace();

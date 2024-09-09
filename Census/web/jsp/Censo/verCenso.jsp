@@ -157,7 +157,6 @@
 
                     </div>
                 </div>
-            </div>
             <footer class="sticky-footer bg-white">
                 <jsp:include page="/jsp/Footer.jsp"></jsp:include>
                 </footer>

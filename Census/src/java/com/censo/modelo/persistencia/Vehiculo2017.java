@@ -1,6 +1,6 @@
 package com.censo.modelo.persistencia;
 
-import java.util.Date;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import lombok.ToString;
 public class Vehiculo2017 {
     
     
-    private long id;
+    private int id;
     private String placa;
     private String chasis;
     private String serie;

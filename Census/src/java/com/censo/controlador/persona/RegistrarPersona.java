@@ -11,8 +11,9 @@ import com.censo.modelo.persistencia.CenPersona;
 import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.annotation.WebServlet;
@@ -22,7 +23,7 @@ public class RegistrarPersona extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -31,10 +32,10 @@ public class RegistrarPersona extends HttpServlet {
         Map<String, String> respuesta = new HashMap<>();
 
         try {
-            
+
             PersonaDao personaDao = new PersonaDao();
             conex = personaDao.conectar();
-            
+
             //Validar parametro tipo documento
             if (request.getParameter("cmbtiposdocumento") == null || request.getParameter("cmbtiposdocumento").isEmpty()) {
                 respuesta.put("status", "error");
@@ -44,7 +45,7 @@ public class RegistrarPersona extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             //Validar parametro numero documento
             if (request.getParameter("txtdocumento") == null || request.getParameter("txtdocumento").isEmpty()) {
                 respuesta.put("status", "error");
@@ -68,7 +69,7 @@ public class RegistrarPersona extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             //Validar parametro txtprimernombre
             if (request.getParameter("txtprimernombre") == null || request.getParameter("txtprimernombre").isEmpty()) {
                 respuesta.put("status", "error");
@@ -78,7 +79,7 @@ public class RegistrarPersona extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             //Validar parametro txtprimerapellido
             if (request.getParameter("txtprimerapellido") == null || request.getParameter("txtprimerapellido").isEmpty()) {
                 respuesta.put("status", "error");
@@ -88,7 +89,7 @@ public class RegistrarPersona extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             //Validar parametro txtfechanacimiento
             if (request.getParameter("txtfechanacimiento") == null || request.getParameter("txtfechanacimiento").isEmpty()) {
                 respuesta.put("status", "error");
@@ -98,7 +99,21 @@ public class RegistrarPersona extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate fechaActual = LocalDate.now();
+
+            //Validar fecha de nacimiento
+            LocalDate fechaNacimiento = LocalDate.parse(request.getParameter("txtfechanacimiento"), formatter);
+            Period periodo = Period.between(fechaNacimiento, fechaActual);
+            if (periodo.getYears() < 16) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Verifique la fecha de NACIMIENTO");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
             //Validar parametro txtdireccion
             if (request.getParameter("txtdireccion") == null || request.getParameter("txtdireccion").isEmpty()) {
                 respuesta.put("status", "error");
@@ -108,7 +123,7 @@ public class RegistrarPersona extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             //Validar parametro txttelefono
             if (request.getParameter("txttelefono") == null || request.getParameter("txttelefono").isEmpty()) {
                 respuesta.put("status", "error");
@@ -118,9 +133,9 @@ public class RegistrarPersona extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             conex.setAutoCommit(false);
-            
+
             String primerNombre = request.getParameter("txtprimernombre").toUpperCase().trim();
             String segundoNombre = "";
             //Validar parametro txtsegundonombre
@@ -133,24 +148,42 @@ public class RegistrarPersona extends HttpServlet {
             if (request.getParameter("txtsegundoapellido") != null) {
                 segundoApellido = request.getParameter("txtsegundoapellido").toUpperCase().trim();
             }
-            Date fechaNacimiento = new Date(new SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechanacimiento")).getTime());
+
             int genero = Integer.parseInt(request.getParameter("cmbgeneros"));
             int municipio = Integer.parseInt(request.getParameter("cmbmunicipios"));
-            
+
             String direccion = request.getParameter("txtdireccion").toUpperCase().trim();
             String telefono = request.getParameter("txttelefono").toUpperCase().trim();
             String email = request.getParameter("txtemail").toUpperCase().trim();
             int grupoSanguineo = Integer.parseInt(request.getParameter("cmbgrupossanguineos"));
             String numeroLicencia = request.getParameter("txtnumerolicencia").toUpperCase().trim();
             int categoriaLicencia = 0;
-            Date fechaExpLicencia = null;
-            Date fechaVenLicencia = null;
+            LocalDate fechaExpLicencia = null;
+            LocalDate fechaVenLicencia = null;
             if (!numeroLicencia.equals("")) {
                 categoriaLicencia = Integer.parseInt(request.getParameter("cmbcategoriaslicencia"));
-                fechaExpLicencia = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechaexplicencia")).getTime());
-                fechaVenLicencia = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechavlicencia")).getTime());
+
+                fechaExpLicencia = LocalDate.parse(request.getParameter("txtfechaexplicencia"), formatter);
+                if (fechaExpLicencia.equals(fechaActual)) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Verifique la fecha de EXPEDICIÓN de licendia");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
+
+                fechaVenLicencia = LocalDate.parse(request.getParameter("txtfechavlicencia"), formatter);
+                if (fechaVenLicencia.equals(fechaActual)) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Verifique la fecha de VENCIMIENTO de licendia");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
             }
-            
+
             cenpersona = new CenPersona();
             cenpersona.setTipodocumento(tipoDocumento);
             cenpersona.setDocumento(documento);
@@ -158,26 +191,22 @@ public class RegistrarPersona extends HttpServlet {
             cenpersona.setNombre2(segundoNombre);
             cenpersona.setApellido1(primerApellido);
             cenpersona.setApellido2(segundoApellido);
-            cenpersona.setFechanacimiento(fechaNacimiento);
+            cenpersona.setFechanacimiento(fechaNacimiento == null ? null : Date.valueOf(fechaNacimiento));
             cenpersona.setGenero(genero);
             cenpersona.setMun_id(municipio);
             cenpersona.setDireccion(direccion);
             cenpersona.setTelefono(telefono);
             cenpersona.setMail(email);
             cenpersona.setGruposanguineo(grupoSanguineo);
-            if(!numeroLicencia.equals("")){
+            if (!numeroLicencia.equals("")) {
                 cenpersona.setLicenciaconduccion(numeroLicencia);
-                cenpersona.setFechaexp(fechaExpLicencia);
-                cenpersona.setFechaven(fechaVenLicencia);
+                cenpersona.setFechaexp(fechaExpLicencia == null ? null : Date.valueOf(fechaExpLicencia));
+                cenpersona.setFechaven(fechaVenLicencia == null ? null : Date.valueOf(fechaVenLicencia));
                 cenpersona.setCategorialicencia(categoriaLicencia);
             }
-            
-            String nombreCompleto = cenpersona.getNombre1() + " " + (cenpersona.getNombre2() != null ? cenpersona.getNombre2().trim() : "") 
-                    + " " + (cenpersona.getApellido1() != null ? cenpersona.getApellido1().trim() : "") 
-                    + " " + (cenpersona.getApellido2() != null ? cenpersona.getApellido2().trim() : "");
 
             long idpersona = personaDao.adicionarPersona(conex, cenpersona);
-            
+
             if (idpersona > 0) {
                 conex.commit();
                 respuesta.put("status", "success");
@@ -188,41 +217,8 @@ public class RegistrarPersona extends HttpServlet {
                 respuesta.put("status", "fail");
                 respuesta.put("message", "Persona no registrada");
             }
-           /* 
-            int opcion = Integer.parseInt(request.getParameter("opcion"));
-            
-            if (idPersona > 0) {
-                conex.commit();
-                if (opcion == 1) {
-                        out.println("<script type=\"text/javascript\">");
-                        out.println("alert('Persona Registrada');");
-                        out.println("location='jsp/Personas/registrarPersona.jsp?opcion=1';");
-                        out.println("</script>");
-                } else {
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Persona Registrada');");
-                    out.println("parent.$('#registrarpersona').modal('hide');");
-                    out.println("parent.document.getElementById('txtnombre').value = '"+ nombreCompleto +"';");
-                    out.println("parent.document.getElementById('idpersona').value = " + idPersona + ";");
-                    out.println("</script>");
-                }
-            } else {
-                conex.rollback();
-                if (opcion == 1) {
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Persona no Registrada');");
-                    out.println("location='jsp/Personas/registrarPersona.jsp?opcion=1';");
-                    out.println("</script>");
-                } else {
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Persona no Registrada');");
-                    out.println("parent.$('#registrarpersona').modal('hide');");
-                    out.println("</script>");
-                }
 
-            }
-*/
-        } catch (NumberFormatException | SQLException | ParseException e) {
+        } catch (NumberFormatException | SQLException e) {
             if (conex != null) {
                 try {
                     conex.rollback();
@@ -242,7 +238,7 @@ public class RegistrarPersona extends HttpServlet {
                 }
             }
         }
-        
+
         String json = new Gson().toJson(respuesta);
         response.getWriter().write(json);
     }

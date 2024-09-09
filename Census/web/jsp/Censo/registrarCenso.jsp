@@ -1,7 +1,7 @@
 <%@page import="javax.servlet.http.HttpSession"%>
-<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="java.time.LocalDate"%>
 <%@page import="java.util.LinkedList"%>
-<%@page import="java.util.Date"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -28,7 +28,9 @@
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
                 if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("registrarCenso.jsp")) {
-                    Date fechaActual = new Date(new Date().getTime());
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    LocalDate fecha = LocalDate.now();
+                    String fechaActual = fecha.format(formatter);
         %>
         <div id="wrapper">
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -57,7 +59,7 @@
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Fecha Censo (*)</label>
-                                                <input class="form-control" type="text" id="txtfechacenso" name="txtfechacenso" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>">
+                                                <input class="form-control" type="text" id="txtfechacenso" name="txtfechacenso" readonly="true" value="<%=fechaActual%>">
                                         </div>
                                     </div>
                                     <div class="form-group row">

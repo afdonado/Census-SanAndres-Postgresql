@@ -10,8 +10,8 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -117,8 +117,12 @@ public class VerificarVehiculo2017 extends HttpServlet {
                     Vehiculo2017Dao vehiculo2017Dao = new Vehiculo2017Dao();
                     Vehiculo2017 vehiculo2017 = new Vehiculo2017();
 
-                    SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-                    Date fechaActual = new Date(new Date().getTime());
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    LocalDate fecha = LocalDate.now();
+                    String fechaActual = fecha.format(formatter);
+                    
+                    //SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                    //Date fechaActual = new Date(new Date().getTime());
 
                     if (tipoReferencia == 1) {
                         vehiculo2017 = vehiculo2017Dao.ConsultarVehiculo2017ByPlaca(conex, valorReferencia);
@@ -166,10 +170,10 @@ public class VerificarVehiculo2017 extends HttpServlet {
 
                     if (vehiculo2017 != null) {
 
-                        String fechaMatricula = vehiculo2017.getFechaMatricula() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaMatricula());
-                        String fechaVenSoat = vehiculo2017.getFechaVenSoat() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaVenSoat());
-                        String fechaVenTecnomecanica = vehiculo2017.getFechaVenTecnomecanica() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaVenTecnomecanica());
-                        String fechaImportacion = vehiculo2017.getFechaImportacion() == null ? formato.format(fechaActual) : formato.format(vehiculo2017.getFechaImportacion());
+                        String fechaMatricula = vehiculo2017.getFechaMatricula() == null ? fechaActual : vehiculo2017.getFechaMatricula().toLocalDate().format(formatter);
+                        String fechaVenSoat = vehiculo2017.getFechaVenSoat() == null ? fechaActual : vehiculo2017.getFechaVenSoat().toLocalDate().format(formatter);
+                        String fechaVenTecnomecanica = vehiculo2017.getFechaVenTecnomecanica() == null ? fechaActual : vehiculo2017.getFechaVenTecnomecanica().toLocalDate().format(formatter);
+                        String fechaImportacion = vehiculo2017.getFechaImportacion() == null ? fechaActual : vehiculo2017.getFechaImportacion().toLocalDate().format(formatter);
 
                         respuesta.put("status", "success2017");
                         respuesta.put("vehiculo", vehiculo2017);

@@ -1,14 +1,7 @@
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.censo.modelo.dao.GrupoSanguineoDao"%>
-<%@page import="com.censo.modelo.dao.CategoriaLicenciaDao"%>
-<%@page import="com.censo.modelo.dao.MunicipioDao"%>
-<%@page import="com.censo.modelo.dao.DepartamentoDao"%>
-<%@page import="com.censo.modelo.dao.GeneroDao"%>
-<%@page import="com.censo.modelo.dao.TipoDocumentoDao"%>
 <%@page import="javax.servlet.http.HttpSession"%>
-<%@page import="java.util.Date"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="java.time.LocalDate"%>
 <%@page import="java.util.List"%>
-<%@page import="javax.servlet.http.HttpSession"%>
 <%@page import="java.util.LinkedList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -37,7 +30,9 @@
             HttpSession sessionCensus = request.getSession();
             if (sessionCensus.getAttribute("usuario") != null) {
                 if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("registrarPersona.jsp")) {
-                Date fechaActual = new Date(new Date().getTime());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate fecha = LocalDate.now();
+                String fechaActual = fecha.format(formatter);
         %>
         <div id="wrapper">
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -90,7 +85,7 @@
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Fecha Nacimiento(*)</label>
-                                                <input class="form-control" type="text" id="txtfechanacimiento" name="txtfechanacimiento" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>" required="true">
+                                                <input class="form-control" type="text" id="txtfechanacimiento" name="txtfechanacimiento" readonly="true" value="<%=fechaActual%>" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Genero(*)</label>
@@ -149,11 +144,11 @@
                                                 </div>
                                                 <div class="col-sm-3 mb-3 mb-sm-0">
                                                     <label>Fecha Expedición</label>
-                                                    <input class="form-control" type="text" id="txtfechaexplicencia" name="txtfechaexplicencia" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>">
+                                                    <input class="form-control" type="text" id="txtfechaexplicencia" name="txtfechaexplicencia" readonly="true" value="<%=fechaActual%>">
                                                 </div>
                                                 <div class="col-sm-3 mb-3 mb-sm-0">
                                                     <label>Fecha Vencimiento</label>
-                                                    <input class="form-control" type="text" id="txtfechavlicencia" name="txtfechavlicencia" readonly="true" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(fechaActual)%>">
+                                                    <input class="form-control" type="text" id="txtfechavlicencia" name="txtfechavlicencia" readonly="true" value="<%=fechaActual%>">
                                                 </div>
                                             </div>
                                         </div>

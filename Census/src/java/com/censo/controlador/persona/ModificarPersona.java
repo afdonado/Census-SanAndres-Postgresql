@@ -7,8 +7,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -143,7 +144,22 @@ public class ModificarPersona extends HttpServlet {
             if (request.getParameter("txtsegundoapellido") != null) {
                 segundoApellido = request.getParameter("txtsegundoapellido").toUpperCase().trim();
             }
-            Date fechaNacimiento = new Date(new SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechanacimiento")).getTime());
+            
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate fechaActual = LocalDate.now();
+
+            //Validar fecha de nacimiento
+            LocalDate fechaNacimiento = LocalDate.parse(request.getParameter("txtfechanacimiento"), formatter);
+            Period periodo = Period.between(fechaNacimiento, fechaActual);
+            if (periodo.getYears() < 16) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Verifique la fecha de NACIMIENTO");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
             int genero = Integer.parseInt(request.getParameter("cmbgeneros"));
             int municipio = Integer.parseInt(request.getParameter("cmbmunicipios"));
             String direccion = request.getParameter("txtdireccion").toUpperCase().trim();
@@ -152,12 +168,30 @@ public class ModificarPersona extends HttpServlet {
             int grupoSanguineo = Integer.parseInt(request.getParameter("cmbgrupossanguineos"));
             String numeroLicencia = request.getParameter("txtnumerolicencia").toUpperCase().trim();
             int categoriaLicencia = 0;
-            Date fechaExpLicencia = null;
-            Date fechaVenLicencia = null;
+            LocalDate fechaExpLicencia = null;
+            LocalDate fechaVenLicencia = null;
             if (!numeroLicencia.equals("")) {
                 categoriaLicencia = Integer.parseInt(request.getParameter("cmbcategoriaslicencia"));
-                fechaExpLicencia = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechaexplicencia")).getTime());
-                fechaVenLicencia = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechavlicencia")).getTime());
+                
+                fechaExpLicencia = LocalDate.parse(request.getParameter("txtfechaexplicencia"), formatter);
+                if (fechaExpLicencia.equals(fechaActual)) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Verifique la 'fecha de EXPEDICIÓN de licendia'");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
+
+                fechaVenLicencia = LocalDate.parse(request.getParameter("txtfechavlicencia"), formatter);
+                if (fechaVenLicencia.equals(fechaActual)) {
+                    respuesta.put("status", "error");
+                    respuesta.put("message", "Verifique la fecha de VENCIMIENTO de licendia");
+
+                    String jsonError = new Gson().toJson(respuesta);
+                    response.getWriter().write(jsonError);
+                    return;
+                }
             }
 
             conex.setAutoCommit(false);
@@ -169,7 +203,7 @@ public class ModificarPersona extends HttpServlet {
             cenpersona.setNombre2(segundoNombre);
             cenpersona.setApellido1(primerApellido);
             cenpersona.setApellido2(segundoApellido);
-            cenpersona.setFechanacimiento(fechaNacimiento);
+            cenpersona.setFechanacimiento(fechaNacimiento == null ? null : Date.valueOf(fechaNacimiento));
             cenpersona.setGenero(genero);
             cenpersona.setMun_id(municipio);
             cenpersona.setDireccion(direccion);
@@ -178,8 +212,8 @@ public class ModificarPersona extends HttpServlet {
             cenpersona.setGruposanguineo(grupoSanguineo);
             if (!numeroLicencia.equals("")) {
                 cenpersona.setLicenciaconduccion(numeroLicencia);
-                cenpersona.setFechaexp(fechaExpLicencia);
-                cenpersona.setFechaven(fechaVenLicencia);
+                cenpersona.setFechaexp(fechaExpLicencia == null ? null : Date.valueOf(fechaExpLicencia));
+                cenpersona.setFechaven(fechaVenLicencia == null ? null : Date.valueOf(fechaVenLicencia));
                 cenpersona.setCategorialicencia(categoriaLicencia);
             }
 
@@ -195,7 +229,7 @@ public class ModificarPersona extends HttpServlet {
                 respuesta.put("status", "fail");
                 respuesta.put("message", "Persona no modificada");
             }
-        } catch (IOException | NumberFormatException | SQLException | ParseException e) {
+        } catch (IOException | NumberFormatException | SQLException e) {
             if (conex != null) {
                 try {
                     conex.rollback();

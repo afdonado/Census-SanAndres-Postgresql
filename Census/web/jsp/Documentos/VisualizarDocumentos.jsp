@@ -31,7 +31,7 @@
                     DocumentoDigitalizadoDao documentoDigitalizadoDao = new DocumentoDigitalizadoDao();
                     Connection conex = documentoDigitalizadoDao.conectar();
 
-                    long iddocumento = Long.parseLong(request.getParameter("iddocumento"));
+                    int iddocumento = Integer.parseInt(request.getParameter("iddocumento"));
                     CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
                     String nombre = "jpg";
                     String extension = "";

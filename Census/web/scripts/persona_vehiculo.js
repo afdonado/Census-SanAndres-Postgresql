@@ -41,9 +41,13 @@ function consultarDocumentoPersonaVehiculo(nametipodocumento, namedocumento, nam
                     $('#' + namenombre).val(response.nombre);
                     $('#' + nameidpersona).val(response.id);
                 } else if (response.status === "fail") {
+                    $('#' + namedocumento).val('');
                     $('#' + namenombre).val('');
                     $('#' + nameidpersona).val('');
                 } else if (response.status === "error") {
+                    $('#' + namedocumento).val('');
+                    $('#' + namenombre).val('');
+                    $('#' + nameidpersona).val('');
                     alert(response.message);
                 }
             },

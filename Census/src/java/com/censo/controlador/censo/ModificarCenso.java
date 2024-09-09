@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -127,16 +131,20 @@ public class ModificarCenso extends HttpServlet {
                 return;
             }
 
-            //Date fechaCenso = new java.sql.Date(new java.text.SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("txtfechacenso")).getTime());
-            Date fechaActual = new java.sql.Date(new java.util.Date().getTime());
-            String hora = new java.text.SimpleDateFormat("HHmm").format(fechaActual);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate fechaCenso = LocalDate.parse(request.getParameter("txtfechacenso"),formatter);
+            
+            DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime horaActual = LocalTime.now();
+            String hora = horaActual.format(formatterHora);
+            
             int puntoAtencion = Integer.parseInt(request.getParameter("cmbpuntosatencion"));
             int idvehiculo = Integer.parseInt(request.getParameter("idvehiculo"));
             String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
 
             conex.setAutoCommit(false);
 
-            //cencenso.setFecha(fechaCenso);
+            cencenso.setFecha(fechaCenso == null ? null : Date.valueOf(fechaCenso));
             cencenso.setHora(hora);
             cencenso.setPun_id(puntoAtencion);
             cencenso.setVeh_id(idvehiculo);

@@ -17,13 +17,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -148,9 +144,8 @@ public class VerificarVehiculoRunt extends HttpServlet {
                             }
                         }
 
-                        SimpleDateFormat formatoEntrada = new SimpleDateFormat("yyyy-MM-dd");
-                        SimpleDateFormat formatoSalida = new SimpleDateFormat("dd/MM/yyyy");
-
+                        DateTimeFormatter formatterEntrada = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
                         vehiculoRunt = VehiculoRunt.builder()
                                 .placa(responseVR.getRuntPlacaVO().getPlacaVehiculo())
@@ -170,7 +165,7 @@ public class VerificarVehiculoRunt extends HttpServlet {
                                 .tipoCarroceria(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getTipoCarroceria())
                                 .tipoCombustible(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getTipoCombustible())
                                 .fechaMatriculaInicial(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getFechaMatriculaInicial() == null ? "" : 
-                                        formatoSalida.format(formatoEntrada.parse(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getFechaMatriculaInicial())))
+                                        formatter.format(formatterEntrada.parse(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getFechaMatriculaInicial())))
                                 .autoridadTransito(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getAutoridadTransito())
                                 .gravamenesPropiedad(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getGravamenesPropiedad())
                                 .clasicoAntiguo(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getClasicoAntiguo())
@@ -187,9 +182,9 @@ public class VerificarVehiculoRunt extends HttpServlet {
                                 .polizaSoat(
                                         VehiculoRunt.PolizaSoat.builder()
                                                 .numeroPoliza(vrpoliza.getNumeroPoliza())
-                                                .fechaExpedicion(vrpoliza.getFechaExpedicion() == null ? "" : formatoSalida.format(formatoEntrada.parse(vrpoliza.getFechaExpedicion())))
-                                                .fechaInicioVigencia(vrpoliza.getFechaInicioVigencia() == null ? "" : formatoSalida.format(formatoEntrada.parse(vrpoliza.getFechaInicioVigencia())))
-                                                .fechaFinVigencia(vrpoliza.getFechaFinVigencia() == null ? "" : formatoSalida.format(formatoEntrada.parse(vrpoliza.getFechaFinVigencia())))
+                                                .fechaExpedicion(vrpoliza.getFechaExpedicion() == null ? "" : formatter.format(formatterEntrada.parse(vrpoliza.getFechaExpedicion())))
+                                                .fechaInicioVigencia(vrpoliza.getFechaInicioVigencia() == null ? "" : formatter.format(formatterEntrada.parse(vrpoliza.getFechaInicioVigencia())))
+                                                .fechaFinVigencia(vrpoliza.getFechaFinVigencia() == null ? "" : formatter.format(formatterEntrada.parse(vrpoliza.getFechaFinVigencia())))
                                                 .entidadSoat(vrpoliza.getEntidadSoat())
                                                 .estado(vrpoliza.getEstado())
                                                 .build()
@@ -197,8 +192,8 @@ public class VerificarVehiculoRunt extends HttpServlet {
                                 .tecnicoMecanico(
                                         VehiculoRunt.TecnicoMecanico.builder()
                                                 .tipoRevision(vrcertificado.getTipoRevision())
-                                                .fechaExpedicion(vrcertificado.getFechaExpedicion() == null ? "" : formatoSalida.format(formatoEntrada.parse(vrcertificado.getFechaExpedicion())))
-                                                .fechaVigencia(vrcertificado.getFechaVigencia() == null ? "" : formatoSalida.format(formatoEntrada.parse(vrcertificado.getFechaVigencia())))
+                                                .fechaExpedicion(vrcertificado.getFechaExpedicion() == null ? "" : formatter.format(formatterEntrada.parse(vrcertificado.getFechaExpedicion())))
+                                                .fechaVigencia(vrcertificado.getFechaVigencia() == null ? "" : formatter.format(formatterEntrada.parse(vrcertificado.getFechaVigencia())))
                                                 .cdaExpide(vrcertificado.getCdaExpide())
                                                 .vigente(vrcertificado.getVigente())
                                                 .build())
@@ -255,8 +250,6 @@ public class VerificarVehiculoRunt extends HttpServlet {
             respuesta.put("status", "error");
             respuesta.put("message", "Error al verificar el vehiculo");
             e.printStackTrace();
-        } catch (ParseException ex) {
-            Logger.getLogger(VerificarVehiculoRunt.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (conex != null) {
                 try {
