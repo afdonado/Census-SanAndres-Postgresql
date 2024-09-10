@@ -38,15 +38,17 @@
                     String ruta = "";
                     cendocumentosdigitalizado = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoById(conex, iddocumento);
 
+                    /*
                     if (cendocumentosdigitalizado.getRuta().startsWith("..")) {
                         ruta = cendocumentosdigitalizado.getRuta().substring(3);
                         ruta = application.getRealPath(ruta);
                     } else {
                         ruta = cendocumentosdigitalizado.getRuta().replace("/", "\\");
                     }
+*/
                     nombre = cendocumentosdigitalizado.getNombre();
                     extension = nombre.substring(nombre.indexOf(".") + 1, nombre.length());
-                    FileInputStream archivo = new FileInputStream(ruta);
+                    FileInputStream archivo = new FileInputStream(cendocumentosdigitalizado.getRuta());
                     int longitud = archivo.available();
                     byte[] data = new byte[longitud];
                     archivo.read(data, 0, longitud);

@@ -86,6 +86,7 @@ public class ListarDocumentos extends HttpServlet {
             for (int i = 0; i < listaDocumentos.size(); i++) {
                 CenDocumentosDigitalizado cendocumentosdigitalizado = (CenDocumentosDigitalizado) listaDocumentos.get(i);
 
+                /*
                 String ruta;
                 if (cendocumentosdigitalizado.getRuta().startsWith("..")) {
                     ruta = cendocumentosdigitalizado.getRuta().substring(3);
@@ -93,9 +94,10 @@ public class ListarDocumentos extends HttpServlet {
                 } else {
                     ruta = cendocumentosdigitalizado.getRuta().replace("/", "\\");
                 }
+*/
                 String nombre = cendocumentosdigitalizado.getNombre();
                 String extension = nombre.substring(nombre.indexOf(".") + 1, nombre.length());
-                FileInputStream archivo = new FileInputStream(ruta);
+                FileInputStream archivo = new FileInputStream(cendocumentosdigitalizado.getRuta());
                 int longitud = archivo.available();
                 byte[] data = new byte[longitud];
                 archivo.read(data, 0, longitud);
