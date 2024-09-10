@@ -122,8 +122,13 @@ public class CargarDocumentos extends HttpServlet {
                     tipo = 3;
                 }
 
+                //Local
                 String directorio = "C:/DocumentosDigitalizados/Censos/" + numero;
                 String ruta = "C:/DocumentosDigitalizados/Censos/" + numero + "/" + file.getName();
+                
+                //Servidor pdn
+                //String directorio = "/data/documentos/censos/";
+                //String ruta = "/data/documentos/censos/" + numero + "/" + file.getName();
 
                 File mkdir = new File(directorio);
                 if (!mkdir.exists()) {

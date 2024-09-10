@@ -5,7 +5,6 @@ $(function () {
         url: '../../listarVehiculos',
         method: 'get',
         success: function (response) {
-
             if ($.fn.DataTable.isDataTable('#dataTable')) {
                 $('#dataTable').DataTable().destroy();
             }

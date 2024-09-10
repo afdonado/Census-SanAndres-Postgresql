@@ -26,7 +26,6 @@ function consultarDocumentoPersona(tipodocumento, documento) {
                     console.log("success", response.message);
                 } else if (response.status === "fail") {
                     $('#txtdocumento').val('');
-                    alert('Documento digitado no esta registrado');
                 } else if (response.status === "error") {
                     $('#txtdocumento').val('');
                     alert(response.message);

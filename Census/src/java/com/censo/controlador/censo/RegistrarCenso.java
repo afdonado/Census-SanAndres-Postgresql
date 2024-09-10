@@ -74,7 +74,7 @@ public class RegistrarCenso extends HttpServlet {
             
             if (request.getParameter("txtfechacenso") == null || request.getParameter("txtfechacenso").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'observaciones' no encontrado");
+                respuesta.put("message", "Parametro 'fecha censo' no encontrado");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
@@ -99,7 +99,7 @@ public class RegistrarCenso extends HttpServlet {
                 return;
             }
             
-            if (request.getParameter("txtobservaciones") == null || request.getParameter("txtobservaciones").isEmpty()) {
+            if (request.getParameter("txtobservaciones") == null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'observaciones' no encontrado");
 

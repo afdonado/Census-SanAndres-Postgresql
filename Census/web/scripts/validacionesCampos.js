@@ -25,59 +25,15 @@ $(function () {
             }
         }
     });
-    
-    
-    // Evento permitir solo números
-    $(".solo-numeros").on("keydown", function(event) {
-        // Permitir solo números y teclas de control
-        if (
-            (event.keyCode < 48 || event.keyCode > 57) && // Números en teclado principal
-            (event.keyCode < 96 || event.keyCode > 105) && // Números en teclado numérico
-            event.keyCode !== 8 && // Backspace
-            event.keyCode !== 9 && // Tab
-            event.keyCode !== 37 && // Flecha izquierda
-            event.keyCode !== 39 && // Flecha derecha
-            event.keyCode !== 46 // Delete
-        ) {
-            event.preventDefault(); // Bloquear cualquier otra tecla
+
+    $('.solo-numeros').on('input', function () {
+        var value = $(this).val();
+
+        // Validar que el valor solo contenga números
+        if (!/^\d*$/.test(value)) {
+            // Si hay letras, se limpia el campo
+            $(this).val('');
         }
-    });
-    
-    var yaLimpiado = false;
-
-    // Evento para limpiar el campo y permitir solo números
-    $(".solo-numeros-censo").on("keydown", function(event) {
-        // Si el campo no se ha limpiado aún, limpiarlo en la primera pulsación de tecla
-        /*if (!yaLimpiado) {
-            $(this).val(''); // Limpiar el campo de texto
-            $(this).css("background-color", "");
-            yaLimpiado = true; // Marcar que ya se ha limpiado
-        }*/
-
-        // Permitir solo números y teclas de control
-        if (
-            (event.keyCode < 48 || event.keyCode > 57) && // Números en teclado principal
-            (event.keyCode < 96 || event.keyCode > 105) && // Números en teclado numérico
-            event.keyCode !== 8 && // Backspace
-            event.keyCode !== 9 && // Tab
-            event.keyCode !== 37 && // Flecha izquierda
-            event.keyCode !== 39 && // Flecha derecha
-            event.keyCode !== 46 // Delete
-        ) {
-            event.preventDefault(); // Bloquear cualquier otra tecla
-        }
-    });
-
-    // Evento para asegurarse de que solo hay números en caso de pegado o entrada no controlada
-    $(".solo-numeros").on("input", function() {
-        // Si el campo no se ha limpiado aún, limpiarlo en el primer cambio
-        /*if (!yaLimpiado) {
-            $(this).val(''); // Limpiar el campo de texto
-            yaLimpiado = true; // Marcar que ya se ha limpiado
-        }*/
-
-        // Mantener solo los caracteres numéricos en el campo
-        this.value = this.value.replace(/[^0-9]/g, ''); // Reemplazar cualquier carácter que no sea un número
     });
 
 });
