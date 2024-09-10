@@ -246,7 +246,7 @@
                                                 <select class="form-control" id="cmbtiposdocumento1" name="cmbtiposdocumento1" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <input class="form-control solo-numeros" type="number" id="txtdocumento1" name="txtdocumento1" maxlength="20" required="true">
+                                                <input class="form-control solo-numeros" type="text" id="txtdocumento1" name="txtdocumento1" maxlength="20" required="true">
                                             </div>
                                             <div class="col-sm-4 mb-3 mb-sm-0">
                                                 <input class="form-control" type="text" id="txtnombre1" name="txtnombre1" readonly="true">

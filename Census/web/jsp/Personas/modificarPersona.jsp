@@ -137,11 +137,11 @@
                                                 </div>
                                                 <div class="col-sm-3 mb-3 mb-sm-0 licencia-conduccion">
                                                     <label>No. Licencia Conduccion</label>
-                                                    <input class="form-control solo-numeros" type="text" id="txtnumerolicencia" name="txtnumerolicencia" maxlength="30" readonly="true">
+                                                    <input class="form-control solo-numeros" type="text" id="txtnumerolicencia" name="txtnumerolicencia" maxlength="30">
                                                 </div>
                                                 <div class="col-sm-3 mb-3 mb-sm-0 licencia-conduccion">
                                                     <label>Categoria</label>
-                                                    <select class="form-control" id="cmbcategoriaslicencia" name="cmbcategoriaslicencia" required="true"></select>
+                                                    <select class="form-control" id="cmbcategoriaslicencia" name="cmbcategoriaslicencia"></select>
                                                 </div>
                                                 <div class="col-sm-3 mb-3 mb-sm-0 licencia-conduccion">
                                                     <label>Fecha Expedición</label>

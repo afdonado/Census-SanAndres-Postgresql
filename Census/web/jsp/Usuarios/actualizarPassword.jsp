@@ -66,12 +66,12 @@
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <input type="password" class="form-control form-control-user"
                                                    id="txtpassword" name="txtpassword" placeholder="Nueva Contraseña" 
-                                                   maxlength="20" required="true">
+                                                   maxlength="50" required="true">
                                         </div>
                                         <div class="col-sm-6">
                                             <input type="password" class="form-control form-control-user"
                                                    id="txtrepetirpassword" name="txtrepetirpassword" placeholder="Repetir Nueva Contraseña" 
-                                                   maxlength="20" required="true">
+                                                   maxlength="50" required="true">
                                         </div>
                                     </div>
                                     <div class="row">

@@ -19,6 +19,7 @@ $(function () {
             data: {id: id},
             success: function (response) {
 
+console.log("response. ",response   );
                 if (response.status === "success") {
 
                     $('#txttipodocumento').val(response.persona.TIPO_DOC);
@@ -39,6 +40,7 @@ $(function () {
                     $('#txttelefono').val(response.persona.TELEFONO);
                     $('#txtemail').val(response.persona.MAIL);
 
+console.log("licencia de conduccion. ",response.persona.LICENCIA_CONDUCCION);
                     if (response.persona.LICENCIA_CONDUCCION === 'S') {
                         $('#txtnumerolicencia').val(response.persona.LIC_CONDUCCION);
                         $('#txtcategorialicencia').val(response.persona.CATEGORIA_LIC);

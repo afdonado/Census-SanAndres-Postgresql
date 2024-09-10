@@ -181,7 +181,7 @@ public class RegistrarPersona extends HttpServlet {
                     return;
                 }
                 numeroLicencia = request.getParameter("txtnumerolicencia").toUpperCase().trim();
-                
+
                 if (request.getParameter("cmbcategoriaslicencia") == null || request.getParameter("cmbcategoriaslicencia").isEmpty()) {
                     respuesta.put("status", "error");
                     respuesta.put("message", "Parametro 'categoria licencia conduccion' no encontrado");
@@ -191,7 +191,7 @@ public class RegistrarPersona extends HttpServlet {
                     return;
                 }
                 categoriaLicencia = Integer.parseInt(request.getParameter("cmbcategoriaslicencia"));
-                
+
                 if (request.getParameter("txtfechaexplicencia") == null || request.getParameter("txtfechaexplicencia").isEmpty()) {
                     respuesta.put("status", "error");
                     respuesta.put("message", "Parametro 'fecha expedición licencia conduccion' no encontrado");
@@ -201,7 +201,7 @@ public class RegistrarPersona extends HttpServlet {
                     return;
                 }
                 fechaExpLicencia = LocalDate.parse(request.getParameter("txtfechaexplicencia"), formatter);
-                
+
                 if (fechaExpLicencia.equals(fechaActual)) {
                     respuesta.put("status", "error");
                     respuesta.put("message", "Verifique la fecha de 'EXPEDICIÓN' de licendia");
@@ -214,7 +214,7 @@ public class RegistrarPersona extends HttpServlet {
             }
 
             conex.setAutoCommit(false);
-            
+
             cenpersona = new CenPersona();
             cenpersona.setTipodocumento(tipoDocumento);
             cenpersona.setDocumento(documento);
@@ -230,12 +230,10 @@ public class RegistrarPersona extends HttpServlet {
             cenpersona.setMail(email);
             cenpersona.setGruposanguineo(grupoSanguineo);
             cenpersona.setLicenciaconduccion(licenciaConduccion);
-            if (licenciaConduccion.equals("S")) {
-                cenpersona.setNumerolicenciaconduccion(numeroLicencia);
-                cenpersona.setFechaexp(fechaExpLicencia == null ? null : Date.valueOf(fechaExpLicencia));
-                cenpersona.setFechaven(fechaVenLicencia == null ? null : Date.valueOf(fechaVenLicencia));
-                cenpersona.setCategorialicencia(categoriaLicencia);
-            }
+            cenpersona.setNumerolicenciaconduccion(numeroLicencia);
+            cenpersona.setFechaexp(fechaExpLicencia == null ? null : Date.valueOf(fechaExpLicencia));
+            cenpersona.setFechaven(fechaVenLicencia == null ? null : Date.valueOf(fechaVenLicencia));
+            cenpersona.setCategorialicencia(categoriaLicencia);
 
             long idpersona = personaDao.adicionarPersona(conex, cenpersona);
 

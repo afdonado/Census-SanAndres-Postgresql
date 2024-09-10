@@ -64,11 +64,11 @@
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Password(*)</label>
-                                                <input class="form-control" type="password" id="txtpassword" name="txtpassword" maxlength="20" autocomplete="off" required="true"><!--onblur="validarPass()"-->
+                                                <input class="form-control" type="password" id="txtpassword" name="txtpassword" maxlength="50" autocomplete="off" required="true"><!--onblur="validarPass()"-->
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Repita Password(*)</label>
-                                                <input class="form-control" type="password" id="txtrepetirpassword" name="txtrepetirpassword" maxlength="20" autocomplete="off" required="true"><!--onblur="validarPass()"-->
+                                                <input class="form-control" type="password" id="txtrepetirpassword" name="txtrepetirpassword" maxlength="50" autocomplete="off" required="true"><!--onblur="validarPass()"-->
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Perfil (*)</label>

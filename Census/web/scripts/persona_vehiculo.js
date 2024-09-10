@@ -23,7 +23,6 @@ $(function () {
 function consultarDocumentoPersonaVehiculo(nametipodocumento, namedocumento, namenombre, nameidpersona) {
     var tipodocumento = $('#' + nametipodocumento).val();
     var documento = $('#' + namedocumento).val().toUpperCase();
-    console.log("personas", tipodocumento + ' ' + documento);
     if (documento.length > 0) {
         $.ajax({
             type: "POST",

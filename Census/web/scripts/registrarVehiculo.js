@@ -206,7 +206,7 @@ $(function () {
             $.each(data, function (index, item) {
                 select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
             });
-            select.select(10);
+            select.val(10);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error("Error en la solicitud de cargar clases vehiculo: ", textStatus, errorThrown);
@@ -440,9 +440,9 @@ $(function () {
         });
     });
 
-    $('#txtdocumento').blur(function () {
-        if ($('#txtdocumento').val().length > 0) {
-            consultarDocumentoPersonaVehiculo('cmbtiposdocumento', 'txtdocumento', 'txtnombre', 'idpersona');
+    $('#txtdocumento1').blur(function () {
+        if ($('#txtdocumento1').val().length > 0) {
+            consultarDocumentoPersonaVehiculo('cmbtiposdocumento1', 'txtdocumento1', 'txtnombre1', 'idpersona1');
         }
     });
 
