@@ -19,6 +19,24 @@
 
         <!-- Custom styles for this page -->
         <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <style>
+            /* Clase para ajustar las imágenes como miniaturas */
+            .thumbnail {
+                display: inline-block;
+                width: 100px; /* Ajusta este valor al tamaño que desees */
+                height: 100px; /* Ajusta este valor al tamaño que desees */
+                overflow: hidden;
+                border: 1px solid #ddd;
+                padding: 4px;
+                margin: 5px;
+                text-align: center;
+            }
+
+            .thumbnail img {
+                width: 100%; /* La imagen ocupará todo el ancho del contenedor */
+                height: auto; /* Mantendrá la proporción */
+            }
+        </style>
     </head>
     <body id="page-top">
         <%
@@ -157,44 +175,44 @@
 
                     </div>
                 </div>
-            <footer class="sticky-footer bg-white">
-                <jsp:include page="/jsp/Footer.jsp"></jsp:include>
-                </footer>
+                <footer class="sticky-footer bg-white">
+                    <jsp:include page="/jsp/Footer.jsp"></jsp:include>
+                    </footer>
+                </div>
             </div>
-        </div>
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
-    <%                        } else {
-    %>
-    <script type="text/javascript">
-        alert("Su usuario no tiene permiso para acceder a esta pagina");
-        window.parent.location.href = "../dashboard";
-    </script>
-    <%
-        }
-    } else {
-    %>
-    <script type="text/javascript">
-        alert("Su sesion a terminado");
-        document.location.href = "../../index.jsp";
-    </script>
-    <%
-        }
-    %>
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
+        <%                        } else {
+        %>
+        <script type="text/javascript">
+            alert("Su usuario no tiene permiso para acceder a esta pagina");
+            window.parent.location.href = "../dashboard";
+        </script>
+        <%
+            }
+        } else {
+        %>
+        <script type="text/javascript">
+            alert("Su sesion a terminado");
+            document.location.href = "../../index.jsp";
+        </script>
+        <%
+            }
+        %>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
-    <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <!-- Bootstrap core JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery/jquery.min.js"></script>
+        <script src="${pageContext.request.contextPath}/template/vendor/bootstrap/js/bootstrap.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
+        <!-- Core plugin JavaScript-->
+        <script src="${pageContext.request.contextPath}/template/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
+        <!-- Custom scripts for all pages-->
+        <script src="${pageContext.request.contextPath}/template/js/sb-admin-2.min.js"></script>
 
-    <script src="${pageContext.request.contextPath}/scripts/verCenso.js" type="text/javascript"></script>
-    <script src="${pageContext.request.contextPath}/scripts/censo.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/verCenso.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/scripts/censo.js" type="text/javascript"></script>
 
-</body>
+    </body>
 </html>

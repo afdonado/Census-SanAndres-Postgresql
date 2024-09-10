@@ -18,6 +18,24 @@
 
         <!-- Custom styles for this page -->
         <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <style>
+            /* Clase para ajustar las imágenes como miniaturas */
+            .thumbnail {
+                display: inline-block;
+                width: 100px; /* Ajusta este valor al tamaño que desees */
+                height: 100px; /* Ajusta este valor al tamaño que desees */
+                overflow: hidden;
+                border: 1px solid #ddd;
+                padding: 4px;
+                margin: 5px;
+                text-align: center;
+            }
+
+            .thumbnail img {
+                width: 100%; /* La imagen ocupará todo el ancho del contenedor */
+                height: auto; /* Mantendrá la proporción */
+            }
+        </style>
     </head>
     <body id="page-top">
         <%

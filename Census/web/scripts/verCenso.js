@@ -94,7 +94,7 @@ $(function () {
                             src = "data:image/'" + imagen.extension + "';base64," + imagen.b64;
                         }
 
-                        var img = '<a href="../Documentos/visualizarDocumentos.jsp?iddocumento=' + imagen.iddocumento + '" target="_blank"><img src="' + src + '" class="img-responsive imagen" title="' + imagen.nombre + '" alt="' + imagen.nombre + '"></a>';
+                        var img = '<a href="../Documentos/visualizarDocumentos.jsp?iddocumento=' + imagen.iddocumento + '" target="_blank" class="thumbnail"><img src="' + src + '" class="img-responsive imagen" title="' + imagen.nombre + '" alt="' + imagen.nombre + '"></a>';
                         containerImagenes.append(img);
                     });
                 }
