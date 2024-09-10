@@ -104,7 +104,7 @@ public class ModificarUsuario extends HttpServlet {
             Date fechaActual = new Date(new java.util.Date().getTime());
             int estado = Integer.parseInt(request.getParameter("cmbestados"));
             int tipoDocumento = Integer.parseInt(request.getParameter("cmbtiposdocumento"));
-            String documento = request.getParameter("txtdocumento");
+            String documento = request.getParameter("txtdocumento").toUpperCase().trim();
 
             if (documento.isEmpty()) {
                 cenusuario.setTipodocumento(0);

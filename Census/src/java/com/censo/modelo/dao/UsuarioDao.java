@@ -617,7 +617,7 @@ public class UsuarioDao extends Conexion {
         try {
             pst = conex.prepareStatement("SELECT USU_ID, NOMBRE_USUARIO,TO_CHAR(FECHA_INICIO,'dd/MM/yyyy') FECHA_INICIO,NVL(TO_CHAR(FECHA_FINAL,'dd/MM/yyyy'),' ') FECHA_FINAL, "
                     + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PEF_ID,PERFIL, TIPO_DOCUMENTO_ID, TIPO_DOCUMENTO, TIPO_DOCUMENTO_CORTO, "
-                    + "NUMERO_DOCUMENTO, ESTADO_ID, ESTADO FROM VW_USUARIOS");
+                    + "NUMERO_DOCUMENTO, ESTADO_ID, ESTADO FROM VW_USUARIOS WHERE PEF_ID NOT IN(4) ");
             rst = pst.executeQuery();
 
             while (rst.next()) {

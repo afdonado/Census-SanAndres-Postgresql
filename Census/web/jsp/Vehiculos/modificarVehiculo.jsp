@@ -55,11 +55,11 @@
                                                 <input class="form-control" type="text" id="txtplaca" name="txtplaca" maxlength="10" style="text-transform: uppercase">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Motor (*)</label>
+                                                <label>Motor<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control" type="text" id="txtmotor" name="txtmotor" maxlength="30" style="text-transform: uppercase" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Chasis (*)</label>
+                                                <label>Chasis<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control" type="text" id="txtchasis" name="txtchasis" maxlength="30"style="text-transform: uppercase" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
@@ -76,11 +76,11 @@
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Clase Vehículo(*)</label>
+                                                <label>Clase Vehículo<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbclasevehiculo" name="cmbclasevehiculo" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Servicio(*)</label>
+                                                <label>Servicio<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbtiposservicio" name="cmbtiposservicio" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
@@ -88,25 +88,25 @@
                                                 <select class="form-control" id="cmbtiposuso" name="cmbtiposuso" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Color(*)</label>
+                                                <label>Color<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control" id="txtcolores" name="txtcolores" style="text-transform: uppercase" required="true">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Marca(*)</label>
+                                                <label>Marca<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control" id="txtmarcas" name="txtmarcas" style="text-transform: uppercase" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Linea(*)</label>
+                                                <label>Linea<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control" id="txtlineas" name="txtlineas" style="text-transform: uppercase" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Modelo (*)</label>
+                                                <label>Modelo<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control solo-numeros" type="text" id="txtmodelo" name="txtmodelo" maxlength="4" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Transformado (*)</label>
+                                                <label>Transformado<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbtransformado" name="cmbtransformado">
                                                     <option value="S" selected>Si</option>
                                                     <option value="N">No</option>
@@ -122,14 +122,14 @@
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Registrado en Runt (*)</label>
+                                                <label>Registrado en Runt<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbrunt" name="cmbrunt">
                                                     <option value="S" selected>Si</option>
                                                     <option value="N">No</option>
                                                 </select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0 matricula">
-                                                <label>Licencia Transito</label>
+                                                <label>No. Licencia Transito</label>
                                                 <input class="form-control" type="text" id="txtlicenciatransito" name="txtlicenciatransito" style="text-transform: uppercase"/>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0 matricula">
@@ -150,7 +150,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card shadow mb-4">
+                                <div class="card shadow mb-4 datos-importancion">
                                     <div class="card-header py-3">
                                         <h6 class="m-0 font-weight-bold text-primary">Datos Importación</h6>
                                     </div>
@@ -161,11 +161,11 @@
                                                 <select class="form-control" id="cmbtiposimportacion" name="cmbtiposimportacion" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0 importacion">
-                                                <label>Documento Importación (*)</label>
+                                                <label>Documento Importación</label>
                                                 <input class="form-control" type="text" id="txtdocumentoimportacion" name="txtdocumentoimportacion" maxlength="80" style="text-transform: uppercase">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0 importacion">
-                                                <label>Fecha Importación (*)</label>
+                                                <label>Fecha Importación</label>
                                                 <input class="form-control" type="text" id="txtfechaimportacion" name="txtfechaimportacion" readonly="true" />
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0 importacion">
@@ -183,7 +183,7 @@
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>SOAT (*)</label>
+                                                <label>SOAT<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbsoat" name="cmbsoat">
                                                     <option value="S" selected>Si</option>
                                                     <option value="N">No</option>
@@ -194,7 +194,7 @@
                                                 <input class="form-control" type="text" id="txtfechavsoat" name="txtfechavsoat" readonly="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Tecnomecanica (*)</label>
+                                                <label>Tecnomecanica<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbtecnomecanica" name="cmbtecnomecanica">
                                                     <option value="S" selected>Si</option>
                                                     <option value="N">No</option>

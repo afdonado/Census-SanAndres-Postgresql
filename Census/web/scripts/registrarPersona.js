@@ -28,7 +28,7 @@ $(function () {
                         $('#txtsegundoapellido').val(response.persona.apellido2);
 
                         $('#txtfechanacimiento').val(response.fechaNacimiento);
-                        $('#cmbgeneros').val(response.persona.GeneroId);
+                        $('#cmbgeneros').val(response.persona.generoId);
                         $('#cmbgrupossanguineos').val(response.persona.grupoSanguineoId);
 
                         $('#cmbdepartamentos').val(response.persona.departamentoId);

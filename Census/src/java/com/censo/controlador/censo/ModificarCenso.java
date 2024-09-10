@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -70,7 +69,7 @@ public class ModificarCenso extends HttpServlet {
             if (!numero.equals(cencenso.getNumero())) {
                 if (numero.length() < 6) {
                     String prefijo = "ACS";
-                    numero = prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero;
+                    numero = (prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero).toUpperCase().trim();
                 } else {
                     respuesta.put("status", "error");
                     respuesta.put("message", "Numero de censo no puede ser mayor a 5 digitos");

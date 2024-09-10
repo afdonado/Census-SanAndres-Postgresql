@@ -59,7 +59,7 @@
                                         <div class="col-sm-6">
                                             <input type="password" class="form-control form-control-user" 
                                                    id="txtpasswordactual" name="txtpasswordactual" placeholder="Contraseña Actual" 
-                                                   maxlength="20" required="true">
+                                                   maxlength="50" required="true">
                                         </div>
                                     </div>
                                     <div class="form-group row">

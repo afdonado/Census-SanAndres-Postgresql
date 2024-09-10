@@ -1,5 +1,7 @@
 
 $(function () {
+    
+    $('.datos-importancion').hide();
 
     function getParameterByName(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -48,16 +50,16 @@ $(function () {
                         $('.matricula').show();
                     }
 
-                    var tipoImportacionId = response.vehiculo.TDOC_IMP_ID;
-                    $('#txtdocumentoimportacion').val(response.vehiculo.DOCUMENTO_IMP);
-                    $('#txtfechaimportacion').val(response.vehiculo.FECHA_IMP);
-                    var paisImportacionId = response.vehiculo.PAIS_IMP_ID;
+                    //var tipoImportacionId = response.vehiculo.TDOC_IMP_ID;
+                    //$('#txtdocumentoimportacion').val(response.vehiculo.DOCUMENTO_IMP);
+                    //$('#txtfechaimportacion').val(response.vehiculo.FECHA_IMP);
+                    //var paisImportacionId = response.vehiculo.PAIS_IMP_ID;
 
-                    if (tipoImportacionId === 0) {
-                        $('.importacion').hide();
-                    } else {
-                        $('.importacion').show();
-                    }
+                    //if (tipoImportacionId === 0) {
+                    //    $('.importacion').hide();
+                    //} else {
+                    //    $('.importacion').show();
+                    //}
 
                     $('#cmbsoat').val(response.vehiculo.SOAT);
                     $('#txtfechavsoat').val(response.vehiculo.FECHAV_SOAT);
@@ -148,7 +150,7 @@ $(function () {
                                 selectImportacion.append('<option value="' + item.id + '">' + item.nombre + '</option>');
                             });
 
-                            selectImportacion.val(paisImportacionId);
+                            selectImportacion.val(0);
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             console.error("Error en la solicitud de cargar paises: ", textStatus, errorThrown);
@@ -202,7 +204,7 @@ $(function () {
                             $.each(data, function (index, item) {
                                 select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
                             });
-                            select.val(tipoImportacionId);
+                            select.val(0);
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             console.error("Error en la solicitud de cargar tipos de importacion: ", textStatus, errorThrown);
@@ -224,7 +226,7 @@ $(function () {
                         <select class="form-control" id="cmbtiposdocumento${persona.PV_ID}" name="cmbtiposdocumento${persona.PV_ID}"></select>
                     </div>
                     <div class="col-sm-3 mb-3 mb-sm-0">
-                        <input class="form-control solo-numeros" type="number" id="txtdocumento${persona.PV_ID}" name="txtdocumento${persona.PV_ID}" maxlength="20" value="${persona.DOCUMENTO}">
+                        <input class="form-control solo-numeros" type="number" id="txtdocumento${persona.PV_ID}" name="txtdocumento${persona.PV_ID}" maxlength="20" value="${persona.DOCUMENTO}" style="text-transform: uppercase">
                     </div>
                     <div class="col-sm-4 mb-2 mb-sm-0">
                         <input class="form-control" type="text" id="txtnombre${persona.PV_ID}" name="txtnombre${persona.PV_ID}" value="${persona.NOMBRE}">

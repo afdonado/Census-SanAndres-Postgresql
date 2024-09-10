@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Date;
 import com.censo.modelo.persistencia.CenPersona;
+import com.censo.modelo.persistencia.CenUsuario;
 import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -32,6 +33,8 @@ public class RegistrarPersona extends HttpServlet {
         Map<String, String> respuesta = new HashMap<>();
 
         try {
+            
+            CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
 
             PersonaDao personaDao = new PersonaDao();
             conex = personaDao.conectar();
@@ -234,6 +237,7 @@ public class RegistrarPersona extends HttpServlet {
             cenpersona.setFechaexp(fechaExpLicencia == null ? null : Date.valueOf(fechaExpLicencia));
             cenpersona.setFechaven(fechaVenLicencia == null ? null : Date.valueOf(fechaVenLicencia));
             cenpersona.setCategorialicencia(categoriaLicencia);
+            cenpersona.setUsu_id(cenusuario.getId());
 
             long idpersona = personaDao.adicionarPersona(conex, cenpersona);
 

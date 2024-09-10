@@ -49,7 +49,7 @@ public class RegistrarCenso extends HttpServlet {
             
             if (numero.length() < 6) {
                 String prefijo = "ACS";
-                numero = prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero;
+                numero = (prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero).toUpperCase().trim();
             } else {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Numero de censo no puede ser mayor a 5 digitos");

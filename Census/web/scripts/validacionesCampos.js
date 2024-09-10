@@ -1,10 +1,17 @@
 $(function () {
+    
     $('.solo-letras').on('keypress', function (e) {
-        var charCode = (e.which) ? e.which : e.keyCode;
-        if (!((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122))) {
-            e.preventDefault(); // Prevenir entrada si no es una letra
-        }
-    });
+    var charCode = (e.which) ? e.which : e.keyCode;
+    // Permitir letras mayúsculas, minúsculas, la ñ (mayúscula y minúscula), y espacios
+    if (!((charCode >= 65 && charCode <= 90) || 
+          (charCode >= 97 && charCode <= 122) || 
+          charCode === 241 || // ñ minúscula
+          charCode === 209 || // Ñ mayúscula
+          charCode === 32)) { // espacio
+        e.preventDefault(); // Prevenir entrada si no es válido
+    }
+});
+
 
     $('.validar-email').on('blur change', function () {
         var $campo = $(this); // Hace referencia al campo actual

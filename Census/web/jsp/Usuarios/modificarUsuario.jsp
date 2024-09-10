@@ -53,7 +53,7 @@
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Nombre</label>
-                                                <input class="form-control" id="txtnombre" name="txtnombre" readonly="true">
+                                                <input class="form-control" id="txtnombre" name="txtnombre" readonly="true" style="text-transform: uppercase">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Tipo Documento</label>
@@ -61,16 +61,16 @@
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Documento</label>
-                                                <input class="form-control solo-numeros" type="text" id="txtdocumento" name="txtdocumento">
+                                                <input class="form-control solo-numeros" type="text" id="txtdocumento" name="txtdocumento" style="text-transform: uppercase">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Perfil(*)</label>
+                                                <label>Perfil<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbperfiles" name="cmbperfiles" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Estado(*)</label>
+                                                <label>Estado<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbestados" name="cmbestados" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">

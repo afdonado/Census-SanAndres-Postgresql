@@ -52,25 +52,25 @@
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label># Censo(*)</label>
+                                                <label># Censo<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control solo-numeros-censo solo-numeros" type="text" id="txtnumerocenso" name="txtnumerocenso" maxlength="5" style="text-transform: uppercase" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Fecha Censo (*)</label>
+                                                <label>Fecha Censo</label>
                                                 <input class="form-control" type="text" id="txtfechacenso" name="txtfechacenso" readonly="true">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Punto de Atención(*)</label>
+                                                <label>Punto de Atención<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbpuntosatencion" name="cmbpuntosatencion" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Tipo Referencia(*)</label>
+                                                <label>Tipo Referencia<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbtiposreferencia" name="cmbtiposreferencia" required="true"></select><!--onblur="consultarRefVehiculo()"-->
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Referencia Vehículo(*)</label>
+                                                <label>Referencia Vehículo<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control" type="text" id="txtreferencia" name="txtreferencia" maxlength="10" style="text-transform: uppercase" required="true"><!--onblur="consultarRefVehiculo()"-->
                                             </div>
                                         </div>

@@ -85,7 +85,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="form-group row">
-                                        <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%" cols="3"></textarea>
+                                        <textarea id="txtobservaciones" name="txtobservaciones" maxlength="300" style="width: 100%; text-transform: uppercase" cols="3"></textarea>
                                     </div>
                                 </div>
                             </div>

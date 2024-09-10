@@ -2,6 +2,7 @@ package com.censo.controlador.persona;
 
 import com.censo.modelo.dao.PersonaDao;
 import com.censo.modelo.persistencia.CenPersona;
+import com.censo.modelo.persistencia.CenUsuario;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Connection;

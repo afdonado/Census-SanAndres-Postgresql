@@ -1,6 +1,8 @@
 
 $(function () {
 
+    $('.datos-importancion').hide();
+
     function getParameterByName(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -81,7 +83,7 @@ $(function () {
                     }
 
                     $(".btneditar").attr("data-id", response.vehiculo.VEH_ID);
-                    
+
                     var personas = response.personasVehiculo;
                     var contenedor = $('#personas-vehiculo');
                     contenedor.empty();

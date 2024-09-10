@@ -60,7 +60,7 @@
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Primer Nombre(*)</label>
+                                                <label>Primer Nombre<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control solo-letras" type="text" id="txtprimernombre" name="txtprimernombre" maxlength="80" style="text-transform: uppercase" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
@@ -68,7 +68,7 @@
                                                 <input class="form-control solo-letras" type="text" id="txtsegundonombre" name="txtsegundonombre" maxlength="80" style="text-transform: uppercase">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Primer Apellido(*)</label>
+                                                <label>Primer Apellido<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control solo-letras" type="text" id="txtprimerapellido" name="txtprimerapellido" maxlength="80" style="text-transform: uppercase" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
@@ -78,15 +78,15 @@
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Fecha Nacimiento(*)</label>
+                                                <label>Fecha Nacimiento<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control" type="text" id="txtfechanacimiento" name="txtfechanacimiento" readonly="true" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Genero(*)</label>
+                                                <label>Genero<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbgeneros" name="cmbgeneros" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Grupo Sanguineo(*)</label>
+                                                <label>Grupo Sanguineo<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbgrupossanguineos" name="cmbgrupossanguineos" required="true"></select>
                                             </div>
                                         </div>
@@ -99,25 +99,25 @@
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Departamento(*)</label>
+                                                <label>Departamento<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbdepartamentos" name="cmbdepartamentos" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Municipio(*)</label>
+                                                <label>Municipio<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbmunicipios" name="cmbmunicipios" required="true"></select>
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Dirección(*)</label>
+                                                <label>Dirección<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control" type="text" id="txtdireccion" name="txtdireccion" maxlength="80" style="text-transform: uppercase">
                                             </div>
                                         </div>
                                         <div class="form-group row">                                    
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Telefono(*)</label>
+                                                <label>Telefono<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control solo-numeros" type="text" id="txttelefono" name="txttelefono" maxlength="30">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Correo Electronico</label>
+                                                <label>Correo Electronico<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control validar-email" type="text" id="txtemail" name="txtemail" maxlength="100" style="text-transform: uppercase">
                                             </div>
                                         </div>
@@ -129,22 +129,22 @@
                                         <div class="card-body">
                                             <div class="form-group row">
                                                 <div class="col-sm-3 mb-3 mb-sm-0">
-                                                    <label>Tiene licencia de conducción?(*)</label>
+                                                    <label>Tiene licencia de conducción?<spam style="color: red">(*)</spam></label>
                                                     <select class="form-control" id="cmblicenciaconduccion" name="cmblicenciaconduccion">
                                                         <option value="S">Si</option>
                                                         <option value="N">No</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-3 mb-3 mb-sm-0 licencia-conduccion">
-                                                    <label>No. Licencia Conduccion</label>
-                                                    <input class="form-control solo-numeros" type="text" id="txtnumerolicencia" name="txtnumerolicencia" maxlength="30">
+                                                    <label>No. Licencia Conduccion<spam style="color: red">(*)</spam></label>
+                                                    <input class="form-control solo-numeros" type="text" id="txtnumerolicencia" name="txtnumerolicencia" maxlength="30" style="text-transform: uppercase">
                                                 </div>
                                                 <div class="col-sm-3 mb-3 mb-sm-0 licencia-conduccion">
-                                                    <label>Categoria</label>
+                                                    <label>Categoria<spam style="color: red">(*)</spam></label>
                                                     <select class="form-control" id="cmbcategoriaslicencia" name="cmbcategoriaslicencia"></select>
                                                 </div>
                                                 <div class="col-sm-3 mb-3 mb-sm-0 licencia-conduccion">
-                                                    <label>Fecha Expedición</label>
+                                                    <label>Fecha Expedición<spam style="color: red">(*)</spam></label>
                                                     <input class="form-control" type="text" id="txtfechaexplicencia" name="txtfechaexplicencia" readonly="true">
                                                 </div>
                                             </div>

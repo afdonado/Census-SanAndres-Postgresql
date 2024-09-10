@@ -49,7 +49,7 @@
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Nombre</label>
+                                                <label>Nombre<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control" id="txtnombre" name="txtnombre" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
@@ -58,20 +58,20 @@
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Documento</label>
-                                                <input class="form-control solo-numeros" type="text" id="txtdocumento" name="txtdocumento">
+                                                <input class="form-control solo-numeros" type="text" id="txtdocumento" name="txtdocumento" style="text-transform: uppercase">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Password(*)</label>
-                                                <input class="form-control" type="password" id="txtpassword" name="txtpassword" maxlength="50" autocomplete="off" required="true"><!--onblur="validarPass()"-->
+                                                <label>Password<spam style="color: red">(*)</spam></label>
+                                                <input class="form-control" type="password" id="txtpassword" name="txtpassword" maxlength="50" autocomplete="off" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Repita Password(*)</label>
-                                                <input class="form-control" type="password" id="txtrepetirpassword" name="txtrepetirpassword" maxlength="50" autocomplete="off" required="true"><!--onblur="validarPass()"-->
+                                                <label>Repita Password<spam style="color: red">(*)</spam></label>
+                                                <input class="form-control" type="password" id="txtrepetirpassword" name="txtrepetirpassword" maxlength="50" autocomplete="off" required="true">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0">
-                                                <label>Perfil (*)</label>
+                                                <label>Perfil<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbperfiles" name="cmbperfiles" required="true"></select>
                                             </div>
                                         </div>

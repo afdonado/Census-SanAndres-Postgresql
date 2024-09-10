@@ -1,5 +1,8 @@
 
 $(function () {
+    
+    $('.datos-importancion').hide();
+    
     $('#txtplaca').blur(function () {
         var placa = $('#txtplaca').val().toString().toUpperCase();
         if (placa.length > 0) {
@@ -126,15 +129,15 @@ $(function () {
                         $('.matricula').show();
                     }
 
-                    $('#cmbtiposimportacion').val(vehiculo.tipoImportacionId);
-                    $('#txtdocumentoimportacion').val(vehiculo.documentoImportacion);
-                    $('#txtfechaimportacion').val(response.fechaImportacion);
-                    $('#cmbpaisimportacion').val(vehiculo.paisImportacionId);
-                    if (vehiculo.tipoImportacionId === 0) {
-                        $('.importacion').hide();
-                    } else {
-                        $('.importacion').show();
-                    }
+                    //$('#cmbtiposimportacion').val(vehiculo.tipoImportacionId);
+                    //$('#txtdocumentoimportacion').val(vehiculo.documentoImportacion);
+                    //$('#txtfechaimportacion').val(response.fechaImportacion);
+                    //$('#cmbpaisimportacion').val(vehiculo.paisImportacionId);
+                    //if (vehiculo.tipoImportacionId === 0) {
+                    //    $('.importacion').hide();
+                    //} else {
+                    //    $('.importacion').show();
+                    //}
                     
                     $('#cmbsoat').val(vehiculo.soat);
                     $('#txtfechavsoat').val(response.fechaVenSoat);
@@ -325,7 +328,7 @@ $(function () {
                 select.append('<option value="' + item.id + '">' + item.descripcion + '</option>');
             });
 
-            select.val(1);
+            select.val(0);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error("Error en la solicitud de cargar tipos de importacion: ", textStatus, errorThrown);
