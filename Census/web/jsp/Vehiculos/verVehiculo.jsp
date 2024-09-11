@@ -79,7 +79,7 @@
                                             <label>Servicio</label>
                                             <input class="form-control" type="text" id="txtservicio" name="txtservicio" readonly="true">
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-uso">
                                             <label>Tipo de Uso</label>
                                             <input class="form-control" type="text" id="txttipouso" name="txttipouso" readonly="true">
                                         </div>

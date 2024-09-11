@@ -61,28 +61,6 @@ public class CargarDocumentos extends HttpServlet {
                 return;
             }
 
-            if (request.getParameter("numerocenso") == null || request.getParameter("numerocenso").isEmpty()) {
-                respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'numero censo' no encontrado");
-
-                String jsonError = new Gson().toJson(respuesta);
-                response.getWriter().write(jsonError);
-                return;
-            }
-            
-            String numero = request.getParameter("numerocenso");
-            if (numero.length() < 6) {
-                String prefijo = "ACS";
-                numero = prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero;
-            } else {
-                respuesta.put("status", "error");
-                respuesta.put("message", "Numero de censo no puede ser mayor a 5 digitos");
-
-                String jsonError = new Gson().toJson(respuesta);
-                response.getWriter().write(jsonError);
-                return;
-            }
-
             CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
 
             DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -123,13 +101,13 @@ public class CargarDocumentos extends HttpServlet {
                 }
 
                 //Local
-                //String directorio = "C:/DocumentosDigitalizados/Censos/" + numero;
-                //String ruta = "C:/DocumentosDigitalizados/Censos/" + numero + "/" + file.getName();
-                
+                String directorio = "C:/DocumentosDigitalizados/Censos/" + cencenso.getNumero();
+                String ruta = "C:/DocumentosDigitalizados/Censos/" + cencenso.getNumero() + "/" + file.getName();
+                /*
                 //Servidor pdn
                 String directorio = "/documentos/censos/" + numero + "/";
                 String ruta = "/documentos/censos/" + numero + "/" + file.getName();
-
+*/
                 File mkdir = new File(directorio);
                 if (!mkdir.exists()) {
                     mkdir.mkdirs();

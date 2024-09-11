@@ -2,6 +2,7 @@
 $(function () {
     
     $('.datos-importancion').hide();
+    $('#tipos-uso').hide();
     
     $('#txtplaca').blur(function () {
         var placa = $('#txtplaca').val().toString().toUpperCase();

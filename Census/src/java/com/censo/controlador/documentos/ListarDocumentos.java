@@ -79,7 +79,7 @@ public class ListarDocumentos extends HttpServlet {
             }
 
             listaDocumentos = documentoDigitalizadoDao.ListarDocumentosDigitalizados(conex, idcenso);
-            ServletContext application = request.getServletContext();
+            //ServletContext application = request.getServletContext();
 
             List<Map<String, String>> imagenes = new ArrayList<>();
 
@@ -110,25 +110,21 @@ public class ListarDocumentos extends HttpServlet {
                 if (extension.equals("jpg") || extension.equals("png") || extension.equals("JPG") || extension.equals("PNG")) {
 
                     BufferedImage img = ImageIO.read(new ByteArrayInputStream(data));
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    int type = img.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : img.getType();
-
-                    BufferedImage resizedImage = new BufferedImage(500, 500, type);
-                    Graphics2D g = resizedImage.createGraphics();
-                    g.drawImage(img, 0, 0, 500, 500, null);
-
-                    g.dispose();
-                    g.setComposite(AlphaComposite.Src);
-
-                    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-                    g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-                    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                    ImageIO.write(resizedImage, extension, baos);
-
-                    baos.flush();
-                    byte[] imageInByteArray = baos.toByteArray();
-                    baos.close();
+                    byte[] imageInByteArray;
+                    try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                        int type = img.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : img.getType();
+                        BufferedImage resizedImage = new BufferedImage(500, 500, type);
+                        Graphics2D g = resizedImage.createGraphics();
+                        g.drawImage(img, 0, 0, 500, 500, null);
+                        g.dispose();
+                        g.setComposite(AlphaComposite.Src);
+                        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        ImageIO.write(resizedImage, extension, baos);
+                        baos.flush();
+                        imageInByteArray = baos.toByteArray();
+                    }
                     String b64 = javax.xml.bind.DatatypeConverter.printBase64Binary(imageInByteArray);
                     if (!b64.isEmpty()) {
                         imagenData.put("b64", b64);

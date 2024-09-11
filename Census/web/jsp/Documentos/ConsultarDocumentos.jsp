@@ -68,6 +68,10 @@
                                                 <label>Numero Censo</label>
                                                 <input class="form-control solo-numeros-censo solo-numeros" type="text" id="txtnumerocenso" name="txtnumerocenso" maxlength="5">
                                             </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label></label>
+                                                <button type="button" class="btn btn-lg btn-success btn-block" id="btnconsultar" name="btnconsultar" >Consultar</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

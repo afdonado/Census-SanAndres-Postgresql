@@ -2,6 +2,7 @@
 $(function () {
 
     $('.datos-importancion').hide();
+    $('#tipos-uso').hide();
 
     function getParameterByName(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");

@@ -13,16 +13,33 @@ $(function () {
             dataType: "json",
             success: function (response) {
                 if (response.status === "success") {
-                    alert(response.message);
+                    
+                    
+                    if (opcion === 1) {
+                        alert(response.message);
+                        $('#imagenes').hide();
+                        $('#imagenes').empty();
+                    } else if (opcion === 2 || opcion === 3) {
+                        alert("Censo no registrado");
+                        $('#txtnumerocensocargar').val('');
+                        $('#cargardocumentos').hide();
+                    }
+                    
+                    
                 } else if (response.status === "fail") {
+                    
+                    
                     if (opcion === 1) {
                         consultarDocumentos(response.id);
                     } else if (opcion === 2) {
-                        $('#frmseleccionardocumentos').attr('action', '../../cargarDocumentos?idcenso=' + response.id + '&numerocenso=' + numero);
+                        $('#frmseleccionardocumentos').attr('action', '../../cargarDocumentos?idcenso=' + response.id);
                         $('#cargardocumentos').show();
+                        $('#cargardocumentos').empty();
                     } else {
                         importarDocumentosWeb(response.id, response.numero);
                     }
+                    
+                    
                 } else if (response.status === "error") {
                     alert(response.message);
                 }
@@ -33,7 +50,7 @@ $(function () {
             }
         });
     }
-
+/*
     $('#txtnumerocenso').blur(function () {
         var numero = $('#txtnumerocenso').val();
         if (numero.length > 0 && numero.length < 6) {
@@ -42,7 +59,19 @@ $(function () {
             verificarNumeroCenso(1, $('#txtnumerocenso').val());
         }
     });
-    $('#txtnumerocensocargar').blur(function () {
+     
+ */
+    
+    $('#btnconsultar').click(function () {
+        var numero = $('#txtnumerocenso').val();
+        if (numero.length > 0 && numero.length < 6) {
+            var prefijo = "ACS";
+            numero = prefijo + ("00000".substring(0, 5 - numero.length)) + numero;
+            verificarNumeroCenso(1, $('#txtnumerocenso').val());
+        }
+    });
+    
+    $('#btnconsultarcargar').click(function () {
         var numero = $('#txtnumerocensocargar').val();
         if (numero.length > 0 && numero.length < 6) {
             var prefijo = "ACS";
@@ -50,6 +79,7 @@ $(function () {
             verificarNumeroCenso(2, $('#txtnumerocensocargar').val());
         }
     });
+
     $('#txtnumerocensoimportar').blur(function () {
         var numero = $('#txtnumerocensoimportar').val();
         if (numero.length > 0 && numero.length < 6) {
@@ -58,6 +88,8 @@ $(function () {
             consultarNumeroCenso(3, $('#txtnumerocensoimportar').val());
         }
     });
+    
+    
     function consultarDocumentos(id) {
         $.ajax({
             url: '../../listarDocumentos',
@@ -99,7 +131,7 @@ $(function () {
 
     $('#frmseleccionardocumentos').on('submit', function (e) {
         e.preventDefault(); // Evita el envío normal del formulario
-        
+
         var formData = new FormData(this);
 
         $.ajax({
@@ -108,13 +140,13 @@ $(function () {
             data: formData,
             processData: false, // No procesar los datos
             contentType: false, // No establecer ningún tipo de contenido
-            beforeSend: function() {
+            beforeSend: function () {
                 checkSubmit('btncargar', 'Guardando...'); // Llamar la función para desactivar el botón o mostrar el mensaje
             },
             success: function (response) {
                 if (response.status === "success") {
                     alert(response.message);
-                    window.location.href = "consultarDocumentos.jsp";
+                    window.location.href = "../Censo/verCenso.jsp?opcion=1&id=" + response.id;
                 } else if (response.status === "fail" || response.status === "error") {
                     alert(response.message);
                 }

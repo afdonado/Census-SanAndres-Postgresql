@@ -83,7 +83,7 @@
                                                 <label>Servicio<spam style="color: red">(*)</spam></label>
                                                 <select class="form-control" id="cmbtiposservicio" name="cmbtiposservicio" required="true"></select>
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-uso">
                                                 <label>Tipo de Uso</label>
                                                 <select class="form-control" id="cmbtiposuso" name="cmbtiposuso" required="true"></select>
                                             </div>
