@@ -13,29 +13,21 @@ $(function () {
             dataType: "json",
             success: function (response) {
                 if (response.status === "success") {
-                    console.log('success');
                     
                     if (opcion === 1) {
-                        console.log('opcion 1 success');
                         alert(response.message);
                         $('#imagenes').hide();
-                        $('#imagenes').empty();
                     } else if (opcion === 2) {
-                        console.log('opcion 2 success');
                         alert("Censo no registrado");
                         $('#txtnumerocensocargar').val('');
                         $('#cargardocumentos').hide();
                     }
                     
-                    
                 } else if (response.status === "fail") {
-                    console.log('fail');
-                    
                     if (opcion === 1) {
-                        console.log('opcion 1 fail');
                         consultarDocumentos(response.id);
+                        $('#imagenes').show();
                     } else if (opcion === 2) {
-                        console.log('opcion 2 fail');
                         $('#frmseleccionardocumentos').attr('action', '../../cargarDocumentos?idcenso=' + response.id);
                         $('#cargardocumentos').show();
                     } else {
