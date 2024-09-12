@@ -14,13 +14,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import org.apache.commons.codec.digest.DigestUtils;
 
 @WebServlet(name = "RegistrarUsuario", urlPatterns = "/registrarUsuario")
 public class RegistrarUsuario extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -30,9 +33,10 @@ public class RegistrarUsuario extends HttpServlet {
         Map<String, String> respuesta = new HashMap<>();
 
         try {
+            
+            conex = dataSource.getConnection();
 
             UsuarioDao usuarioDao = new UsuarioDao();
-            conex = usuarioDao.conectar();
 
             //Validar parametro nombre
             if (request.getParameter("txtnombre") == null || request.getParameter("txtnombre").isEmpty()) {

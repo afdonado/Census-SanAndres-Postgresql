@@ -14,21 +14,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "CargarDatosVehiculo", urlPatterns = {"/cargarDatosVehiculo"})
 public class CargarDatosVehiculo extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Connection conex = null;
-
         Map<String, Object> respuesta = new HashMap<>();
 
-        try {
+        try (Connection conex = dataSource.getConnection()) {
 
             if (request.getParameter("id").equals("")) {
                 respuesta.put("status", "error");
@@ -42,8 +43,6 @@ public class CargarDatosVehiculo extends HttpServlet {
             int idvehiculo = Integer.parseInt(request.getParameter("id"));
 
             VehiculoDao vehiculoDao = new VehiculoDao();
-            conex = vehiculoDao.conectar();
-
             HashMap<String, Object> datosVehiculo = vehiculoDao.ConsultarDatosVehiculoById(conex, idvehiculo);
 
             if (!datosVehiculo.isEmpty()) {
@@ -62,14 +61,6 @@ public class CargarDatosVehiculo extends HttpServlet {
             respuesta.put("message", "Error al cargar los datos del vehiculo");
             e.printStackTrace();
 
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
         }
         
         String json = new Gson().toJson(respuesta);

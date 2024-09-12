@@ -13,22 +13,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "CargarEstados", urlPatterns = {"/cargarEstados"})
 public class CargarEstados extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        Connection conex = null;
-
-        try {
+        try (Connection conex = dataSource.getConnection()){
 
             EstadoDao estadoDao = new EstadoDao();
-            conex = estadoDao.conectar();
             
             List<CenEstado> lista = estadoDao.ListarEstados(conex);
             
@@ -48,13 +48,6 @@ public class CargarEstados extends HttpServlet {
             e.printStackTrace();
 
         } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
             out.close();
         }
     }

@@ -1,3 +1,4 @@
+<%@page import="javax.sql.DataSource"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="javax.servlet.http.HttpSession"%>
 <%@page import="java.util.HashMap"%>
@@ -30,12 +31,9 @@
             if (session.getAttribute("usuario") != null) {
                 if (((LinkedList) session.getAttribute("permisosUsuario")).contains("estadisticasSanAndres.jsp")) {
 
-                    Connection conex = null;
-
-                    try {
-
+                DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
+                    try (Connection conex = dataSource.getConnection()) {
                         EstadisticaDao estadisticaDao = new EstadisticaDao();
-                        conex = estadisticaDao.conectar();
         %>
         <div id="wrapper">
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -263,14 +261,6 @@
         <%
             } catch (SQLException e) {
                 e.printStackTrace();
-            } finally {
-                if (conex != null) {
-                    try {
-                        conex.close();
-                    } catch (SQLException closeEx) {
-                        closeEx.printStackTrace();
-                    }
-                }
             }
         } else {
         %>

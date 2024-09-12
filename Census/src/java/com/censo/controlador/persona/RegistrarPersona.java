@@ -18,12 +18,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.annotation.WebServlet;
+import javax.sql.DataSource;
 
 @WebServlet(name = "RegistrarPersona", urlPatterns = "/registrarPersona")
 public class RegistrarPersona extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -34,10 +37,11 @@ public class RegistrarPersona extends HttpServlet {
 
         try {
             
+            conex = dataSource.getConnection();
+            
             CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
 
             PersonaDao personaDao = new PersonaDao();
-            conex = personaDao.conectar();
 
             //Validar parametro tipo documento
             if (request.getParameter("cmbtiposdocumento") == null || request.getParameter("cmbtiposdocumento").isEmpty()) {
@@ -266,6 +270,7 @@ public class RegistrarPersona extends HttpServlet {
         } finally {
             if (conex != null) {
                 try {
+                    conex.setAutoCommit(true);
                     conex.close();
                 } catch (SQLException closeEx) {
                     closeEx.printStackTrace();

@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "CargarMarcas", urlPatterns = "/cargarMarcas")
 public class CargarMarcas extends HttpServlet {
@@ -18,14 +19,13 @@ public class CargarMarcas extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
+        
         response.setContentType("text/html;charset=UTF-8");
         
-        Connection conex = null;
-
-        try {
+        try (Connection conex = dataSource.getConnection()) {
 
             MarcaDao marcaDao = new MarcaDao();
-            conex = marcaDao.conectar();
 
             String find = request.getParameter("marcas").toUpperCase().trim();
             
@@ -38,14 +38,6 @@ public class CargarMarcas extends HttpServlet {
             
         } catch (IOException | SQLException e) {
             System.out.println(e);
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
         }
     }
 

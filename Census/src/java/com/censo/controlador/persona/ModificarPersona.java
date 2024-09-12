@@ -2,7 +2,6 @@ package com.censo.controlador.persona;
 
 import com.censo.modelo.dao.PersonaDao;
 import com.censo.modelo.persistencia.CenPersona;
-import com.censo.modelo.persistencia.CenUsuario;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Connection;
@@ -18,12 +17,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "ModificarPersona", urlPatterns = "/modificarPersona")
 public class ModificarPersona extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -33,6 +35,8 @@ public class ModificarPersona extends HttpServlet {
         Map<String, String> respuesta = new HashMap<>();
 
         try {
+            
+            conex = dataSource.getConnection();
             
             //Validar parametro idpersona
             if (request.getParameter("idpersona") == null || request.getParameter("idpersona").isEmpty()) {
@@ -47,7 +51,6 @@ public class ModificarPersona extends HttpServlet {
             int idpersona = Integer.parseInt(request.getParameter("idpersona"));
 
             PersonaDao personaDao = new PersonaDao();
-            conex = personaDao.conectar();
 
             //Verificar que la persona existe para modificar
             CenPersona cenpersona = personaDao.ConsultarPersonaById(conex, idpersona);
@@ -267,6 +270,7 @@ public class ModificarPersona extends HttpServlet {
         } finally {
             if (conex != null) {
                 try {
+                    conex.setAutoCommit(true);
                     conex.close();
                 } catch (SQLException closeEx) {
                     closeEx.printStackTrace();

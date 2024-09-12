@@ -25,12 +25,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "VerificarVehiculoRunt", urlPatterns = {"/verificarVehiculoRunt"})
 public class VerificarVehiculoRunt extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -40,6 +43,8 @@ public class VerificarVehiculoRunt extends HttpServlet {
         Map<String, Object> respuesta = new HashMap<>();
 
         try {
+            
+            conex = dataSource.getConnection();
 
             if (request.getParameter("tiporeferencia") == null || request.getParameter("tiporeferencia").isEmpty()) {
                 respuesta.put("status", "error");
@@ -63,7 +68,6 @@ public class VerificarVehiculoRunt extends HttpServlet {
             String valorReferencia = request.getParameter("valorreferencia");
 
             VehiculoRuntDao vehiculoRuntDao = new VehiculoRuntDao();
-            conex = vehiculoRuntDao.conectar();
 
             //Consultar si la placa esta o no en la tabla vehiculo_runt
             VehiculoRunt vehiculoRunt = vehiculoRuntDao.ConsultarVehiculoRuntByPlaca(conex, valorReferencia);
@@ -90,7 +94,7 @@ public class VerificarVehiculoRunt extends HttpServlet {
                 CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, tipoReferencia, valorReferencia);
 
                 if (cenvehiculo == null) {
-                    String urlString = "http://localhost:3001/consulta/runt/placa";
+                    String urlString = System.getenv("URL_RUNT_PLACA");
                     URL url = new URL(urlString);
 
                     // Abrir conexión
@@ -253,6 +257,7 @@ public class VerificarVehiculoRunt extends HttpServlet {
         } finally {
             if (conex != null) {
                 try {
+                    conex.setAutoCommit(true);
                     conex.close();
                 } catch (SQLException closeEx) {
                     closeEx.printStackTrace();

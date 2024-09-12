@@ -13,25 +13,24 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "ListarCensos", urlPatterns = {"/listarCensos"})
 public class ListarCensos extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Connection conex = null;
-
         Map<String, Object> respuesta = new HashMap<>();
         
-        try {
+        try (Connection conex = dataSource.getConnection()) {
 
             CensoDao censoDao = new CensoDao();
-            conex = censoDao.conectar();
-
             List<HashMap<String, Object>> lista = censoDao.ListarCensos(conex);
 
             if (!lista.isEmpty()) {
@@ -44,14 +43,6 @@ public class ListarCensos extends HttpServlet {
             respuesta.put("message", "Error al listas los censos");
             e.printStackTrace();
 
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
         }
 
         String json = new Gson().toJson(respuesta);

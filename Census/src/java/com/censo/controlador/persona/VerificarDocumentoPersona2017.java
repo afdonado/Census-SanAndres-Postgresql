@@ -17,21 +17,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "VerificarDocumentoPersona2017", urlPatterns = {"/verificarDocumentoPersona2017"})
 public class VerificarDocumentoPersona2017 extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
+        
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Connection conex = null;
-
         Map<String, Object> respuesta = new HashMap<>();
 
-        try {
+        try (Connection conex = dataSource.getConnection()) {
 
             //Validar parametro tipo documento
             if (request.getParameter("tipodocumento") == null || request.getParameter("tipodocumento").isEmpty()) {
@@ -57,7 +58,6 @@ public class VerificarDocumentoPersona2017 extends HttpServlet {
             String documento = request.getParameter("documento").toUpperCase().trim();
 
             PersonaDao personaDao = new PersonaDao();
-            conex = personaDao.conectar();
 
             //Verificar si existe la persona con tipo y numero de documento
             CenPersona cenPersona = personaDao.ConsultarPersona(conex, tipoDocumento, documento);
@@ -96,14 +96,6 @@ public class VerificarDocumentoPersona2017 extends HttpServlet {
             respuesta.put("message", "Error al verificar el numero de documento");
             e.printStackTrace();
 
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
         }
 
         String json = new Gson().toJson(respuesta);

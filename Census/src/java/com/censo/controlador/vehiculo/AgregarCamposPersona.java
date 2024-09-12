@@ -17,20 +17,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "AgregarCamposPersona", urlPatterns = {"/agregarCamposPersona"})
 public class AgregarCamposPersona extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         PrintWriter out = response.getWriter();
         
-        Connection conex = null;
-
         Map<String, String> respuesta = new HashMap<>();
 
-        try {
+        try (Connection conex = dataSource.getConnection()) {
 
             if ((request.getParameter("nameComboTP") == null || request.getParameter("nameComboTP").isEmpty())
                     && (request.getParameter("nameComboTD") == null || request.getParameter("nameComboTD").isEmpty())
@@ -58,7 +59,6 @@ public class AgregarCamposPersona extends HttpServlet {
             
             TipoPersonaDao tipoPersonaDao = new TipoPersonaDao();
             TipoDocumentoDao tipoDocumentoDao = new TipoDocumentoDao();
-            conex = tipoPersonaDao.conectar();
 
             out.println("<div class=\"col-sm-2 mb-3 mb-sm-0\">");
             out.println("<select class=\"form-control\" name=\"" + nameComboTP + "\" id=\"" + nameComboTP + "\">");
@@ -104,16 +104,6 @@ public class AgregarCamposPersona extends HttpServlet {
             String jsonError = new Gson().toJson(respuesta);
             response.getWriter().write(jsonError);
             e.printStackTrace();
-
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
-            out.close();
         }
     }
 

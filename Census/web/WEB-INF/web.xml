@@ -3,6 +3,9 @@
     <listener>
         <listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
     </listener>
+    <listener>
+        <listener-class>com.censo.modelo.dao.AppContextListener</listener-class>
+    </listener>
     <servlet>
         <servlet-name>consultarNumeroCenso</servlet-name>
         <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>

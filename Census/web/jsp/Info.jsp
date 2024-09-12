@@ -1,3 +1,4 @@
+<%@page import="javax.sql.DataSource"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="javax.servlet.http.HttpSession"%>
 <%@page import="java.util.LinkedList"%>
@@ -34,12 +35,11 @@
 <%
     if (((LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("estadisticas")) {
 
-        Connection conex = null;
-
-        try {
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
+        
+        try (Connection conex = dataSource.getConnection()) {
 
             EstadisticaDao estadisticaDao = new EstadisticaDao();
-            conex = estadisticaDao.conectar();
 %>
 <div class="row">
     <div id="graficaClaseVeh" class="col-md-8"></div>
@@ -272,14 +272,6 @@
         } catch (SQLException e) {
             e.printStackTrace();
 
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
         }
     }
 %>

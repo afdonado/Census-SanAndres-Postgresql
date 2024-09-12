@@ -13,21 +13,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "CargarDatosVehiculosRunt", urlPatterns = {"/cargarDatosVehiculoRunt"})
 public class CargarDatosVehiculosRunt extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Connection conex = null;
-
         Map<String, Object> respuesta = new HashMap<>();
 
-        try {
+        try (Connection conex = dataSource.getConnection()) {
 
             if (request.getParameter("placa") == null || request.getParameter("valorreferencia").isEmpty()) {
                 respuesta.put("status", "error");
@@ -41,7 +42,6 @@ public class CargarDatosVehiculosRunt extends HttpServlet {
             int idvehiculo = Integer.parseInt(request.getParameter("id"));
 
             VehiculoDao vehiculoDao = new VehiculoDao();
-            conex = vehiculoDao.conectar();
 
             CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoById(conex, idvehiculo);
 /*
@@ -89,15 +89,6 @@ public class CargarDatosVehiculosRunt extends HttpServlet {
             respuesta.put("status", "error");
             respuesta.put("message", "Error al cargar los datos del vehiculo");
             e.printStackTrace();
-
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
         }
 
         String json = new Gson().toJson(respuesta);

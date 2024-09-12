@@ -14,13 +14,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
 import org.apache.commons.codec.digest.DigestUtils;
 
 @WebServlet(name = "InicioSesion", urlPatterns = "/inicioSesion")
 public class InicioSesion extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -29,7 +32,7 @@ public class InicioSesion extends HttpServlet {
 
         UsuarioDao usuarioDao = new UsuarioDao();
 
-        try (Connection conex = usuarioDao.conectar();) {
+        try (Connection conex = dataSource.getConnection()) {
 
             if ((request.getParameter("txtloginusuario") == null || request.getParameter("txtloginusuario").isEmpty())
                     && (request.getParameter("txtloginpassword") == null || request.getParameter("txtloginpassword").isEmpty())) {

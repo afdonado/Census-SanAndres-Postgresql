@@ -6,34 +6,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ModuloDao extends Conexion {
-    
-    private ResultSet rst = null;
-    private PreparedStatement pst = null;
-    
+public class ModuloDao {
+
     public CenModulo ConsultarModuloById(Connection conex, int id) throws SQLException {
 
-        try {
-            pst = conex.prepareStatement("SELECT * FROM CEN_MODULOS WHERE EST_ID = 1 AND MOD_ID = ? ORDER BY MOD_ORDEN ");
+        String sql = "SELECT * FROM CEN_MODULOS WHERE EST_ID = 1 AND MOD_ID = ? ORDER BY MOD_ORDEN";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setInt(1, id);
-            rst = pst.executeQuery();
-
-            while (rst.next()) {
-                return CenModulo.load(rst);
+            try (ResultSet rst = pst.executeQuery()) {
+                while (rst.next()) {
+                    return CenModulo.load(rst);
+                }
             }
         } catch (SQLException e) {
             throw new SQLException("Error en ConsultarModuloById: " + e);
-        } finally {
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-                if (rst != null) {
-                    rst.close();
-                }
-            } catch (SQLException e) {
-                System.err.println("Error en cierres de ConsultarModuloById: " + e);
-            }
         }
         return null;
     }

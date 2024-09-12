@@ -13,13 +13,15 @@ $(function () {
             dataType: "json",
             success: function (response) {
                 if (response.status === "success") {
-                    
+                    console.log('success');
                     
                     if (opcion === 1) {
+                        console.log('opcion 1 success');
                         alert(response.message);
                         $('#imagenes').hide();
                         $('#imagenes').empty();
-                    } else if (opcion === 2 || opcion === 3) {
+                    } else if (opcion === 2) {
+                        console.log('opcion 2 success');
                         alert("Censo no registrado");
                         $('#txtnumerocensocargar').val('');
                         $('#cargardocumentos').hide();
@@ -27,14 +29,15 @@ $(function () {
                     
                     
                 } else if (response.status === "fail") {
-                    
+                    console.log('fail');
                     
                     if (opcion === 1) {
+                        console.log('opcion 1 fail');
                         consultarDocumentos(response.id);
                     } else if (opcion === 2) {
+                        console.log('opcion 2 fail');
                         $('#frmseleccionardocumentos').attr('action', '../../cargarDocumentos?idcenso=' + response.id);
                         $('#cargardocumentos').show();
-                        $('#cargardocumentos').empty();
                     } else {
                         importarDocumentosWeb(response.id, response.numero);
                     }
@@ -50,17 +53,6 @@ $(function () {
             }
         });
     }
-/*
-    $('#txtnumerocenso').blur(function () {
-        var numero = $('#txtnumerocenso').val();
-        if (numero.length > 0 && numero.length < 6) {
-            var prefijo = "ACS";
-            numero = prefijo + ("00000".substring(0, 5 - numero.length)) + numero;
-            verificarNumeroCenso(1, $('#txtnumerocenso').val());
-        }
-    });
-     
- */
     
     $('#btnconsultar').click(function () {
         var numero = $('#txtnumerocenso').val();
@@ -149,6 +141,7 @@ $(function () {
                     window.location.href = "../Censo/verCenso.jsp?opcion=1&id=" + response.id;
                 } else if (response.status === "fail" || response.status === "error") {
                     alert(response.message);
+                    habilitarUpload('btncargar');
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -189,6 +182,11 @@ $(function () {
 function checkSubmit(id, mensaje) { // Con esta funcion se deshabilita el boton tipo submit y cambia el value para dar la impresion de que se esta procesando la informacion
     document.getElementById(id).value = mensaje;
     document.getElementById(id).disabled = true;
+    return true;
+}
+
+function habilitarUpload(id) { // Con esta funcion se deshabilita el boton tipo submit y cambia el value para dar la impresion de que se esta procesando la informacion
+    document.getElementById(id).disabled = false;
     return true;
 }
 

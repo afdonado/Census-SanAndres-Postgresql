@@ -12,18 +12,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class VehiculoDao extends Conexion {
-
-    private ResultSet rst = null;
-    private PreparedStatement pst = null;
+public class VehiculoDao {
 
     public int adicionarVehiculo(Connection conex, CenVehiculo cenvehiculo) {
 
-        try {
-            pst = conex.prepareStatement("INSERT INTO CEN_VEHICULOS (VEH_PLACA,VEH_CHASIS,VEH_SERIE,VEH_MOTOR,VEH_CLASE,VEH_SERVICIO,"
-                    + "COL_ID,VEH_MODELO,LIN_ID,VEH_LICTRANSITO,VEH_RUNT,VEH_SOAT,VEH_FECVENSOAT,VEH_TECNOMEC,VEH_FECVENTECNO,PAI_ID,MUN_ID,"
-                    + "VEH_TIPODOCUMENTOIMP,VEH_DOCUMENTOIMP,VEH_FECHAIMP,PAI_ID_ORIGEN,VEH_TIPOUSO,VEH_TRANSFORMADO,"
-                    + "USU_ID,EST_ID,VEH_FECHAPROCESO,VEH_FECMATRI) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,sysdate,?)", new String[]{"VEH_ID"});
+        String sql = "INSERT INTO CEN_VEHICULOS (VEH_PLACA,VEH_CHASIS,VEH_SERIE,VEH_MOTOR,VEH_CLASE,VEH_SERVICIO,"
+                + "COL_ID,VEH_MODELO,LIN_ID,VEH_LICTRANSITO,VEH_RUNT,VEH_SOAT,VEH_FECVENSOAT,VEH_TECNOMEC,VEH_FECVENTECNO,PAI_ID,MUN_ID,"
+                + "VEH_TIPODOCUMENTOIMP,VEH_DOCUMENTOIMP,VEH_FECHAIMP,PAI_ID_ORIGEN,VEH_TIPOUSO,VEH_TRANSFORMADO,"
+                + "USU_ID,EST_ID,VEH_FECHAPROCESO,VEH_FECMATRI) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,sysdate,?)";
+        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"VEH_ID"})) {
             pst.setString(1, cenvehiculo.getPlaca_veh());
             pst.setString(2, cenvehiculo.getChasis());
             pst.setString(3, cenvehiculo.getSerie());
@@ -51,38 +48,28 @@ public class VehiculoDao extends Conexion {
             pst.setInt(25, cenvehiculo.getEstado());
             pst.setDate(26, cenvehiculo.getFecha_matricula());
             pst.executeUpdate();
-            rst = pst.getGeneratedKeys();
-            if (rst != null) {
-                if (rst.next()) {
-                    return rst.getInt(1);
+            try (ResultSet rst = pst.getGeneratedKeys()) {
+                if (rst != null) {
+                    if (rst.next()) {
+                        return rst.getInt(1);
+                    }
                 }
             }
         } catch (SQLException e) {
             System.err.println("Error en adicionarVehiculo: " + e);
-        } finally {
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-                if (rst != null) {
-                    rst.close();
-                }
-            } catch (SQLException e) {
-                System.err.println("Error en cierres de adicionarVehiculo: " + e);
-            }
         }
         return 0;
     }
 
     public boolean modificarVehiculo(Connection conex, CenVehiculo cenvehiculo) throws SQLException, IOException {
 
-        try {
-            pst = conex.prepareStatement("UPDATE CEN_VEHICULOS SET VEH_PLACA = ?,VEH_CHASIS = ?,VEH_SERIE = ?,"
-                    + "VEH_MOTOR = ?,VEH_CLASE = ?,VEH_SERVICIO = ?,COL_ID = ?,VEH_MODELO = ?,LIN_ID = ?, "
-                    + "VEH_LICTRANSITO = ?,VEH_RUNT = ?,VEH_SOAT = ?,VEH_FECVENSOAT = ?,VEH_TECNOMEC = ?,"
-                    + "VEH_FECVENTECNO = ?,PAI_ID = ?,MUN_ID = ?, VEH_TIPODOCUMENTOIMP = ?,"
-                    + "VEH_DOCUMENTOIMP = ?,VEH_FECHAIMP = ?, PAI_ID_ORIGEN = ?, "
-                    + "VEH_TIPOUSO = ?, VEH_TRANSFORMADO = ?, EST_ID = ?, VEH_FECMATRI = ? WHERE VEH_ID = ? ");
+        String sql = "UPDATE CEN_VEHICULOS SET VEH_PLACA = ?,VEH_CHASIS = ?,VEH_SERIE = ?,"
+                + "VEH_MOTOR = ?,VEH_CLASE = ?,VEH_SERVICIO = ?,COL_ID = ?,VEH_MODELO = ?,LIN_ID = ?, "
+                + "VEH_LICTRANSITO = ?,VEH_RUNT = ?,VEH_SOAT = ?,VEH_FECVENSOAT = ?,VEH_TECNOMEC = ?,"
+                + "VEH_FECVENTECNO = ?,PAI_ID = ?,MUN_ID = ?, VEH_TIPODOCUMENTOIMP = ?,"
+                + "VEH_DOCUMENTOIMP = ?,VEH_FECHAIMP = ?, PAI_ID_ORIGEN = ?, "
+                + "VEH_TIPOUSO = ?, VEH_TRANSFORMADO = ?, EST_ID = ?, VEH_FECMATRI = ? WHERE VEH_ID = ? ";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setString(1, cenvehiculo.getPlaca_veh());
             pst.setString(2, cenvehiculo.getChasis());
             pst.setString(3, cenvehiculo.getSerie());
@@ -110,88 +97,53 @@ public class VehiculoDao extends Conexion {
             pst.setDate(25, cenvehiculo.getFecha_matricula());
             pst.setInt(26, cenvehiculo.getId());
             pst.executeUpdate();
-
             return true;
-
         } catch (SQLException e) {
             System.err.println("Error en modificarVehiculo: " + e);
-        } finally {
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-                if (rst != null) {
-                    rst.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error en cierres de modificarVehiculo:" + e);
-            }
         }
-
         return false;
     }
 
     public CenVehiculo ConsultarVehiculoByReferencia(Connection conex, int tipoRef, String valorReferencia) throws SQLException {
 
-        try {
-            if (tipoRef == 1) {
-                pst = conex.prepareStatement("SELECT * FROM CEN_VEHICULOS WHERE VEH_PLACA = ? ");
-            }
-            if (tipoRef == 2) {
-                pst = conex.prepareStatement("SELECT * FROM CEN_VEHICULOS WHERE VEH_MOTOR = ? ");
-            }
-            if (tipoRef == 3) {
-                pst = conex.prepareStatement("SELECT * FROM CEN_VEHICULOS WHERE VEH_CHASIS = ? ");
-            }
-            if (tipoRef == 4) {
-                pst = conex.prepareStatement("SELECT * FROM CEN_VEHICULOS WHERE VEH_SERIE = ? ");
-            }
+        String sql = "";
+        if (tipoRef == 1) {
+            sql = "SELECT * FROM CEN_VEHICULOS WHERE VEH_PLACA = ? ";
+        }
+        if (tipoRef == 2) {
+            sql = "SELECT * FROM CEN_VEHICULOS WHERE VEH_MOTOR = ? ";
+        }
+        if (tipoRef == 3) {
+            sql = "SELECT * FROM CEN_VEHICULOS WHERE VEH_CHASIS = ? ";
+        }
+        if (tipoRef == 4) {
+            sql = "SELECT * FROM CEN_VEHICULOS WHERE VEH_SERIE = ? ";
+        }
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setString(1, valorReferencia);
-            rst = pst.executeQuery();
-
-            while (rst.next()) {
-                return CenVehiculo.load(rst);
+            try (ResultSet rst = pst.executeQuery()) {
+                while (rst.next()) {
+                    return CenVehiculo.load(rst);
+                }
             }
         } catch (SQLException e) {
             throw new SQLException("Error en ConsultarVehiculoByReferencia: " + e);
-        } finally {
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-                if (rst != null) {
-                    rst.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error en cierres de ConsultarVehiculoByReferencia:" + e);
-            }
         }
         return null;
     }
 
     public CenVehiculo ConsultarVehiculoById(Connection conex, int id) throws SQLException {
 
-        try {
-            pst = conex.prepareStatement("SELECT * FROM CEN_VEHICULOS WHERE VEH_ID = ? ");
+        String sql = "SELECT * FROM CEN_VEHICULOS WHERE VEH_ID = ? ";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setInt(1, id);
-            rst = pst.executeQuery();
-
-            while (rst.next()) {
-                return CenVehiculo.load(rst);
+            try (ResultSet rst = pst.executeQuery()) {
+                while (rst.next()) {
+                    return CenVehiculo.load(rst);
+                }
             }
         } catch (SQLException e) {
             throw new SQLException("Error en ConsultarVehiculoById: " + e);
-        } finally {
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-                if (rst != null) {
-                    rst.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error en cierres de ConsultarVehiculoById:" + e);
-            }
         }
         return null;
     }
@@ -200,43 +152,34 @@ public class VehiculoDao extends Conexion {
 
         List<HashMap> listaDatosVehiculo = new LinkedList<>();
 
-        try {
-            if (tipoRef == 1) {
-                pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS WHERE VEH_PLACA = ? ");
-            }
-            if (tipoRef == 2) {
-                pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS WHERE VEH_MOTOR = ? ");
-            }
-            if (tipoRef == 3) {
-                pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS WHERE VEH_CHASIS = ? ");
-            }
-            if (tipoRef == 4) {
-                pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS WHERE VEH_SERIE = ? ");
-            }
-            pst.setString(1, valorReferencia);
-            rst = pst.executeQuery();
+        String sql = "";
+        if (tipoRef == 1) {
+            sql = "SELECT * FROM VW_VEHICULOS WHERE VEH_PLACA = ? ";
+        }
+        if (tipoRef == 2) {
+            sql = "SELECT * FROM VW_VEHICULOS WHERE VEH_MOTOR = ? ";
+        }
+        if (tipoRef == 3) {
+            sql = "SELECT * FROM VW_VEHICULOS WHERE VEH_CHASIS = ? ";
+        }
+        if (tipoRef == 4) {
+            sql = "SELECT * FROM VW_VEHICULOS WHERE VEH_SERIE = ? ";
+        }
 
-            while (rst.next()) {
-                ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<>();
-                for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                    hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
+            pst.setString(1, valorReferencia);
+            try (ResultSet rst = pst.executeQuery()) {
+                while (rst.next()) {
+                    ResultSetMetaData rsmd = rst.getMetaData();
+                    HashMap<String, String> hash = new HashMap<>();
+                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                        hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+                    }
+                    listaDatosVehiculo.add(hash);
                 }
-                listaDatosVehiculo.add(hash);
             }
         } catch (SQLException e) {
             throw new SQLException("Error en ListarVehiculosByReferencia: " + e);
-        } finally {
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-                if (rst != null) {
-                    rst.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error en cierres de ListarVehiculosByReferencia:" + e);
-            }
         }
         return listaDatosVehiculo;
     }
@@ -245,35 +188,24 @@ public class VehiculoDao extends Conexion {
 
         List<HashMap> listaDatosVehiculo = new LinkedList<>();
 
-        try {
-            pst = conex.prepareStatement("SELECT VP.VEH_ID, VP.VEH_PLACA, VP.VEH_MOTOR, VP.VEH_CHASIS, VP.VEH_SERIE,VP.MARCA,VP.LINEA "
-                    + "FROM VW_VEHICULOS_PERSONAS VP WHERE VP.PER_TIPODOC = ? AND VP.PER_DOCUMENTO=? "
-                    + "GROUP BY VP.VEH_ID, VP.VEH_PLACA, VP.VEH_MOTOR, VP.VEH_CHASIS, VP.VEH_SERIE,VP.MARCA,VP.LINEA ");
+        String sql = "SELECT VP.VEH_ID, VP.VEH_PLACA, VP.VEH_MOTOR, VP.VEH_CHASIS, VP.VEH_SERIE,VP.MARCA,VP.LINEA "
+                + "FROM VW_VEHICULOS_PERSONAS VP WHERE VP.PER_TIPODOC = ? AND VP.PER_DOCUMENTO=? "
+                + "GROUP BY VP.VEH_ID, VP.VEH_PLACA, VP.VEH_MOTOR, VP.VEH_CHASIS, VP.VEH_SERIE,VP.MARCA,VP.LINEA ";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setInt(1, tipodoc);
             pst.setString(2, documento);
-            rst = pst.executeQuery();
-
-            while (rst.next()) {
-                ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<>();
-                for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                    hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+            try (ResultSet rst = pst.executeQuery()) {
+                while (rst.next()) {
+                    ResultSetMetaData rsmd = rst.getMetaData();
+                    HashMap<String, String> hash = new HashMap<>();
+                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                        hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+                    }
+                    listaDatosVehiculo.add(hash);
                 }
-                listaDatosVehiculo.add(hash);
             }
         } catch (SQLException e) {
             throw new SQLException("Error en ListarVehiculosByPersona: " + e);
-        } finally {
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-                if (rst != null) {
-                    rst.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error en cierres de ListarVehiculosByPersona:" + e);
-            }
         }
         return listaDatosVehiculo;
     }
@@ -282,31 +214,19 @@ public class VehiculoDao extends Conexion {
 
         HashMap<String, Object> datos = new HashMap<>();
 
-        try {
-            pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS WHERE VEH_ID = ? ");
+        String sql = "SELECT * FROM VW_VEHICULOS WHERE VEH_ID = ? ";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setInt(1, id);
-            rst = pst.executeQuery();
-
-            if (rst.next()) {
-                ResultSetMetaData rsmd = rst.getMetaData();
-                for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                    datos.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
+            try (ResultSet rst = pst.executeQuery()) {
+                if (rst.next()) {
+                    ResultSetMetaData rsmd = rst.getMetaData();
+                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                        datos.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
+                    }
                 }
             }
-
         } catch (SQLException e) {
             throw new SQLException("Error en ConsultarDatosVehiculoById: " + e);
-        } finally {
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-                if (rst != null) {
-                    rst.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error en cierres de ConsultarDatosVehiculoById:" + e);
-            }
         }
         return datos;
     }
@@ -315,10 +235,8 @@ public class VehiculoDao extends Conexion {
 
         List<HashMap<String, Object>> lista = new LinkedList<>();
 
-        try {
-            pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS ");
-            rst = pst.executeQuery();
-
+        String sql = "SELECT * FROM VW_VEHICULOS ";
+        try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
                 HashMap<String, Object> hash = new HashMap<>();
@@ -329,17 +247,6 @@ public class VehiculoDao extends Conexion {
             }
         } catch (SQLException e) {
             throw new SQLException("Error en ListarVehiculos: " + e);
-        } finally {
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-                if (rst != null) {
-                    rst.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error en cierres de ListarVehiculos:" + e);
-            }
         }
         return lista;
     }
@@ -348,33 +255,22 @@ public class VehiculoDao extends Conexion {
 
         List<HashMap> listaDatosVehiculo = new LinkedList<>();
 
-        try {
-            pst = conex.prepareStatement("SELECT * FROM VW_VEHICULOS WHERE to_date(to_char(FECHA_PROCESO,'dd/MM/yyyy')) BETWEEN ? AND ? ORDER BY FECHA_PROCESO ");
+        String sql = "SELECT * FROM VW_VEHICULOS WHERE to_date(to_char(FECHA_PROCESO,'dd/MM/yyyy')) BETWEEN ? AND ? ORDER BY FECHA_PROCESO ";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setDate(1, fechaini);
             pst.setDate(2, fechafin);
-            rst = pst.executeQuery();
-
-            while (rst.next()) {
-                ResultSetMetaData rsmd = rst.getMetaData();
-                HashMap<String, String> hash = new HashMap<>();
-                for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                    hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+            try (ResultSet rst = pst.executeQuery()) {
+                while (rst.next()) {
+                    ResultSetMetaData rsmd = rst.getMetaData();
+                    HashMap<String, String> hash = new HashMap<>();
+                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                        hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+                    }
+                    listaDatosVehiculo.add(hash);
                 }
-                listaDatosVehiculo.add(hash);
             }
         } catch (SQLException e) {
             throw new SQLException("Error en ListarVehiculosByFechaRegistro: " + e);
-        } finally {
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-                if (rst != null) {
-                    rst.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error en cierres de ListarVehiculosByFechaRegistro:" + e);
-            }
         }
         return listaDatosVehiculo;
     }

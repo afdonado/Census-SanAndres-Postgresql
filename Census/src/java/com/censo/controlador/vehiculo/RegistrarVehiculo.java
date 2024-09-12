@@ -25,12 +25,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "RegistrarVehiculo", urlPatterns = "/registrarVehiculo")
 public class RegistrarVehiculo extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -40,9 +43,10 @@ public class RegistrarVehiculo extends HttpServlet {
         Map<String, String> respuesta = new HashMap<>();
 
         try {
+            
+            conex = dataSource.getConnection();
 
             VehiculoDao vehiculoDao = new VehiculoDao();
-            conex = vehiculoDao.conectar();
 
             //Validar parametro placa
             if (request.getParameter("txtplaca") == null) {
@@ -583,6 +587,7 @@ public class RegistrarVehiculo extends HttpServlet {
         } finally {
             if (conex != null) {
                 try {
+                    conex.setAutoCommit(true);
                     conex.close();
                 } catch (SQLException closeEx) {
                     closeEx.printStackTrace();

@@ -7,7 +7,6 @@ import com.censo.modelo.persistencia.CenDocumentosDigitalizado;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,22 +25,22 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.util.ArrayList;
-import javax.servlet.ServletContext;
+import javax.sql.DataSource;
 
 @WebServlet(name = "ListarDocumentos", urlPatterns = "/listarDocumentos")
 public class ListarDocumentos extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Connection conex = null;
-
         Map<String, Object> respuesta = new HashMap<>();
 
-        try {
+        try (Connection conex = dataSource.getConnection()) {
 
             if (request.getParameter("idcenso") == null || request.getParameter("idcenso").isEmpty()) {
                 respuesta.put("status", "error");
@@ -53,7 +52,6 @@ public class ListarDocumentos extends HttpServlet {
             }
 
             CensoDao censoDao = new CensoDao();
-            conex = censoDao.conectar();
 
             int idcenso = Integer.parseInt(request.getParameter("idcenso"));
             CenCenso cencenso = censoDao.ConsultarCensoById(conex, idcenso);
@@ -145,14 +143,6 @@ public class ListarDocumentos extends HttpServlet {
             respuesta.put("status", "error");
             respuesta.put("message", "No se consultaron los documentos del censo");
             e.printStackTrace();
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
         }
 
         String json = new Gson().toJson(respuesta);

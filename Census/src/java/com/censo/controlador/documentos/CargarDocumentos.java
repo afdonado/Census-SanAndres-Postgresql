@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -28,6 +30,8 @@ public class CargarDocumentos extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -37,6 +41,8 @@ public class CargarDocumentos extends HttpServlet {
         Map<String, Object> respuesta = new HashMap<>();
 
         try {
+
+            conex = dataSource.getConnection();
 
             if (request.getParameter("idcenso") == null || request.getParameter("idcenso").isEmpty()) {
                 respuesta.put("status", "error");
@@ -48,8 +54,6 @@ public class CargarDocumentos extends HttpServlet {
             }
 
             CensoDao censoDao = new CensoDao();
-            conex = censoDao.conectar();
-
             int idcenso = Integer.parseInt(request.getParameter("idcenso"));
             CenCenso cencenso = censoDao.ConsultarCensoById(conex, idcenso);
             if (cencenso == null) {
@@ -79,10 +83,11 @@ public class CargarDocumentos extends HttpServlet {
                 String nombre = (String) file.getName();
 
                 int tipo = 0;
-                String format = nombre.substring(nombre.indexOf("."));
 
-                if (!format.equalsIgnoreCase(".jpg") && !format.equalsIgnoreCase(".jpeg") && !format.equalsIgnoreCase(".png") && !format.equalsIgnoreCase(".pdf")) {
+                List<String> formatosPermitidos = Arrays.asList(".jpg", ".png", ".pdf");
+                String format = nombre.substring(nombre.lastIndexOf(".")).toLowerCase();
 
+                if (!formatosPermitidos.contains(format)) {
                     respuesta.put("status", "error");
                     respuesta.put("message", "La extensión de los documentos seleccionados no es permitida");
 
@@ -92,7 +97,7 @@ public class CargarDocumentos extends HttpServlet {
 
                 }
 
-                if (format.equalsIgnoreCase(".jpg") || format.equalsIgnoreCase(".jpeg")) {
+                if (format.equalsIgnoreCase(".jpg")) {
                     tipo = 1;
                 } else if (format.equalsIgnoreCase(".png")) {
                     tipo = 2;
@@ -101,13 +106,13 @@ public class CargarDocumentos extends HttpServlet {
                 }
 
                 //Local
-                String directorio = "C:/DocumentosDigitalizados/Censos/" + cencenso.getNumero();
-                String ruta = "C:/DocumentosDigitalizados/Censos/" + cencenso.getNumero() + "/" + file.getName();
-                /*
+                //String directorio = "C:/DocumentosDigitalizados/Censos/" + cencenso.getNumero();
+                //String ruta = "C:/DocumentosDigitalizados/Censos/" + cencenso.getNumero() + "/" + file.getName();
+                
                 //Servidor pdn
-                String directorio = "/documentos/censos/" + numero + "/";
-                String ruta = "/documentos/censos/" + numero + "/" + file.getName();
-*/
+                String directorio = "/documentos/censos/" + cencenso.getNumero() + "/";
+                String ruta = "/documentos/censos/" + cencenso.getNumero() + "/" + file.getName();
+
                 File mkdir = new File(directorio);
                 if (!mkdir.exists()) {
                     mkdir.mkdirs();
@@ -120,7 +125,7 @@ public class CargarDocumentos extends HttpServlet {
 
                     String jsonError = new Gson().toJson(respuesta);
                     response.getWriter().write(jsonError);
-                    break;
+                    return;
                 }
 
                 file.write(saveTo);
@@ -142,12 +147,12 @@ public class CargarDocumentos extends HttpServlet {
                     respuesta.put("status", "success");
                     respuesta.put("message", "Documentos cargados correctamente");
                     respuesta.put("id", String.valueOf(idcenso));
-                    //out.println("location='jsp/Documentos/ListarDocumentos.jsp?idcenso=" + idcenso + "';");
                 } else {
                     conex.rollback();
                     respuesta.put("status", "fail");
                     respuesta.put("message", "Documento no registrado");
                 }
+                conex.setAutoCommit(true);
             }
         } catch (Exception e) {
             if (conex != null) {
@@ -163,6 +168,7 @@ public class CargarDocumentos extends HttpServlet {
         } finally {
             if (conex != null) {
                 try {
+                    conex.setAutoCommit(true);
                     conex.close();
                 } catch (SQLException closeEx) {
                     closeEx.printStackTrace();

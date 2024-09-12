@@ -8,91 +8,53 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TipoServicioDao extends Conexion {
-    
-    private ResultSet rst = null;
-    private PreparedStatement pst = null;
-    
+public class TipoServicioDao {
+
     public List ListarTiposServicio(Connection conex) throws SQLException {
 
         List listaTipoServicio = new LinkedList();
 
-        try {
-            pst = conex.prepareStatement("SELECT * FROM CEN_TIPOS_SERVICIO WHERE EST_ID = 1 ORDER BY TSER_ID ");
-            rst = pst.executeQuery();
-
+        String sql = "SELECT * FROM CEN_TIPOS_SERVICIO WHERE EST_ID = 1 ORDER BY TSER_ID ";
+        try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
             while (rst.next()) {
                 listaTipoServicio.add(CenTipoServicio.load(rst));
             }
         } catch (SQLException e) {
             throw new SQLException("Error en ListarTiposServicio: " + e);
-        } finally {
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-                if (rst != null) {
-                    rst.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error en cierres de ListarTiposServicio:" + e);
-            }
         }
         return listaTipoServicio;
     }
 
     public CenTipoServicio ConsultarTipoServicioById(Connection conex, int id) throws SQLException {
 
-        try {
-            pst = conex.prepareStatement("SELECT * FROM CEN_TIPOS_SERVICIO WHERE EST_ID = 1 AND TSER_ID = ? ORDER BY TSER_ID ");
+        String sql = "SELECT * FROM CEN_TIPOS_SERVICIO WHERE EST_ID = 1 AND TSER_ID = ? ORDER BY TSER_ID ";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setInt(1, id);
-            rst = pst.executeQuery();
-
-            while (rst.next()) {
-                return CenTipoServicio.load(rst);
+            try (ResultSet rst = pst.executeQuery()) {
+                while (rst.next()) {
+                    return CenTipoServicio.load(rst);
+                }
             }
         } catch (SQLException e) {
             throw new SQLException("Error en ConsultarTipoServicioById: " + e);
-        } finally {
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-                if (rst != null) {
-                    rst.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error en cierres de ConsultarTipoServicioById:" + e);
-            }
         }
         return null;
     }
-    
+
     public CenTipoServicio ConsultarTipoServicioByDescripcion(Connection conex, String descripcion) throws SQLException {
 
-        try {
-            pst = conex.prepareStatement("SELECT * FROM CEN_TIPOS_SERVICIO WHERE EST_ID = 1 AND TSER_DESCRIPCION = ?");
+        String sql = "SELECT * FROM CEN_TIPOS_SERVICIO WHERE EST_ID = 1 AND TSER_DESCRIPCION = ?";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setString(1, descripcion);
-            rst = pst.executeQuery();
-
-            while (rst.next()) {
-                return CenTipoServicio.load(rst);
+            try (ResultSet rst = pst.executeQuery()) {
+                while (rst.next()) {
+                    return CenTipoServicio.load(rst);
+                }
             }
         } catch (SQLException e) {
             throw new SQLException("Error en ConsultarTipoServicioByDescripcion: " + e);
-        } finally {
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-                if (rst != null) {
-                    rst.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error en cierres de ConsultarTipoServicioByDescripcion:" + e);
-            }
         }
         return null;
     }
-    
+
 }

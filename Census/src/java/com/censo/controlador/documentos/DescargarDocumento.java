@@ -15,21 +15,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "DescargarDocumento", urlPatterns = "/descargarDocumento")
 public class DescargarDocumento extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Connection conex = null;
-
         Map<String, String> respuesta = new HashMap<>();
 
-        try {
+        try (Connection conex = dataSource.getConnection()){
 
             if (request.getParameter("iddocumento") == null || request.getParameter("iddocumento").isEmpty()) {
                 respuesta.put("status", "error");
@@ -41,7 +42,6 @@ public class DescargarDocumento extends HttpServlet {
             }
 
             DocumentoDigitalizadoDao documentoDigitalizadoDao = new DocumentoDigitalizadoDao();
-            conex = documentoDigitalizadoDao.conectar();
 
             int iddocumento = Integer.parseInt(request.getParameter("iddocumento"));
             CenDocumentosDigitalizado cendocumentosdigitalizado = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoById(conex, iddocumento);
@@ -97,14 +97,6 @@ public class DescargarDocumento extends HttpServlet {
             respuesta.put("status", "error");
             respuesta.put("message", "Error descargando el documento");
             e.printStackTrace();
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
         }
         
         String json = new Gson().toJson(respuesta);

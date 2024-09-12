@@ -12,24 +12,24 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 @WebServlet(name = "CargarEstadisticas", urlPatterns = "/cargarEstadisticas")
 public class CargarEstadisticas extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("text/html;charset=UTF-8");
 
-        Connection conex = null;
-
-        try (PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter(); Connection conex = dataSource.getConnection()) {
 
             EstadisticaDao estadisticaDao = new EstadisticaDao();
-            conex = estadisticaDao.conectar();
 
             if (request.getParameter("opcion") != null || !request.getParameter("opcion").isEmpty()) {
 
@@ -150,14 +150,6 @@ public class CargarEstadisticas extends HttpServlet {
             e.printStackTrace();
         } catch (JSONException ex) {
             ex.printStackTrace();
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
         }
     }
 

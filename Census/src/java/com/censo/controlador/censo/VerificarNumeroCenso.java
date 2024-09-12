@@ -13,21 +13,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "VerificarNumeroCenso", urlPatterns = {"/verificarNumeroCenso"})
 public class VerificarNumeroCenso extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         
-        Connection conex = null;
-
         Map<String, String> respuesta = new HashMap<>();
 
-        try {
+        try (Connection conex = dataSource.getConnection()) {
             
             if (request.getParameter("numero") == null || request.getParameter("numero").isEmpty()) {
                 respuesta.put("status", "error");
@@ -52,7 +53,6 @@ public class VerificarNumeroCenso extends HttpServlet {
             }
 
             CensoDao censoDao = new CensoDao();
-            conex = censoDao.conectar();
 
             CenCenso cencenso = censoDao.ConsultarCensoByNumero(conex, numero);
 
@@ -70,15 +70,6 @@ public class VerificarNumeroCenso extends HttpServlet {
             respuesta.put("status", "error");
             respuesta.put("message", "Error al verificar el número de censo");
             e.printStackTrace();
-
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
         }
 
         String json = new Gson().toJson(respuesta);

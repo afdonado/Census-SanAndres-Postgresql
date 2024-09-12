@@ -18,12 +18,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "RegistrarCenso", urlPatterns = "/registrarCenso")
 public class RegistrarCenso extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -33,6 +36,8 @@ public class RegistrarCenso extends HttpServlet {
         Map<String, String> respuesta = new HashMap<>();
 
         try {
+            
+            conex = dataSource.getConnection();
 
             CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
             
@@ -60,7 +65,6 @@ public class RegistrarCenso extends HttpServlet {
             }
             
             CensoDao censoDao = new CensoDao();
-            conex = censoDao.conectar();            
             CenCenso cencenso = censoDao.ConsultarCensoByNumero(conex, numero);
             
             if (cencenso != null) {
@@ -158,6 +162,7 @@ public class RegistrarCenso extends HttpServlet {
         } finally {
             if (conex != null) {
                 try {
+                    conex.setAutoCommit(true);
                     conex.close();
                 } catch (SQLException closeEx) {
                     closeEx.printStackTrace();

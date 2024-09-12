@@ -15,26 +15,15 @@ public class consultarNumeroCenso {
 
         Datosresponse datosresponse = new Datosresponse();
         
-        Connection conex = null;
-        
-        try {
-            
+        /*try (Connection conex = conexion.conectar()) {
             CensoDao censoDao = new CensoDao();
-            conex = censoDao.conectar();
-            
             datosresponse = censoDao.ConsultarCensoWSByNumero(conex, numero);
         } catch (SQLException e) {
             System.out.println("Error Servicio ConsultarNumeroCenso");
             e.printStackTrace();
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
         }
         return datosresponse;
+*/
+        return null;
     }
 }

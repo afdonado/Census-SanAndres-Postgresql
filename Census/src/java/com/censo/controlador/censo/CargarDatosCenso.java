@@ -2,7 +2,6 @@ package com.censo.controlador.censo;
 
 import com.censo.modelo.dao.CensoDao;
 import com.censo.modelo.dao.PersonaVehiculoDao;
-import com.censo.modelo.persistencia.CenCenso;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Connection;
@@ -15,21 +14,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "CargarDatosCenso", urlPatterns = {"/cargarDatosCenso"})
 public class CargarDatosCenso extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Connection conex = null;
-
         Map<String, Object> respuesta = new HashMap<>();
 
-        try {
+        try(Connection conex = dataSource.getConnection()) {
 
             if (request.getParameter("id").equals("")) {
                 respuesta.put("status", "error");
@@ -42,9 +42,8 @@ public class CargarDatosCenso extends HttpServlet {
             
             int idcenso = Integer.parseInt(request.getParameter("id"));
 
+            
             CensoDao censoDao = new CensoDao();
-            conex = censoDao.conectar();
-
             HashMap<String, Object> datosCenso = censoDao.ConsultarDatosCensoById(conex, idcenso);
 
             if (!datosCenso.isEmpty()) {
@@ -64,14 +63,6 @@ public class CargarDatosCenso extends HttpServlet {
             respuesta.put("message", "Error al cargar los datos del censo");
             e.printStackTrace();
 
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
         }
 
         String json = new Gson().toJson(respuesta);

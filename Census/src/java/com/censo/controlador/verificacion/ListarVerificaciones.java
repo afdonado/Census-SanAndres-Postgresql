@@ -13,24 +13,24 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "ListarVerificaciones", urlPatterns = {"/listarVerificaciones"})
 public class ListarVerificaciones extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         
-        Connection conex = null;
-        
         Map<String, Object> respuesta = new HashMap<>();
 
-        try {
+        try (Connection conex = dataSource.getConnection()) {
 
             VerificacionDao verificacionDao = new VerificacionDao();
-            conex = verificacionDao.conectar();
             
             List<HashMap<String, Object>> lista = verificacionDao.ListarVerificaciones(conex);
 
@@ -44,14 +44,6 @@ public class ListarVerificaciones extends HttpServlet {
             respuesta.put("message", "Error al listas las verificaciones");
             e.printStackTrace();
 
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
         }
         
         String json = new Gson().toJson(respuesta);

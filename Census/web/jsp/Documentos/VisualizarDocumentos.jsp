@@ -1,3 +1,4 @@
+<%@page import="javax.sql.DataSource"%>
 <%@page import="java.sql.Connection"%>
 <%@page import="com.censo.modelo.dao.DocumentoDigitalizadoDao"%>
 <%@page import="javax.servlet.http.HttpSession"%>
@@ -28,45 +29,48 @@
             if (((java.util.LinkedList) sessionCensus.getAttribute("permisosUsuario")).contains("consultarDocumentos.jsp")) {
                 if (request.getParameter("iddocumento") != null) {
 
+                    DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
                     DocumentoDigitalizadoDao documentoDigitalizadoDao = new DocumentoDigitalizadoDao();
-                    Connection conex = documentoDigitalizadoDao.conectar();
 
-                    int iddocumento = Integer.parseInt(request.getParameter("iddocumento"));
-                    CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
-                    String nombre = "jpg";
-                    String extension = "";
-                    String ruta = "";
-                    cendocumentosdigitalizado = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoById(conex, iddocumento);
+                    try (Connection conex = dataSource.getConnection()) {
 
-                    /*
+                        int iddocumento = Integer.parseInt(request.getParameter("iddocumento"));
+                        CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
+                        String nombre = "jpg";
+                        String extension = "";
+                        String ruta = "";
+                        cendocumentosdigitalizado = documentoDigitalizadoDao.ConsultarDocumentoDigitalizadoById(conex, iddocumento);
+
+                        /*
                     if (cendocumentosdigitalizado.getRuta().startsWith("..")) {
                         ruta = cendocumentosdigitalizado.getRuta().substring(3);
                         ruta = application.getRealPath(ruta);
                     } else {
                         ruta = cendocumentosdigitalizado.getRuta().replace("/", "\\");
                     }
-*/
-                    nombre = cendocumentosdigitalizado.getNombre();
-                    extension = nombre.substring(nombre.indexOf(".") + 1, nombre.length());
-                    FileInputStream archivo = new FileInputStream(cendocumentosdigitalizado.getRuta());
-                    int longitud = archivo.available();
-                    byte[] data = new byte[longitud];
-                    archivo.read(data, 0, longitud);
+                         */
+                        nombre = cendocumentosdigitalizado.getNombre();
+                        extension = nombre.substring(nombre.indexOf(".") + 1, nombre.length());
+                        FileInputStream archivo = new FileInputStream(cendocumentosdigitalizado.getRuta());
+                        int longitud = archivo.available();
+                        byte[] data = new byte[longitud];
+                        archivo.read(data, 0, longitud);
 
-                    response.setHeader("Content-disposition", "inline; filename=" + nombre + "");
+                        response.setHeader("Content-disposition", "inline; filename=" + nombre + "");
 
-                    if (extension.toUpperCase().equals("JPG") || extension.toUpperCase().equals("PNG")) {
-                        response.setContentType("image/gif");
-                    } else {
-                        if (extension.toUpperCase().equals("PDF")) {
-                            response.setContentType("application/pdf");
+                        if (extension.toUpperCase().equals("JPG") || extension.toUpperCase().equals("PNG")) {
+                            response.setContentType("image/gif");
+                        } else {
+                            if (extension.toUpperCase().equals("PDF")) {
+                                response.setContentType("application/pdf");
+                            }
                         }
+
+                        response.setContentLength(longitud);
+                        response.getOutputStream().write(data);
+
+                        archivo.close();
                     }
-
-                    response.setContentLength(longitud);
-                    response.getOutputStream().write(data);
-
-                    archivo.close();
 
                 } else {
     %>

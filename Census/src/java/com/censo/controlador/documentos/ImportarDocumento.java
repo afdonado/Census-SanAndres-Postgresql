@@ -20,12 +20,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "ImportarDocumento", urlPatterns = "/importarDocumento")
 public class ImportarDocumento extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -35,6 +38,8 @@ public class ImportarDocumento extends HttpServlet {
         Map<String, String> respuesta = new HashMap<>();
 
         try {
+            
+            conex = dataSource.getConnection();
 
             if (request.getParameter("idcenso") == null || request.getParameter("idcenso").isEmpty()) {
                 respuesta.put("status", "error");
@@ -46,7 +51,6 @@ public class ImportarDocumento extends HttpServlet {
             }
 
             CensoDao censoDao = new CensoDao();
-            conex = censoDao.conectar();
 
             int idcenso = Integer.parseInt(request.getParameter("idcenso"));
             CenCenso cencenso = censoDao.ConsultarCensoById(conex, idcenso);
@@ -144,6 +148,7 @@ public class ImportarDocumento extends HttpServlet {
         } catch (NumberFormatException | SQLException e) {
             if (conex != null) {
                 try {
+                    conex.setAutoCommit(true);
                     conex.rollback();
                 } catch (SQLException rollbackEx) {
                     rollbackEx.printStackTrace();
@@ -155,6 +160,7 @@ public class ImportarDocumento extends HttpServlet {
         } finally {
             if (conex != null) {
                 try {
+                    conex.setAutoCommit(true);
                     conex.close();
                 } catch (SQLException closeEx) {
                     closeEx.printStackTrace();

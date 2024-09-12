@@ -13,22 +13,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "CargarGeneros", urlPatterns = {"/cargarGeneros"})
 public class CargarGeneros extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
+        
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        Connection conex = null;
-
-        try {
+        try (Connection conex = dataSource.getConnection()) {
 
             GeneroDao generoDao = new GeneroDao();
-            conex = generoDao.conectar();
             
             List<CenGenero> lista = generoDao.ListarGeneros(conex);
             
@@ -48,13 +48,6 @@ public class CargarGeneros extends HttpServlet {
             e.printStackTrace();
 
         } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
             out.close();
         }
     }

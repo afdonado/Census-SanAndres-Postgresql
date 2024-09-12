@@ -13,21 +13,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "VerificarPersonaVehiculo", urlPatterns = {"/verificarPersonaVehiculo"})
 public class VerificarPersonaVehiculo extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Connection conex = null;
-
         Map<String, String> respuesta = new HashMap<>();
 
-        try {
+        try (Connection conex = dataSource.getConnection()) {
 
             //Validar parametro tipo documento
             if (request.getParameter("tipodocumento") == null || request.getParameter("tipodocumento").isEmpty()) {
@@ -55,7 +56,6 @@ public class VerificarPersonaVehiculo extends HttpServlet {
 
 
             PersonaDao personaDao = new PersonaDao();
-            conex = personaDao.conectar();
 
             CenPersona cenPersona = personaDao.ConsultarPersona(conex, tipoDocumento, documento);
             if (cenPersona != null) {
@@ -78,14 +78,6 @@ public class VerificarPersonaVehiculo extends HttpServlet {
             respuesta.put("message", "Error al verificar el numero de documento");
             e.printStackTrace();
 
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
         }
         
         String json = new Gson().toJson(respuesta);

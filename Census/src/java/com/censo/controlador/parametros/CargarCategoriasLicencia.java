@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "CargarCategoriasLicencia", urlPatterns = {"/cargarCategoriasLicencia"})
 public class CargarCategoriasLicencia extends HttpServlet {
@@ -20,24 +21,23 @@ public class CargarCategoriasLicencia extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
+        
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        Connection conex = null;
-
-        try {
+        try (Connection conex = dataSource.getConnection()) {
 
             CategoriaLicenciaDao categoriaLicenciaDao = new CategoriaLicenciaDao();
-            conex = categoriaLicenciaDao.conectar();
-            
+
             List<CenCategoriaLicencia> lista = categoriaLicenciaDao.ListarCategoriasLicencia(conex);
-            
+
             if (!lista.isEmpty()) {
-                    Gson gson = new Gson();
-                    String json = gson.toJson(lista);
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
-                    response.getWriter().write(json);
+                Gson gson = new Gson();
+                String json = gson.toJson(lista);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(json);
             }
 
         } catch (SQLException e) {
@@ -47,15 +47,6 @@ public class CargarCategoriasLicencia extends HttpServlet {
             out.println("</script>");
             e.printStackTrace();
 
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
-            out.close();
         }
     }
 

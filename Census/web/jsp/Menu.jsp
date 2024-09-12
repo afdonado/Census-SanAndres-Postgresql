@@ -1,3 +1,4 @@
+<%@page import="javax.sql.DataSource"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.Connection"%>
 <%@page import="com.censo.modelo.persistencia.CenPermiso"%>
@@ -11,11 +12,10 @@
     CenUsuario cenusuario = (CenUsuario) sessionCensus.getAttribute("usuario");
     List listaModulosUsuario = (List) sessionCensus.getAttribute("modulosUsuario");
 
-    Connection conex = null;
+    DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
-    try {
+    try (Connection conex = dataSource.getConnection()) {
         UsuarioDao usuarioDao = new UsuarioDao();
-        conex = usuarioDao.conectar();
 %>
 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="${pageContext.request.contextPath}/dashboard">
     <div class="sidebar-brand-icon rotate-n-15">
@@ -78,13 +78,5 @@
     <button class="rounded-circle border-0" id="sidebarToggle"></button>
 </div>
 <%
-    } finally {
-        if (conex != null) {
-            try {
-                conex.close();
-            } catch (SQLException closeEx) {
-                closeEx.printStackTrace();
-            }
-        }
     }
 %>

@@ -13,24 +13,24 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "VerificarNombreUsuario", urlPatterns = {"/verificarNombreUsuario"})
 public class VerificarNombreUsuario extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Connection conex = null;
-
         Map<String, String> respuesta = new HashMap<>();
 
-        try {
+        try (Connection conex = dataSource.getConnection()) {
 
             UsuarioDao usuarioDao = new UsuarioDao();
-            conex = usuarioDao.conectar();
 
             //Validar parametro nombre
             if (request.getParameter("nombre") == null || request.getParameter("nombre").isEmpty()) {
@@ -67,14 +67,6 @@ public class VerificarNombreUsuario extends HttpServlet {
             respuesta.put("status", "error");
             respuesta.put("message", "Error al verificar el nombre de usuario");
             e.printStackTrace();
-        } finally {
-            if (conex != null) {
-                try {
-                    conex.close();
-                } catch (SQLException closeEx) {
-                    closeEx.printStackTrace();
-                }
-            }
         }
     }
 

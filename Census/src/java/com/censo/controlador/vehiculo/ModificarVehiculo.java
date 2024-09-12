@@ -26,12 +26,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 @WebServlet(name = "ModificarVehiculo", urlPatterns = "/modificarVehiculo")
 public class ModificarVehiculo extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -41,6 +44,7 @@ public class ModificarVehiculo extends HttpServlet {
         Map<String, String> respuesta = new HashMap<>();
 
         try {
+            conex = dataSource.getConnection();
 
             //Validar parametro idvehiculo
             if (request.getParameter("idvehiculo") == null || request.getParameter("idvehiculo").isEmpty()) {
@@ -55,7 +59,6 @@ public class ModificarVehiculo extends HttpServlet {
             int idvehiculo = Integer.parseInt(request.getParameter("idvehiculo"));
 
             VehiculoDao vehiculoDao = new VehiculoDao();
-            conex = vehiculoDao.conectar();
 
             //Verificar que el vehiculo existe para modificar
             CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoById(conex, idvehiculo);
@@ -628,6 +631,7 @@ public class ModificarVehiculo extends HttpServlet {
         } finally {
             if (conex != null) {
                 try {
+                    conex.setAutoCommit(true);
                     conex.close();
                 } catch (SQLException closeEx) {
                     closeEx.printStackTrace();
