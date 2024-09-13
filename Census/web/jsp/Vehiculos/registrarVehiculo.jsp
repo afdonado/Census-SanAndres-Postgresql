@@ -55,7 +55,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group row">
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <div class="col-sm-2 mb-2 mb-sm-0">
                                                 <label>Consultar en Runt?</label>
                                                 <select class="form-control" id="cmbconsultarunt" name="cmbconsultarunt">
                                                     <option value="S" selected>Si</option>
@@ -70,8 +70,14 @@
                                                 <label>Documento Propietario</label>
                                                 <input class="form-control solo-numeros" type="text" id="txtdocumentorunt" name="txtdocumentorunt" maxlength="20">
                                             </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label></label>
+                                                <button type="button" class="btn btn-lg btn-success btn-block" id="btnconsultar" name="btnconsultar">Consultar</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <div id="procesando" style="display:none;">
-                                                <p>Consultado los datos en el runt, espere por favor...</p>
+                                                <spam style="color: red"><p>Consultado los datos en el runt, espere por favor...</p></spam>
                                             </div>
                                         </div>
                                     </div>

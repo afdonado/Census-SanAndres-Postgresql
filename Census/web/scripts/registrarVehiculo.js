@@ -3,16 +3,8 @@ $(function () {
 
     $('.datos-importancion').hide();
     $('#tipos-uso').hide();
-
-    $('#txtplacarunt').blur(function () {
-        var placa = $('#txtplacarunt').val().toString().toUpperCase();
-        var documento = $('#txtdocumentorunt').val().toString().toUpperCase();
-        if (placa.length > 0 && documento.length > 0) {
-            verificarVehiculoRunt(placa, documento);
-        }
-    });
-
-    $('#txtdocumentorunt').blur(function () {
+    
+    $('#btnconsultar').click(function () {
         var placa = $('#txtplacarunt').val().toString().toUpperCase();
         var documento = $('#txtdocumentorunt').val().toString().toUpperCase();
         if (placa.length > 0 && documento.length > 0) {
@@ -52,6 +44,7 @@ $(function () {
     function verificarVehiculoRunt(placa, numerodocumento) {
 
         $('#procesando').show();
+        $('#btnconsultar').prop('disabled', true);
 
         var parametros = {
             placa: placa,
@@ -132,6 +125,7 @@ $(function () {
             },
             complete: function () {
                 $('#procesando').hide();
+                $('#btnconsultar').prop('disabled', false);
             }
         });
     }

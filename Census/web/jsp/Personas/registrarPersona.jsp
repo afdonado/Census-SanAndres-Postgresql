@@ -62,9 +62,11 @@
                                             <div class="col-sm-3 mb-3 mb-sm-0">
                                                 <label>Documento<spam style="color: red">(*)</spam></label>
                                                 <input class="form-control solo-numeros" type="text" id="txtdocumento" name="txtdocumento" maxlength="20" style="text-transform: uppercase" required="true">
-                                                <div id="procesando" style="display:none;">
-                                                    <p>Consultado los datos en el runt, espere por favor...</p>
-                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div id="procesando" style="display:none;">
+                                                <spam style="color: red"><p>Consultado los datos en el runt, espere por favor...</p></spam>
                                             </div>
                                         </div>
                                         <div class="form-group row">
