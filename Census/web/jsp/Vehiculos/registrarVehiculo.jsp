@@ -70,7 +70,7 @@
                                                 <label>Documento Propietario</label>
                                                 <input class="form-control solo-numeros" type="text" id="txtdocumentorunt" name="txtdocumentorunt" maxlength="20">
                                             </div>
-                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                            <div class="col-sm-3 mb-3 mb-sm-0 consulta-runt">
                                                 <label></label>
                                                 <button type="button" class="btn btn-lg btn-success btn-block" id="btnconsultar" name="btnconsultar">Consultar</button>
                                             </div>
