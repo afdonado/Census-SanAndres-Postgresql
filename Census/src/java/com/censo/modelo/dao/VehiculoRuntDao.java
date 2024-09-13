@@ -18,8 +18,9 @@ public class VehiculoRuntDao {
                 + "REGRABACION_MOTOR,REGRABACION_CHASIS,REGRABACION_SERIE,REGRABACION_VIN,CAPACIDAD_CARGA,"
                 + "PESO_BRUTO_VEHICULAR,CAPACIDAD_PASAJEROS,CAPACIDAD_PASAJEROS_SENTADOS,NRO_EJES,NUMERO_POLIZA,"
                 + "FECHA_EXPEDICION_SOAT,FECHA_INICIO_VIGENCIA,FECHA_FIN_VIGENCIA,ENTIDAD_SOAT,ESTADO_SOAT,TIPO_REVISION,"
-                + "FECHA_EXPEDICION_TECNO,FECHA_VIGENCIA,CDA_EXPIDE,VIGENTE,FECHA_CONSULTA,NUMERO_DOCUMENTO) "
-                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "FECHA_EXPEDICION_TECNO,FECHA_VIGENCIA,CDA_EXPIDE,VIGENTE,FECHA_CONSULTA,NUMERO_DOCUMENTO,"
+                + "CLASE_VEHICULO_ID,TIPO_SERVICIO_ID) "
+                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setString(1, vehiculoRunt.getPlaca());
@@ -65,6 +66,8 @@ public class VehiculoRuntDao {
             pst.setString(41, vehiculoRunt.getTecnicoMecanico().getVigente());
             pst.setString(42, vehiculoRunt.getFechaConsulta());
             pst.setString(43, vehiculoRunt.getNumeroDocumento());
+            pst.setInt(44, vehiculoRunt.getClaseVehiculoId());
+            pst.setInt(45, vehiculoRunt.getTipoServicioId());
             pst.executeUpdate();
 
             return true;

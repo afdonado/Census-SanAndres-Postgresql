@@ -89,7 +89,8 @@ public class VerificarPersonaRunt extends HttpServlet {
                 CenPersona cenpersona = personaDao.ConsultarPersona(conex, tipoDocumento, documento);
 
                 if (cenpersona == null) {
-                    String urlString = System.getenv("URL_RUNT_CEDULA");
+                    //String urlString = System.getenv("URL_RUNT_CEDULA");
+                    String urlString = "http://produccion.konivin.com:32564/konivin/servicio/persona/consultar?lcy=Lagit&vpv=L4gIt&jor=23566548&icf=01&thy=CO&klm=";
                     urlString = urlString.concat(documento);
                     URL url = new URL(urlString);
 

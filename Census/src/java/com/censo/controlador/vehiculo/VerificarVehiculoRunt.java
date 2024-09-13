@@ -93,7 +93,8 @@ public class VerificarVehiculoRunt extends HttpServlet {
                 CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, 1, placa);
 
                 if (cenvehiculo == null) {
-                    String urlString = System.getenv("URL_RUNT_PLACA");
+                    //String urlString = System.getenv("URL_RUNT_PLACA");
+                    String urlString = "http://produccion.konivin.com:32564/konivin/servicio/persona/consultar?lcy=Lagit&vpv=L4gIt&jor=24158996&icf=01&thy=CO&klm=";
                     urlString = urlString.concat(numerodocumento).concat("&hho=").concat(placa);
                     URL url = new URL(urlString);
 
@@ -118,37 +119,47 @@ public class VerificarVehiculoRunt extends HttpServlet {
                     if (responseVR != null && !responseVR.getPlacaVehiculo().isEmpty()) {
 
                         VehiculoRunt.PolizaSoat vrpoliza = new VehiculoRunt.PolizaSoat();
-                        for (ResponseVehiculoRunt.PolizaSoat vr : responseVR.getListPolizaSoat()) {
-                            if (vr.getEstado().equals("VIGENTE")) {
-                                vrpoliza = VehiculoRunt.PolizaSoat.builder()
-                                        .numeroPoliza(responseVR.getListPolizaSoat().get(0).getNumeroPoliza())
-                                        .fechaExpedicion(responseVR.getListPolizaSoat().get(0).getFechaExpedicion())
-                                        .fechaInicioVigencia(responseVR.getListPolizaSoat().get(0).getFechaInicioVigencia())
-                                        .fechaFinVigencia(responseVR.getListPolizaSoat().get(0).getFechaFinVigencia())
-                                        .entidadSoat(responseVR.getListPolizaSoat().get(0).getEntidadSoat())
-                                        .estado(responseVR.getListPolizaSoat().get(0).getEstado())
-                                        .build();
-                                break;
-                            } else {
-                                VehiculoRunt.PolizaSoat.builder().build();
+                        if (!responseVR.getListPolizaSoat().isEmpty()) {
+                            for (ResponseVehiculoRunt.PolizaSoat vr : responseVR.getListPolizaSoat()) {
+                                if (vr.getEstado().equals("VIGENTE")) {
+                                    vrpoliza = VehiculoRunt.PolizaSoat.builder()
+                                            .numeroPoliza(responseVR.getListPolizaSoat().get(0).getNumeroPoliza())
+                                            .fechaExpedicion(responseVR.getListPolizaSoat().get(0).getFechaExpedicion())
+                                            .fechaInicioVigencia(responseVR.getListPolizaSoat().get(0).getFechaInicioVigencia())
+                                            .fechaFinVigencia(responseVR.getListPolizaSoat().get(0).getFechaFinVigencia())
+                                            .entidadSoat(responseVR.getListPolizaSoat().get(0).getEntidadSoat())
+                                            .estado(responseVR.getListPolizaSoat().get(0).getEstado())
+                                            .build();
+                                    break;
+                                }
                             }
+                        } else {
+                            vrpoliza = VehiculoRunt.PolizaSoat.builder().build();
                         }
 
                         VehiculoRunt.TecnicoMecanico vrcertificado = new VehiculoRunt.TecnicoMecanico();
-                        for (ResponseVehiculoRunt.CertificadoTecnicoMecanicoGases vr : responseVR.getListCertificadoTecnicoMecanicoGases()) {
-                            if (vr.getVigente().equals("SI")) {
-                                vrcertificado = VehiculoRunt.TecnicoMecanico.builder()
-                                        .tipoRevision(responseVR.getListCertificadoTecnicoMecanicoGases().get(0).getTipoRevision())
-                                        .fechaExpedicion(responseVR.getListCertificadoTecnicoMecanicoGases().get(0).getFechaExpedicion())
-                                        .fechaVigencia(responseVR.getListCertificadoTecnicoMecanicoGases().get(0).getFechaVigencia())
-                                        .cdaExpide(responseVR.getListCertificadoTecnicoMecanicoGases().get(0).getCdaExpide())
-                                        .vigente(responseVR.getListCertificadoTecnicoMecanicoGases().get(0).getVigente())
-                                        .build();
-                                break;
-                            } else {
-                                VehiculoRunt.TecnicoMecanico.builder().build();
+                        if (!responseVR.getListCertificadoTecnicoMecanicoGases().isEmpty()) {
+                            for (ResponseVehiculoRunt.CertificadoTecnicoMecanicoGases vr : responseVR.getListCertificadoTecnicoMecanicoGases()) {
+                                if (vr.getVigente().equals("SI")) {
+                                    vrcertificado = VehiculoRunt.TecnicoMecanico.builder()
+                                            .tipoRevision(responseVR.getListCertificadoTecnicoMecanicoGases().get(0).getTipoRevision())
+                                            .fechaExpedicion(responseVR.getListCertificadoTecnicoMecanicoGases().get(0).getFechaExpedicion())
+                                            .fechaVigencia(responseVR.getListCertificadoTecnicoMecanicoGases().get(0).getFechaVigencia())
+                                            .cdaExpide(responseVR.getListCertificadoTecnicoMecanicoGases().get(0).getCdaExpide())
+                                            .vigente(responseVR.getListCertificadoTecnicoMecanicoGases().get(0).getVigente())
+                                            .build();
+                                    break;
+                                }
                             }
+                        } else {
+                            vrcertificado = VehiculoRunt.TecnicoMecanico.builder().build();
                         }
+
+                        ClaseVehiculoDao claseVehiculoDao = new ClaseVehiculoDao();
+                        CenClaseVehiculo cenClaseVehiculo = claseVehiculoDao.ConsultarClaseVehiculoByDescripcion(conex, responseVR.getClaseVehiculo());
+
+                        TipoServicioDao tipoServicioDao = new TipoServicioDao();
+                        CenTipoServicio cenTipoServicio = tipoServicioDao.ConsultarTipoServicioByDescripcion(conex, responseVR.getTipoServicio());
 
                         DateTimeFormatter formatterEntrada = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -205,23 +216,13 @@ public class VerificarVehiculoRunt extends HttpServlet {
                                                 .build())
                                 .fechaConsulta(responseVR.getFechaConsulta())
                                 .numeroDocumento(numerodocumento)
+                                .claseVehiculoId(cenClaseVehiculo.getId())
+                                .tipoServicioId(cenTipoServicio.getId())
                                 .build();
 
                         conex.setAutoCommit(false);
 
                         boolean runt_registrado = vehiculoRuntDao.adicionarVehiculoRunt(conex, vehiculoRunt);
-
-                        ClaseVehiculoDao claseVehiculoDao = new ClaseVehiculoDao();
-                        CenClaseVehiculo cenClaseVehiculo = claseVehiculoDao.ConsultarClaseVehiculoByDescripcion(conex, vehiculoRunt.getClaseVehiculo());
-                        if (cenClaseVehiculo != null) {
-                            respuesta.put("clasevehiculoId", cenClaseVehiculo.getId());
-                        }
-
-                        TipoServicioDao tipoServicioDao = new TipoServicioDao();
-                        CenTipoServicio cenTipoServicio = tipoServicioDao.ConsultarTipoServicioByDescripcion(conex, vehiculoRunt.getTipoServicio());
-                        if (cenTipoServicio != null) {
-                            respuesta.put("tiposervicioId", cenTipoServicio.getId());
-                        }
 
                         if (runt_registrado) {
                             conex.commit();
@@ -237,6 +238,8 @@ public class VerificarVehiculoRunt extends HttpServlet {
                         vehiculoRuntDao.adicionarVehiculoRunt(conex, VehiculoRunt.builder()
                                 .placa(placa)
                                 .numeroDocumento(numerodocumento)
+                                .polizaSoat(VehiculoRunt.PolizaSoat.builder().build())
+                                .tecnicoMecanico(VehiculoRunt.TecnicoMecanico.builder().build())
                                 .build());
                     }
                 } else {

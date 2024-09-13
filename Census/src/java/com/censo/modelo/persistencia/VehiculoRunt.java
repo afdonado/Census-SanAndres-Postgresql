@@ -51,6 +51,8 @@ public class VehiculoRunt {
     private TecnicoMecanico tecnicoMecanico;
     private String fechaConsulta;
     private String numeroDocumento;
+    private int claseVehiculoId;
+    private int tipoServicioId;
 
     @Getter
     @Setter
@@ -134,6 +136,8 @@ public class VehiculoRunt {
                                 .build())
                 .fechaConsulta(rs.getString(42))
                 .numeroDocumento(rs.getString(43))
+                .claseVehiculoId(rs.getInt(44))
+                .tipoServicioId(rs.getInt(45))
                 .build();
 
         return vehiculoRunt;

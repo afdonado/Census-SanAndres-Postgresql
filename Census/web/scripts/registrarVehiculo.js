@@ -50,6 +50,9 @@ $(function () {
 
     // Verificar si la placa del vehiculo existe en el runt
     function verificarVehiculoRunt(placa, numerodocumento) {
+
+        $('#procesando').show();
+
         var parametros = {
             placa: placa,
             numerodocumento: numerodocumento
@@ -68,8 +71,8 @@ $(function () {
                         $('#txtmotor').val(vehiculo.motor);
                         $('#txtchasis').val(vehiculo.chasis);
                         $('#txtserie').val(vehiculo.serie);
-                        $('#cmbclasevehiculo').val(response.clasevehiculoId);
-                        $('#cmbtiposservicio').val(response.tiposervicioId);
+                        $('#cmbclasevehiculo').val(vehiculo.claseVehiculoId);
+                        $('#cmbtiposservicio').val(vehiculo.tipoServicioId);
                         $('#txtcolores').val(vehiculo.color);
                         $('#txtmarcas').val(vehiculo.marca);
                         $('#txtlineas').val(vehiculo.linea);
@@ -104,7 +107,20 @@ $(function () {
                         $('#txtlicenciatransito').val('');
                         verificarVehiculo2017(1, placa);
                     }
-                } else if (response.status === "fail" || response.status === "error") {
+                } else if (response.status === "fail") {
+                    $('#txtplaca').val('');
+                    $('#txtmotor').val('');
+                    $('#txtchasis').val('');
+                    $('#txtserie').val('');
+                    $('#txtcolores').val('');
+                    $('#txtmarcas').val('');
+                    $('#txtlineas').val('');
+                    $('#txtmodelo').val('');
+                    $('#txtlicenciatransito').val('');
+                    verificarVehiculo2017(1, placa);
+                    console.log(response.message);
+
+                } else if (response.status === "error") {
                     verificarVehiculo2017(1, placa);
                     console.log(response.message);
                 }
@@ -113,6 +129,9 @@ $(function () {
                 console.error("Error en la solicitud de verificar vehiculo: ", textStatus, errorThrown);
                 alert("Ocurrió un error al procesar la solicitud de verificar vehiculo.");
                 verificarVehiculo2017(1, placa);
+            },
+            complete: function () {
+                $('#procesando').hide();
             }
         });
     }
@@ -188,14 +207,14 @@ $(function () {
                 } else if (response.status === "fail") {
                     $(response.input).val('');
                     $(response.input).focus();
-                        $('#txtmotor').val('');
-                        $('#txtchasis').val('');
-                        $('#txtserie').val('');
-                        $('#txtcolores').val('');
-                        $('#txtmarcas').val('');
-                        $('#txtlineas').val('');
-                        $('#txtmodelo').val('');
-                        $('#txtlicenciatransito').val('');
+                    $('#txtmotor').val('');
+                    $('#txtchasis').val('');
+                    $('#txtserie').val('');
+                    $('#txtcolores').val('');
+                    $('#txtmarcas').val('');
+                    $('#txtlineas').val('');
+                    $('#txtmodelo').val('');
+                    $('#txtlicenciatransito').val('');
                     alert(response.message);
                 } else if (response.status === "error") {
                     alert(response.message);

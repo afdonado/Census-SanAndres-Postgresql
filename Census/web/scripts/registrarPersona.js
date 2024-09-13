@@ -8,7 +8,7 @@ $(function () {
 
     // Verificar si la placa del vehiculo existe en el runt
     function consultarDocumentoRunt(tipodocumento, documento) {
-        console.log('consultarDocumentoRunt');
+        $('#procesando').show();
         var parametros = {
             tipodocumento: tipodocumento,
             documento: documento
@@ -59,6 +59,9 @@ $(function () {
                 console.error("Error en la solicitud de verificar persona runt: ", textStatus, errorThrown);
                 //alert("Ocurrió un error al procesar la solicitud de verificar vehiculo.");
                 consultarDocumentoPersona2017(tipodocumento, documento);
+            },
+            complete: function () {
+                $('#procesando').hide();
             }
         });
     }

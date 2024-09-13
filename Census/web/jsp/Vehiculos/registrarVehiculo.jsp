@@ -69,101 +69,104 @@
                                             <div class="col-sm-3 mb-3 mb-sm-0 consulta-runt">
                                                 <label>Documento Propietario</label>
                                                 <input class="form-control solo-numeros" type="text" id="txtdocumentorunt" name="txtdocumentorunt" maxlength="20">
+                                            </div>
+                                            <div id="procesando" style="display:none;">
+                                                <p>Consultado los datos en el runt, espere por favor...</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Datos de Identificación</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Placa</label>
-                                            <input class="form-control" type="text" id="txtplaca" name="txtplaca" maxlength="10" style="text-transform: uppercase">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Motor<spam style="color: red">(*)</spam></label>
-                                            <input class="form-control" type="text" id="txtmotor" name="txtmotor" maxlength="30" style="text-transform: uppercase" required="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Chasis<spam style="color: red">(*)</spam></label>
-                                            <input class="form-control" type="text" id="txtchasis" name="txtchasis" maxlength="30"style="text-transform: uppercase" required="true">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Serie</label>
-                                            <input class="form-control" type="text" id="txtserie" name="txtserie" maxlength="30" style="text-transform: uppercase">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Datos de Identificación</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Placa</label>
+                                                <input class="form-control" type="text" id="txtplaca" name="txtplaca" maxlength="10" style="text-transform: uppercase">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Motor<spam style="color: red">(*)</spam></label>
+                                                <input class="form-control" type="text" id="txtmotor" name="txtmotor" maxlength="30" style="text-transform: uppercase" required="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Chasis<spam style="color: red">(*)</spam></label>
+                                                <input class="form-control" type="text" id="txtchasis" name="txtchasis" maxlength="30"style="text-transform: uppercase" required="true">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Serie</label>
+                                                <input class="form-control" type="text" id="txtserie" name="txtserie" maxlength="30" style="text-transform: uppercase">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Datos Generales</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Clase Vehículo<spam style="color: red">(*)</spam></label>
-                                            <select class="form-control" id="cmbclasevehiculo" name="cmbclasevehiculo" required="true"></select>
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Datos Generales</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Clase Vehículo<spam style="color: red">(*)</spam></label>
+                                                <select class="form-control" id="cmbclasevehiculo" name="cmbclasevehiculo" required="true"></select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Servicio<spam style="color: red">(*)</spam></label>
+                                                <select class="form-control" id="cmbtiposservicio" name="cmbtiposservicio" required="true"></select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-uso">
+                                                <label>Tipo de Uso</label>
+                                                <select class="form-control" id="cmbtiposuso" name="cmbtiposuso" required="true"></select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Color<spam style="color: red">(*)</spam></label>
+                                                <input class="form-control" id="txtcolores" name="txtcolores" style="text-transform: uppercase">
+                                            </div>
                                         </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Servicio<spam style="color: red">(*)</spam></label>
-                                            <select class="form-control" id="cmbtiposservicio" name="cmbtiposservicio" required="true"></select>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0" id="tipos-uso">
-                                            <label>Tipo de Uso</label>
-                                            <select class="form-control" id="cmbtiposuso" name="cmbtiposuso" required="true"></select>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Color<spam style="color: red">(*)</spam></label>
-                                            <input class="form-control" id="txtcolores" name="txtcolores" style="text-transform: uppercase">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Marca<spam style="color: red">(*)</spam></label>
+                                                <input class="form-control" id="txtmarcas" name="txtmarcas" style="text-transform: uppercase">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Linea<spam style="color: red">(*)</spam></label>
+                                                <input class="form-control" id="txtlineas" name="txtlineas" style="text-transform: uppercase">
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Modelo<spam style="color: red">(*)</spam></label>
+                                                <input class="form-control solo-numeros" type="text" id="txtmodelo" name="txtmodelo" maxlength="4" required>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Transformado<spam style="color: red">(*)</spam></label>
+                                                <select class="form-control" id="cmbtransformado" name="cmbtransformado">
+                                                    <option value="S">Si</option>
+                                                    <option value="N" selected>No</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Marca<spam style="color: red">(*)</spam></label>
-                                            <input class="form-control" id="txtmarcas" name="txtmarcas" style="text-transform: uppercase">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Linea<spam style="color: red">(*)</spam></label>
-                                            <input class="form-control" id="txtlineas" name="txtlineas" style="text-transform: uppercase">
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Modelo<spam style="color: red">(*)</spam></label>
-                                            <input class="form-control solo-numeros" type="text" id="txtmodelo" name="txtmodelo" maxlength="4" required>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Transformado<spam style="color: red">(*)</spam></label>
-                                            <select class="form-control" id="cmbtransformado" name="cmbtransformado">
-                                                <option value="S">Si</option>
-                                                <option value="N" selected>No</option>
-                                            </select>
-                                        </div>
+                                </div>
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Datos Registro Inicial</h6>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Datos Registro Inicial</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-3 mb-3 mb-sm-0">
-                                            <label>Registrado en Runt<spam style="color: red">(*)</spam></label>
-                                            <select class="form-control" id="cmbrunt" name="cmbrunt">
-                                                <option value="S" selected>Si</option>
-                                                <option value="N">No</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula">
-                                            <label>No. Licencia Transito</label>
-                                            <input class="form-control" type="text" id="txtlicenciatransito" name="txtlicenciatransito" value="" style="text-transform: uppercase"/>
-                                        </div>
-                                        <div class="col-sm-3 mb-3 mb-sm-0 matricula">
-                                            <label>Fecha Matricula</label>
-                                            <input class="form-control" type="text" id="txtfechamatricula" name="txtfechamatricula" readonly="true" value="<%=fechaActual%>">
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-3 mb-sm-0">
+                                                <label>Registrado en Runt<spam style="color: red">(*)</spam></label>
+                                                <select class="form-control" id="cmbrunt" name="cmbrunt">
+                                                    <option value="S" selected>Si</option>
+                                                    <option value="N">No</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0 matricula">
+                                                <label>No. Licencia Transito</label>
+                                                <input class="form-control" type="text" id="txtlicenciatransito" name="txtlicenciatransito" value="" style="text-transform: uppercase"/>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0 matricula">
+                                                <label>Fecha Matricula</label>
+                                                <input class="form-control" type="text" id="txtfechamatricula" name="txtfechamatricula" readonly="true" value="<%=fechaActual%>">
                                         </div>
                                     </div>
                                     <div class="form-group row">
