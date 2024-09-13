@@ -50,6 +50,7 @@ public class VehiculoRunt {
     private PolizaSoat polizaSoat;
     private TecnicoMecanico tecnicoMecanico;
     private String fechaConsulta;
+    private String numeroDocumento;
 
     @Getter
     @Setter
@@ -131,6 +132,8 @@ public class VehiculoRunt {
                                 .cdaExpide(rs.getString(40))
                                 .vigente(rs.getString(41))
                                 .build())
+                .fechaConsulta(rs.getString(42))
+                .numeroDocumento(rs.getString(43))
                 .build();
 
         return vehiculoRunt;

@@ -18,8 +18,8 @@ public class VehiculoRuntDao {
                 + "REGRABACION_MOTOR,REGRABACION_CHASIS,REGRABACION_SERIE,REGRABACION_VIN,CAPACIDAD_CARGA,"
                 + "PESO_BRUTO_VEHICULAR,CAPACIDAD_PASAJEROS,CAPACIDAD_PASAJEROS_SENTADOS,NRO_EJES,NUMERO_POLIZA,"
                 + "FECHA_EXPEDICION_SOAT,FECHA_INICIO_VIGENCIA,FECHA_FIN_VIGENCIA,ENTIDAD_SOAT,ESTADO_SOAT,TIPO_REVISION,"
-                + "FECHA_EXPEDICION_TECNO,FECHA_VIGENCIA,CDA_EXPIDE,VIGENTE,FECHA_CONSULTA) "
-                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "FECHA_EXPEDICION_TECNO,FECHA_VIGENCIA,CDA_EXPIDE,VIGENTE,FECHA_CONSULTA,NUMERO_DOCUMENTO) "
+                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setString(1, vehiculoRunt.getPlaca());
@@ -64,6 +64,7 @@ public class VehiculoRuntDao {
             pst.setString(40, vehiculoRunt.getTecnicoMecanico().getCdaExpide());
             pst.setString(41, vehiculoRunt.getTecnicoMecanico().getVigente());
             pst.setString(42, vehiculoRunt.getFechaConsulta());
+            pst.setString(43, vehiculoRunt.getNumeroDocumento());
             pst.executeUpdate();
 
             return true;
@@ -73,29 +74,30 @@ public class VehiculoRuntDao {
         return false;
     }
 
-    public VehiculoRunt ConsultarVehiculoRuntByPlaca(Connection conex, String placa) throws SQLException {
+    public VehiculoRunt ConsultarVehiculoRuntByPlacaDocumento(Connection conex, String placa, String documento) throws SQLException {
 
-        String sql = "SELECT * FROM VEHICULOS_RUNT WHERE PLACA = ? ";
+        String sql = "SELECT * FROM VEHICULOS_RUNT WHERE PLACA = ? AND NUMERO_DOCUMENTO = ? ";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setString(1, placa);
+            pst.setString(2, documento);
             try (ResultSet rst = pst.executeQuery()) {
                 while (rst.next()) {
                     return VehiculoRunt.load(rst);
                 }
             }
         } catch (SQLException e) {
-            throw new SQLException("Error en ConsultarVehiculoRuntByPlaca: " + e);
+            throw new SQLException("Error en ConsultarVehiculoRuntByPlacaDocumento: " + e);
         }
         return null;
     }
 
-    public HashMap<String, Object> ConsultarDatosVehiculoRuntByPlaca(Connection conex, int id) throws SQLException {
+    public HashMap<String, Object> ConsultarDatosVehiculoRuntByPlaca(Connection conex, String placa) throws SQLException {
 
         HashMap<String, Object> datos = new HashMap<>();
 
         String sql = "SELECT * FROM VEHICULOS_RUNT WHERE PLACA = ? ";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
-            pst.setInt(1, id);
+            pst.setString(1, placa);
             try (ResultSet rst = pst.executeQuery()) {
                 if (rst.next()) {
                     ResultSetMetaData rsmd = rst.getMetaData();

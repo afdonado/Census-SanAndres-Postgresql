@@ -1,9 +1,14 @@
 package com.censo.controlador.censo;
 
 import com.censo.modelo.dao.CensoDao;
+import com.censo.modelo.dao.DocumentoDigitalizadoDao;
+import com.censo.modelo.dao.VehiculoDao;
 import com.censo.modelo.persistencia.CenCenso;
+import com.censo.modelo.persistencia.CenDocumentosDigitalizado;
 import com.censo.modelo.persistencia.CenUsuario;
+import com.censo.modelo.persistencia.CenVehiculo;
 import com.google.gson.Gson;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
@@ -22,10 +27,10 @@ import javax.sql.DataSource;
 
 @WebServlet(name = "RegistrarCenso", urlPatterns = "/registrarCenso")
 public class RegistrarCenso extends HttpServlet {
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
@@ -36,11 +41,11 @@ public class RegistrarCenso extends HttpServlet {
         Map<String, String> respuesta = new HashMap<>();
 
         try {
-            
+
             conex = dataSource.getConnection();
 
             CenUsuario cenusuario = (CenUsuario) request.getSession().getAttribute("usuario");
-            
+
             if (request.getParameter("txtnumerocenso") == null || request.getParameter("txtnumerocenso").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'numero censo' no encontrado");
@@ -49,9 +54,9 @@ public class RegistrarCenso extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             String numero = request.getParameter("txtnumerocenso").toUpperCase().trim();
-            
+
             if (numero.length() < 6) {
                 String prefijo = "ACS";
                 numero = (prefijo + ("00000".substring(0, 5 - (numero + "").length())) + numero).toUpperCase().trim();
@@ -63,10 +68,10 @@ public class RegistrarCenso extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             CensoDao censoDao = new CensoDao();
             CenCenso cencenso = censoDao.ConsultarCensoByNumero(conex, numero);
-            
+
             if (cencenso != null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Numero de censo no valido para registrarlo");
@@ -75,7 +80,7 @@ public class RegistrarCenso extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             if (request.getParameter("txtfechacenso") == null || request.getParameter("txtfechacenso").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'fecha censo' no encontrado");
@@ -84,7 +89,7 @@ public class RegistrarCenso extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             if (request.getParameter("cmbpuntosatencion") == null || request.getParameter("cmbpuntosatencion").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'punto de atencion' no encontrado");
@@ -93,7 +98,7 @@ public class RegistrarCenso extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             if (request.getParameter("idvehiculo") == null || request.getParameter("idvehiculo").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'id vehiculo' no encontrado");
@@ -102,7 +107,7 @@ public class RegistrarCenso extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             if (request.getParameter("txtobservaciones") == null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'observaciones' no encontrado");
@@ -111,18 +116,30 @@ public class RegistrarCenso extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate fechaCenso = LocalDate.parse(request.getParameter("txtfechacenso"),formatter);
-            
+            LocalDate fechaCenso = LocalDate.parse(request.getParameter("txtfechacenso"), formatter);
+
             DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm");
             LocalTime horaActual = LocalTime.now();
             String hora = horaActual.format(formatterHora);
-            
+
             int puntoAtencion = Integer.parseInt(request.getParameter("cmbpuntosatencion"));
             int idvehiculo = Integer.parseInt(request.getParameter("idvehiculo"));
-            String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
             
+            VehiculoDao vehiculoDao = new VehiculoDao();
+            CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoById(conex, idvehiculo);
+            if(cenvehiculo == null){
+                respuesta.put("status", "error");
+                respuesta.put("message", "Vehiculo no se encuentra registrado");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+            
+            String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
+
             conex.setAutoCommit(false);
 
             cencenso = new CenCenso();
@@ -135,9 +152,35 @@ public class RegistrarCenso extends HttpServlet {
             cencenso.setNumero(numero);
             cencenso.setObservaciones(observaciones);
 
-            long idcenso = censoDao.adicionarCenso(conex, cencenso);
+            int idcenso = censoDao.adicionarCenso(conex, cencenso);
 
             if (idcenso > 0) {
+
+                String directorio = "/documentos/vehiculos/" + cenvehiculo.getPlaca_veh() + "/";
+
+                File carpeta = new File(directorio);
+                if (carpeta.exists() && carpeta.isDirectory()) {
+                    File[] archivos = carpeta.listFiles((dir, nombre) -> nombre.endsWith(".pdf"));
+
+                    if (archivos != null) {
+                        for (File archivo : archivos) {
+                            String nombreArchivo = archivo.getName();
+                            String ruta = archivo.getAbsolutePath();
+
+                            // Aquí puedes guardar en la base de datos
+                            DocumentoDigitalizadoDao documentoDigitalizadoDao = new DocumentoDigitalizadoDao();
+                            CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
+                            cendocumentosdigitalizado.setNombre(nombreArchivo);
+                            cendocumentosdigitalizado.setRuta(ruta);
+                            cendocumentosdigitalizado.setTipo(3);
+                            cendocumentosdigitalizado.setReferencia_id(idcenso);
+                            cendocumentosdigitalizado.setObservacion("Imagen cargada desde documentos vehiculos");
+                            cendocumentosdigitalizado.setUsu_id(cenusuario.getId());
+                            documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizado);
+                        }
+                    }
+                }
+
                 conex.commit();
                 respuesta.put("status", "success");
                 respuesta.put("message", "Censo registrado exitosamente");

@@ -40,5 +40,21 @@ public class CategoriaLicenciaDao {
         }
         return null;
     }
+    
+    public CenCategoriaLicencia ConsultarCategoriaLicenciaByDescripcion(Connection conex, String nombre) throws SQLException {
+
+        String sql = "SELECT * FROM CEN_CATEGORIAS_LICENCIA WHERE EST_ID = 1 AND CTL_DESCRIPCION_CORTA = ? ORDER BY CTL_ID ";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
+            pst.setString(1, nombre);
+            try (ResultSet rst = pst.executeQuery()) {
+                while (rst.next()) {
+                    return CenCategoriaLicencia.load(rst);
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error en ConsultarCategoriaLicenciaByDescripcion: " + e);
+        }
+        return null;
+    }
 
 }

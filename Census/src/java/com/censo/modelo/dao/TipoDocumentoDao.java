@@ -40,5 +40,21 @@ public class TipoDocumentoDao {
         }
         return null;
     }
+    
+    public CenTipoDocumento ConsultarTipoDocumentoByDescripcionCorta(Connection conex, String descripcionCorta) throws SQLException {
+
+        String sql = "SELECT * FROM CEN_TIPOS_DOCUMENTO WHERE EST_ID = 1 AND TDOC_DESCRIPCION_CORTA = ? ORDER BY TDOC_ID ";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
+            pst.setString(1, descripcionCorta);
+            try (ResultSet rst = pst.executeQuery()) {
+                while (rst.next()) {
+                    return CenTipoDocumento.load(rst);
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error en ConsultarTipoDocumentoById: " + e);
+        }
+        return null;
+    }
 
 }

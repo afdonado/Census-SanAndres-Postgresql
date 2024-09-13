@@ -2,9 +2,66 @@
 $(function () {
     $('#txtdocumento').blur(function () {
         if ($('#txtdocumento').val().length > 0) {
-            consultarDocumentoPersona2017($('#cmbtiposdocumento').val(), $('#txtdocumento').val());
+            consultarDocumentoRunt($('#cmbtiposdocumento').val(), $('#txtdocumento').val());
         }
     });
+
+    // Verificar si la placa del vehiculo existe en el runt
+    function consultarDocumentoRunt(tipodocumento, documento) {
+        console.log('consultarDocumentoRunt');
+        var parametros = {
+            tipodocumento: tipodocumento,
+            documento: documento
+        };
+        $.ajax({
+            data: parametros,
+            url: "../../verificarPersonaRunt",
+            type: "POST",
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    var persona = response.personarunt;
+                    if (persona.nombre1 && persona.nombre1.length > 0) {
+
+                        $('#txtprimernombre').val(persona.nombre1);
+                        $('#txtsegundonombre').val(persona.nombre2);
+                        $('#txtprimerapellido').val(persona.apellido1);
+                        $('#txtsegundoapellido').val(persona.apellido2);
+
+                        $('#cmblicenciaconduccion').val(persona.numeroLicencia.length > 0 ? 'S' : 'N');
+                        $('#txtnumerolicencia').val(persona.numeroLicencia);
+                        $('#cmbcategoriaslicencia').val(persona.categoriaId);
+                        $('#txtfechaexplicencia').val(persona.fechaExpedicion);
+
+                        if ($('#cmblicenciaconduccion').val() === 'S') {
+                            $('.licencia-conduccion').show();
+                        } else {
+                            $('.licencia-conduccion').hide();
+                        }
+                    } else {
+                        $('#txtprimernombre').val('');
+                        $('#txtsegundonombre').val('');
+                        $('#txtprimerapellido').val('');
+                        $('#txtsegundoapellido').val('');
+                        $('#cmblicenciaconduccion').val('N');
+                        $('#txtnumerolicencia').val('');
+                        $('#cmbcategoriaslicencia').val(2);
+                        
+                        consultarDocumentoPersona2017(tipodocumento, documento);
+                    }
+
+                } else if (response.status === "fail" || response.status === "error") {
+                    consultarDocumentoPersona2017(tipodocumento, documento);
+                    console.log(response.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error en la solicitud de verificar persona runt: ", textStatus, errorThrown);
+                //alert("Ocurrió un error al procesar la solicitud de verificar vehiculo.");
+                consultarDocumentoPersona2017(tipodocumento, documento);
+            }
+        });
+    }
 
     function consultarDocumentoPersona2017(tipodocumento, documento) {
         if (documento.length > 0) {
@@ -19,7 +76,7 @@ $(function () {
                 success: function (response) {
 
                     if (response.status === "success2017") {
-                        
+
                         console.log(response);
 
                         $('#txtprimernombre').val(response.persona.nombre1);
@@ -41,7 +98,7 @@ $(function () {
                         $('#txtnumerolicencia').val(response.persona.numeroLicenciaConduccion);
                         $('#cmbcategoriaslicencia').val(response.persona.categoriaLicenciaId);
                         $('#txtfechaexplicencia').val(response.fechaExpedicion);
-                        
+
                         if ($('#cmblicenciaconduccion').val() === 'S') {
                             $('.licencia-conduccion').show();
                         } else {
@@ -50,6 +107,13 @@ $(function () {
 
                     } else if (response.status === "fail") {
                         $('#txtdocumento').val('');
+                        $('#txtprimernombre').val('');
+                        $('#txtsegundonombre').val('');
+                        $('#txtprimerapellido').val('');
+                        $('#txtsegundoapellido').val('');
+                        $('#cmblicenciaconduccion').val('N');
+                        $('#txtnumerolicencia').val('');
+                        $('#cmbcategoriaslicencia').val(2);
                     } else if (response.status === "error") {
                         $('#txtdocumento').val('');
                         alert(response.message);

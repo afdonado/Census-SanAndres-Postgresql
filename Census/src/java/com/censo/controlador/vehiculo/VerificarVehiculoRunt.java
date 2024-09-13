@@ -32,7 +32,7 @@ public class VerificarVehiculoRunt extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
@@ -43,46 +43,45 @@ public class VerificarVehiculoRunt extends HttpServlet {
         Map<String, Object> respuesta = new HashMap<>();
 
         try {
-            
+
             conex = dataSource.getConnection();
 
-            if (request.getParameter("tiporeferencia") == null || request.getParameter("tiporeferencia").isEmpty()) {
+            if (request.getParameter("placa") == null || request.getParameter("placa").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'tipo de referencia' no encontrado para verificar vehiculo");
+                respuesta.put("message", "Parametro 'placa' no encontrado para consultar vehiculo en runt");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
                 return;
             }
 
-            if (request.getParameter("valorreferencia") == null || request.getParameter("valorreferencia").isEmpty()) {
+            if (request.getParameter("numerodocumento") == null || request.getParameter("numerodocumento").isEmpty()) {
                 respuesta.put("status", "error");
-                respuesta.put("message", "Parametro 'numero de referencia' no encontrado para verificar vehiculo");
+                respuesta.put("message", "Parametro 'numero de documento' no encontrado para consultar vehiculo en runt");
 
                 String jsonError = new Gson().toJson(respuesta);
                 response.getWriter().write(jsonError);
                 return;
             }
 
-            int tipoReferencia = Integer.parseInt(request.getParameter("tiporeferencia"));
-            String valorReferencia = request.getParameter("valorreferencia");
+            String placa = request.getParameter("placa").toUpperCase().trim();
+            String numerodocumento = request.getParameter("numerodocumento").toUpperCase().trim();
 
             VehiculoRuntDao vehiculoRuntDao = new VehiculoRuntDao();
 
             //Consultar si la placa esta o no en la tabla vehiculo_runt
-            VehiculoRunt vehiculoRunt = vehiculoRuntDao.ConsultarVehiculoRuntByPlaca(conex, valorReferencia);
+            VehiculoRunt vehiculoRunt = vehiculoRuntDao.ConsultarVehiculoRuntByPlacaDocumento(conex, placa, numerodocumento);
 
             if (vehiculoRunt != null) {
 
                 VehiculoDao vehiculoDao = new VehiculoDao();
-                CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, tipoReferencia, valorReferencia);
+                CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, 1, placa);
 
                 if (cenvehiculo != null) {
                     respuesta.put("status", "fail");
-                    if (tipoReferencia == 1) {
-                        respuesta.put("message", "Placa no valida, ya se encuentra registrada");
-                        respuesta.put("input", "#txtplaca");
-                    }
+                    respuesta.put("message", "Placa no valida, ya se encuentra registrada");
+                    respuesta.put("input", "#txtplacarunt");
+                    respuesta.put("input", "#txtdocumentorunt");
                 } else {
                     respuesta.put("status", "success");
                     respuesta.put("vehiculorunt", vehiculoRunt);
@@ -91,10 +90,11 @@ public class VerificarVehiculoRunt extends HttpServlet {
             } else {
 
                 VehiculoDao vehiculoDao = new VehiculoDao();
-                CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, tipoReferencia, valorReferencia);
+                CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, 1, placa);
 
                 if (cenvehiculo == null) {
                     String urlString = System.getenv("URL_RUNT_PLACA");
+                    urlString = urlString.concat(numerodocumento).concat("&hho=").concat(placa);
                     URL url = new URL(urlString);
 
                     // Abrir conexión
@@ -115,34 +115,36 @@ public class VerificarVehiculoRunt extends HttpServlet {
                     ResponseVehiculoRunt responseVR = gson.fromJson(content.toString(), ResponseVehiculoRunt.class);
 
                     // Validar si el dato existe
-                    if (responseVR != null && !responseVR.getRuntPlacaVO().getPlacaVehiculo().isEmpty()) {
+                    if (responseVR != null && !responseVR.getPlacaVehiculo().isEmpty()) {
 
                         VehiculoRunt.PolizaSoat vrpoliza = new VehiculoRunt.PolizaSoat();
-                        for (ResponseVehiculoRunt.RuntPlacaVO.PolizaSoat vr : responseVR.getRuntPlacaVO().getListPolizaSoat()) {
+                        for (ResponseVehiculoRunt.PolizaSoat vr : responseVR.getListPolizaSoat()) {
                             if (vr.getEstado().equals("VIGENTE")) {
                                 vrpoliza = VehiculoRunt.PolizaSoat.builder()
-                                        .numeroPoliza(responseVR.getRuntPlacaVO().getListPolizaSoat().get(0).getNumeroPoliza())
-                                        .fechaExpedicion(responseVR.getRuntPlacaVO().getListPolizaSoat().get(0).getFechaExpedicion())
-                                        .fechaInicioVigencia(responseVR.getRuntPlacaVO().getListPolizaSoat().get(0).getFechaInicioVigencia())
-                                        .fechaFinVigencia(responseVR.getRuntPlacaVO().getListPolizaSoat().get(0).getFechaFinVigencia())
-                                        .entidadSoat(responseVR.getRuntPlacaVO().getListPolizaSoat().get(0).getEntidadSoat())
-                                        .estado(responseVR.getRuntPlacaVO().getListPolizaSoat().get(0).getEstado())
+                                        .numeroPoliza(responseVR.getListPolizaSoat().get(0).getNumeroPoliza())
+                                        .fechaExpedicion(responseVR.getListPolizaSoat().get(0).getFechaExpedicion())
+                                        .fechaInicioVigencia(responseVR.getListPolizaSoat().get(0).getFechaInicioVigencia())
+                                        .fechaFinVigencia(responseVR.getListPolizaSoat().get(0).getFechaFinVigencia())
+                                        .entidadSoat(responseVR.getListPolizaSoat().get(0).getEntidadSoat())
+                                        .estado(responseVR.getListPolizaSoat().get(0).getEstado())
                                         .build();
+                                break;
                             } else {
                                 VehiculoRunt.PolizaSoat.builder().build();
                             }
                         }
 
                         VehiculoRunt.TecnicoMecanico vrcertificado = new VehiculoRunt.TecnicoMecanico();
-                        for (ResponseVehiculoRunt.RuntPlacaVO.CertificadoTecnicoMecanicoGases vr : responseVR.getRuntPlacaVO().getListCertificadoTecnicoMecanicoGases()) {
+                        for (ResponseVehiculoRunt.CertificadoTecnicoMecanicoGases vr : responseVR.getListCertificadoTecnicoMecanicoGases()) {
                             if (vr.getVigente().equals("SI")) {
                                 vrcertificado = VehiculoRunt.TecnicoMecanico.builder()
-                                        .tipoRevision(responseVR.getRuntPlacaVO().getListCertificadoTecnicoMecanicoGases().get(0).getTipoRevision())
-                                        .fechaExpedicion(responseVR.getRuntPlacaVO().getListCertificadoTecnicoMecanicoGases().get(0).getFechaExpedicion())
-                                        .fechaVigencia(responseVR.getRuntPlacaVO().getListCertificadoTecnicoMecanicoGases().get(0).getFechaVigencia())
-                                        .cdaExpide(responseVR.getRuntPlacaVO().getListCertificadoTecnicoMecanicoGases().get(0).getCdaExpide())
-                                        .vigente(responseVR.getRuntPlacaVO().getListCertificadoTecnicoMecanicoGases().get(0).getVigente())
+                                        .tipoRevision(responseVR.getListCertificadoTecnicoMecanicoGases().get(0).getTipoRevision())
+                                        .fechaExpedicion(responseVR.getListCertificadoTecnicoMecanicoGases().get(0).getFechaExpedicion())
+                                        .fechaVigencia(responseVR.getListCertificadoTecnicoMecanicoGases().get(0).getFechaVigencia())
+                                        .cdaExpide(responseVR.getListCertificadoTecnicoMecanicoGases().get(0).getCdaExpide())
+                                        .vigente(responseVR.getListCertificadoTecnicoMecanicoGases().get(0).getVigente())
                                         .build();
+                                break;
                             } else {
                                 VehiculoRunt.TecnicoMecanico.builder().build();
                             }
@@ -152,37 +154,37 @@ public class VerificarVehiculoRunt extends HttpServlet {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
                         vehiculoRunt = VehiculoRunt.builder()
-                                .placa(responseVR.getRuntPlacaVO().getPlacaVehiculo())
-                                .licenciaTransito(responseVR.getRuntPlacaVO().getNroLicenciaTransito())
-                                .estado(responseVR.getRuntPlacaVO().getEstadoVehiculo())
-                                .tipoServicio(responseVR.getRuntPlacaVO().getTipoServicio())
-                                .claseVehiculo(responseVR.getRuntPlacaVO().getClaseVehiculo())
-                                .marca(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getMarca())
-                                .linea(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getLinea())
-                                .modelo(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getModelo())
-                                .color(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getColor())
-                                .serie(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getNroSerie())
-                                .motor(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getNroMotor())
-                                .chasis(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getNroChasis())
-                                .vin(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getNroVin())
-                                .cilindraje(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getCilindraje())
-                                .tipoCarroceria(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getTipoCarroceria())
-                                .tipoCombustible(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getTipoCombustible())
-                                .fechaMatriculaInicial(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getFechaMatriculaInicial() == null ? "" : 
-                                        formatter.format(formatterEntrada.parse(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getFechaMatriculaInicial())))
-                                .autoridadTransito(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getAutoridadTransito())
-                                .gravamenesPropiedad(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getGravamenesPropiedad())
-                                .clasicoAntiguo(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getClasicoAntiguo())
-                                .repotenciado(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getRepotenciado())
-                                .regrabacionMotor(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getRegrabacionMotor())
-                                .regrabacionChasis(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getRegrabacionChasis())
-                                .regrabacionSerie(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getRegrabacionSerie())
-                                .regrabacionVin(responseVR.getRuntPlacaVO().getInformacionGeneralVehiculo().getRegrabacionVin())
-                                .capacidadCarga(responseVR.getRuntPlacaVO().getDatosTecnicosVehiculo().getCapacidadCarga())
-                                .pesoBrutoVehicular(responseVR.getRuntPlacaVO().getDatosTecnicosVehiculo().getPesoBrutoVehicular())
-                                .capacidadPasajeros(responseVR.getRuntPlacaVO().getDatosTecnicosVehiculo().getCapacidadPasajeros())
-                                .capacidadPasajerosSentados(responseVR.getRuntPlacaVO().getDatosTecnicosVehiculo().getCapacidadPasajerosSentados())
-                                .nroEjes(responseVR.getRuntPlacaVO().getDatosTecnicosVehiculo().getNroEjes())
+                                .placa(responseVR.getPlacaVehiculo())
+                                .licenciaTransito(responseVR.getNroLicenciaTransito())
+                                .estado(responseVR.getEstadoVehiculo())
+                                .tipoServicio(responseVR.getTipoServicio())
+                                .claseVehiculo(responseVR.getClaseVehiculo())
+                                .marca(responseVR.getInformacionGeneralVehiculo().getMarca())
+                                .linea(responseVR.getInformacionGeneralVehiculo().getLinea())
+                                .modelo(responseVR.getInformacionGeneralVehiculo().getModelo())
+                                .color(responseVR.getInformacionGeneralVehiculo().getColor())
+                                .serie(responseVR.getInformacionGeneralVehiculo().getNroSerie())
+                                .motor(responseVR.getInformacionGeneralVehiculo().getNroMotor())
+                                .chasis(responseVR.getInformacionGeneralVehiculo().getNroChasis())
+                                .vin(responseVR.getInformacionGeneralVehiculo().getNroVin())
+                                .cilindraje(responseVR.getInformacionGeneralVehiculo().getCilindraje())
+                                .tipoCarroceria(responseVR.getInformacionGeneralVehiculo().getTipoCarroceria())
+                                .tipoCombustible(responseVR.getInformacionGeneralVehiculo().getTipoCombustible())
+                                .fechaMatriculaInicial(responseVR.getInformacionGeneralVehiculo().getFechaMatriculaInicial() == null ? ""
+                                        : formatter.format(formatterEntrada.parse(responseVR.getInformacionGeneralVehiculo().getFechaMatriculaInicial())))
+                                .autoridadTransito(responseVR.getInformacionGeneralVehiculo().getAutoridadTransito())
+                                .gravamenesPropiedad(responseVR.getInformacionGeneralVehiculo().getGravamenesPropiedad())
+                                .clasicoAntiguo(responseVR.getInformacionGeneralVehiculo().getClasicoAntiguo())
+                                .repotenciado(responseVR.getInformacionGeneralVehiculo().getRepotenciado())
+                                .regrabacionMotor(responseVR.getInformacionGeneralVehiculo().getRegrabacionMotor())
+                                .regrabacionChasis(responseVR.getInformacionGeneralVehiculo().getRegrabacionChasis())
+                                .regrabacionSerie(responseVR.getInformacionGeneralVehiculo().getRegrabacionSerie())
+                                .regrabacionVin(responseVR.getInformacionGeneralVehiculo().getRegrabacionVin())
+                                .capacidadCarga(responseVR.getDatosTecnicosVehiculo().getCapacidadCarga())
+                                .pesoBrutoVehicular(responseVR.getDatosTecnicosVehiculo().getPesoBrutoVehicular())
+                                .capacidadPasajeros(responseVR.getDatosTecnicosVehiculo().getCapacidadPasajeros())
+                                .capacidadPasajerosSentados(responseVR.getDatosTecnicosVehiculo().getCapacidadPasajerosSentados())
+                                .nroEjes(responseVR.getDatosTecnicosVehiculo().getNroEjes())
                                 .polizaSoat(
                                         VehiculoRunt.PolizaSoat.builder()
                                                 .numeroPoliza(vrpoliza.getNumeroPoliza())
@@ -201,6 +203,8 @@ public class VerificarVehiculoRunt extends HttpServlet {
                                                 .cdaExpide(vrcertificado.getCdaExpide())
                                                 .vigente(vrcertificado.getVigente())
                                                 .build())
+                                .fechaConsulta(responseVR.getFechaConsulta())
+                                .numeroDocumento(numerodocumento)
                                 .build();
 
                         conex.setAutoCommit(false);
@@ -231,14 +235,15 @@ public class VerificarVehiculoRunt extends HttpServlet {
                         respuesta.put("status", "fail");
                         respuesta.put("message", "Vehiculo no encontrado en runt");
                         vehiculoRuntDao.adicionarVehiculoRunt(conex, VehiculoRunt.builder()
-                                .placa(valorReferencia).build());
+                                .placa(placa)
+                                .numeroDocumento(numerodocumento)
+                                .build());
                     }
                 } else {
                     respuesta.put("status", "fail");
-                    if (tipoReferencia == 1) {
-                        respuesta.put("message", "Placa no valida, ya se encuentra registrada");
-                        respuesta.put("input", "#txtplaca");
-                    }
+                    respuesta.put("message", "Placa no valida, ya se encuentra registrada");
+                    respuesta.put("input", "#txtplacarunt");
+                    respuesta.put("input", "#txtdocumentorunt");
                 }
 
             }

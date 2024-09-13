@@ -1,13 +1,29 @@
 
 $(function () {
-    
+
     $('.datos-importancion').hide();
     $('#tipos-uso').hide();
-    
+
+    $('#txtplacarunt').blur(function () {
+        var placa = $('#txtplacarunt').val().toString().toUpperCase();
+        var documento = $('#txtdocumentorunt').val().toString().toUpperCase();
+        if (placa.length > 0 && documento.length > 0) {
+            verificarVehiculoRunt(placa, documento);
+        }
+    });
+
+    $('#txtdocumentorunt').blur(function () {
+        var placa = $('#txtplacarunt').val().toString().toUpperCase();
+        var documento = $('#txtdocumentorunt').val().toString().toUpperCase();
+        if (placa.length > 0 && documento.length > 0) {
+            verificarVehiculoRunt(placa, documento);
+        }
+    });
+
     $('#txtplaca').blur(function () {
         var placa = $('#txtplaca').val().toString().toUpperCase();
         if (placa.length > 0) {
-            verificarVehiculoRunt(1, placa);
+            verificarVehiculo2017(1, placa);
         }
     });
 
@@ -33,11 +49,10 @@ $(function () {
     });
 
     // Verificar si la placa del vehiculo existe en el runt
-    function verificarVehiculoRunt(tiporeferencia, valorreferencia) {
-        console.log('verificarVehiculoRunt');
+    function verificarVehiculoRunt(placa, numerodocumento) {
         var parametros = {
-            tiporeferencia: tiporeferencia,
-            valorreferencia: valorreferencia
+            placa: placa,
+            numerodocumento: numerodocumento
         };
         $.ajax({
             data: parametros,
@@ -46,43 +61,58 @@ $(function () {
             dataType: "json",
             success: function (response) {
                 if (response.status === "success") {
+
                     var vehiculo = response.vehiculorunt;
-                    $('#txtmotor').val(vehiculo.motor);
-                    $('#txtchasis').val(vehiculo.chasis);
-                    $('#txtserie').val(vehiculo.serie);
-                    $('#cmbclasevehiculo').val(response.clasevehiculoId);
-                    $('#cmbtiposservicio').val(response.tiposervicioId);
-                    $('#txtcolores').val(vehiculo.color);
-                    $('#txtmarcas').val(vehiculo.marca);
-                    $('#txtlineas').val(vehiculo.linea);
-                    $('#txtmodelo').val(vehiculo.modelo);
-                    $('#txtlicenciatransito').val(vehiculo.licenciaTransito);
-                    $('#txtfechamatricula').val(vehiculo.fechaMatriculaInicial);
-                    if (vehiculo.polizaSoat.estado === 'VIGENTE') {
-                        $('#cmbsoat').val('S');
-                        $('#txtfechavsoat').val(vehiculo.polizaSoat.fechaFinVigencia);
-                        $('#soatcontenedor').show();
+                    if (vehiculo.motor && vehiculo.motor.length > 0) {
+                        $('#txtplaca').val(vehiculo.placa);
+                        $('#txtmotor').val(vehiculo.motor);
+                        $('#txtchasis').val(vehiculo.chasis);
+                        $('#txtserie').val(vehiculo.serie);
+                        $('#cmbclasevehiculo').val(response.clasevehiculoId);
+                        $('#cmbtiposservicio').val(response.tiposervicioId);
+                        $('#txtcolores').val(vehiculo.color);
+                        $('#txtmarcas').val(vehiculo.marca);
+                        $('#txtlineas').val(vehiculo.linea);
+                        $('#txtmodelo').val(vehiculo.modelo);
+                        $('#txtlicenciatransito').val(vehiculo.licenciaTransito);
+                        $('#txtfechamatricula').val(vehiculo.fechaMatriculaInicial);
+                        if (vehiculo.polizaSoat.estado === 'VIGENTE') {
+                            $('#cmbsoat').val('S');
+                            $('#txtfechavsoat').val(vehiculo.polizaSoat.fechaFinVigencia);
+                            $('#soatcontenedor').show();
+                        } else {
+                            $('#cmbsoat').val('N');
+                            $('#soatcontenedor').hide();
+                        }
+                        if (vehiculo.tecnicoMecanico.vigente === 'SI') {
+                            $('#cmbtecnomecanica').val('S');
+                            $('#txtfechavtecnomecanica').val(vehiculo.tecnicoMecanico.fechaVigencia);
+                            $('#tecnomecanicacontenedor').show();
+                        } else {
+                            $('#cmbtecnomecanica').val('N');
+                            $('#tecnomecanicacontenedor').hide();
+                        }
                     } else {
-                        $('#cmbsoat').val('N');
-                        $('#soatcontenedor').hide();
-                    }
-                    if (vehiculo.tecnicoMecanico.vigente === 'SI') {
-                        $('#cmbtecnomecanica').val('S');
-                        $('#txtfechavtecnomecanica').val(vehiculo.tecnicoMecanico.fechaVigencia);
-                        $('#tecnomecanicacontenedor').show();
-                    } else {
-                        $('#cmbtecnomecanica').val('N');
-                        $('#tecnomecanicacontenedor').hide();
+                        $('#txtplaca').val('');
+                        $('#txtmotor').val('');
+                        $('#txtchasis').val('');
+                        $('#txtserie').val('');
+                        $('#txtcolores').val('');
+                        $('#txtmarcas').val('');
+                        $('#txtlineas').val('');
+                        $('#txtmodelo').val('');
+                        $('#txtlicenciatransito').val('');
+                        verificarVehiculo2017(1, placa);
                     }
                 } else if (response.status === "fail" || response.status === "error") {
-                    verificarVehiculo2017(tiporeferencia, valorreferencia);
+                    verificarVehiculo2017(1, placa);
                     console.log(response.message);
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error("Error en la solicitud de verificar vehiculo: ", textStatus, errorThrown);
-                //alert("Ocurrió un error al procesar la solicitud de verificar vehiculo.");
-                verificarVehiculo2017(tiporeferencia, valorreferencia);
+                alert("Ocurrió un error al procesar la solicitud de verificar vehiculo.");
+                verificarVehiculo2017(1, placa);
             }
         });
     }
@@ -139,7 +169,7 @@ $(function () {
                     //} else {
                     //    $('.importacion').show();
                     //}
-                    
+
                     $('#cmbsoat').val(vehiculo.soat);
                     $('#txtfechavsoat').val(response.fechaVenSoat);
                     if (vehiculo.soat === 'S') {
@@ -147,10 +177,10 @@ $(function () {
                     } else {
                         $('#soatcontenedor').hide();
                     }
-                    
+
                     $('#cmbtecnomecanica').val(vehiculo.tecnomecanica);
                     $('#txtfechavtecnomecanica').val(response.fechaVenTecnomecanica);
-                    if (vehiculo.tecnomecanica === 'S') {                        
+                    if (vehiculo.tecnomecanica === 'S') {
                         $('#tecnomecanicacontenedor').show();
                     } else {
                         $('#tecnomecanicacontenedor').hide();
@@ -158,6 +188,14 @@ $(function () {
                 } else if (response.status === "fail") {
                     $(response.input).val('');
                     $(response.input).focus();
+                        $('#txtmotor').val('');
+                        $('#txtchasis').val('');
+                        $('#txtserie').val('');
+                        $('#txtcolores').val('');
+                        $('#txtmarcas').val('');
+                        $('#txtlineas').val('');
+                        $('#txtmodelo').val('');
+                        $('#txtlicenciatransito').val('');
                     alert(response.message);
                 } else if (response.status === "error") {
                     alert(response.message);
@@ -452,6 +490,14 @@ $(function () {
 
     $('#btnvolver').click(function () {
         window.location.href = "listarVehiculos.jsp";
+    });
+
+    $('#cmbconsultarunt').on('change', function () {
+        if ($('#cmbconsultarunt').val() === 'N') {
+            $('.consulta-runt').hide();
+        } else {
+            $('.consulta-runt').show();
+        }
     });
 
 });
