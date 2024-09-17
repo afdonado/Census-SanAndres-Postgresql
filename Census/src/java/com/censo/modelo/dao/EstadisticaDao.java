@@ -595,4 +595,48 @@ public class EstadisticaDao {
         return listaDatos;
     }
 
+    public List reporteCensosGeneralMensual(Connection conex) throws SQLException {
+
+        List<HashMap> listaDatos = new LinkedList<>();
+
+        String sql = "SELECT * FROM SQL_CENSOS_GENERAL_MENSUAL";
+
+        try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
+
+            while (rst.next()) {
+                ResultSetMetaData rsmd = rst.getMetaData();
+                HashMap<String, String> hash = new HashMap<>();
+                for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                    hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+                }
+                listaDatos.add(hash);
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error en reporteCensosGeneralMensual: " + e);
+        }
+        return listaDatos;
+    }
+
+    public HashMap<String, Object> reporteCensosGeneral(Connection conex, String mes) throws SQLException {
+
+        HashMap<String, Object> hash = new HashMap<>();
+
+        String sql = "SELECT * FROM SQL_CENSOS_GENERAL WHERE MES = ? ";
+
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
+            pst.setString(1, mes);
+            try (ResultSet rst = pst.executeQuery()) {
+                if (rst.next()) {
+                    ResultSetMetaData rsmd = rst.getMetaData();
+                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                        hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error en reporteCensosGeneral: " + e);
+        }
+        return hash;
+    }
+
 }

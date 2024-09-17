@@ -27,11 +27,13 @@ $(function () {
                         $('#txtsegundonombre').val(persona.nombre2);
                         $('#txtprimerapellido').val(persona.apellido1);
                         $('#txtsegundoapellido').val(persona.apellido2);
-
-                        $('#cmblicenciaconduccion').val(persona.numeroLicencia.length > 0 ? 'S' : 'N');
-                        $('#txtnumerolicencia').val(persona.numeroLicencia);
-                        $('#cmbcategoriaslicencia').val(persona.categoriaId);
-                        $('#txtfechaexplicencia').val(persona.fechaExpedicion);
+                        
+                        if(persona.numeroLicencia && persona.numeroLicencia.length > 0){
+                            $('#cmblicenciaconduccion').val(persona.numeroLicencia.length > 0 ? 'S' : 'N');
+                            $('#txtnumerolicencia').val(persona.numeroLicencia);
+                            $('#cmbcategoriaslicencia').val(persona.categoriaId);
+                            $('#txtfechaexplicencia').val(persona.fechaExpedicion);
+                        }                        
 
                         if ($('#cmblicenciaconduccion').val() === 'S') {
                             $('.licencia-conduccion').show();

@@ -93,8 +93,7 @@ public class VerificarVehiculoRunt extends HttpServlet {
                 CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, 1, placa);
 
                 if (cenvehiculo == null) {
-                    //String urlString = System.getenv("URL_RUNT_PLACA");
-                    String urlString = "http://produccion.konivin.com:32564/konivin/servicio/persona/consultar?lcy=Lagit&vpv=L4gIt&jor=24158996&icf=01&thy=CO&klm=";
+                    String urlString = System.getenv("URL_RUNT_PLACA");
                     urlString = urlString.concat(numerodocumento).concat("&hho=").concat(placa);
                     URL url = new URL(urlString);
 

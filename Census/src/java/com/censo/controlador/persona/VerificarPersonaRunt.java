@@ -30,7 +30,7 @@ public class VerificarPersonaRunt extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
@@ -89,8 +89,7 @@ public class VerificarPersonaRunt extends HttpServlet {
                 CenPersona cenpersona = personaDao.ConsultarPersona(conex, tipoDocumento, documento);
 
                 if (cenpersona == null) {
-                    //String urlString = System.getenv("URL_RUNT_CEDULA");
-                    String urlString = "http://produccion.konivin.com:32564/konivin/servicio/persona/consultar?lcy=Lagit&vpv=L4gIt&jor=23566548&icf=01&thy=CO&klm=";
+                    String urlString = System.getenv("URL_RUNT_CEDULA");
                     urlString = urlString.concat(documento);
                     URL url = new URL(urlString);
 
@@ -116,30 +115,40 @@ public class VerificarPersonaRunt extends HttpServlet {
                             && !responsePR.getPersonaVO().getTipoDocumento().isEmpty()
                             && !responsePR.getPersonaVO().getNumeroDocumento().isEmpty()) {
 
-                        
                         PersonaRunt personaRuntLicencia = new PersonaRunt();
-                        for (ResponsePersonaRunt.LicenciaConduccion lc : responsePR.getLicenciasConduccion()) {
-                            if (lc.getEstadoLicencia().equals("ACTIVA")) {
-                                CategoriaLicenciaDao categoriaLicenciaDao = new CategoriaLicenciaDao();
-                                CenCategoriaLicencia cencategorialicencia = 
-                                        categoriaLicenciaDao.ConsultarCategoriaLicenciaByDescripcion(conex, lc.getDetalleLicencias().get(0).getCategoria().toUpperCase().trim());
-                                int categorialicenciaId = 0;
-                                if(cencategorialicencia != null){
-                                    categorialicenciaId = cencategorialicencia.getId();
+                        if (!responsePR.getLicenciasConduccion().isEmpty()) {
+                            for (ResponsePersonaRunt.LicenciaConduccion lc : responsePR.getLicenciasConduccion()) {
+                                if (lc.getEstadoLicencia().equals("ACTIVA")) {
+                                    CategoriaLicenciaDao categoriaLicenciaDao = new CategoriaLicenciaDao();
+                                    CenCategoriaLicencia cencategorialicencia
+                                            = categoriaLicenciaDao.ConsultarCategoriaLicenciaByDescripcion(conex, lc.getDetalleLicencias().get(0).getCategoria().toUpperCase().trim());
+                                    int categorialicenciaId = 0;
+                                    if (cencategorialicencia != null) {
+                                        categorialicenciaId = cencategorialicencia.getId();
+                                    }
+
+                                    personaRuntLicencia = PersonaRunt.builder()
+                                            .numeroLicencia(lc.getNumeroLicencia())
+                                            .fechaExpedicion(lc.getDetalleLicencias().get(0).getFechaExpedicion())
+                                            .fechaVencimiento(lc.getDetalleLicencias().get(0).getFechaVencimiento())
+                                            .categoriaId(categorialicenciaId)
+                                            .categoria(lc.getDetalleLicencias().get(0).getCategoria())
+                                            .estadoLicencia(lc.getEstadoLicencia())
+                                            .build();
+                                    break;
+                                } else {
+                                    PersonaRunt.builder().build();
                                 }
-                                
-                                personaRuntLicencia = PersonaRunt.builder()
-                                        .numeroLicencia(lc.getNumeroLicencia())
-                                        .fechaExpedicion(lc.getDetalleLicencias().get(0).getFechaExpedicion())
-                                        .fechaVencimiento(lc.getDetalleLicencias().get(0).getFechaVencimiento())
-                                        .categoriaId(categorialicenciaId)
-                                        .categoria(lc.getDetalleLicencias().get(0).getCategoria())
-                                        .estadoLicencia(lc.getEstadoLicencia())
-                                        .build();
-                                break;
-                            } else {
-                                PersonaRunt.builder().build();
                             }
+                        } else {
+                            personaRuntLicencia = PersonaRunt.builder()
+                                            .numeroLicencia(null)
+                                            .fechaExpedicion(null)
+                                            .fechaVencimiento(null)
+                                            .categoriaId(0)
+                                            .categoria(null)
+                                            .estadoLicencia(null)
+                                            .build();
                         }
 
                         DateTimeFormatter formatterEntrada = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -189,7 +198,7 @@ public class VerificarPersonaRunt extends HttpServlet {
                                 .apellido2(segundoApellido)
                                 .numeroLicencia(personaRuntLicencia.getNumeroLicencia())
                                 .fechaExpedicion(personaRuntLicencia.getFechaExpedicion() == null ? "" : formatter.format(formatterEntrada.parse(personaRuntLicencia.getFechaExpedicion())))
-                                .fechaVencimiento(personaRuntLicencia.getFechaVencimiento()  == null ? "" : formatter.format(formatterEntrada.parse(personaRuntLicencia.getFechaVencimiento())))
+                                .fechaVencimiento(personaRuntLicencia.getFechaVencimiento() == null ? "" : formatter.format(formatterEntrada.parse(personaRuntLicencia.getFechaVencimiento())))
                                 .categoriaId(personaRuntLicencia.getCategoriaId())
                                 .categoria(personaRuntLicencia.getCategoria())
                                 .estadoLicencia(personaRuntLicencia.getEstadoLicencia())
