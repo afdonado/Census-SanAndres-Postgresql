@@ -41,7 +41,11 @@
                         </nav>
 
                         <div class="container-fluid">
-                            <h1 class="h3 mb-2 text-gray-800">Verificaciones</h1>
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                <h1 class="h3 mb-0 text-gray-800">Verificaciones</h1>
+                                <a href="generarReporteVerificacion.jsp" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                        class="fas fa-download fa-sm text-white-50"></i> Generar Reportes</a>
+                            </div>
 
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
@@ -52,36 +56,37 @@
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th>Numero</th>
+                                                    <th>Numero Censo</th>
                                                     <th>Fecha</th>
-                                                    <th>Hora</th>
                                                     <th>Punto Atención</th>
-                                                    <th>Estado</th>
-                                                    <th>Usuario</th>
+                                                    <th>Placa</th>
+                                                    <th>Motor</th>
+                                                    <th>Chasis</th>
+                                                    <th>Serie</th>
                                                     <th>PDF</th>
                                                     <th>Foto</th>
-                                                    <th>Fecha Registro</th>
                                                     <th>Fecha Reg. Verifi.</th>
-                                                    <th>Estado Verificacion</th>
+                                                    <th>Estado Verificación</th>
                                                     <th>Ver</th>
-                                                    <th>Editar</th>
+                                                    <th>Verificar</th>
                                                 </tr>
                                             </thead>
                                             <tfoot>
                                                 <tr>
-                                                    <th>Numero</th>
+                                                    <th>Numero Censo</th>
                                                     <th>Fecha</th>
-                                                    <th>Hora</th>
                                                     <th>Punto Atención</th>
-                                                    <th>Estado</th>
-                                                    <th>Usuario</th>
+                                                    <th>Fecha Reg. Censo</th>
+                                                    <th>Placa</th>
+                                                    <th>Motor</th>
+                                                    <th>Chasis</th>
+                                                    <th>Serie</th>
                                                     <th>PDF</th>
                                                     <th>Foto</th>
-                                                    <th>Fecha Registro</th>
                                                     <th>Fecha Reg. Verifi.</th>
-                                                    <th>Estado Verificacion</th>
+                                                    <th>Estado Verificación</th>
                                                     <th>Ver</th>
-                                                    <th>Editar</th>
+                                                    <th>Verificar</th>
                                                 </tr>
                                             </tfoot>
                                             <tbody id="lista-verificaciones"></tbody>

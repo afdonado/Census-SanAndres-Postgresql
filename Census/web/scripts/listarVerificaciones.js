@@ -15,6 +15,62 @@ $(function () {
             var lista = response.verificaciones;
 
             $.each(lista, function (index, verificacion) {
+                
+                var numero = '';
+                if (verificacion.NUMERO && verificacion.NUMERO.length > 0) {
+                    numero = verificacion.NUMERO;
+                }
+                
+                var fecha = '';
+                if (verificacion.FECHA && verificacion.FECHA.length > 0) {
+                    fecha = verificacion.FECHA;
+                }
+                
+                var punto_atencion = '';
+                if (verificacion.PUNTO_ATENCION && verificacion.PUNTO_ATENCION.length > 0) {
+                    punto_atencion = verificacion.PUNTO_ATENCION;
+                }
+                
+                var placa = '';
+                if (verificacion.VEH_PLACA && verificacion.VEH_PLACA.length > 0) {
+                    placa = verificacion.VEH_PLACA;
+                }
+                
+                var motor = '';
+                if (verificacion.VEH_MOTOR && verificacion.VEH_MOTOR.length > 0) {
+                    motor = verificacion.VEH_MOTOR;
+                }
+                
+                var chasis = '';
+                if (verificacion.VEH_CHASIS && verificacion.VEH_CHASIS.length > 0) {
+                    chasis = verificacion.VEH_CHASIS;
+                }
+                
+                var serie = '';
+                if (verificacion.VEH_SERIE && verificacion.VEH_SERIE.length > 0) {
+                    serie = verificacion.VEH_SERIE;
+                }
+                
+                var verificacion_documentos = '';
+                if (verificacion.VERIFICACION_DOC && verificacion.VERIFICACION_DOC.length > 0) {
+                    verificacion_documentos = verificacion.VERIFICACION_DOC;
+                }
+                
+                var verificacion_fotos = '';
+                if (verificacion.VERIFICACION_FOTOS && verificacion.VERIFICACION_FOTOS.length > 0) {
+                    verificacion_fotos = verificacion.VERIFICACION_FOTOS;
+                }
+                
+                var fecha_verificacion = '';
+                if (verificacion.FECHA_PROCESO_VERIFICACION_FORMAT 
+                        && verificacion.FECHA_PROCESO_VERIFICACION_FORMAT.length > 0) {
+                    fecha_verificacion = verificacion.FECHA_PROCESO_VERIFICACION_FORMAT;
+                }
+                
+                var estado_verificacion = '';
+                if (verificacion.ESTADO_VERIFICACION && verificacion.ESTADO_VERIFICACION.length > 0) {
+                    estado_verificacion = verificacion.ESTADO_VERIFICACION;
+                }
 
                 var btnaccion = '';
 
@@ -24,20 +80,22 @@ $(function () {
                 } else {
                     btnaccion = `<button type="button" class="btn btn-danger btneditar" name="btneditar" data-id="${verificacion.CEN_ID}">Editar</button>`;
                 }
+                
+                
 
                 var nuevoElemento = `
                 <tr>
-                    <td>${verificacion.NUMERO}</td>
-                    <td>${verificacion.FECHA}</td>
-                    <td>${verificacion.HORA}</td>
-                    <td>${verificacion.PUNTO_ATENCION}</td>
-                    <td>${verificacion.ESTADO}</td>
-                    <td>${verificacion.USUARIO}</td>
-                    <td>${verificacion.VERIFICACION_DOC === 'S' ? 'Si': 'No'}</td>
-                    <td>${verificacion.VERIFICACION_FOTOS === 'S' ? 'Si' : 'No'}</td>
-                    <td>${verificacion.FECHA_PROCESO_FORMAT}</td>
-                    <td>${verificacion.FECHA_PROCESO_VERIFICACION_FORMAT}</td>
-                    <td>${verificacion.ESTADO_VERIFICACION}</td>
+                    <td>${numero}</td>
+                    <td>${fecha}</td>
+                    <td>${punto_atencion}</td>
+                    <td>${placa}</td>
+                    <td>${motor}</td>
+                    <td>${chasis}</td>
+                    <td>${serie}</td>
+                    <td>${verificacion_documentos === 'S' ? 'Si': 'No'}</td>
+                    <td>${verificacion_fotos === 'S' ? 'Si' : 'No'}</td>
+                    <td>${fecha_verificacion}</td>
+                    <td>${estado_verificacion}</td>
                     <td><button type="button" class="btn btn-info btnconsultar" name="btnconsultar" data-id="${verificacion.CEN_ID}">Consultar</button></td>
                     <td>${btnaccion}</td>
                     </tr>

@@ -3,7 +3,7 @@ $(function () {
 
     $('.datos-importancion').hide();
     $('#tipos-uso').hide();
-    
+
     $('#btnconsultar').click(function () {
         var placa = $('#txtplacarunt').val().toString().toUpperCase();
         var documento = $('#txtdocumentorunt').val().toString().toUpperCase();
@@ -59,18 +59,67 @@ $(function () {
                 if (response.status === "success") {
 
                     var vehiculo = response.vehiculorunt;
+
                     if (vehiculo.motor && vehiculo.motor.length > 0) {
-                        $('#txtplaca').val(vehiculo.placa);
-                        $('#txtmotor').val(vehiculo.motor);
-                        $('#txtchasis').val(vehiculo.chasis);
-                        $('#txtserie').val(vehiculo.serie);
+
+
+                        if (vehiculo.placa && vehiculo.placa.length > 0) {
+                            $('#txtplaca').val(vehiculo.placa);
+                        } else {
+                            $('#txtplaca').val('');
+                        }
+
+                        if (vehiculo.motor && vehiculo.motor.length > 0) {
+                            $('#txtmotor').val(vehiculo.motor);
+                        } else {
+                            $('#txtmotor').val('');
+                        }
+
+                        if (vehiculo.chasis && vehiculo.chasis.length > 0) {
+                            $('#txtchasis').val(vehiculo.chasis);
+                        } else {
+                            $('#txtchasis').val('');
+                        }
+
+                        if (vehiculo.serie && vehiculo.serie.length > 0) {
+                            $('#txtserie').val(vehiculo.serie);
+                        } else {
+                            $('#txtserie').val('');
+                        }
+
+                        if (vehiculo.color && vehiculo.color.length > 0) {
+                            $('#txtcolores').val(vehiculo.color);
+                        } else {
+                            $('#txtcolores').val('');
+                        }
+
+                        if (vehiculo.color && vehiculo.color.length > 0) {
+                            $('#txtmarcas').val(vehiculo.marca);
+                        } else {
+                            $('#txtmarcas').val('');
+                        }
+
+                        if (vehiculo.linea && vehiculo.linea.length > 0) {
+                            $('#txtlineas').val(vehiculo.linea);
+                        } else {
+                            $('#txtlineas').val('');
+                        }
+
+                        if (vehiculo.modelo && vehiculo.modelo.length > 0) {
+                            $('#txtmodelo').val(vehiculo.modelo);
+                        } else {
+                            $('#txtmodelo').val('');
+                        }
+
+                        if (vehiculo.licenciaTransito && vehiculo.licenciaTransito.length > 0) {
+                            $('#txtlicenciatransito').val(vehiculo.licenciaTransito);
+                        } else {
+                            $('#txtlicenciatransito').val('');
+                        }
+
                         $('#cmbclasevehiculo').val(vehiculo.claseVehiculoId);
                         $('#cmbtiposservicio').val(vehiculo.tipoServicioId);
-                        $('#txtcolores').val(vehiculo.color);
-                        $('#txtmarcas').val(vehiculo.marca);
-                        $('#txtlineas').val(vehiculo.linea);
-                        $('#txtmodelo').val(vehiculo.modelo);
-                        $('#txtlicenciatransito').val(vehiculo.licenciaTransito);
+
                         $('#txtfechamatricula').val(vehiculo.fechaMatriculaInicial);
                         if (vehiculo.polizaSoat.estado === 'VIGENTE') {
                             $('#cmbsoat').val('S');
@@ -119,8 +168,8 @@ $(function () {
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.error("Error en la solicitud de verificar vehiculo: ", textStatus, errorThrown);
-                alert("Ocurrió un error al procesar la solicitud de verificar vehiculo.");
+                console.error("No se pudo consultar el vehiculo en el RUNT: ", textStatus, errorThrown);
+                alert("No se pudo consultar el vehiculo en el RUNT");
                 verificarVehiculo2017(1, placa);
             },
             complete: function () {
@@ -216,7 +265,7 @@ $(function () {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error("Error en la solicitud de verificar vehiculo 2017: ", textStatus, errorThrown);
-                alert("Ocurrió un error al procesar la solicitud de verificar vehiculo.");
+                alert("No se pudo consultar el vehiculo");
             }
         });
     }
