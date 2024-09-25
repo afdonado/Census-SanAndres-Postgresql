@@ -78,7 +78,7 @@ public class RegistrarVehiculo extends HttpServlet {
                 return;
             }
             String motor = request.getParameter("txtmotor").toUpperCase().trim();
-            cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, 1, motor);
+            cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, 2, motor);
             if (cenvehiculo != null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Motor no valido, ya se encuentra registrado");
@@ -98,7 +98,7 @@ public class RegistrarVehiculo extends HttpServlet {
                 return;
             }
             String chasis = request.getParameter("txtchasis").toUpperCase().trim();
-            cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, 1, chasis);
+            cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, 3, chasis);
             if (cenvehiculo != null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Chasis no valido, ya se encuentra registrado");
@@ -118,7 +118,7 @@ public class RegistrarVehiculo extends HttpServlet {
                 return;
             }
             String serie = request.getParameter("txtserie").toUpperCase().trim();
-            cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, 1, placa);
+            cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, 4, serie);
             if (cenvehiculo != null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Serie no valida, ya se encuentra registrada");

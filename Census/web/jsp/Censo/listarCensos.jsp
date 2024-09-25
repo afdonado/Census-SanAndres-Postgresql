@@ -58,6 +58,10 @@
                                                     <th>Usuario</th>
                                                     <th>Fecha Registro</th>
                                                     <th>PDF-Fotos</th>
+                                                    <th>Placa</th>
+                                                    <th>Motor</th>
+                                                    <th>Chasis</th>
+                                                    <th>Serie</th>
                                                     <th>Ver</th>
                                                     <th>Editar</th>
                                                 </tr>
@@ -72,6 +76,10 @@
                                                     <th>Usuario</th>
                                                     <th>Fecha Registro</th>
                                                     <th>PDF-Fotos</th>
+                                                    <th>Placa</th>
+                                                    <th>Motor</th>
+                                                    <th>Chasis</th>
+                                                    <th>Serie</th>
                                                     <th>Ver</th>
                                                     <th>Editar</th>
                                                 </tr>
