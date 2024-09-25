@@ -157,6 +157,7 @@ public class RegistrarCenso extends HttpServlet {
             if (idcenso > 0) {
 
                 String directorio = "/documentos/vehiculos/" + cenvehiculo.getPlaca_veh() + "/";
+                //String directorio = "C:/DocumentosDigitalizados/vehiculos/" + cenvehiculo.getPlaca_veh() + "/";
 
                 File carpeta = new File(directorio);
                 if (carpeta.exists() && carpeta.isDirectory()) {
@@ -167,7 +168,6 @@ public class RegistrarCenso extends HttpServlet {
                             String nombreArchivo = archivo.getName();
                             String ruta = archivo.getAbsolutePath();
 
-                            // Aquí puedes guardar en la base de datos
                             DocumentoDigitalizadoDao documentoDigitalizadoDao = new DocumentoDigitalizadoDao();
                             CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
                             cendocumentosdigitalizado.setNombre(nombreArchivo);
@@ -175,6 +175,32 @@ public class RegistrarCenso extends HttpServlet {
                             cendocumentosdigitalizado.setTipo(3);
                             cendocumentosdigitalizado.setReferencia_id(idcenso);
                             cendocumentosdigitalizado.setObservacion("Imagen cargada desde documentos vehiculos");
+                            cendocumentosdigitalizado.setUsu_id(cenusuario.getId());
+                            documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizado);
+                        }
+                    }
+                }
+                
+                
+                String directorioTag = "/documentos/tag/" + cencenso.getNumero() + "/";
+                //String directorioTag = "C:/DocumentosDigitalizados/tag/";
+
+                File carpetaTag = new File(directorioTag);
+                if (carpetaTag.exists() && carpetaTag.isDirectory()) {
+                    File[] archivos = carpetaTag.listFiles((dir, nombre) -> nombre.endsWith(".jpg"));
+
+                    if (archivos != null) {
+                        for (File archivo : archivos) {
+                            String nombreArchivo = archivo.getName();
+                            String ruta = archivo.getAbsolutePath();
+
+                            DocumentoDigitalizadoDao documentoDigitalizadoDao = new DocumentoDigitalizadoDao();
+                            CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
+                            cendocumentosdigitalizado.setNombre(nombreArchivo);
+                            cendocumentosdigitalizado.setRuta(ruta);
+                            cendocumentosdigitalizado.setTipo(1);
+                            cendocumentosdigitalizado.setReferencia_id(idcenso);
+                            cendocumentosdigitalizado.setObservacion("Imagen cargada desde documentos tag");
                             cendocumentosdigitalizado.setUsu_id(cenusuario.getId());
                             documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizado);
                         }
