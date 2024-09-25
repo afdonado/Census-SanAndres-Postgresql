@@ -70,7 +70,7 @@ $(function () {
                 alert("Ocurrió un error al procesar la solicitud de cargar datos censo.");
             }
         });
-        
+
         $.ajax({
             url: '../../listarDocumentos',
             type: 'GET',
@@ -94,8 +94,38 @@ $(function () {
                             src = "data:image/'" + imagen.extension + "';base64," + imagen.b64;
                         }
 
-                        var img = '<a href="../Documentos/visualizarDocumentos.jsp?iddocumento=' + imagen.iddocumento + '" target="_blank" class="thumbnail"><img src="' + src + '" class="img-responsive imagen" title="' + imagen.nombre + '" alt="' + imagen.nombre + '"></a>';
+                        var img = '<div class="thumbnail text-center">' +
+                                '<label>' + imagen.nombre + '</label>' + 
+                                '<a href="../Documentos/visualizarDocumentos.jsp?iddocumento=' + imagen.iddocumento + '" target="_blank">' +
+                                '<img src="' + src + '" title="' + imagen.nombre + '" alt="' + imagen.nombre + '">' +
+                                '</a>' +
+                                '<button class="btn btn-danger eliminar-doc" data-id="' + imagen.iddocumento + '">Eliminar</button>' +
+                                '</div>';
                         containerImagenes.append(img);
+                    });
+
+                    $('.eliminar-doc').click(function () {
+                        var iddocumento = $(this).data('id');
+
+                        if (confirm("¿Estás seguro de que deseas eliminar este documento?")) {
+                            $.ajax({
+                                url: '../../eliminarDocumento',
+                                type: 'POST',
+                                data: {iddocumento: iddocumento},
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.status === 'success') {
+                                        alert("Documento eliminado correctamente");
+                                        location.reload();
+                                    } else {
+                                        alert("Error al eliminar el documento: " + response.message);
+                                    }
+                                },
+                                error: function () {
+                                    alert("Ocurrió un error al intentar eliminar el documento.");
+                                }
+                            });
+                        }
                     });
                 }
             },
@@ -112,10 +142,10 @@ $(function () {
     $('#btnvolver').click(function () {
         window.location.href = "listarCensos.jsp";
     });
-    
+
     $('#btneditar').click(function () {
         var id = $(this).data('id');
-        window.location.href = "modificarCenso.jsp?opcion=2&id="+id;
+        window.location.href = "modificarCenso.jsp?opcion=2&id=" + id;
     });
 
 });

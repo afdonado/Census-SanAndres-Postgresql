@@ -20,21 +20,32 @@
         <!-- Custom styles for this page -->
         <link href="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
         <style>
-            /* Clase para ajustar las imágenes como miniaturas */
             .thumbnail {
-                display: inline-block;
-                width: 100px; /* Ajusta este valor al tamaño que desees */
-                height: 100px; /* Ajusta este valor al tamaño que desees */
-                overflow: hidden;
-                border: 1px solid #ddd;
-                padding: 4px;
-                margin: 5px;
-                text-align: center;
+                display: inline-block;          /* Mantiene el contenedor como un bloque en línea */
+                min-width: 120px;              /* Ancho mínimo */
+                max-width: 200px;              /* Ancho máximo para evitar que crezca demasiado */
+                height: auto;                  /* Permite que el alto sea automático */
+                overflow: hidden;              /* Oculta el desbordamiento si lo hubiera */
+                border: 1px solid #ddd;       /* Borde del contenedor */
+                padding: 10px;                 /* Espacio interno */
+                margin: 5px;                   /* Espacio externo entre contenedores */
+                text-align: center;            /* Centra el contenido dentro del contenedor */
             }
 
             .thumbnail img {
-                width: 100%; /* La imagen ocupará todo el ancho del contenedor */
-                height: auto; /* Mantendrá la proporción */
+                width: 100%;                   /* La imagen ocupará todo el ancho del contenedor */
+                height: auto;                  /* Mantiene la proporción */
+            }
+
+            .thumbnail label {
+                display: block;                /* Muestra el label como un bloque */
+                margin-bottom: 5px;           /* Espacio entre el nombre y la imagen */
+                word-wrap: break-word;        /* Permite que el texto se ajuste si es demasiado largo */
+            }
+
+            .thumbnail button {
+                margin-top: 5px;              /* Espacio entre la imagen y el botón */
+                width: 100%;                   /* El botón ocupa todo el ancho del contenedor */
             }
         </style>
     </head>

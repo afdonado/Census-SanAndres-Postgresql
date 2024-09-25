@@ -159,16 +159,20 @@ public class DocumentoDigitalizadoDao {
         return null;
     }
 
-    public void eliminarDocumentoById(Connection conex, int id) throws SQLException, IOException {
+    public boolean eliminarDocumentoById(Connection conex, int id) throws SQLException, IOException {
 
         String sql = "DELETE CEN_DOCUMENTOS_DIGITALIZADOS WHERE DDIG_ID = ? ";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setInt(1, id);
             pst.executeUpdate();
+            
+            return true;
 
         } catch (SQLException e) {
             System.err.println("Error en eliminarDocumentoById: " + e);
         }
+        return false;
     }
+    
 
 }

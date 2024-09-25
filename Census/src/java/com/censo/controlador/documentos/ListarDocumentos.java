@@ -29,10 +29,10 @@ import javax.sql.DataSource;
 
 @WebServlet(name = "ListarDocumentos", urlPatterns = "/listarDocumentos")
 public class ListarDocumentos extends HttpServlet {
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         DataSource dataSource = (DataSource) getServletContext().getAttribute("DataSource");
 
         response.setContentType("application/json");
@@ -77,59 +77,59 @@ public class ListarDocumentos extends HttpServlet {
             }
 
             listaDocumentos = documentoDigitalizadoDao.ListarDocumentosDigitalizados(conex, idcenso);
-            //ServletContext application = request.getServletContext();
 
             List<Map<String, String>> imagenes = new ArrayList<>();
 
             for (int i = 0; i < listaDocumentos.size(); i++) {
                 CenDocumentosDigitalizado cendocumentosdigitalizado = (CenDocumentosDigitalizado) listaDocumentos.get(i);
 
-                /*
-                String ruta;
-                if (cendocumentosdigitalizado.getRuta().startsWith("..")) {
-                    ruta = cendocumentosdigitalizado.getRuta().substring(3);
-                    ruta = application.getRealPath(ruta);
-                } else {
-                    ruta = cendocumentosdigitalizado.getRuta().replace("/", "\\");
-                }
-*/
                 String nombre = cendocumentosdigitalizado.getNombre();
                 String extension = nombre.substring(nombre.indexOf(".") + 1, nombre.length());
-                FileInputStream archivo = new FileInputStream(cendocumentosdigitalizado.getRuta());
-                int longitud = archivo.available();
-                byte[] data = new byte[longitud];
-                archivo.read(data, 0, longitud);
+                FileInputStream archivo = null;
 
-                Map<String, String> imagenData = new HashMap<>();
-                imagenData.put("extension", extension);
-                imagenData.put("nombre", nombre);
-                imagenData.put("iddocumento", String.valueOf(cendocumentosdigitalizado.getId()));
+                try {
 
-                if (extension.equals("jpg") || extension.equals("png") || extension.equals("JPG") || extension.equals("PNG")) {
+                    archivo = new FileInputStream(cendocumentosdigitalizado.getRuta());
+                    int longitud = archivo.available();
+                    byte[] data = new byte[longitud];
+                    archivo.read(data, 0, longitud);
 
-                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(data));
-                    byte[] imageInByteArray;
-                    try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-                        int type = img.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : img.getType();
-                        BufferedImage resizedImage = new BufferedImage(500, 500, type);
-                        Graphics2D g = resizedImage.createGraphics();
-                        g.drawImage(img, 0, 0, 500, 500, null);
-                        g.dispose();
-                        g.setComposite(AlphaComposite.Src);
-                        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-                        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-                        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                        ImageIO.write(resizedImage, extension, baos);
-                        baos.flush();
-                        imageInByteArray = baos.toByteArray();
+                    Map<String, String> imagenData = new HashMap<>();
+                    imagenData.put("extension", extension);
+                    imagenData.put("nombre", nombre);
+                    imagenData.put("iddocumento", String.valueOf(cendocumentosdigitalizado.getId()));
+
+                    if (extension.equals("jpg") || extension.equals("png") || extension.equals("JPG") || extension.equals("PNG")) {
+
+                        BufferedImage img = ImageIO.read(new ByteArrayInputStream(data));
+                        byte[] imageInByteArray;
+                        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                            int type = img.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : img.getType();
+                            BufferedImage resizedImage = new BufferedImage(500, 500, type);
+                            Graphics2D g = resizedImage.createGraphics();
+                            g.drawImage(img, 0, 0, 500, 500, null);
+                            g.dispose();
+                            g.setComposite(AlphaComposite.Src);
+                            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                            g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                            ImageIO.write(resizedImage, extension, baos);
+                            baos.flush();
+                            imageInByteArray = baos.toByteArray();
+                        }
+                        String b64 = javax.xml.bind.DatatypeConverter.printBase64Binary(imageInByteArray);
+                        if (!b64.isEmpty()) {
+                            imagenData.put("b64", b64);
+                        }
                     }
-                    String b64 = javax.xml.bind.DatatypeConverter.printBase64Binary(imageInByteArray);
-                    if (!b64.isEmpty()) {
-                        imagenData.put("b64", b64);
+
+                    imagenes.add(imagenData);
+
+                } finally {
+                    if (archivo != null) {
+                        archivo.close(); // Cerrar el FileInputStream para liberar el archivo
                     }
                 }
-                
-                imagenes.add(imagenData);
             }
 
             if (!imagenes.isEmpty()) {
@@ -137,7 +137,6 @@ public class ListarDocumentos extends HttpServlet {
                 respuesta.put("message", "Documentos consultados correctamente");
                 respuesta.put("numerocenso", cencenso.getNumero());
                 respuesta.put("imagenes", imagenes);
-                //out.println("location='jsp/Documentos/ListarDocumentos.jsp?idcenso=" + idcenso + "';");
             }
         } catch (Exception e) {
             respuesta.put("status", "error");

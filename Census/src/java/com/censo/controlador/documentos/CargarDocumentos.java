@@ -39,6 +39,8 @@ public class CargarDocumentos extends HttpServlet {
         Connection conex = null;
 
         Map<String, Object> respuesta = new HashMap<>();
+        
+        List<FileItem> items = null;
 
         try {
 
@@ -74,7 +76,7 @@ public class CargarDocumentos extends HttpServlet {
                 return;
             }
 
-            List items = sfu.parseRequest(request);
+            items = sfu.parseRequest(request);
 
             int cant = items.size() - 1;
 
@@ -166,6 +168,11 @@ public class CargarDocumentos extends HttpServlet {
             respuesta.put("message", "No se cargaron los documentos seleccionados");
             e.printStackTrace();
         } finally {
+            if (items != null) {
+                for (FileItem fileItem : items) {
+                    fileItem.delete();  // Limpia el recurso del FileItem
+                }
+            }
             if (conex != null) {
                 try {
                     conex.setAutoCommit(true);
