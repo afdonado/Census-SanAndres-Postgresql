@@ -17,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,6 +56,15 @@ public class VerificarVehiculoRunt extends HttpServlet {
                 return;
             }
 
+            if (request.getParameter("tipodocumento") == null || request.getParameter("tipodocumento").isEmpty()) {
+                respuesta.put("status", "error");
+                respuesta.put("message", "Parametro 'numero de tipo documento' no encontrado para consultar vehiculo en runt");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
+
             if (request.getParameter("numerodocumento") == null || request.getParameter("numerodocumento").isEmpty()) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Parametro 'numero de documento' no encontrado para consultar vehiculo en runt");
@@ -65,14 +75,15 @@ public class VerificarVehiculoRunt extends HttpServlet {
             }
 
             String placa = request.getParameter("placa").toUpperCase().trim();
+            String tipodocumento = request.getParameter("tipodocumento").toUpperCase().trim();
             String numerodocumento = request.getParameter("numerodocumento").toUpperCase().trim();
 
             VehiculoRuntDao vehiculoRuntDao = new VehiculoRuntDao();
 
             //Consultar si la placa esta o no en la tabla vehiculo_runt
-            VehiculoRunt vehiculoRunt = vehiculoRuntDao.ConsultarVehiculoRuntByPlacaDocumento(conex, placa, numerodocumento);
+            VehiculoRunt vehiculoRunt = vehiculoRuntDao.ConsultarVehiculoRuntByPlacaDocumento(conex, placa, tipodocumento, numerodocumento, "NO");
 
-            if (vehiculoRunt != null) {
+            if (vehiculoRunt != null && vehiculoRunt.getFuenteFallo().equals("NO")) {
 
                 VehiculoDao vehiculoDao = new VehiculoDao();
                 CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, 1, placa);
@@ -93,8 +104,9 @@ public class VerificarVehiculoRunt extends HttpServlet {
                 CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoByReferencia(conex, 1, placa);
 
                 if (cenvehiculo == null) {
-                    String urlString = System.getenv("URL_RUNT_PLACA");
-                    urlString = urlString.concat(numerodocumento).concat("&hho=").concat(placa);
+                    //String urlString = System.getenv("URL_RUNT_PLACA");
+                    String urlString = "http://produccion.konivin.com:32564/konivin/servicio/persona/consultar?lcy=Lagit&vpv=L4gIt&jor=24158996";
+                    urlString = urlString.concat("&icf=").concat(tipodocumento).concat("&thy=CO&klm=").concat(numerodocumento).concat("&hho=").concat(placa);
                     URL url = new URL(urlString);
 
                     // Abrir conexión
@@ -115,7 +127,7 @@ public class VerificarVehiculoRunt extends HttpServlet {
                     ResponseVehiculoRunt responseVR = gson.fromJson(content.toString(), ResponseVehiculoRunt.class);
 
                     // Validar si el dato existe
-                    if (responseVR != null && !responseVR.getPlacaVehiculo().isEmpty()) {
+                    if (responseVR != null && responseVR.getFuenteFallo().equals("NO")) {
 
                         VehiculoRunt.PolizaSoat vrpoliza = new VehiculoRunt.PolizaSoat();
                         if (!responseVR.getListPolizaSoat().isEmpty()) {
@@ -217,6 +229,8 @@ public class VerificarVehiculoRunt extends HttpServlet {
                                 .numeroDocumento(numerodocumento)
                                 .claseVehiculoId(cenClaseVehiculo.getId())
                                 .tipoServicioId(cenTipoServicio.getId())
+                                .tipodocumento(tipodocumento)
+                                .fuenteFallo(responseVR.getFuenteFallo())
                                 .build();
 
                         conex.setAutoCommit(false);
@@ -232,14 +246,35 @@ public class VerificarVehiculoRunt extends HttpServlet {
                         }
 
                     } else {
+
+                        vehiculoRunt = vehiculoRuntDao.ConsultarVehiculoRuntByPlacaDocumento(conex, placa, tipodocumento, numerodocumento, "SI");
+
+                        LocalDateTime fechaActual = LocalDateTime.now();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                        
+                        if (vehiculoRunt == null) {
+                            
+                            vehiculoRuntDao.adicionarVehiculoRunt(conex, VehiculoRunt.builder()
+                                    .placa(placa)
+                                    .numeroDocumento(numerodocumento)
+                                    .tipodocumento(tipodocumento)
+                                    .polizaSoat(VehiculoRunt.PolizaSoat.builder().build())
+                                    .tecnicoMecanico(VehiculoRunt.TecnicoMecanico.builder().build())
+                                    .fechaConsulta(fechaActual.format(formatter))
+                                    .fuenteFallo("SI")
+                                    .build());
+                        } else {
+                            vehiculoRuntDao.modificarVehiculoRunt(conex, VehiculoRunt.builder()
+                                    .placa(placa)
+                                    .numeroDocumento(numerodocumento)
+                                    .tipodocumento(tipodocumento)
+                                    .fechaConsulta(fechaActual.format(formatter))
+                                    .fuenteFallo("SI")
+                                    .build());
+                        }
                         respuesta.put("status", "fail");
                         respuesta.put("message", "Vehiculo no encontrado en runt");
-                        vehiculoRuntDao.adicionarVehiculoRunt(conex, VehiculoRunt.builder()
-                                .placa(placa)
-                                .numeroDocumento(numerodocumento)
-                                .polizaSoat(VehiculoRunt.PolizaSoat.builder().build())
-                                .tecnicoMecanico(VehiculoRunt.TecnicoMecanico.builder().build())
-                                .build());
+
                     }
                 } else {
                     respuesta.put("status", "fail");

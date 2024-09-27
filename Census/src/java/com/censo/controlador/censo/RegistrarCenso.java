@@ -182,12 +182,13 @@ public class RegistrarCenso extends HttpServlet {
                 }
                 
                 
-                String directorioTag = "/documentos/tag/" + cencenso.getNumero() + "/";
+                /*
+                String directorioTag = "/documentos/tag/";
                 //String directorioTag = "C:/DocumentosDigitalizados/tag/";
 
                 File carpetaTag = new File(directorioTag);
                 if (carpetaTag.exists() && carpetaTag.isDirectory()) {
-                    File[] archivos = carpetaTag.listFiles((dir, nombre) -> nombre.endsWith(".jpg"));
+                    File[] archivos = carpetaTag.listFiles((dir, nombre) -> nombre.endsWith(".png"));
 
                     if (archivos != null) {
                         for (File archivo : archivos) {
@@ -206,6 +207,7 @@ public class RegistrarCenso extends HttpServlet {
                         }
                     }
                 }
+                */
 
                 conex.commit();
                 respuesta.put("status", "success");

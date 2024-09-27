@@ -4,7 +4,6 @@ import com.censo.modelo.persistencia.CenCenso;
 import com.censo.servicios.Datosresponse;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -157,57 +156,6 @@ public class CensoDao {
             }
         } catch (Exception e) {
             throw new SQLException("Error en ListarCensos: " + e);
-        }
-        return lista;
-    }
-
-    public List<HashMap<String, Object>> ListarCensosByFecha(Connection conex, Date fechaini, Date fechafin) throws SQLException {
-
-        List<HashMap<String, Object>> lista = new LinkedList<>();
-
-        String sql = "SELECT * FROM VW_CENSOS "
-                + "WHERE TO_DATE(TO_CHAR(FECHA,'dd/MM/yyyy')) BETWEEN ? AND ? ORDER BY NUMERO";
-        try (PreparedStatement pst = conex.prepareStatement(sql)) {
-            pst.setDate(1, fechaini);
-            pst.setDate(2, fechafin);
-            try (ResultSet rst = pst.executeQuery()) {
-                while (rst.next()) {
-                    ResultSetMetaData rsmd = rst.getMetaData();
-                    HashMap<String, Object> hash = new HashMap<>();
-                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                        hash.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
-                    }
-                    lista.add(hash);
-                }
-            }
-        } catch (SQLException e) {
-            throw new SQLException("Error en ListarCensosByFecha: " + e);
-        }
-        return lista;
-    }
-
-    public List<HashMap<String, Object>> ListarCensosByFechaRegistro(Connection conex, Date fechaini, Date fechafin) throws SQLException {
-
-        List<HashMap<String, Object>> lista = new LinkedList<>();
-
-        String sql = "SELECT * FROM VW_CENSOS "
-                + "WHERE TO_DATE(TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy')) BETWEEN ? AND ? ORDER BY NUMERO";
-        try (PreparedStatement pst = conex.prepareStatement(sql)) {
-
-            pst.setDate(1, fechaini);
-            pst.setDate(2, fechafin);
-            try (ResultSet rst = pst.executeQuery()) {
-                while (rst.next()) {
-                    ResultSetMetaData rsmd = rst.getMetaData();
-                    HashMap<String, Object> hash = new HashMap<>();
-                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                        hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
-                    }
-                    lista.add(hash);
-                }
-            }
-        } catch (SQLException e) {
-            throw new SQLException("Error en ListarCensosByFechaRegistro: " + e);
         }
         return lista;
     }

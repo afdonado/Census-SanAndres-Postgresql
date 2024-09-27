@@ -67,6 +67,16 @@
                                                 <input class="form-control" type="text" id="txtplacarunt" name="txtplacarunt" maxlength="10" style="text-transform: uppercase">
                                             </div>
                                             <div class="col-sm-3 mb-3 mb-sm-0 consulta-runt">
+                                                <label>Tipo Documento</label>
+                                                <select class="form-control" id="cmbtiposdocumentorunt" name="cmbtiposdocumentorunt">
+                                                    <option value="01">Cedula Ciudadania</option>
+                                                    <option value="02">Tarjeta Identidad</option>
+                                                    <option value="03">Cedula Extranjeria</option>
+                                                    <option value="PS">Pasaporte</option>
+                                                    <option value="NI">NIT</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3 mb-sm-0 consulta-runt">
                                                 <label>Documento Propietario</label>
                                                 <input class="form-control solo-numeros" type="text" id="txtdocumentorunt" name="txtdocumentorunt" maxlength="20">
                                             </div>

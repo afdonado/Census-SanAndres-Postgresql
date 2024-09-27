@@ -7,8 +7,9 @@ $(function () {
     $('#btnconsultar').click(function () {
         var placa = $('#txtplacarunt').val().toString().toUpperCase();
         var documento = $('#txtdocumentorunt').val().toString().toUpperCase();
-        if (placa.length > 0 && documento.length > 0) {
-            verificarVehiculoRunt(placa, documento);
+        var tipodocumento = $('#cmbtiposdocumentorunt').val().toString().toUpperCase();
+        if (placa.length > 0 && tipodocumento.length > 0 && documento.length > 0) {
+            verificarVehiculoRunt(placa, tipodocumento, documento);
         }
     });
 
@@ -41,13 +42,14 @@ $(function () {
     });
 
     // Verificar si la placa del vehiculo existe en el runt
-    function verificarVehiculoRunt(placa, numerodocumento) {
+    function verificarVehiculoRunt(placa, tipodocumento, numerodocumento) {
 
         $('#procesando').show();
         $('#btnconsultar').prop('disabled', true);
 
         var parametros = {
             placa: placa,
+            tipodocumento: tipodocumento,
             numerodocumento: numerodocumento
         };
         $.ajax({

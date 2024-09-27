@@ -3,7 +3,6 @@ package com.censo.modelo.dao;
 import com.censo.modelo.persistencia.CenVehiculo;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -148,42 +147,6 @@ public class VehiculoDao {
         return null;
     }
 
-    public List ListarVehiculosByReferencia(Connection conex, int tipoRef, String valorReferencia) throws SQLException {
-
-        List<HashMap> listaDatosVehiculo = new LinkedList<>();
-
-        String sql = "";
-        if (tipoRef == 1) {
-            sql = "SELECT * FROM VW_VEHICULOS WHERE VEH_PLACA = ? ";
-        }
-        if (tipoRef == 2) {
-            sql = "SELECT * FROM VW_VEHICULOS WHERE VEH_MOTOR = ? ";
-        }
-        if (tipoRef == 3) {
-            sql = "SELECT * FROM VW_VEHICULOS WHERE VEH_CHASIS = ? ";
-        }
-        if (tipoRef == 4) {
-            sql = "SELECT * FROM VW_VEHICULOS WHERE VEH_SERIE = ? ";
-        }
-
-        try (PreparedStatement pst = conex.prepareStatement(sql)) {
-            pst.setString(1, valorReferencia);
-            try (ResultSet rst = pst.executeQuery()) {
-                while (rst.next()) {
-                    ResultSetMetaData rsmd = rst.getMetaData();
-                    HashMap<String, String> hash = new HashMap<>();
-                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                        hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
-                    }
-                    listaDatosVehiculo.add(hash);
-                }
-            }
-        } catch (SQLException e) {
-            throw new SQLException("Error en ListarVehiculosByReferencia: " + e);
-        }
-        return listaDatosVehiculo;
-    }
-
     public List ListarVehiculosByPersona(Connection conex, int tipodoc, String documento) throws SQLException {
 
         List<HashMap> listaDatosVehiculo = new LinkedList<>();
@@ -235,7 +198,7 @@ public class VehiculoDao {
 
         List<HashMap<String, Object>> lista = new LinkedList<>();
 
-        String sql = "SELECT * FROM VW_VEHICULOS ";
+        String sql = "SELECT VEH_ID, VEH_PLACA, VEH_MOTOR, VEH_CHASIS, VEH_SERIE, MARCA, LINEA FROM VW_VEHICULOS";
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
@@ -249,30 +212,6 @@ public class VehiculoDao {
             throw new SQLException("Error en ListarVehiculos: " + e);
         }
         return lista;
-    }
-
-    public List ListarVehiculosByFechaRegistro(Connection conex, Date fechaini, Date fechafin) throws SQLException {
-
-        List<HashMap> listaDatosVehiculo = new LinkedList<>();
-
-        String sql = "SELECT * FROM VW_VEHICULOS WHERE to_date(to_char(FECHA_PROCESO,'dd/MM/yyyy')) BETWEEN ? AND ? ORDER BY FECHA_PROCESO ";
-        try (PreparedStatement pst = conex.prepareStatement(sql)) {
-            pst.setDate(1, fechaini);
-            pst.setDate(2, fechafin);
-            try (ResultSet rst = pst.executeQuery()) {
-                while (rst.next()) {
-                    ResultSetMetaData rsmd = rst.getMetaData();
-                    HashMap<String, String> hash = new HashMap<>();
-                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                        hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
-                    }
-                    listaDatosVehiculo.add(hash);
-                }
-            }
-        } catch (SQLException e) {
-            throw new SQLException("Error en ListarVehiculosByFechaRegistro: " + e);
-        }
-        return listaDatosVehiculo;
     }
 
 }

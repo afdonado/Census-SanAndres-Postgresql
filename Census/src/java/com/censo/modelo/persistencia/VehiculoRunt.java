@@ -53,6 +53,8 @@ public class VehiculoRunt {
     private String numeroDocumento;
     private int claseVehiculoId;
     private int tipoServicioId;
+    private String tipodocumento;
+    private String fuenteFallo;
 
     @Getter
     @Setter
@@ -138,6 +140,8 @@ public class VehiculoRunt {
                 .numeroDocumento(rs.getString(43))
                 .claseVehiculoId(rs.getInt(44))
                 .tipoServicioId(rs.getInt(45))
+                .tipodocumento(rs.getString(46))
+                .fuenteFallo(rs.getString(47))
                 .build();
 
         return vehiculoRunt;

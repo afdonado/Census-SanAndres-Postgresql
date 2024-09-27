@@ -67,6 +67,27 @@ public class VerificarPersonaRunt extends HttpServlet {
             int tipoDocumento = Integer.parseInt(request.getParameter("tipodocumento"));
             String documento = request.getParameter("documento").toUpperCase().trim();
 
+            String tipo_documento;
+            switch (tipoDocumento) {
+                case 1:
+                    tipo_documento = "01";
+                    break;
+                case 2:
+                    tipo_documento = "03";
+                    break;
+                case 3:
+                    tipo_documento = "02";
+                    break;
+                case 4:
+                    tipo_documento = "PS";
+                    break;
+                case 5:
+                    tipo_documento = "NI";
+                    break;
+                default:
+                    tipo_documento = "01";
+            }
+
             PersonaRuntDao personaRuntDao = new PersonaRuntDao();
             PersonaRunt personaRunt = personaRuntDao.ConsultarPersonaRuntByDocumento(conex, tipoDocumento, documento);
 
@@ -89,8 +110,9 @@ public class VerificarPersonaRunt extends HttpServlet {
                 CenPersona cenpersona = personaDao.ConsultarPersona(conex, tipoDocumento, documento);
 
                 if (cenpersona == null) {
-                    String urlString = System.getenv("URL_RUNT_CEDULA");
-                    urlString = urlString.concat(documento);
+                    //String urlString = System.getenv("URL_RUNT_CEDULA");
+                    String urlString = "http://produccion.konivin.com:32564/konivin/servicio/persona/consultar?lcy=Lagit&vpv=L4gIt&jor=23566548&icf=01&thy=CO&klm=";
+                    urlString = urlString.concat("&icf=").concat(tipo_documento).concat("&thy=CO&klm=").concat(documento);
                     URL url = new URL(urlString);
 
                     // Abrir conexión
@@ -142,13 +164,13 @@ public class VerificarPersonaRunt extends HttpServlet {
                             }
                         } else {
                             personaRuntLicencia = PersonaRunt.builder()
-                                            .numeroLicencia(null)
-                                            .fechaExpedicion(null)
-                                            .fechaVencimiento(null)
-                                            .categoriaId(0)
-                                            .categoria(null)
-                                            .estadoLicencia(null)
-                                            .build();
+                                    .numeroLicencia(null)
+                                    .fechaExpedicion(null)
+                                    .fechaVencimiento(null)
+                                    .categoriaId(0)
+                                    .categoria(null)
+                                    .estadoLicencia(null)
+                                    .build();
                         }
 
                         DateTimeFormatter formatterEntrada = DateTimeFormatter.ofPattern("yyyy-MM-dd");

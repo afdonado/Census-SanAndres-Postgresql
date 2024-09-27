@@ -19,8 +19,8 @@ public class VehiculoRuntDao {
                 + "PESO_BRUTO_VEHICULAR,CAPACIDAD_PASAJEROS,CAPACIDAD_PASAJEROS_SENTADOS,NRO_EJES,NUMERO_POLIZA,"
                 + "FECHA_EXPEDICION_SOAT,FECHA_INICIO_VIGENCIA,FECHA_FIN_VIGENCIA,ENTIDAD_SOAT,ESTADO_SOAT,TIPO_REVISION,"
                 + "FECHA_EXPEDICION_TECNO,FECHA_VIGENCIA,CDA_EXPIDE,VIGENTE,FECHA_CONSULTA,NUMERO_DOCUMENTO,"
-                + "CLASE_VEHICULO_ID,TIPO_SERVICIO_ID) "
-                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "CLASE_VEHICULO_ID,TIPO_SERVICIO_ID,TIPO_DOCUMENTO,FUENTE_FALLO) "
+                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setString(1, vehiculoRunt.getPlaca());
@@ -68,6 +68,8 @@ public class VehiculoRuntDao {
             pst.setString(43, vehiculoRunt.getNumeroDocumento());
             pst.setInt(44, vehiculoRunt.getClaseVehiculoId());
             pst.setInt(45, vehiculoRunt.getTipoServicioId());
+            pst.setString(46, vehiculoRunt.getTipodocumento());
+            pst.setString(47, vehiculoRunt.getFuenteFallo());
             pst.executeUpdate();
 
             return true;
@@ -76,13 +78,35 @@ public class VehiculoRuntDao {
         }
         return false;
     }
+    
+    public boolean modificarVehiculoRunt(Connection conex, VehiculoRunt vehiculoRunt) throws SQLException {
 
-    public VehiculoRunt ConsultarVehiculoRuntByPlacaDocumento(Connection conex, String placa, String documento) throws SQLException {
+        String sql = "UPDATE VEHICULOS_RUNT SET FECHA_CONSULTA = ? "
+                + "WHERE PLACA = ? AND NUMERO_DOCUMENTO = ? AND TIPO_DOCUMENTO = ? AND FUENTE_FALLO = ? ";
 
-        String sql = "SELECT * FROM VEHICULOS_RUNT WHERE PLACA = ? AND NUMERO_DOCUMENTO = ? ";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
+            pst.setString(1, vehiculoRunt.getFechaConsulta());
+            pst.setString(2, vehiculoRunt.getPlaca());
+            pst.setString(3, vehiculoRunt.getNumeroDocumento());
+            pst.setString(4, vehiculoRunt.getTipodocumento());
+            pst.setString(5, vehiculoRunt.getFuenteFallo());
+            pst.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Error en modificarVehiculoRunt: " + e);
+        }
+        return false;
+    }
+
+    public VehiculoRunt ConsultarVehiculoRuntByPlacaDocumento(Connection conex, String placa, String tipodocumento, String documento, String fuentefallo) throws SQLException {
+
+        String sql = "SELECT * FROM VEHICULOS_RUNT WHERE PLACA = ? AND NUMERO_DOCUMENTO = ? AND TIPO_DOCUMENTO = ? AND FUENTE_FALLO = ?";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setString(1, placa);
             pst.setString(2, documento);
+            pst.setString(3, tipodocumento);
+            pst.setString(4, fuentefallo);
             try (ResultSet rst = pst.executeQuery()) {
                 while (rst.next()) {
                     return VehiculoRunt.load(rst);
