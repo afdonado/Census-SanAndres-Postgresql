@@ -139,7 +139,10 @@ public class CensoDao {
 
         List<HashMap<String, Object>> lista = new LinkedList<>();
 
-        String sql = "SELECT * FROM VW_CENSOS";
+        String sql = "SELECT CEN_ID, NUMERO, FECHA, HORA, PUNTO_ATENCION, \n"
+                + "ESTADO, USUARIO, FECHA_PROCESO_FORMAT, FECHA_PROCESO_HORA, DOCUMENTO_PDF,\n"
+                + "VEH_PLACA, VEH_MOTOR, VEH_CHASIS, VEH_SERIE \n"
+                + "FROM VW_CENSOS";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
 
             try (ResultSet rst = pst.executeQuery()) {

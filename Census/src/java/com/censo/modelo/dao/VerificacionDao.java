@@ -4,7 +4,6 @@ import com.censo.modelo.persistencia.CenHistorialVerificacion;
 import com.censo.modelo.persistencia.CenVerificacion;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -59,22 +58,6 @@ public class VerificacionDao {
         return false;
     }
 
-    public CenVerificacion ConsultarVerificacionByIdCenso(Connection conex, int id) throws SQLException {
-
-        String sql = "SELECT * FROM CEN_VERIFICACIONES WHERE CEN_ID = ? ";
-        try (PreparedStatement pst = conex.prepareStatement(sql)) {
-            pst.setInt(1, id);
-            try (ResultSet rst = pst.executeQuery()) {
-                while (rst.next()) {
-                    return CenVerificacion.load(rst);
-                }
-            }
-        } catch (SQLException e) {
-            throw new SQLException("Error en ConsultarVerificacionByIdCenso: " + e);
-        }
-        return null;
-    }
-
     public CenVerificacion ConsultarVerificacionByIdVerificacion(Connection conex, int id) throws SQLException {
 
         String sql = "SELECT * FROM CEN_VERIFICACIONES WHERE VER_ID = ? ";
@@ -89,56 +72,6 @@ public class VerificacionDao {
             throw new SQLException("Error en ConsultarVerificacionByIdVerificacion: " + e);
         }
         return null;
-    }
-
-    public List ListarVerificacionesByFechaCenso(Connection conex, Date fechaini, Date fechafin) throws SQLException {
-
-        List<HashMap> listaDatos = new LinkedList<>();
-
-        String sql = "SELECT * FROM VW_CENSOS WHERE (PUN_ID = ? OR 0 = ?) "
-                + "AND TO_DATE(TO_CAHR(FECHA,'dd/MM/yyyy')) BETWEEN ? AND ? ORDER BY NUMERO";
-        try (PreparedStatement pst = conex.prepareStatement(sql)) {
-            pst.setDate(1, fechaini);
-            pst.setDate(2, fechafin);
-            try (ResultSet rst = pst.executeQuery()) {
-                while (rst.next()) {
-                    ResultSetMetaData rsmd = rst.getMetaData();
-                    HashMap<String, String> hash = new HashMap<>();
-                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                        hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
-                    }
-                    listaDatos.add(hash);
-                }
-            }
-        } catch (SQLException e) {
-            throw new SQLException("Error en ListarVerificacionesByFechaCenso: " + e);
-        }
-        return listaDatos;
-    }
-
-    public List ListarVerificacionesByFechaRegistro(Connection conex, Date fechaini, Date fechafin) throws SQLException {
-
-        List<HashMap> listaDatos = new LinkedList<>();
-
-        String sql = "SELECT * FROM VW_CENSOS "
-                + "WHERE TO_DATE(TO_CHAR(FECHA_PROCESO_VERIFICACION,'dd/MM/yyyy')) BETWEEN ? AND ? ORDER BY NUMERO ";
-        try (PreparedStatement pst = conex.prepareStatement(sql)) {
-            pst.setDate(1, fechaini);
-            pst.setDate(2, fechafin);
-            try (ResultSet rst = pst.executeQuery()) {
-                while (rst.next()) {
-                    ResultSetMetaData rsmd = rst.getMetaData();
-                    HashMap<String, String> hash = new HashMap<>();
-                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                        hash.put(rsmd.getColumnName(i + 1), rst.getString(i + 1));
-                    }
-                    listaDatos.add(hash);
-                }
-            }
-        } catch (SQLException e) {
-            throw new SQLException("Error en ListarVerificacionesByFechaRegistro: " + e);
-        }
-        return listaDatos;
     }
 
     public int adicionarHistorialVerificacion(Connection conex, CenHistorialVerificacion cenhistotialverificacion) {
@@ -168,7 +101,12 @@ public class VerificacionDao {
 
         List<HashMap<String, Object>> lista = new LinkedList<>();
 
-        String sql = "SELECT * FROM VW_CENSOS";
+        String sql = "SELECT CEN_ID, NUMERO, FECHA, PUNTO_ATENCION, \n"
+                + "VEH_PLACA, VEH_MOTOR, VEH_CHASIS, VEH_SERIE, \n"
+                + "VERIFICACION_DOC,VERIFICACION_FOTOS,\n"
+                + "FECHA_PROCESO_VERIFICACION_FORMAT,ESTADO_VERIFICACION,\n"
+                + "VERIFICACION_ID\n"
+                + "FROM VW_CENSOS";
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
@@ -180,6 +118,33 @@ public class VerificacionDao {
             }
         } catch (SQLException e) {
             throw new SQLException("Error en ListarVerificaciones: " + e);
+        }
+        return lista;
+    }
+
+    public List<HashMap<String, Object>> ListarVerificacionesReporte(Connection conex) throws SQLException {
+
+        List<HashMap<String, Object>> lista = new LinkedList<>();
+
+        String sql = "SELECT NUMERO, FECHA, HORA, PUNTO_ATENCION, OBSERVACIONES, \n"
+                + "VEH_PLACA, VEH_MOTOR, VEH_CHASIS, VEH_SERIE, \n"
+                + "VEH_COLOR, VEH_MARCA, VEH_LINEA, VEH_MODELO,\n"
+                + "VEH_CLASE, VEH_SERVICIO, VEH_RUNT, VEH_SOAT, VEH_TECNOMEC,\n"
+                + "ESTADO, USUARIO, FECHA_PROCESO, VERIFICACION_DOC, VERIFICACION_FOTOS,\n"
+                + "OBSERVACIONES_VERIFICACION, FECHA_PROCESO_VERIFICACION_FORMAT,\n"
+                + "USUARIO_VERIFICACION,ESTADO_VERIFICACION\n"
+                + "FROM VW_CENSOS";
+        try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
+            while (rst.next()) {
+                ResultSetMetaData rsmd = rst.getMetaData();
+                HashMap<String, Object> hash = new HashMap<>();
+                for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                    hash.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
+                }
+                lista.add(hash);
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error en ListarVerificacionesReporte: " + e);
         }
         return lista;
     }

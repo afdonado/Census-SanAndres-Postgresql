@@ -24,7 +24,7 @@
 
                         VerificacionDao verificacionDao = new VerificacionDao();
 
-                        List<HashMap<String, Object>> datosVerificaciones = verificacionDao.ListarVerificaciones(conex);
+                        List<HashMap<String, Object>> datosVerificaciones = verificacionDao.ListarVerificacionesReporte(conex);
 
 
         %>
