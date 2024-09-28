@@ -126,10 +126,10 @@ public class RegistrarCenso extends HttpServlet {
 
             int puntoAtencion = Integer.parseInt(request.getParameter("cmbpuntosatencion"));
             int idvehiculo = Integer.parseInt(request.getParameter("idvehiculo"));
-            
+
             VehiculoDao vehiculoDao = new VehiculoDao();
             CenVehiculo cenvehiculo = vehiculoDao.ConsultarVehiculoById(conex, idvehiculo);
-            if(cenvehiculo == null){
+            if (cenvehiculo == null) {
                 respuesta.put("status", "error");
                 respuesta.put("message", "Vehiculo no se encuentra registrado");
 
@@ -137,7 +137,7 @@ public class RegistrarCenso extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
-            
+
             String observaciones = request.getParameter("txtobservaciones").toUpperCase().trim();
 
             conex.setAutoCommit(false);
@@ -180,34 +180,23 @@ public class RegistrarCenso extends HttpServlet {
                         }
                     }
                 }
+
+                //Se relaciona imagen tag a los documentos registrados del censo
+                String nombreArchivo = numero + ".png";
+                String ruta = "/documentos/tag/" + numero + ".png";
+
+                //Local
+                //String ruta = "C:\\DocumentosDigitalizados\\tag\\" + numero + ".png";
                 
-                
-                /*
-                String directorioTag = "/documentos/tag/";
-                //String directorioTag = "C:/DocumentosDigitalizados/tag/";
-
-                File carpetaTag = new File(directorioTag);
-                if (carpetaTag.exists() && carpetaTag.isDirectory()) {
-                    File[] archivos = carpetaTag.listFiles((dir, nombre) -> nombre.endsWith(".png"));
-
-                    if (archivos != null) {
-                        for (File archivo : archivos) {
-                            String nombreArchivo = archivo.getName();
-                            String ruta = archivo.getAbsolutePath();
-
-                            DocumentoDigitalizadoDao documentoDigitalizadoDao = new DocumentoDigitalizadoDao();
-                            CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
-                            cendocumentosdigitalizado.setNombre(nombreArchivo);
-                            cendocumentosdigitalizado.setRuta(ruta);
-                            cendocumentosdigitalizado.setTipo(1);
-                            cendocumentosdigitalizado.setReferencia_id(idcenso);
-                            cendocumentosdigitalizado.setObservacion("Imagen cargada desde documentos tag");
-                            cendocumentosdigitalizado.setUsu_id(cenusuario.getId());
-                            documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizado);
-                        }
-                    }
-                }
-                */
+                DocumentoDigitalizadoDao documentoDigitalizadoDao = new DocumentoDigitalizadoDao();
+                CenDocumentosDigitalizado cendocumentosdigitalizado = new CenDocumentosDigitalizado();
+                cendocumentosdigitalizado.setNombre(nombreArchivo);
+                cendocumentosdigitalizado.setRuta(ruta);
+                cendocumentosdigitalizado.setTipo(1);
+                cendocumentosdigitalizado.setReferencia_id(idcenso);
+                cendocumentosdigitalizado.setObservacion("Imagen cargada desde documentos tag");
+                cendocumentosdigitalizado.setUsu_id(cenusuario.getId());
+                documentoDigitalizadoDao.adicionarDocumentoDigitalizado(conex, cendocumentosdigitalizado);
 
                 conex.commit();
                 respuesta.put("status", "success");
