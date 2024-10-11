@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -89,9 +90,9 @@ public class VerificarPersonaRunt extends HttpServlet {
             }
 
             PersonaRuntDao personaRuntDao = new PersonaRuntDao();
-            PersonaRunt personaRunt = personaRuntDao.ConsultarPersonaRuntByDocumento(conex, tipoDocumento, documento);
+            PersonaRunt personaRunt = personaRuntDao.ConsultarPersonaRuntByDocumento(conex, tipoDocumento, documento, "NO");
 
-            if (personaRunt != null) {
+            if (personaRunt != null && personaRunt.getFuenteFallo().equals("NO")) {
 
                 PersonaDao personaDao = new PersonaDao();
                 CenPersona cenpersona = personaDao.ConsultarPersona(conex, tipoDocumento, documento);
@@ -111,7 +112,7 @@ public class VerificarPersonaRunt extends HttpServlet {
 
                 if (cenpersona == null) {
                     //String urlString = System.getenv("URL_RUNT_CEDULA");
-                    String urlString = "http://produccion.konivin.com:32564/konivin/servicio/persona/consultar?lcy=Lagit&vpv=L4gIt&jor=23566548&icf=01&thy=CO&klm=";
+                    String urlString = "http://produccion.konivin.com:32564/konivin/servicio/persona/consultar?lcy=Lagit&vpv=L4gIt&jor=23566548";
                     urlString = urlString.concat("&icf=").concat(tipo_documento).concat("&thy=CO&klm=").concat(documento);
                     URL url = new URL(urlString);
 
@@ -133,9 +134,7 @@ public class VerificarPersonaRunt extends HttpServlet {
                     ResponsePersonaRunt responsePR = gson.fromJson(content.toString(), ResponsePersonaRunt.class);
 
                     // Validar si el dato existe
-                    if (responsePR != null
-                            && !responsePR.getPersonaVO().getTipoDocumento().isEmpty()
-                            && !responsePR.getPersonaVO().getNumeroDocumento().isEmpty()) {
+                    if (responsePR != null && responsePR.getFuenteFallo().equals("NO")) {
 
                         PersonaRunt personaRuntLicencia = new PersonaRunt();
                         if (!responsePR.getLicenciasConduccion().isEmpty()) {
@@ -176,14 +175,6 @@ public class VerificarPersonaRunt extends HttpServlet {
                         DateTimeFormatter formatterEntrada = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-                        int tipoDocumentoId = 0;
-                        if (!responsePR.getPersonaVO().getTipoDocumento().isEmpty()) {
-                            tipoDocumentoId = Integer.parseInt(responsePR.getPersonaVO().getTipoDocumento());
-                            if (tipoDocumentoId == 0) {
-                                tipoDocumentoId = 1;
-                            }
-                        }
-
                         String[] partesNombre = responsePR.getPersonaVO().getNombres().getRUNT().getPrimerNombre().split(" ");
 
                         String primerNombre = "";
@@ -211,7 +202,7 @@ public class VerificarPersonaRunt extends HttpServlet {
                         }
 
                         personaRunt = PersonaRunt.builder()
-                                .tipoDocumentoId(tipoDocumentoId)
+                                .tipoDocumentoId(tipoDocumento)
                                 .tipoDocumento(responsePR.getPersonaVO().getTipoDocumento())
                                 .numeroDocumento(responsePR.getPersonaVO().getNumeroDocumento())
                                 .nombre1(primerNombre)
@@ -225,6 +216,7 @@ public class VerificarPersonaRunt extends HttpServlet {
                                 .categoria(personaRuntLicencia.getCategoria())
                                 .estadoLicencia(personaRuntLicencia.getEstadoLicencia())
                                 .fechaConsulta(responsePR.getFechaConsulta())
+                                .fuenteFallo(responsePR.getFuenteFallo())
                                 .build();
 
                         conex.setAutoCommit(false);
@@ -240,11 +232,33 @@ public class VerificarPersonaRunt extends HttpServlet {
                         }
 
                     } else {
+                        
+                        personaRunt = personaRuntDao.ConsultarPersonaRuntByDocumento(conex, tipoDocumento, documento, "SI");
+                        
+                        LocalDateTime fechaActual = LocalDateTime.now();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                        
+                        if(personaRunt == null){
+                            
+                            personaRuntDao.adicionarPersonaRunt(conex, PersonaRunt.builder()
+                                .tipoDocumentoId(tipoDocumento)
+                                .tipoDocumento(tipo_documento)
+                                .numeroDocumento(documento)
+                                .categoriaId(0)
+                                .fechaConsulta(fechaActual.format(formatter))
+                                .fuenteFallo("SI")
+                                .build());
+                            
+                        } else {
+                            personaRuntDao.modificarPersonaRunt(conex, PersonaRunt.builder()
+                                .tipoDocumento(tipo_documento)
+                                .numeroDocumento(documento)
+                                .fechaConsulta(fechaActual.format(formatter))
+                                .fuenteFallo("SI")
+                                .build());
+                        }
                         respuesta.put("status", "fail");
                         respuesta.put("message", "Persona no encontrada en runt");
-                        personaRuntDao.adicionarPersonaRunt(conex, PersonaRunt.builder()
-                                .tipoDocumentoId(tipoDocumento)
-                                .numeroDocumento(documento).build());
                     }
                 } else {
                     respuesta.put("status", "fail");

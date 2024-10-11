@@ -29,6 +29,7 @@ public class ResponsePersonaRunt {
     private List<CertificadosAptitudConduccion> certificadosAptitudConduccion;
     private List<SolicitudesConductor> solicitudesConductor;
     private String fechaConsulta;
+    private String fuenteFallo;
 
     @Getter
     @Setter
@@ -133,49 +134,5 @@ public class ResponsePersonaRunt {
         private String estado;
         private String tramitesRealizados;
         private String entidad;
-    }
-
-    public static ResponsePersonaRunt load(ResultSet rs) throws SQLException {
-
-        ResponsePersonaRunt personaRunt = ResponsePersonaRunt.builder()
-                                .personaVO(
-                                        ResponsePersonaRunt.PersonaVO.builder()
-                                                .numeroDocumento(rs.getString(1))
-                                                .tipoDocumento(rs.getString(2))
-                                                .pais(rs.getString(3))
-                                                .nombres(
-                                                        ResponsePersonaRunt.PersonaVO.Nombres.builder()
-                                                                .RUNT(
-                                                                        ResponsePersonaRunt.PersonaVO.Nombres.Runt.builder()
-                                                                                .primerNombre(rs.getString(4))
-                                                                                .primerApellido(rs.getString(5))
-                                                                                .tipoNombre(rs.getString(6))
-                                                                                .build())
-                                                                .build())
-                                                .build())
-                                .nroInscripcion(rs.getString(7))
-                                .fechaInscripcion(rs.getString(8))
-                                .estadoConductor(rs.getString(9))
-                                .estadoPersona(rs.getString(10))
-                                .tieneMultas(rs.getString(11))
-                                .nroPazYSalvo(rs.getString(12))
-                                .licenciasConduccion(
-                                        List.of(ResponsePersonaRunt.LicenciaConduccion.builder()
-                                                .numeroLicencia(rs.getString(13))
-                                                .otExpide(rs.getString(14))
-                                                .fechaExpedicion(rs.getString(15))
-                                                .estadoLicencia(rs.getString(16))
-                                                .restricciones(rs.getString(17))
-                                                .detalleLicencias(
-                                                        List.of(ResponsePersonaRunt.LicenciaConduccion.DetalleLicencias.builder()
-                                                                .categoria(rs.getString(18))
-                                                                .fechaExpedicion(rs.getString(19))
-                                                                .fechaVencimiento(rs.getString(20))
-                                                                .fechaVencimientoExamen(rs.getString(21))
-                                                                .build()))
-                                                .build()))
-                                .build();
-
-        return personaRunt;
     }
 }

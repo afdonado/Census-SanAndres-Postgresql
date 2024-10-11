@@ -31,6 +31,7 @@ public class PersonaRunt {
     private String categoria;
     private String estadoLicencia;
     private String fechaConsulta;
+    private String fuenteFallo;
 
     public static PersonaRunt load(ResultSet rs) throws SQLException {
         PersonaRunt personaRunt = PersonaRunt.builder()
@@ -48,6 +49,7 @@ public class PersonaRunt {
                 .categoria(rs.getString(12))
                 .estadoLicencia(rs.getString(13))
                 .fechaConsulta(rs.getString(14))
+                .fuenteFallo(rs.getString(15))
                 .build();
 
         return personaRunt;
