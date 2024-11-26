@@ -124,9 +124,6 @@
         <script src="${pageContext.request.contextPath}/template/vendor/datatables/jquery.dataTables.min.js"></script>
         <script src="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-        <!-- Page level custom scripts -->
-        <script src="${pageContext.request.contextPath}/template/js/demo/datatables-demo.js"></script>
-
         <script src="${pageContext.request.contextPath}/scripts/listarPersonas.js" type="text/javascript"></script>
     </body>
 </html>

@@ -126,7 +126,8 @@ $(function () {
         var tipoReferencia = $('#cmbtiposreferencia').val();
         var referencia = $('#txtreferencia').val().toString().toUpperCase();
         if (referencia.length > 0 &&
-                (!referencia.eq($('#referencia').val().toString().toUpperCase()))
+                (!$('#txtreferencia').val().toString().toUpperCase()
+                .eq($('#referencia').val().toString().toUpperCase()))
                 || tipoReferencia !== $('#tiporeferencia').val()) {
             consultarReferenciaVehiculo(tipoReferencia, referencia);
         }

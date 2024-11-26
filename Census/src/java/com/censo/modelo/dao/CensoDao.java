@@ -160,6 +160,118 @@ public class CensoDao {
         return lista;
     }
 
+    public List<HashMap<String, Object>> listarCensosPaginados(Connection conex, int start, int length, String orderBy, String orderDirection) throws SQLException {
+
+        List<HashMap<String, Object>> lista = new LinkedList<>();
+
+        String sql = "SELECT CEN_ID, NUMERO, FECHA, HORA, PUNTO_ATENCION, "
+                + "ESTADO, USUARIO, FECHA_PROCESO_FORMAT, FECHA_PROCESO_HORA, DOCUMENTO_PDF, "
+                + "VEH_PLACA, VEH_MOTOR, VEH_CHASIS, VEH_SERIE "
+                + "FROM VW_CENSOS ORDER BY " + orderBy + " " + orderDirection + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
+            pst.setInt(1, start);
+            pst.setInt(2, length);
+
+            try (ResultSet rst = pst.executeQuery()) {
+                while (rst.next()) {
+                    ResultSetMetaData rsmd = rst.getMetaData();
+                    HashMap<String, Object> hash = new HashMap<>();
+                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                        hash.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
+                    }
+                    lista.add(hash);
+                }
+            }
+        } catch (Exception e) {
+            throw new SQLException("Error en listarCensosPaginados: " + e);
+        }
+        return lista;
+    }
+
+    public List<HashMap<String, Object>> listarCensosPaginadosFiltrados(Connection conex, int start, int length, String searchValue, String orderBy, String orderDirection) throws SQLException {
+
+        List<HashMap<String, Object>> lista = new LinkedList<>();
+
+        String sql = "SELECT CEN_ID, NUMERO, FECHA, HORA, PUNTO_ATENCION, "
+                + "ESTADO, USUARIO, FECHA_PROCESO_FORMAT, FECHA_PROCESO_HORA, DOCUMENTO_PDF, "
+                + "VEH_PLACA, VEH_MOTOR, VEH_CHASIS, VEH_SERIE "
+                + "FROM VW_CENSOS WHERE (NUMERO LIKE ? OR FECHA LIKE ? OR HORA LIKE ? OR PUNTO_ATENCION LIKE ? OR "
+                + "ESTADO LIKE ? OR USUARIO LIKE ? OR FECHA_PROCESO_FORMAT LIKE ? OR FECHA_PROCESO_HORA LIKE ? OR DOCUMENTO_PDF LIKE ? OR "
+                + "VEH_PLACA LIKE ? OR VEH_MOTOR LIKE ? OR VEH_CHASIS LIKE ? OR VEH_SERIE LIKE ?) "
+                + "ORDER BY " + orderBy + " " + orderDirection + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
+            String searchPattern = "%" + searchValue + "%";
+            pst.setString(1, searchPattern);
+            pst.setString(2, searchPattern);
+            pst.setString(3, searchPattern);
+            pst.setString(4, searchPattern);
+            pst.setString(5, searchPattern);
+            pst.setString(6, searchPattern);
+            pst.setString(7, searchPattern);
+            pst.setString(8, searchPattern);
+            pst.setString(9, searchPattern);
+            pst.setString(10, searchPattern);
+            pst.setString(11, searchPattern);
+            pst.setString(12, searchPattern);
+            pst.setString(13, searchPattern);
+            pst.setInt(14, start);
+            pst.setInt(15, length);
+
+            try (ResultSet rst = pst.executeQuery()) {
+                while (rst.next()) {
+                    ResultSetMetaData rsmd = rst.getMetaData();
+                    HashMap<String, Object> hash = new HashMap<>();
+                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                        hash.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
+                    }
+                    lista.add(hash);
+                }
+            }
+        } catch (Exception e) {
+            throw new SQLException("Error en listarCensosPaginados: " + e);
+        }
+        return lista;
+    }
+    
+    public int contarCensos(Connection conex) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM VW_CENSOS";
+        try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
+            if (rst.next()) {
+                return rst.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public int contarCensosFiltrados(Connection conex, String searchValue) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM VW_CENSOS "
+                + "WHERE (NUMERO LIKE ? OR FECHA LIKE ? OR HORA LIKE ? OR PUNTO_ATENCION LIKE ? OR "
+                + "ESTADO LIKE ? OR USUARIO LIKE ? OR FECHA_PROCESO_FORMAT LIKE ? OR FECHA_PROCESO_HORA LIKE ? OR DOCUMENTO_PDF LIKE ? OR "
+                + "VEH_PLACA LIKE ? OR VEH_MOTOR LIKE ? OR VEH_CHASIS LIKE ? OR VEH_SERIE LIKE ?)";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
+            String searchPattern = "%" + searchValue + "%";
+            pst.setString(1, searchPattern);
+            pst.setString(2, searchPattern);
+            pst.setString(3, searchPattern);
+            pst.setString(4, searchPattern);
+            pst.setString(5, searchPattern);
+            pst.setString(6, searchPattern);
+            pst.setString(7, searchPattern);
+            pst.setString(8, searchPattern);
+            pst.setString(9, searchPattern);
+            pst.setString(10, searchPattern);
+            pst.setString(11, searchPattern);
+            pst.setString(12, searchPattern);
+            pst.setString(13, searchPattern);
+            try (ResultSet rst = pst.executeQuery()) {
+                if (rst.next()) {
+                    return rst.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
+
     public Datosresponse ConsultarCensoWSByNumero(Connection conex, String numero) throws SQLException {
 
         String sql = "SELECT to_char(CC.CEN_FECHA,'dd/MM/yyyy') FECHA_CENSO,CV.VEH_PLACA PLACA_VEHICULO,"

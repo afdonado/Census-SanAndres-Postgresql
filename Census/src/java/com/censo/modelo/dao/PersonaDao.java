@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -124,7 +125,28 @@ public class PersonaDao {
         return null;
     }
 
-    public List<HashMap<String, Object>> ListarPersonas(Connection conex) throws SQLException {
+    public HashMap<String, Object> ConsultarDatosPersonaById(Connection conex, int id) throws SQLException {
+
+        HashMap<String, Object> datos = new HashMap<>();
+
+        String sql = "SELECT * FROM VW_PERSONAS WHERE PER_ID = ? ";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
+            pst.setInt(1, id);
+            try (ResultSet rst = pst.executeQuery()) {
+                if (rst.next()) {
+                    ResultSetMetaData rsmd = rst.getMetaData();
+                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                        datos.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error en ConsultarDatosPersonaById: " + e);
+        }
+        return datos;
+    }
+
+    public List<HashMap<String, Object>> listarPersonasOld(Connection conex) throws SQLException {
 
         List<HashMap<String, Object>> lista = new LinkedList<>();
 
@@ -147,25 +169,99 @@ public class PersonaDao {
         return lista;
     }
 
-    public HashMap<String, Object> ConsultarDatosPersonaById(Connection conex, int id) throws SQLException {
+    public List<HashMap<String, Object>> listarPersonasPaginados(Connection conex, int start, int length, String orderBy, String orderDirection) throws SQLException {
+        List<HashMap<String, Object>> lista = new ArrayList<>();
 
-        HashMap<String, Object> datos = new HashMap<>();
+        String sql = "SELECT PER_ID, TIPO_DOC, DOCUMENTO, NOMBRE_COMPLETO, FECHA_NAC, DIRECCION, DEPARTAMENTO, MUNICIPIO, TELEFONO, MAIL "
+                + "FROM VW_PERSONAS ORDER BY " + orderBy + " " + orderDirection + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
-        String sql = "SELECT * FROM VW_PERSONAS WHERE PER_ID = ? ";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
-            pst.setInt(1, id);
+            pst.setInt(1, start);
+            pst.setInt(2, length);
+
             try (ResultSet rst = pst.executeQuery()) {
-                if (rst.next()) {
+                while (rst.next()) {
                     ResultSetMetaData rsmd = rst.getMetaData();
+                    HashMap<String, Object> hash = new HashMap<>();
                     for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                        datos.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
+                        hash.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
                     }
+                    lista.add(hash);
                 }
             }
-        } catch (SQLException e) {
-            throw new SQLException("Error en ConsultarDatosPersonaById: " + e);
         }
-        return datos;
+
+        return lista;
+    }
+
+    public List<HashMap<String, Object>> listarPersonasPaginadosFiltrados(Connection conex, int start, int length, String searchValue, String orderBy, String orderDirection) throws SQLException {
+        List<HashMap<String, Object>> lista = new ArrayList<>();
+
+        String sql = "SELECT PER_ID, TIPO_DOC, DOCUMENTO, NOMBRE_COMPLETO, FECHA_NAC, DIRECCION, DEPARTAMENTO, MUNICIPIO, TELEFONO, MAIL "
+                + "FROM VW_PERSONAS WHERE (TIPO_DOC LIKE ? OR DOCUMENTO LIKE ? OR NOMBRE_COMPLETO LIKE ? OR FECHA_NAC LIKE ? OR DIRECCION LIKE ? "
+                + "OR DEPARTAMENTO LIKE ? OR MUNICIPIO LIKE ? OR TELEFONO LIKE ? OR MAIL LIKE ?) "
+                + "ORDER BY " + orderBy + " " + orderDirection + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
+            String searchPattern = "%" + searchValue + "%";
+            pst.setString(1, searchPattern);
+            pst.setString(2, searchPattern);
+            pst.setString(3, searchPattern);
+            pst.setString(4, searchPattern);
+            pst.setString(5, searchPattern);
+            pst.setString(6, searchPattern);
+            pst.setString(7, searchPattern);
+            pst.setString(8, searchPattern);
+            pst.setString(9, searchPattern);
+            pst.setInt(10, start);
+            pst.setInt(11, length);
+
+            try (ResultSet rst = pst.executeQuery()) {
+                while (rst.next()) {
+                    ResultSetMetaData rsmd = rst.getMetaData();
+                    HashMap<String, Object> hash = new HashMap<>();
+                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                        hash.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
+                    }
+                    lista.add(hash);
+                }
+            }
+        }
+
+        return lista;
+    }
+
+    public int contarPersonas(Connection conex) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM VW_PERSONAS";
+        try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
+            if (rst.next()) {
+                return rst.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public int contarPersonasFiltrados(Connection conex, String searchValue) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM VW_PERSONAS WHERE (TIPO_DOC LIKE ? OR DOCUMENTO LIKE ? OR NOMBRE_COMPLETO LIKE ? OR FECHA_NAC LIKE ? OR DIRECCION LIKE ? "
+                + "OR DEPARTAMENTO LIKE ? OR MUNICIPIO LIKE ? OR TELEFONO LIKE ? OR MAIL LIKE ?)";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
+            String searchPattern = "%" + searchValue + "%";
+            pst.setString(1, searchPattern);
+            pst.setString(2, searchPattern);
+            pst.setString(3, searchPattern);
+            pst.setString(4, searchPattern);
+            pst.setString(5, searchPattern);
+            pst.setString(6, searchPattern);
+            pst.setString(7, searchPattern);
+            pst.setString(8, searchPattern);
+            pst.setString(9, searchPattern);
+            try (ResultSet rst = pst.executeQuery()) {
+                if (rst.next()) {
+                    return rst.getInt(1);
+                }
+            }
+        }
+        return 0;
     }
 
 }

@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -194,7 +195,7 @@ public class VehiculoDao {
         return datos;
     }
 
-    public List<HashMap<String, Object>> ListarVehiculos(Connection conex) throws SQLException {
+    public List<HashMap<String, Object>> ListarVehiculosOld(Connection conex) throws SQLException {
 
         List<HashMap<String, Object>> lista = new LinkedList<>();
 
@@ -212,6 +213,93 @@ public class VehiculoDao {
             throw new SQLException("Error en ListarVehiculos: " + e);
         }
         return lista;
+    }
+
+    public List<HashMap<String, Object>> listarVehiculosPaginados(Connection conex, int start, int length, String orderBy, String orderDirection) throws SQLException {
+        List<HashMap<String, Object>> lista = new ArrayList<>();
+
+        String sql = "SELECT VEH_ID, VEH_PLACA, VEH_MOTOR, VEH_CHASIS, VEH_SERIE, MARCA, LINEA "
+                + "FROM VW_VEHICULOS ORDER BY " + orderBy + " " + orderDirection + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
+            pst.setInt(1, start);
+            pst.setInt(2, length);
+
+            try (ResultSet rst = pst.executeQuery()) {
+                while (rst.next()) {
+                    ResultSetMetaData rsmd = rst.getMetaData();
+                    HashMap<String, Object> hash = new HashMap<>();
+                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                        hash.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
+                    }
+                    lista.add(hash);
+                }
+            }
+        }
+
+        return lista;
+    }
+
+    public List<HashMap<String, Object>> listarVehiculosPaginadosFiltrados(Connection conex, int start, int length, String searchValue, String orderBy, String orderDirection) throws SQLException {
+        List<HashMap<String, Object>> lista = new ArrayList<>();
+
+        String sql = "SELECT VEH_ID, VEH_PLACA, VEH_MOTOR, VEH_CHASIS, VEH_SERIE, MARCA, LINEA "
+                + "FROM VW_VEHICULOS WHERE (VEH_PLACA LIKE ? OR VEH_MOTOR LIKE ? OR VEH_CHASIS LIKE ? OR VEH_SERIE LIKE ? OR MARCA LIKE ? OR LINEA LIKE ? ) "
+                + "ORDER BY " + orderBy + " " + orderDirection + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
+            String searchPattern = "%" + searchValue + "%";
+            pst.setString(1, searchPattern);
+            pst.setString(2, searchPattern);
+            pst.setString(3, searchPattern);
+            pst.setString(4, searchPattern);
+            pst.setString(5, searchPattern);
+            pst.setString(6, searchPattern);
+            pst.setInt(7, start);
+            pst.setInt(8, length);
+
+            try (ResultSet rst = pst.executeQuery()) {
+                while (rst.next()) {
+                    ResultSetMetaData rsmd = rst.getMetaData();
+                    HashMap<String, Object> hash = new HashMap<>();
+                    for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                        hash.put(rsmd.getColumnName(i + 1), rst.getObject(i + 1));
+                    }
+                    lista.add(hash);
+                }
+            }
+        }
+
+        return lista;
+    }
+
+    public int contarVehiculos(Connection conex) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM VW_VEHICULOS";
+        try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
+            if (rst.next()) {
+                return rst.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public int contarVehiculosFiltrados(Connection conex, String searchValue) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM VW_VEHICULOS WHERE (VEH_PLACA LIKE ? OR VEH_MOTOR LIKE ? OR VEH_CHASIS LIKE ? OR VEH_SERIE LIKE ? OR MARCA LIKE ? OR LINEA LIKE ? )";
+        try (PreparedStatement pst = conex.prepareStatement(sql)) {
+            String searchPattern = "%" + searchValue + "%";
+            pst.setString(1, searchPattern);
+            pst.setString(2, searchPattern);
+            pst.setString(3, searchPattern);
+            pst.setString(4, searchPattern);
+            pst.setString(5, searchPattern);
+            pst.setString(6, searchPattern);
+            try (ResultSet rst = pst.executeQuery()) {
+                if (rst.next()) {
+                    return rst.getInt(1);
+                }
+            }
+        }
+        return 0;
     }
 
 }

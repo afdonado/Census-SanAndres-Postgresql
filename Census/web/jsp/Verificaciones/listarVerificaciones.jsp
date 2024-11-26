@@ -76,7 +76,6 @@
                                                     <th>Numero Censo</th>
                                                     <th>Fecha</th>
                                                     <th>Punto Atención</th>
-                                                    <th>Fecha Reg. Censo</th>
                                                     <th>Placa</th>
                                                     <th>Motor</th>
                                                     <th>Chasis</th>
@@ -136,9 +135,6 @@
         <!-- Page level plugins -->
         <script src="${pageContext.request.contextPath}/template/vendor/datatables/jquery.dataTables.min.js"></script>
         <script src="${pageContext.request.contextPath}/template/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-        <!-- Page level custom scripts -->
-        <script src="${pageContext.request.contextPath}/template/js/demo/datatables-demo.js"></script>
 
         <script src="${pageContext.request.contextPath}/scripts/listarVerificaciones.js" type="text/javascript"></script>
 

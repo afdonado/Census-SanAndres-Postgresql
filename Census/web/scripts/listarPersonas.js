@@ -1,53 +1,41 @@
 
 $(function () {
-
-    $.ajax({
-        url: '../../listarPersonas',
-        method: 'get',
-        success: function (response) {
-
-            if (response.status === "success") {
-                if ($.fn.DataTable.isDataTable('#dataTable')) {
-                    $('#dataTable').DataTable().destroy();
-                }
-                
-                $("#lista-vehiculos").empty();
-                
-                var lista = response.personas;
-
-                $.each(lista, function (index, persona) {
-                    var nuevoElemento = `
-                <tr>
-                    <td>${persona.TIPO_DOC}</td>
-                    <td>${persona.DOCUMENTO}</td>
-                    <td>${persona.NOMBRE_COMPLETO}</td>
-                    <td>${persona.FECHA_NAC}</td>
-                    <td>${persona.DIRECCION}</td>
-                    <td>${persona.DEPARTAMENTO}</td>
-                    <td>${persona.MUNICIPIO}</td>
-                    <td>${persona.TELEFONO}</td>
-                    <td>${persona.MAIL}</td>
-                    <td><button type="button" class="btn btn-info btnconsultar" name="btnconsultar" data-id="${persona.PER_ID}">Consultar</button></td>
-                    <td><button type="button" class="btn btn-danger btneditar" name="btneditar" data-id="${persona.PER_ID}">Editar</button></td>
-                    </tr>
-                `;
-                    $("#lista-personas").append(nuevoElemento);
-                });
-
-                $('#dataTable').DataTable({
-                    responsive: true,
-                    autoWidth: false
-                });
-                
-            } else if (response.status === "fail") {
-                alert(response.message);
-            } else if (response.status === "error") {
-                alert(response.message);
-            }
+    
+    $('#dataTable').DataTable({
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        autoWidth: false,
+        ajax: {
+            url: '../../listarPersonas',
+            type: 'GET',
+            dataSrc: 'data'
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.error("Error en la solicitud de listas personas: ", textStatus, errorThrown);
-            alert("Ocurrió un error al procesar la solicitud de listas personas");
+        columns: [
+            {data: 'TIPO_DOC', defaultContent: ''},
+            {data: 'DOCUMENTO', defaultContent: ''},
+            {data: 'NOMBRE_COMPLETO', defaultContent: ''},
+            {data: 'FECHA_NAC', defaultContent: ''},
+            {data: 'DIRECCION', defaultContent: ''},
+            {data: 'DEPARTAMENTO', defaultContent: ''},
+            {data: 'MUNICIPIO', defaultContent: ''},
+            {data: 'TELEFONO', defaultContent: ''},
+            {data: 'MAIL', defaultContent: ''},
+            {
+                data: null,
+                render: function (data) {
+                    return `<button type="button" class="btn btn-info btnconsultar" data-id="${data.PER_ID}">Consultar</button>`;
+                }
+            },
+            {
+                data: null,
+                render: function (data) {
+                    return `<button type="button" class="btn btn-danger btneditar" data-id="${data.PER_ID}">Editar</button>`;
+                }
+            }
+        ],
+        language: {
+            url: '../../template/vendor/datatables/i18n/Spanish.json'
         }
     });
 

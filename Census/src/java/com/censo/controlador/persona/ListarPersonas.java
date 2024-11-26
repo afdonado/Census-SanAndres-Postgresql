@@ -28,16 +28,40 @@ public class ListarPersonas extends HttpServlet {
         
         Map<String, Object> respuesta = new HashMap<>();
 
+        // Parámetros de paginación de DataTables
+        int draw = Integer.parseInt(request.getParameter("draw"));
+        int start = Integer.parseInt(request.getParameter("start"));
+        int length = Integer.parseInt(request.getParameter("length"));
+        String searchValue = request.getParameter("search[value]").toUpperCase();
+        String orderColumnIndex = request.getParameter("order[0][column]");
+        String orderDirection = request.getParameter("order[0][dir]");
+
+        String[] columnNames = {"TIPO_DOC", "DOCUMENTO", "NOMBRE_COMPLETO", "FECHA_NAC", "DIRECCION", "DEPARTAMENTO", "MUNICIPIO", "TELEFONO", "MAIL"};
+
+        String orderBy = columnNames[Integer.parseInt(orderColumnIndex)];
+
         try (Connection conex = dataSource.getConnection()) {
-
             PersonaDao personaDao = new PersonaDao();
-
-            List<HashMap<String, Object>> lista = personaDao.ListarPersonas(conex);
-
-            if (!lista.isEmpty()) {
-                respuesta.put("status", "success");
-                respuesta.put("personas", lista);
+            
+            List<HashMap<String, Object>> lista;
+            if (searchValue.equals("")) {
+                // Obtén los datos paginados
+                lista = personaDao.listarPersonasPaginados(conex, start, length, orderBy, orderDirection);
+            } else {
+                // Obtén los datos paginados y filtrados
+                lista = personaDao.listarPersonasPaginadosFiltrados(conex, start, length, searchValue, orderBy, orderDirection);
             }
+
+            // Obtén el total de registros (sin filtro)
+            int totalRecords = personaDao.contarPersonas(conex);
+
+            // Obtén el total de registros filtrados
+            int filteredRecords = personaDao.contarPersonasFiltrados(conex, searchValue);
+
+            respuesta.put("draw", draw);
+            respuesta.put("recordsTotal", totalRecords);
+            respuesta.put("recordsFiltered", filteredRecords);
+            respuesta.put("data", lista);
 
         } catch (SQLException e) {
             respuesta.put("status", "error");
