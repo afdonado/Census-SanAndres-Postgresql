@@ -132,7 +132,7 @@ public class VerificacionDao {
                 + "VEH_CLASE, VEH_SERVICIO, VEH_RUNT, VEH_SOAT, VEH_TECNOMEC,\n"
                 + "ESTADO, USUARIO, FECHA_PROCESO, VERIFICACION_DOC, VERIFICACION_FOTOS,\n"
                 + "OBSERVACIONES_VERIFICACION, FECHA_PROCESO_VERIFICACION_FORMAT,\n"
-                + "USUARIO_VERIFICACION,ESTADO_VERIFICACION\n"
+                + "USUARIO_VERIFICACION,ESTADO_VERIFICACION,DOCUMENTO_PDF \n"
                 + "FROM VW_CENSOS";
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
             while (rst.next()) {

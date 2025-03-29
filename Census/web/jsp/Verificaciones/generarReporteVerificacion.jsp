@@ -69,6 +69,7 @@
                         <th>Fecha Verificacion</th>
                         <th>Usuario Verificacion</th>
                         <th>Estado Verificacion</th>
+                        <th>PDF Cargado</th>
                     </tr>
                     <%
                         if (datosVerificaciones.size() > 0) {
@@ -105,6 +106,7 @@
                         <td><%=hash.get("FECHA_PROCESO_VERIFICACION_FORMAT") == null ? "" : hash.get("FECHA_PROCESO_VERIFICACION_FORMAT").toString()%></td>
                         <td><%=hash.get("USUARIO_VERIFICACION") == null ? "" : hash.get("USUARIO_VERIFICACION").toString()%></td>
                         <td><%=hash.get("ESTADO_VERIFICACION") == null ? "" : hash.get("ESTADO_VERIFICACION").toString()%></td>
+                        <td><%=hash.get("DOCUMENTO_PDF") == null ? "" : hash.get("DOCUMENTO_PDF").toString()%></td>
                     </tr>
                     <%
                             }

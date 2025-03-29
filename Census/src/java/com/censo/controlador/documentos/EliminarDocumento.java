@@ -55,6 +55,16 @@ public class EliminarDocumento extends HttpServlet {
                 response.getWriter().write(jsonError);
                 return;
             }
+            
+            //condicion para no permitir eliminar un TAG o png
+            if(cendocumentosdigitalizado.getTipo() == 2){
+                respuesta.put("status", "error");
+                respuesta.put("message", "No está permitido eliminar este documento");
+
+                String jsonError = new Gson().toJson(respuesta);
+                response.getWriter().write(jsonError);
+                return;
+            }
 
             String rutaArchivo = cendocumentosdigitalizado.getRuta();
             File archivo = new File(rutaArchivo);

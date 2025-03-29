@@ -32,7 +32,12 @@ $(function () {
             {
                 data: null,
                 render: function (data) {
-                    return `<button type="button" class="btn btn-danger btneditar" data-id="${data.CEN_ID}">Editar</button>`;
+                    var idverificacion = data.VERIFICACION_ID || '';
+                    if (idverificacion === '') {
+                        return `<button type="button" class="btn btn-primary btnregistrar" name="btnregistrar" data-id="${data.CEN_ID}">Guardar</button>`;
+                    } else {
+                        return `<button type="button" class="btn btn-danger btneditar" name="btneditar" data-id="${data.CEN_ID}">Editar</button>`;
+                    }
                 }
             }
         ],
