@@ -51,7 +51,7 @@
     <div class="col-lg-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Año: <%=hash.get("ANO").toString()%> Mes: <%=hash.get("MES").toString()%> Cantidad: <%=hash.get("CANTIDAD_MES").toString()%></h6>
+                <h6 class="m-0 font-weight-bold text-primary">Año: <%=hash.get("ano").toString()%> Mes: <%=hash.get("mes").toString()%> Cantidad: <%=hash.get("cantidad_mes").toString()%></h6>
             </div>
             <div class="card-body">
                 <div id="tablaCantidadGeneral" class="table-responsive">
@@ -91,7 +91,7 @@
                         </thead>
                         <tbody>
                             <%
-                                HashMap<String, Object> dias = estadisticaDao.reporteCensosGeneral(conex, hash.get("MES").toString());
+                                HashMap<String, Object> dias = estadisticaDao.reporteCensosGeneral(conex, hash.get("mes").toString());
 
                                 if (!dias.isEmpty()) {
 

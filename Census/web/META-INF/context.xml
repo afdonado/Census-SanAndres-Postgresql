@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<Context path="/Census">
+    <Resource 
+        name="jdbc/postgres"
+        auth="Container"
+        type="javax.sql.DataSource"
+        driverClassName="org.postgresql.Driver"
+        url="jdbc:postgresql://localhost:5433/censo24"
+        username="censoapp"
+        password="desarrollo"
+        maxTotal="5"
+        maxIdle="1"
+        maxWaitMillis="20000"
+        validationQuery="SELECT 1"
+        removeAbandonedOnBorrow="true"
+        removeAbandonedTimeout="30"
+        logAbandoned="true"
+    />
+</Context>
+<!--
+
+<?xml version="1.0" encoding="UTF-8"?>
 <Context path="/Census"> 
     <Resource 
         name="jdbc/oracle" 
@@ -17,7 +38,7 @@
         logAbandoned="true"
       />
 </Context>
-<!--
+
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/Census">
     <Resource 

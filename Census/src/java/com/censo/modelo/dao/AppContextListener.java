@@ -14,7 +14,7 @@ public class AppContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         try {
             InitialContext ctx = new InitialContext();
-            dataSource = (DataSource) ctx.lookup("java:/comp/env/jdbc/oracle");
+            dataSource = (DataSource) ctx.lookup("java:/comp/env/jdbc/postgres");
             sce.getServletContext().setAttribute("DataSource", dataSource);
         } catch (NamingException e) {
             e.printStackTrace();
