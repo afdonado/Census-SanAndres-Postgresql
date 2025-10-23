@@ -19,17 +19,17 @@ $(function () {
             success: function (response) {
                 if (response.status === "success") {
 
-                    $('#txtnumerocenso').val(response.verificacion.NUMERO);
-                    $('#txtfechacenso').val(response.verificacion.FECHA);
-                    if (response.verificacion.VERIFICACION_DOCUMENTOS === 'S') {
+                    $('#txtnumerocenso').val(response.verificacion.numero);
+                    $('#txtfechacenso').val(response.verificacion.fecha);
+                    if (response.verificacion.verificacion_documentos === 'S') {
                         $('#chkdocumentos').prop('checked', true);
                     }
-                    if (response.verificacion.VERIFICACION_FOTOS === 'S') {
+                    if (response.verificacion.verificacion_fotos === 'S') {
                         $('#chkfotos').prop('checked', true);
                     }
 
-                    $('#txtestadoverificacion').val(response.verificacion.ESTADO_VERIFICACION);
-                    $("#btneditar").attr("data-id", response.verificacion.CEN_ID);
+                    $('#txtestadoverificacion').val(response.verificacion.estado_verificacion);
+                    $("#btneditar").attr("data-id", response.verificacion.cen_id);
                     
                 } else if (response.status === "fail" || response.status === "error") {
                     alert(response.message);

@@ -18,8 +18,8 @@ public class CensoDao {
 
         String sql = "INSERT INTO CEN_CENSOS (CEN_FECHA,CEN_HORA,PUN_ID,VEH_ID,USU_ID,"
                 + "EST_ID,CEN_FECHAPROCESO,CEN_NUMERO,CEN_OBSERVACIONES) "
-                + "VALUES (?,?,?,?,?,?,SYSDATE,?,?)";
-        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"CEN_ID"})) {
+                + "VALUES (?,?,?,?,?,?,now(),?,?)";
+        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"cen_id"})) {
             pst.setDate(1, cencenso.getFecha());
             pst.setString(2, cencenso.getHora());
             pst.setInt(3, cencenso.getPun_id());

@@ -19,7 +19,7 @@ public class UsuarioDao {
 
     public CenUsuario ConsultarUsuario(Connection conex, String usuario, String password, int estado) throws SQLException, IOException {
 
-        String sql = "SELECT * FROM CEN_USUARIOS WHERE USU_NOMBRE = ? AND USU_PASS = ? AND EST_ID = ? AND USU_FECHAFINAL IS NULL ";
+        String sql = "select * from cen_usuarios where usu_nombre = ? and usu_pass = ? and est_id = ? and usu_fechafinal is null";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setString(1, usuario);
             pst.setString(2, password);
@@ -39,11 +39,11 @@ public class UsuarioDao {
 
         List listaPermisos = new LinkedList();
 
-        String sql = "SELECT PM.PRM_DESCRIPCION FROM CEN_USUARIOS U \n"
-                + "INNER JOIN CEN_PERFIL_USUARIO PU ON PU.EST_ID=1 AND PU.USU_ID=U.USU_ID  \n"
-                + "INNER JOIN CEN_PERFIL_PERMISO PP ON PP.EST_ID=1 AND PP.PEF_ID=PU.PEF_ID \n"
-                + "INNER JOIN CEN_PERMISOS PM ON PM.EST_ID=1 AND PM.PRM_ID=PP.PRM_ID \n"
-                + "WHERE U.EST_ID=1 AND U.USU_ID=? ORDER BY 1";
+        String sql = "select pm.prm_descripcion from cen_usuarios u "
+                + "inner join cen_perfil_usuario pu on pu.est_id=1 and pu.usu_id=u.usu_id "
+                + "inner join cen_perfil_permiso pp on pp.est_id=1 and pp.pef_id=pu.pef_id "
+                + "inner join cen_permisos pm on pm.est_id=1 and pm.prm_id=pp.prm_id "
+                + "where u.est_id=1 and u.usu_id=? order by 1";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setInt(1, id);
             try (ResultSet rst = pst.executeQuery()) {
@@ -61,13 +61,13 @@ public class UsuarioDao {
 
         List listaModulos = new LinkedList();
 
-        String sql = "SELECT M.MOD_ID, M.MOD_ORDEN FROM CEN_MODULOS M \n"
-                + "INNER JOIN CEN_PERMISOS P ON P.EST_ID=1 AND P.MOD_ID=M.MOD_ID \n"
-                + "INNER JOIN CEN_PERFIL_PERMISO PP ON PP.EST_ID=1 AND PP.PRM_ID=P.PRM_ID \n"
-                + "INNER JOIN CEN_PERFIL_USUARIO PU ON PU.EST_ID=1 AND PU.PEF_ID=PP.PEF_ID \n"
-                + "INNER JOIN CEN_USUARIOS U ON U.EST_ID=1 AND U.USU_ID=PU.USU_ID AND U.USU_ID=? \n"
-                + "WHERE M.EST_ID=1 AND M.MOD_ID NOT IN(1) \n"
-                + "GROUP BY M.MOD_ID, M.MOD_ORDEN ORDER BY M.MOD_ORDEN";
+        String sql = "select m.mod_id, m.mod_orden from cen_modulos m "
+                + "inner join cen_permisos p on p.est_id=1 and p.mod_id=m.mod_id "
+                + "inner join cen_perfil_permiso pp on pp.est_id=1 and pp.prm_id=p.prm_id "
+                + "inner join cen_perfil_usuario pu on pu.est_id=1 and pu.pef_id=pp.pef_id "
+                + "inner join cen_usuarios u on u.est_id=1 and u.usu_id=pu.usu_id and u.usu_id=? "
+                + "where m.est_id=1 and m.mod_id not in(1) "
+                + "group by m.mod_id, m.mod_orden order by m.mod_orden";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setInt(1, id);
             try (ResultSet rst = pst.executeQuery()) {
@@ -84,7 +84,7 @@ public class UsuarioDao {
     public List<CenModulo> ListarModulos(Connection conex) throws SQLException {
 
         List<CenModulo> listaModulos = new LinkedList();
-        String sql = "SELECT * FROM CEN_MODULOS WHERE EST_ID = 1 ORDER BY MOD_ORDEN ";
+        String sql = "select * from cen_modulos where est_id = 1 order by mod_orden";
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
             while (rst.next()) {
                 listaModulos.add(CenModulo.load(rst));
@@ -97,8 +97,8 @@ public class UsuarioDao {
 
     public int adicionarUsuario(Connection conex, CenUsuario cenusuario) throws SQLException, IOException {
 
-        String sql = "INSERT INTO CEN_USUARIOS (USU_NOMBRE,USU_PASS,USU_FECHAINICIO,EST_ID,USU_FECHAPROCESO,TIPO_DOCUMENTO,NUMERO_DOCUMENTO) VALUES (?,?,SYSDATE,?,SYSDATE,?,?)";
-        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"USU_ID"})) {
+        String sql = "INSERT INTO CEN_USUARIOS (USU_NOMBRE,USU_PASS,USU_FECHAINICIO,EST_ID,USU_FECHAPROCESO,TIPO_DOCUMENTO,NUMERO_DOCUMENTO) VALUES (?,?,now(),?,now(),?,?)";
+        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"usu_id"})) {
             pst.setString(1, cenusuario.getNombre());
             pst.setString(2, cenusuario.getPassword());
             pst.setInt(3, cenusuario.getEstado());
@@ -210,8 +210,8 @@ public class UsuarioDao {
 
         List<HashMap> listaDatos = new LinkedList<>();
 
-        String sql = "SELECT USU_ID, NOMBRE_USUARIO,TO_CHAR(FECHA_INICIO,'dd/MM/yyyy') FECHA_INICIO,NVL(TO_CHAR(FECHA_FINAL,'dd/MM/yyyy'),' ') FECHA_FINAL,TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,"
-                + "PEF_ID,PERFIL,PUN_ID,NVL(PUNTO_ATENCION,'SIN PUNTO') PUNTO_ATENCION,ESTADO,PER_ID,TDOC_ID,TIPO_DOC,DOCUMENTO,NOMBRE "
+        String sql = "SELECT USU_ID, NOMBRE_USUARIO,TO_CHAR(FECHA_INICIO,'dd/MM/yyyy') FECHA_INICIO,COALESCE(TO_CHAR(FECHA_FINAL,'dd/MM/yyyy'),' ') FECHA_FINAL,TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,"
+                + "PEF_ID,PERFIL,PUN_ID,COALESCE(PUNTO_ATENCION,'SIN PUNTO') PUNTO_ATENCION,ESTADO,PER_ID,TDOC_ID,TIPO_DOC,DOCUMENTO,NOMBRE "
                 + "FROM VW_USUARIOS VU WHERE VU.NOMBRE_USUARIO LIKE ? ORDER BY NOMBRE_USUARIO";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setString(1, "%" + nombre + "%");
@@ -235,8 +235,8 @@ public class UsuarioDao {
 
         List<HashMap> listaDatos = new LinkedList<>();
 
-        String sql = "SELECT USU_ID, NOMBRE_USUARIO,TO_CHAR(FECHA_INICIO,'dd/MM/yyyy') FECHA_INICIO,NVL(TO_CHAR(FECHA_FINAL,'dd/MM/yyyy'),' ') FECHA_FINAL,TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,"
-                + "PEF_ID,PERFIL,PUN_ID,NVL(PUNTO_ATENCION,'SIN PUNTO') PUNTO_ATENCION,ESTADO,PER_ID,TDOC_ID,TIPO_DOC,DOCUMENTO,NOMBRE "
+        String sql = "SELECT USU_ID, NOMBRE_USUARIO,TO_CHAR(FECHA_INICIO,'dd/MM/yyyy') FECHA_INICIO,COALESCE(TO_CHAR(FECHA_FINAL,'dd/MM/yyyy'),' ') FECHA_FINAL,TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,"
+                + "PEF_ID,PERFIL,PUN_ID,COALESCE(PUNTO_ATENCION,'SIN PUNTO') PUNTO_ATENCION,ESTADO,PER_ID,TDOC_ID,TIPO_DOC,DOCUMENTO,NOMBRE "
                 + "FROM VW_USUARIOS VU WHERE VU.TDOC_ID = ? AND VU.DOCUMENTO=? ORDER BY VU.FECHA_INICIO";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setInt(1, tipodoc);
@@ -261,8 +261,8 @@ public class UsuarioDao {
 
         List<HashMap> listaDatos = new LinkedList<>();
 
-        String sql = "SELECT USU_ID, NOMBRE_USUARIO,TO_CHAR(FECHA_INICIO,'dd/MM/yyyy') FECHA_INICIO,NVL(TO_CHAR(FECHA_FINAL,'dd/MM/yyyy'),' ') FECHA_FINAL,"
-                + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PEF_ID,PERFIL,PUN_ID,NVL(PUNTO_ATENCION,'SIN PUNTO') PUNTO_ATENCION,ESTADO,PER_ID,TDOC_ID,TIPO_DOC,DOCUMENTO,NOMBRE "
+        String sql = "SELECT USU_ID, NOMBRE_USUARIO,TO_CHAR(FECHA_INICIO,'dd/MM/yyyy') FECHA_INICIO,COALESCE(TO_CHAR(FECHA_FINAL,'dd/MM/yyyy'),' ') FECHA_FINAL,"
+                + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PEF_ID,PERFIL,PUN_ID,COALESCE(PUNTO_ATENCION,'SIN PUNTO') PUNTO_ATENCION,ESTADO,PER_ID,TDOC_ID,TIPO_DOC,DOCUMENTO,NOMBRE "
                 + "FROM VW_USUARIOS VU WHERE (VU.PUN_ID = ? OR 0 = ?) ORDER BY VU.FECHA_INICIO";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setInt(1, punto);
@@ -316,7 +316,7 @@ public class UsuarioDao {
 
     public CenPerfil ConsultarPerfilById(Connection conex, int id) throws SQLException {
 
-        String sql = "SELECT * FROM CEN_PERFILES WHERE EST_ID = 1 AND PEF_ID = ? ORDER BY PEF_ID ";
+        String sql = "select * from cen_perfiles where est_id = 1 and pef_id = ? order by pef_id";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setInt(1, id);
             try (ResultSet rst = pst.executeQuery()) {
@@ -333,8 +333,8 @@ public class UsuarioDao {
     public int adicionarPerfilUsuario(Connection conex, CenPerfilUsuario cenperfilusuario) {
 
         String sql = "INSERT INTO CEN_PERFIL_USUARIO (PEF_ID,USU_ID,PFU_FECHAINICIAL,PFU_FECHAPROCESO,EST_ID) "
-                + "VALUES (?,?,SYSDATE,SYSDATE,?)";
-        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"PFU_ID"})) {
+                + "VALUES (?,?,now(),now(),?)";
+        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"pfu_id"})) {
             pst.setInt(1, cenperfilusuario.getPef_id());
             pst.setInt(2, cenperfilusuario.getUsu_id());
             pst.setInt(3, cenperfilusuario.getEstado());
@@ -372,7 +372,7 @@ public class UsuarioDao {
 
         HashMap<String, Object> datos = new HashMap<>();
 
-        String sql = "SELECT USU_ID, NOMBRE_USUARIO,TO_CHAR(FECHA_INICIO,'dd/MM/yyyy') FECHA_INICIO,NVL(TO_CHAR(FECHA_FINAL,'dd/MM/yyyy'),' ') FECHA_FINAL,"
+        String sql = "SELECT USU_ID, NOMBRE_USUARIO,TO_CHAR(FECHA_INICIO,'dd/MM/yyyy') FECHA_INICIO,COALESCE(TO_CHAR(FECHA_FINAL,'dd/MM/yyyy'),' ') FECHA_FINAL,"
                 + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PEF_ID,PERFIL, TIPO_DOCUMENTO_ID, TIPO_DOCUMENTO, TIPO_DOCUMENTO_CORTO,"
                 + "NUMERO_DOCUMENTO, ESTADO_ID, ESTADO FROM VW_USUARIOS "
                 + "WHERE USU_ID = ? ";
@@ -396,7 +396,7 @@ public class UsuarioDao {
 
         List<HashMap<String, Object>> lista = new LinkedList<>();
 
-        String sql = "SELECT USU_ID, NOMBRE_USUARIO,TO_CHAR(FECHA_INICIO,'dd/MM/yyyy') FECHA_INICIO,NVL(TO_CHAR(FECHA_FINAL,'dd/MM/yyyy'),' ') FECHA_FINAL, "
+        String sql = "SELECT USU_ID, NOMBRE_USUARIO,TO_CHAR(FECHA_INICIO,'dd/MM/yyyy') FECHA_INICIO,COALESCE(TO_CHAR(FECHA_FINAL,'dd/MM/yyyy'),' ') FECHA_FINAL, "
                 + "TO_CHAR(FECHA_PROCESO,'dd/MM/yyyy') FECHA_PROCESO,PEF_ID,PERFIL, TIPO_DOCUMENTO_ID, TIPO_DOCUMENTO, TIPO_DOCUMENTO_CORTO, "
                 + "NUMERO_DOCUMENTO, ESTADO_ID, ESTADO FROM VW_USUARIOS WHERE PEF_ID NOT IN(4) ";
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {

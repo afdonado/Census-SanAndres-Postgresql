@@ -2,7 +2,7 @@
 $(function () {
     $('#txtdocumento').blur(function () {
         if ($('#txtdocumento').val().length > 0) {
-            consultarDocumentoRunt($('#cmbtiposdocumento').val(), $('#txtdocumento').val());
+            consultarDocumentoPersona2017($('#cmbtiposdocumento').val(), $('#txtdocumento').val());
         }
     });
 

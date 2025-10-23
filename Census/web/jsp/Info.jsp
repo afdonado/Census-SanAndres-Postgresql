@@ -97,37 +97,37 @@
 
                             %>
                             <tr>
-                                <td><%=dias.get("D01") == null ? "" : dias.get("D01").toString()%></td>
-                                <td><%=dias.get("D02") == null ? "" : dias.get("D02").toString()%></td>
-                                <td><%=dias.get("D03") == null ? "" : dias.get("D03").toString()%></td>
-                                <td><%=dias.get("D04") == null ? "" : dias.get("D04").toString()%></td>
-                                <td><%=dias.get("D05") == null ? "" : dias.get("D05").toString()%></td>
-                                <td><%=dias.get("D06") == null ? "" : dias.get("D06").toString()%></td>
-                                <td><%=dias.get("D07") == null ? "" : dias.get("D07").toString()%></td>
-                                <td><%=dias.get("D08") == null ? "" : dias.get("D08").toString()%></td>
-                                <td><%=dias.get("D09") == null ? "" : dias.get("D09").toString()%></td>
-                                <td><%=dias.get("D10") == null ? "" : dias.get("D10").toString()%></td>
-                                <td><%=dias.get("D11") == null ? "" : dias.get("D11").toString()%></td>
-                                <td><%=dias.get("D12") == null ? "" : dias.get("D12").toString()%></td>
-                                <td><%=dias.get("D13") == null ? "" : dias.get("D13").toString()%></td>
-                                <td><%=dias.get("D14") == null ? "" : dias.get("D14").toString()%></td>
-                                <td><%=dias.get("D15") == null ? "" : dias.get("D15").toString()%></td>
-                                <td><%=dias.get("D16") == null ? "" : dias.get("D16").toString()%></td>
-                                <td><%=dias.get("D17") == null ? "" : dias.get("D17").toString()%></td>
-                                <td><%=dias.get("D18") == null ? "" : dias.get("D18").toString()%></td>
-                                <td><%=dias.get("D19") == null ? "" : dias.get("D19").toString()%></td>
-                                <td><%=dias.get("D20") == null ? "" : dias.get("D20").toString()%></td>
-                                <td><%=dias.get("D21") == null ? "" : dias.get("D21").toString()%></td>
-                                <td><%=dias.get("D22") == null ? "" : dias.get("D22").toString()%></td>
-                                <td><%=dias.get("D23") == null ? "" : dias.get("D23").toString()%></td>
-                                <td><%=dias.get("D24") == null ? "" : dias.get("D24").toString()%></td>
-                                <td><%=dias.get("D25") == null ? "" : dias.get("D25").toString()%></td>
-                                <td><%=dias.get("D26") == null ? "" : dias.get("D26").toString()%></td>
-                                <td><%=dias.get("D27") == null ? "" : dias.get("D27").toString()%></td>
-                                <td><%=dias.get("D28") == null ? "" : dias.get("D28").toString()%></td>
-                                <td><%=dias.get("D29") == null ? "" : dias.get("D29").toString()%></td>
-                                <td><%=dias.get("D30") == null ? "" : dias.get("D30").toString()%></td>
-                                <td><%=dias.get("D31") == null ? "" : dias.get("D31").toString()%></td>
+                                <td><%=dias.get("d01") == null ? "" : dias.get("d01").toString()%></td>
+                                <td><%=dias.get("d02") == null ? "" : dias.get("d02").toString()%></td>
+                                <td><%=dias.get("d03") == null ? "" : dias.get("d03").toString()%></td>
+                                <td><%=dias.get("d04") == null ? "" : dias.get("d04").toString()%></td>
+                                <td><%=dias.get("d05") == null ? "" : dias.get("d05").toString()%></td>
+                                <td><%=dias.get("d06") == null ? "" : dias.get("d06").toString()%></td>
+                                <td><%=dias.get("d07") == null ? "" : dias.get("d07").toString()%></td>
+                                <td><%=dias.get("d08") == null ? "" : dias.get("d08").toString()%></td>
+                                <td><%=dias.get("d09") == null ? "" : dias.get("d09").toString()%></td>
+                                <td><%=dias.get("d10") == null ? "" : dias.get("d10").toString()%></td>
+                                <td><%=dias.get("d11") == null ? "" : dias.get("d11").toString()%></td>
+                                <td><%=dias.get("d12") == null ? "" : dias.get("d12").toString()%></td>
+                                <td><%=dias.get("d13") == null ? "" : dias.get("d13").toString()%></td>
+                                <td><%=dias.get("d14") == null ? "" : dias.get("d14").toString()%></td>
+                                <td><%=dias.get("d15") == null ? "" : dias.get("d15").toString()%></td>
+                                <td><%=dias.get("d16") == null ? "" : dias.get("d16").toString()%></td>
+                                <td><%=dias.get("d17") == null ? "" : dias.get("d17").toString()%></td>
+                                <td><%=dias.get("d18") == null ? "" : dias.get("d18").toString()%></td>
+                                <td><%=dias.get("d19") == null ? "" : dias.get("d19").toString()%></td>
+                                <td><%=dias.get("d20") == null ? "" : dias.get("d20").toString()%></td>
+                                <td><%=dias.get("d21") == null ? "" : dias.get("d21").toString()%></td>
+                                <td><%=dias.get("d22") == null ? "" : dias.get("d22").toString()%></td>
+                                <td><%=dias.get("d23") == null ? "" : dias.get("d23").toString()%></td>
+                                <td><%=dias.get("d24") == null ? "" : dias.get("d24").toString()%></td>
+                                <td><%=dias.get("d25") == null ? "" : dias.get("d25").toString()%></td>
+                                <td><%=dias.get("d26") == null ? "" : dias.get("d26").toString()%></td>
+                                <td><%=dias.get("d27") == null ? "" : dias.get("d27").toString()%></td>
+                                <td><%=dias.get("d28") == null ? "" : dias.get("d28").toString()%></td>
+                                <td><%=dias.get("d29") == null ? "" : dias.get("d29").toString()%></td>
+                                <td><%=dias.get("d30") == null ? "" : dias.get("d30").toString()%></td>
+                                <td><%=dias.get("d31") == null ? "" : dias.get("d31").toString()%></td>
                             </tr>
                             <%
                                 }
@@ -164,8 +164,8 @@
                 %>
                 <tr>
                     <td><%=contador%></td>
-                    <td><%=hash.get("CLV_DESCRIPCION") == null ? "" : hash.get("CLV_DESCRIPCION")%></td>
-                    <td><%=hash.get("CANTIDAD") == null ? "" : hash.get("CANTIDAD").toString()%></td>
+                    <td><%=hash.get("clv_descripcion") == null ? "" : hash.get("clv_descripcion")%></td>
+                    <td><%=hash.get("cantidad") == null ? "" : hash.get("cantidad").toString()%></td>
                 </tr>
                 <%
                         }
@@ -199,8 +199,8 @@
                 %>
                 <tr>
                     <td><%=contador%></td>
-                    <td><%=hash.get("DESCRIPCION") == null ? "" : hash.get("DESCRIPCION")%></td>
-                    <td><%=hash.get("CANTIDAD") == null ? "" : hash.get("CANTIDAD").toString()%></td>
+                    <td><%=hash.get("descripcion") == null ? "" : hash.get("descripcion")%></td>
+                    <td><%=hash.get("cantidad") == null ? "" : hash.get("cantidad").toString()%></td>
                 </tr>
                 <%
                         }
@@ -229,8 +229,8 @@
                 %>
                 <tr>
                     <td><%=contador%></td>
-                    <td><%=hash.get("PUN_DESCRIPCION") == null ? "" : hash.get("PUN_DESCRIPCION")%></td>
-                    <td><%=hash.get("CANTIDAD") == null ? "" : hash.get("CANTIDAD").toString()%></td>
+                    <td><%=hash.get("pun_descripcion") == null ? "" : hash.get("pun_descripcion")%></td>
+                    <td><%=hash.get("cantidad") == null ? "" : hash.get("cantidad").toString()%></td>
                 </tr>
                 <%
                         }
@@ -264,8 +264,8 @@
                 %>
                 <tr>
                     <td><%=contador%></td>
-                    <td><%=hash.get("GENERO") == null ? "" : hash.get("GENERO")%></td>
-                    <td><%=hash.get("CANTIDAD") == null ? "" : hash.get("CANTIDAD").toString()%></td>
+                    <td><%=hash.get("genero") == null ? "" : hash.get("genero")%></td>
+                    <td><%=hash.get("cantidad") == null ? "" : hash.get("cantidad").toString()%></td>
                 </tr>
                 <%
                         }
@@ -294,8 +294,8 @@
                 %>
                 <tr>
                     <td><%=contador%></td>
-                    <td><%=hash.get("DESCRIPCION") == null ? "" : hash.get("DESCRIPCION")%></td>
-                    <td><%=hash.get("CANTIDAD") == null ? "" : hash.get("CANTIDAD").toString()%></td>
+                    <td><%=hash.get("descripcion") == null ? "" : hash.get("descripcion")%></td>
+                    <td><%=hash.get("cantidad") == null ? "" : hash.get("cantidad").toString()%></td>
                 </tr>
                 <%
                         }
@@ -330,8 +330,8 @@
                 %>
                 <tr>
                     <td><%=contador%></td>
-                    <td><%=hash.get("DESCRIPCION") == null ? "" : hash.get("DESCRIPCION")%></td>
-                    <td><%=hash.get("CANTIDAD") == null ? "" : hash.get("CANTIDAD").toString()%></td>
+                    <td><%=hash.get("descripcion") == null ? "" : hash.get("descripcion")%></td>
+                    <td><%=hash.get("cantidad") == null ? "" : hash.get("cantidad").toString()%></td>
                 </tr>
                 <%
                         }
@@ -359,8 +359,8 @@
                 %>
                 <tr>
                     <td><%=contador%></td>
-                    <td><%=hash.get("DESCRIPCION") == null ? "" : hash.get("DESCRIPCION")%></td>
-                    <td><%=hash.get("CANTIDAD") == null ? "" : hash.get("CANTIDAD").toString()%></td>
+                    <td><%=hash.get("descripcion") == null ? "" : hash.get("descripcion")%></td>
+                    <td><%=hash.get("cantidad") == null ? "" : hash.get("cantidad").toString()%></td>
                 </tr>
                 <%
                         }

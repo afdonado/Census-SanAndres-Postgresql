@@ -12,25 +12,25 @@ $(function () {
             dataSrc: 'data'
         },
         columns: [
-            {data: 'TIPO_DOC', defaultContent: ''},
-            {data: 'DOCUMENTO', defaultContent: ''},
-            {data: 'NOMBRE_COMPLETO', defaultContent: ''},
-            {data: 'FECHA_NAC', defaultContent: ''},
-            {data: 'DIRECCION', defaultContent: ''},
-            {data: 'DEPARTAMENTO', defaultContent: ''},
-            {data: 'MUNICIPIO', defaultContent: ''},
-            {data: 'TELEFONO', defaultContent: ''},
-            {data: 'MAIL', defaultContent: ''},
+            {data: 'tipo_doc', defaultContent: ''},
+            {data: 'documento', defaultContent: ''},
+            {data: 'nombre_completo', defaultContent: ''},
+            {data: 'fecha_nac', defaultContent: ''},
+            {data: 'direccion', defaultContent: ''},
+            {data: 'departamento', defaultContent: ''},
+            {data: 'municipio', defaultContent: ''},
+            {data: 'telefono', defaultContent: ''},
+            {data: 'mail', defaultContent: ''},
             {
                 data: null,
                 render: function (data) {
-                    return `<button type="button" class="btn btn-info btnconsultar" data-id="${data.PER_ID}">Consultar</button>`;
+                    return `<button type="button" class="btn btn-info btnconsultar" data-id="${data.per_id}">Consultar</button>`;
                 }
             },
             {
                 data: null,
                 render: function (data) {
-                    return `<button type="button" class="btn btn-danger btneditar" data-id="${data.PER_ID}">Editar</button>`;
+                    return `<button type="button" class="btn btn-danger btneditar" data-id="${data.per_id}">Editar</button>`;
                 }
             }
         ],

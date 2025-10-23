@@ -13,28 +13,28 @@ $(function () {
             dataSrc: 'data'
         },
         columns: [
-            {data: 'NUMERO', defaultContent: ''},
-            {data: 'FECHA', defaultContent: ''},
-            {data: 'HORA', defaultContent: ''},
-            {data: 'PUNTO_ATENCION', defaultContent: ''},
-            {data: 'ESTADO', defaultContent: ''},
-            {data: 'USUARIO', defaultContent: ''},
-            {data: 'FECHA_PROCESO_FORMAT'.concat(' '.concat('FECHA_PROCESO_HORA')), defaultContent: ''},
-            {data: 'DOCUMENTO_PDF', defaultContent: ''},
-            {data: 'VEH_PLACA', defaultContent: ''},
-            {data: 'VEH_MOTOR', defaultContent: ''},
-            {data: 'VEH_CHASIS', defaultContent: ''},
-            {data: 'VEH_SERIE', defaultContent: ''},
+            {data: 'numero', defaultContent: ''},
+            {data: 'fecha', defaultContent: ''},
+            {data: 'hora', defaultContent: ''},
+            {data: 'punto_atencion', defaultContent: ''},
+            {data: 'estado', defaultContent: ''},
+            {data: 'usuario', defaultContent: ''},
+            {data: 'fecha_proceso_format'.concat(' '.concat('fecha_proceso_hora')), defaultContent: ''},
+            {data: 'documento_pdf', defaultContent: ''},
+            {data: 'veh_placa', defaultContent: ''},
+            {data: 'veh_motor', defaultContent: ''},
+            {data: 'veh_chasis', defaultContent: ''},
+            {data: 'veh_serie', defaultContent: ''},
             {
                 data: null,
                 render: function (data) {
-                    return `<button type="button" class="btn btn-info btnconsultar" data-id="${data.CEN_ID}">Consultar</button>`;
+                    return `<button type="button" class="btn btn-info btnconsultar" data-id="${data.cen_id}">Consultar</button>`;
                 }
             },
             {
                 data: null,
                 render: function (data) {
-                    return `<button type="button" class="btn btn-danger btneditar" data-id="${data.CEN_ID}">Editar</button>`;
+                    return `<button type="button" class="btn btn-danger btneditar" data-id="${data.cen_id}">Editar</button>`;
                 }
             }
         ],

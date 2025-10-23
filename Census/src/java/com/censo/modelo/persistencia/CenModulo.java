@@ -1,6 +1,7 @@
 
 package com.censo.modelo.persistencia;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @ToString
-public class CenModulo {
+public class CenModulo implements Serializable {
     
     private int id;
     private String nombre;

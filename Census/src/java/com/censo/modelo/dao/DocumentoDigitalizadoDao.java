@@ -24,8 +24,8 @@ public class DocumentoDigitalizadoDao {
     public int adicionarDocumentoDigitalizado(Connection conex, CenDocumentosDigitalizado cendocumentosdigitalizado) {
 
         String sql = "INSERT INTO CEN_DOCUMENTOS_DIGITALIZADOS (DDIG_NOMBRE,DDIG_RUTA,DDIG_TIPO,"
-                + "DDIG_REFERENCIA,DDIG_OBSERVACIONES,DDIG_FECHAPROCESO,USU_ID) VALUES (?,?,?,?,?,SYSDATE,?)";
-        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"DDIG_ID"})) {
+                + "DDIG_REFERENCIA,DDIG_OBSERVACIONES,DDIG_FECHAPROCESO,USU_ID) VALUES (?,?,?,?,?,now(),?)";
+        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"ddig_id"})) {
             pst.setString(1, cendocumentosdigitalizado.getNombre());
             pst.setString(2, cendocumentosdigitalizado.getRuta());
             pst.setInt(3, cendocumentosdigitalizado.getTipo());

@@ -11,22 +11,22 @@ $(function () {
             dataSrc: 'data'
         },
         columns: [
-            {data: 'VEH_PLACA', defaultContent: ''},
-            {data: 'VEH_MOTOR', defaultContent: ''},
-            {data: 'VEH_CHASIS', defaultContent: ''},
-            {data: 'VEH_SERIE', defaultContent: ''},
-            {data: 'MARCA', defaultContent: ''},
-            {data: 'LINEA', defaultContent: ''},
+            {data: 'veh_placa', defaultContent: ''},
+            {data: 'veh_motor', defaultContent: ''},
+            {data: 'veh_chasis', defaultContent: ''},
+            {data: 'veh_serie', defaultContent: ''},
+            {data: 'marca', defaultContent: ''},
+            {data: 'linea', defaultContent: ''},
             {
                 data: null,
                 render: function (data) {
-                    return `<button type="button" class="btn btn-info btnconsultar" data-id="${data.VEH_ID}">Consultar</button>`;
+                    return `<button type="button" class="btn btn-info btnconsultar" data-id="${data.veh_id}">Consultar</button>`;
                 }
             },
             {
                 data: null,
                 render: function (data) {
-                    return `<button type="button" class="btn btn-danger btneditar" data-id="${data.VEH_ID}">Editar</button>`;
+                    return `<button type="button" class="btn btn-danger btneditar" data-id="${data.veh_id}">Editar</button>`;
                 }
             }
         ],

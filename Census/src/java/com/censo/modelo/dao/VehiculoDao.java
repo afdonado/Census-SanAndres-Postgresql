@@ -19,8 +19,8 @@ public class VehiculoDao {
         String sql = "INSERT INTO CEN_VEHICULOS (VEH_PLACA,VEH_CHASIS,VEH_SERIE,VEH_MOTOR,VEH_CLASE,VEH_SERVICIO,"
                 + "COL_ID,VEH_MODELO,LIN_ID,VEH_LICTRANSITO,VEH_RUNT,VEH_SOAT,VEH_FECVENSOAT,VEH_TECNOMEC,VEH_FECVENTECNO,PAI_ID,MUN_ID,"
                 + "VEH_TIPODOCUMENTOIMP,VEH_DOCUMENTOIMP,VEH_FECHAIMP,PAI_ID_ORIGEN,VEH_TIPOUSO,VEH_TRANSFORMADO,"
-                + "USU_ID,EST_ID,VEH_FECHAPROCESO,VEH_FECMATRI) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,sysdate,?)";
-        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"VEH_ID"})) {
+                + "USU_ID,EST_ID,VEH_FECHAPROCESO,VEH_FECMATRI) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),?)";
+        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"veh_id"})) {
             pst.setString(1, cenvehiculo.getPlaca_veh());
             pst.setString(2, cenvehiculo.getChasis());
             pst.setString(3, cenvehiculo.getSerie());

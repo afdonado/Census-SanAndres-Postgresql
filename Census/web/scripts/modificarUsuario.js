@@ -18,18 +18,18 @@ $(function () {
             method: 'get',
             data: {id: id},
             success: function (response) {
-                var tipoDocumentoId = response.usuario.TIPO_DOCUMENTO_ID;
-                $('#txtdocumento').val(response.usuario.NUMERO_DOCUMENTO);
-                $('#txtnombre').val(response.usuario.NOMBRE_USUARIO);
+                var tipoDocumentoId = response.usuario.tipo_documento_id;
+                $('#txtdocumento').val(response.usuario.numero_documento);
+                $('#txtnombre').val(response.usuario.nombre_usuario);
 
-                var perfilId = response.usuario.PEF_ID;
-                $('#txtfechainicial').val(response.usuario.FECHA_INICIO);
+                var perfilId = response.usuario.pef_id;
+                $('#txtfechainicial').val(response.usuario.fecha_inicio);
 
-                var estadoId = response.usuario.ESTADO_ID;
+                var estadoId = response.usuario.estado_id;
 
-                $('#idusuario').val(response.usuario.USU_ID);
+                $('#idusuario').val(response.usuario.usu_id);
 
-                $('.restaurar').attr('data-id', response.usuario.USU_ID);
+                $('.restaurar').attr('data-id', response.usuario.usu_id);
 
                 $.ajax({
                     url: '../../cargarPerfiles',

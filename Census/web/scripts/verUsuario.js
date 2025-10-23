@@ -21,16 +21,16 @@ $(function () {
 
                 if (response.status === "success") {
 
-                    $('#txttipodocumento').val(response.usuario.TIPO_DOCUMENTO);
-                    $('#txtdocumento').val(response.usuario.NUMERO_DOCUMENTO);
-                    $('#txtnombre').val(response.usuario.NOMBRE_USUARIO);
-                    $('#txtperfil').val(response.usuario.PERFIL);
+                    $('#txttipodocumento').val(response.usuario.tipo_documento);
+                    $('#txtdocumento').val(response.usuario.numero_documento);
+                    $('#txtnombre').val(response.usuario.nombre_usuario);
+                    $('#txtperfil').val(response.usuario.perfil);
 
-                    $('#txtfechainicial').val(response.usuario.FECHA_INICIO);
-                    $('#txtfechafinal').val(response.usuario.FECHA_FINAL);
-                    $('#txtestado').val(response.usuario.ESTADO);
+                    $('#txtfechainicial').val(response.usuario.fecha_inicio);
+                    $('#txtfechafinal').val(response.usuario.fecha_final);
+                    $('#txtestado').val(response.usuario.estado);
                     
-                    $(".btneditar").attr("data-id", response.usuario.USU_ID);
+                    $(".btneditar").attr("data-id", response.usuario.usu_id);
                     
                 } else if (response.status === "fail") {
                     alert(response.message);

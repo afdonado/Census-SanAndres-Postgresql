@@ -44,9 +44,9 @@ public class CargarEstadisticas extends HttpServlet {
                         if (!lista.isEmpty()) {
                             for (HashMap hash : lista) {
                                 JSONObject detalleJson = new JSONObject();
-                                detalleJson.put("CLV_DESCRIPCION", hash.get("CLV_DESCRIPCION").toString());
-                                detalleJson.put("CANTIDAD", hash.get("CANTIDAD").toString());
-                                detalleJson.put("CANTIDAD_TOTAL", hash.get("CANTIDAD_TOTAL").toString());
+                                detalleJson.put("clv_descripcion", hash.get("clv_descripcion").toString());
+                                detalleJson.put("cantidad", hash.get("cantidad").toString());
+                                detalleJson.put("cantidad_total", hash.get("cantidad_total").toString());
                                 jsonArray.put(detalleJson);
                             }
                         }
@@ -59,9 +59,9 @@ public class CargarEstadisticas extends HttpServlet {
                         if (!lista.isEmpty()) {
                             for (HashMap hash : lista) {
                                 JSONObject detalleJson = new JSONObject();
-                                detalleJson.put("PUN_DESCRIPCION", hash.get("PUN_DESCRIPCION").toString());
-                                detalleJson.put("CANTIDAD", hash.get("CANTIDAD").toString());
-                                detalleJson.put("CANTIDAD_TOTAL", hash.get("CANTIDAD_TOTAL").toString());
+                                detalleJson.put("pun_descripcion", hash.get("pun_descripcion").toString());
+                                detalleJson.put("cantidad", hash.get("cantidad").toString());
+                                detalleJson.put("cantidad_total", hash.get("cantidad_total").toString());
                                 jsonArray.put(detalleJson);
                             }
                         }
@@ -74,9 +74,9 @@ public class CargarEstadisticas extends HttpServlet {
                         if (!lista.isEmpty()) {
                             for (HashMap hash : lista) {
                                 JSONObject detalleJson = new JSONObject();
-                                detalleJson.put("GENERO", hash.get("GENERO").toString());
-                                detalleJson.put("PORCENTAJE", hash.get("PORCENTAJE").toString());
-                                detalleJson.put("CANTIDAD_TOTAL", hash.get("CANTIDAD_TOTAL").toString());
+                                detalleJson.put("genero", hash.get("genero").toString());
+                                detalleJson.put("porcentaje", hash.get("porcentaje").toString());
+                                detalleJson.put("cantidad_total", hash.get("cantidad_total").toString());
                                 jsonArray.put(detalleJson);
                             }
                         }
@@ -89,10 +89,10 @@ public class CargarEstadisticas extends HttpServlet {
                         if (!lista.isEmpty()) {
                             for (HashMap hash : lista) {
                                 JSONObject detalleJson = new JSONObject();
-                                detalleJson.put("DESCRIPCION", hash.get("DESCRIPCION").toString());
-                                detalleJson.put("PORCENTAJE", hash.get("PORCENTAJE").toString());
-                                detalleJson.put("CANTIDAD", hash.get("CANTIDAD").toString());
-                                detalleJson.put("CANTIDAD_TOTAL", hash.get("CANTIDAD_TOTAL").toString());
+                                detalleJson.put("descripcion", hash.get("descripcion").toString());
+                                detalleJson.put("porcentaje", hash.get("porcentaje").toString());
+                                detalleJson.put("cantidad", hash.get("cantidad").toString());
+                                detalleJson.put("cantidad_total", hash.get("cantidad_total").toString());
                                 jsonArray.put(detalleJson);
                             }
                         }
@@ -105,10 +105,10 @@ public class CargarEstadisticas extends HttpServlet {
                         if (!lista.isEmpty()) {
                             for (HashMap hash : lista) {
                                 JSONObject detalleJson = new JSONObject();
-                                detalleJson.put("DESCRIPCION", hash.get("DESCRIPCION").toString());
-                                detalleJson.put("PORCENTAJE", hash.get("PORCENTAJE").toString());
-                                detalleJson.put("CANTIDAD", hash.get("CANTIDAD").toString());
-                                detalleJson.put("CANTIDAD_TOTAL", hash.get("CANTIDAD_TOTAL").toString());
+                                detalleJson.put("descripcion", hash.get("descripcion").toString());
+                                detalleJson.put("porcentaje", hash.get("porcentaje").toString());
+                                detalleJson.put("cantidad", hash.get("cantidad").toString());
+                                detalleJson.put("cantidad_total", hash.get("cantidad_total").toString());
                                 jsonArray.put(detalleJson);
                             }
                         }
@@ -120,9 +120,9 @@ public class CargarEstadisticas extends HttpServlet {
                         if (!lista.isEmpty()) {
                             for (HashMap hash : lista) {
                                 JSONObject detalleJson = new JSONObject();
-                                detalleJson.put("DESCRIPCION", hash.get("DESCRIPCION").toString());
-                                detalleJson.put("CANTIDAD", hash.get("CANTIDAD").toString());
-                                detalleJson.put("CANTIDAD_TOTAL", hash.get("CANTIDAD_TOTAL").toString());
+                                detalleJson.put("descripcion", hash.get("descripcion").toString());
+                                detalleJson.put("cantidad", hash.get("cantidad").toString());
+                                detalleJson.put("cantidad_total", hash.get("cantidad_total").toString());
                                 jsonArray.put(detalleJson);
                             }
                         }
@@ -134,9 +134,9 @@ public class CargarEstadisticas extends HttpServlet {
                         if (!lista.isEmpty()) {
                             for (HashMap hash : lista) {
                                 JSONObject detalleJson = new JSONObject();
-                                detalleJson.put("DESCRIPCION", hash.get("DESCRIPCION").toString());
-                                detalleJson.put("CANTIDAD", hash.get("CANTIDAD").toString());
-                                detalleJson.put("CANTIDAD_TOTAL", hash.get("CANTIDAD_TOTAL").toString());
+                                detalleJson.put("descripcion", hash.get("descripcion").toString());
+                                detalleJson.put("cantidad", hash.get("cantidad").toString());
+                                detalleJson.put("cantidad_total", hash.get("cantidad_total").toString());
                                 jsonArray.put(detalleJson);
                             }
                         }

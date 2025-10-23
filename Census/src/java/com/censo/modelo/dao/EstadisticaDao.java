@@ -15,14 +15,14 @@ public class EstadisticaDao {
 
         List<HashMap> listaDatos = new LinkedList<>();
 
-        String sql = "SELECT CV.CLV_ID CLV_ID, CV.CLV_DESCRIPCION CLV_DESCRIPCION, COUNT(V.VEH_CLASE) CANTIDAD,"
-                + "(SELECT COUNT(C.CEN_ID) FROM CEN_CENSOS C WHERE C.EST_ID=1 ) CANTIDAD_TOTAL "
-                + "FROM CEN_CENSOS CC "
-                + "INNER JOIN CEN_VEHICULOS V ON V.VEH_ID=CC.VEH_ID "
-                + "INNER JOIN CEN_CLASES_VEHICULO CV ON CV.CLV_ID=V.VEH_CLASE "
-                + "WHERE CC.EST_ID=1 "
-                + "GROUP BY CV.CLV_ID, CV.CLV_DESCRIPCION "
-                + "ORDER BY CV.CLV_DESCRIPCION";
+        String sql = "select cv.clv_id clv_id, cv.clv_descripcion clv_descripcion, count(v.veh_clase) cantidad, "
+                + "(select count(c.cen_id) from cen_censos c where c.est_id=1 ) cantidad_total "
+                + "from cen_censos cc "
+                + "inner join cen_vehiculos v on v.veh_id=cc.veh_id "
+                + "inner join cen_clases_vehiculo cv on cv.clv_id=v.veh_clase "
+                + "where cc.est_id=1 "
+                + "group by cv.clv_id, cv.clv_descripcion "
+                + "order by cv.clv_descripcion";
 
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
 
@@ -44,13 +44,13 @@ public class EstadisticaDao {
 
         List<HashMap> listaDatos = new LinkedList<>();
 
-        String sql = "SELECT P.PUN_ID PUN_ID, P.PUN_NOMBRE PUN_DESCRIPCION, COUNT(CC.PUN_ID) CANTIDAD, "
-                + "(SELECT COUNT(C.PUN_ID) FROM CEN_CENSOS C WHERE C.EST_ID=1 AND C.PUN_ID IN(SELECT CP.PUN_ID FROM CEN_PUNTOS_ATENCION CP )) CANTIDAD_TOTAL "
-                + "FROM CEN_CENSOS CC "
-                + "INNER JOIN CEN_PUNTOS_ATENCION P ON P.PUN_ID=CC.PUN_ID "
-                + "WHERE CC.EST_ID=1 "
-                + "GROUP BY P.PUN_ID, P.PUN_NOMBRE "
-                + "ORDER BY P.PUN_NOMBRE";
+        String sql = "select p.pun_id pun_id, p.pun_nombre pun_descripcion, count(cc.pun_id) cantidad, "
+                + "(select count(c.pun_id) from cen_censos c where c.est_id=1 and c.pun_id in(select cp.pun_id from cen_puntos_atencion cp )) cantidad_total "
+                + "from cen_censos cc "
+                + "inner join cen_puntos_atencion p on p.pun_id=cc.pun_id "
+                + "where cc.est_id=1 "
+                + "group by p.pun_id, p.pun_nombre "
+                + "order by p.pun_nombre";
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
 
             while (rst.next()) {
@@ -70,20 +70,20 @@ public class EstadisticaDao {
     public List ListarCantidadPersonasCensadasGenero(Connection conex) throws SQLException {
 
         List<HashMap> listaDatos = new LinkedList<>();
-        String sql = "SELECT P.PER_GENERO, G.GEN_DESCRIPCION GENERO, COUNT(DISTINCT P.PER_ID) CANTIDAD, "
-                + "ROUND(((COUNT(DISTINCT P.PER_ID)/("
-                + "SELECT COUNT( DISTINCT CP.PER_ID) FROM CEN_PERSONAS CP "
-                + "INNER JOIN CEN_PERSONA_VEHICULO CPV ON CPV.PER_ID=CP.PER_ID AND CPV.EST_ID = 1 "
-                + "INNER JOIN CEN_CENSOS CC ON CC.EST_ID=1 AND CC.VEH_ID=CPV.VEH_ID))*100)) PORCENTAJE, "
-                + "(SELECT COUNT( DISTINCT CP.PER_ID) FROM CEN_PERSONAS CP WHERE CP.PER_ID IN("
-                + "SELECT CPV.PER_ID FROM CEN_PERSONA_VEHICULO CPV "
-                + "INNER JOIN CEN_CENSOS CC ON CC.EST_ID=1 AND CC.VEH_ID=CPV.VEH_ID "
-                + "WHERE CPV.EST_ID = 1)) CANTIDAD_TOTAL "
-                + "FROM CEN_PERSONAS P "
-                + "INNER JOIN CEN_PERSONA_VEHICULO PV ON PV.PER_ID=P.PER_ID AND PV.EST_ID = 1"
-                + "INNER JOIN CEN_CENSOS C ON C.EST_ID=1 AND C.VEH_ID=PV.VEH_ID "
-                + "INNER JOIN CEN_GENEROS G ON G.GEN_ID=P.PER_GENERO "
-                + "GROUP BY P.PER_GENERO,G.GEN_DESCRIPCION";
+        String sql = "select p.per_genero, g.gen_descripcion genero, count(distinct p.per_id) cantidad, "
+                + "round(((count(distinct p.per_id)/("
+                + "select count( distinct cp.per_id) from cen_personas cp "
+                + "inner join cen_persona_vehiculo cpv on cpv.per_id=cp.per_id and cpv.est_id = 1 "
+                + "inner join cen_censos cc on cc.est_id=1 and cc.veh_id=cpv.veh_id))*100)) porcentaje, "
+                + "(select count( distinct cp.per_id) from cen_personas cp where cp.per_id in("
+                + "select cpv.per_id from cen_persona_vehiculo cpv "
+                + "inner join cen_censos cc on cc.est_id=1 and cc.veh_id=cpv.veh_id "
+                + "where cpv.est_id = 1)) cantidad_total "
+                + "from cen_personas p "
+                + "inner join cen_persona_vehiculo pv on pv.per_id=p.per_id and pv.est_id = 1"
+                + "inner join cen_censos c on c.est_id=1 and c.veh_id=pv.veh_id "
+                + "inner join cen_generos g on g.gen_id=p.per_genero "
+                + "group by p.per_genero,g.gen_descripcion";
 
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
 
@@ -104,35 +104,57 @@ public class EstadisticaDao {
     public List ListarCantidadPersonasCensadasLicencia(Connection conex) throws SQLException {
 
         List<HashMap> listaDatos = new LinkedList<>();
-        String sql = "SELECT 'CON LICENCIA' DESCRIPCION, \n"
-                + "ROUND(((COUNT(DISTINCT CP.PER_ID)/(\n"
-                + "SELECT COUNT( DISTINCT CP2.PER_ID) FROM CEN_PERSONAS CP2 \n"
-                + "INNER JOIN CEN_PERSONA_VEHICULO CPV2 ON CPV2.PER_ID=CP2.PER_ID\n"
-                + "INNER JOIN CEN_CENSOS CC2 ON CC2.EST_ID=1 AND CC2.VEH_ID=CPV2.VEH_ID ))*100)) PORCENTAJE, \n"
-                + "COUNT(0) CANTIDAD, (\n"
-                + "SELECT COUNT(0) FROM CEN_PERSONAS P \n"
-                + "INNER JOIN CEN_PERSONA_VEHICULO PV ON PV.PER_ID=P.PER_ID AND PV.EST_ID = 1\n"
-                + "INNER JOIN CEN_CENSOS C ON C.VEH_ID=PV.VEH_ID AND C.EST_ID=1\n"
-                + ") CANTIDAD_TOTAL\n"
-                + "FROM CEN_PERSONAS CP \n"
-                + "INNER JOIN CEN_PERSONA_VEHICULO CPV ON CPV.PER_ID=CP.PER_ID AND CPV.EST_ID = 1\n"
-                + "INNER JOIN CEN_CENSOS CC ON CC.VEH_ID=CPV.VEH_ID AND CC.EST_ID=1 \n"
-                + "WHERE CP.PER_LICONDUCCION IS NULL group by 'CON LICENCIA', 0\n"
-                + "UNION \n"
-                + "SELECT 'SIN LICENCIA' DESCRIPCION, \n"
-                + "ROUND(((COUNT(DISTINCT CP.PER_ID)/(\n"
-                + "SELECT COUNT( DISTINCT CP2.PER_ID) \n"
-                + "FROM CEN_PERSONAS CP2 \n"
-                + "INNER JOIN CEN_PERSONA_VEHICULO CPV2 ON CPV2.PER_ID=CP2.PER_ID AND CPV2.EST_ID=1\n"
-                + "INNER JOIN CEN_CENSOS CC2 ON CC2.EST_ID=1 AND CC2.VEH_ID=CPV2.VEH_ID))*100)) PORCENTAJE,\n"
-                + "COUNT(0) CANTIDAD, (\n"
-                + "SELECT COUNT(0) FROM CEN_PERSONAS P \n"
-                + "INNER JOIN CEN_PERSONA_VEHICULO PV ON PV.PER_ID=P.PER_ID AND PV.EST_ID = 1\n"
-                + "INNER JOIN CEN_CENSOS C ON C.VEH_ID=PV.VEH_ID AND C.EST_ID=1) CANTIDAD_TOTAL \n"
-                + "FROM CEN_PERSONAS CP \n"
-                + "INNER JOIN CEN_PERSONA_VEHICULO PV ON PV.PER_ID=CP.PER_ID AND PV.EST_ID = 1\n"
-                + "INNER JOIN CEN_CENSOS CC ON CC.VEH_ID=PV.VEH_ID AND CC.EST_ID=1 \n"
-                + "WHERE CP.PER_LICONDUCCION IS NOT NULL group by 'SIN LICENCIA', 0";
+        String sql = "SELECT "
+                + "    'CON LICENCIA' AS descripcion, "
+                + "    ROUND( "
+                + "        ( "
+                + "            COUNT(DISTINCT cp.per_id)::numeric / "
+                + "            ( "
+                + "                SELECT COUNT(DISTINCT cp2.per_id) "
+                + "                FROM cen_personas cp2 "
+                + "                INNER JOIN cen_persona_vehiculo cpv2 ON cpv2.per_id = cp2.per_id "
+                + "                INNER JOIN cen_censos cc2 ON cc2.est_id = 1 AND cc2.veh_id = cpv2.veh_id "
+                + "            ) * 100 "
+                + "        ), 2 "
+                + "    ) AS porcentaje, "
+                + "    COUNT(*) AS cantidad, "
+                + "    ( "
+                + "        SELECT COUNT(*) "
+                + "        FROM cen_personas p "
+                + "        INNER JOIN cen_persona_vehiculo pv ON pv.per_id = p.per_id AND pv.est_id = 1 "
+                + "        INNER JOIN cen_censos c ON c.veh_id = pv.veh_id AND c.est_id = 1 "
+                + "    ) AS cantidad_total "
+                + "FROM cen_personas cp "
+                + "INNER JOIN cen_persona_vehiculo cpv ON cpv.per_id = cp.per_id AND cpv.est_id = 1 "
+                + "INNER JOIN cen_censos cc ON cc.veh_id = cpv.veh_id AND cc.est_id = 1 "
+                + "WHERE cp.per_liconduccion IS NULL "
+                + "GROUP BY descripcion "
+                + "UNION ALL "
+                + "SELECT "
+                + "    'SIN LICENCIA' AS descripcion, "
+                + "    ROUND("
+                + "        ("
+                + "            COUNT(DISTINCT cp.per_id)::numeric / "
+                + "            ( "
+                + "                SELECT COUNT(DISTINCT cp2.per_id) "
+                + "                FROM cen_personas cp2 "
+                + "                INNER JOIN cen_persona_vehiculo cpv2 ON cpv2.per_id = cp2.per_id AND cpv2.est_id = 1 "
+                + "                INNER JOIN cen_censos cc2 ON cc2.est_id = 1 AND cc2.veh_id = cpv2.veh_id "
+                + "            ) * 100 "
+                + "        ), 2 "
+                + "    ) AS porcentaje, "
+                + "    COUNT(*) AS cantidad, "
+                + "    ("
+                + "        SELECT COUNT(*) "
+                + "        FROM cen_personas p "
+                + "        INNER JOIN cen_persona_vehiculo pv ON pv.per_id = p.per_id AND pv.est_id = 1 "
+                + "        INNER JOIN cen_censos c ON c.veh_id = pv.veh_id AND c.est_id = 1 "
+                + "    ) AS cantidad_total "
+                + "FROM cen_personas cp "
+                + "INNER JOIN cen_persona_vehiculo pv ON pv.per_id = cp.per_id AND pv.est_id = 1 "
+                + "INNER JOIN cen_censos cc ON cc.veh_id = pv.veh_id AND cc.est_id = 1 "
+                + "WHERE cp.per_liconduccion IS NOT NULL "
+                + "GROUP BY descripcion";
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
 
             while (rst.next()) {
@@ -153,27 +175,41 @@ public class EstadisticaDao {
 
         List<HashMap> listaDatos = new LinkedList<>();
 
-        String sql = "SELECT DESCRIPCION, PORCENTAJE, CANTIDAD, (SELECT COUNT(C.VEH_ID) FROM CEN_CENSOS C WHERE C.EST_ID=1) CANTIDAD_TOTAL FROM (\n"
-                + "SELECT 'CON PLACA DE 6 DIGITOS' DESCRIPCION, ROUND((COUNT(V.VEH_ID)/(SELECT COUNT(C.VEH_ID) FROM CEN_CENSOS C WHERE C.EST_ID=1))*100) PORCENTAJE,\n"
-                + "COUNT(V.VEH_ID) CANTIDAD, 0 CANTIDAD_TOTAL \n"
-                + "FROM CEN_VEHICULOS V \n"
-                + "WHERE V.VEH_PLACA IS NOT NULL AND LENGTH(V.VEH_PLACA) = 6 \n"
-                + "AND V.VEH_ID IN(SELECT C.VEH_ID FROM CEN_CENSOS C WHERE C.EST_ID=1 )\n"
-                + "group by 'CON PLACA DE 6 DIGITOS', 0\n"
-                + "UNION \n"
-                + "SELECT 'CON PLACA DIFERENTE A 6 DIGITOS' DESCRIPCION, ROUND((COUNT(V.VEH_ID)/(SELECT COUNT(C.VEH_ID) FROM CEN_CENSOS C WHERE C.EST_ID=1))*100) PORCENTAJE, \n"
-                + "COUNT(V.VEH_ID) CANTIDAD, 0 CANTIDAD_TOTAL \n"
-                + "FROM CEN_VEHICULOS V \n"
-                + "WHERE V.VEH_PLACA IS NOT NULL AND LENGTH(V.VEH_PLACA) != 6 \n"
-                + "AND V.VEH_ID IN(SELECT C.VEH_ID FROM CEN_CENSOS C WHERE C.EST_ID=1 ) \n"
-                + "group by 'CON PLACA DIFERENTE A 6 DIGITOS', 0 \n"
-                + "UNION \n"
-                + "SELECT 'SIN PLACA' DESCRIPCION, ROUND((COUNT(V.VEH_ID)/(SELECT COUNT(C.VEH_ID) FROM CEN_CENSOS C WHERE C.EST_ID=1))*100) PORCENTAJE, \n"
-                + "COUNT(V.VEH_ID) CANTIDAD, 0 CANTIDAD_TOTAL \n"
-                + "FROM CEN_VEHICULOS V \n"
-                + "WHERE V.VEH_PLACA IS NULL \n"
-                + "AND V.VEH_ID IN(SELECT C.VEH_ID FROM CEN_CENSOS C WHERE C.EST_ID=1 )\n"
-                + "group by 'SIN PLACA', 0)";
+        String sql = "SELECT "
+                + "    descripcion, "
+                + "    porcentaje, "
+                + "    cantidad, "
+                + "    (SELECT COUNT(c.veh_id) FROM cen_censos c WHERE c.est_id = 1) AS cantidad_total "
+                + "FROM ( "
+                + "    SELECT "
+                + "        'CON PLACA DE 6 DIGITOS' AS descripcion, "
+                + "        ROUND((COUNT(v.veh_id)::numeric / (SELECT COUNT(c.veh_id) FROM cen_censos c WHERE c.est_id = 1)) * 100, 2) AS porcentaje, "
+                + "        COUNT(v.veh_id) AS cantidad "
+                + "    FROM cen_vehiculos v "
+                + "    WHERE v.veh_placa IS NOT NULL "
+                + "      AND LENGTH(v.veh_placa) = 6 "
+                + "      AND v.veh_id IN (SELECT c.veh_id FROM cen_censos c WHERE c.est_id = 1) "
+                + "    GROUP BY descripcion "
+                + "    UNION ALL "
+                + "    SELECT "
+                + "        'CON PLACA DIFERENTE A 6 DIGITOS' AS descripcion, "
+                + "        ROUND((COUNT(v.veh_id)::numeric / (SELECT COUNT(c.veh_id) FROM cen_censos c WHERE c.est_id = 1)) * 100, 2) AS porcentaje, "
+                + "        COUNT(v.veh_id) AS cantidad "
+                + "    FROM cen_vehiculos v "
+                + "    WHERE v.veh_placa IS NOT NULL "
+                + "      AND LENGTH(v.veh_placa) <> 6 "
+                + "      AND v.veh_id IN (SELECT c.veh_id FROM cen_censos c WHERE c.est_id = 1) "
+                + "    GROUP BY descripcion "
+                + "    UNION ALL "
+                + "    SELECT "
+                + "        'SIN PLACA' AS descripcion, "
+                + "        ROUND((COUNT(v.veh_id)::numeric / (SELECT COUNT(c.veh_id) FROM cen_censos c WHERE c.est_id = 1)) * 100, 2) AS porcentaje, "
+                + "        COUNT(v.veh_id) AS cantidad "
+                + "    FROM cen_vehiculos v "
+                + "    WHERE v.veh_placa IS NULL "
+                + "      AND v.veh_id IN (SELECT c.veh_id FROM cen_censos c WHERE c.est_id = 1) "
+                + "    GROUP BY descripcion "
+                + ") AS resultados";
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
 
             while (rst.next()) {
@@ -194,11 +230,27 @@ public class EstadisticaDao {
 
         List<HashMap> listaDatos = new LinkedList<>();
 
-        String sql = "SELECT DECODE(V.VEH_SOAT,'S','Si','N','No') DESCRIPCION, COUNT(DISTINCT V.VEH_ID) CANTIDAD, \n"
-                + "(SELECT COUNT( DISTINCT CV.VEH_ID) FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN(SELECT CC.VEH_ID FROM CEN_CENSOS CC WHERE CC.EST_ID=1 )) CANTIDAD_TOTAL \n"
-                + "FROM CEN_VEHICULOS V \n"
-                + "INNER JOIN CEN_CENSOS C ON C.EST_ID=1 AND C.VEH_ID=V.VEH_ID \n"
-                + "GROUP BY V.VEH_SOAT";
+        String sql = "SELECT "
+                + "    CASE "
+                + "        WHEN v.veh_soat = 'S' THEN 'SI' "
+                + "        WHEN v.veh_soat = 'N' THEN 'NO' "
+                + "        ELSE 'DESCONOCIDO' "
+                + "    END AS descripcion, "
+                + "    COUNT(DISTINCT v.veh_id) AS cantidad, "
+                + "    ( "
+                + "        SELECT COUNT(DISTINCT cv.veh_id) "
+                + "        FROM cen_vehiculos cv "
+                + "        WHERE cv.veh_id IN ( "
+                + "            SELECT cc.veh_id "
+                + "            FROM cen_censos cc "
+                + "            WHERE cc.est_id = 1 "
+                + "        ) "
+                + "    ) AS cantidad_total "
+                + "FROM cen_vehiculos v "
+                + "INNER JOIN cen_censos c "
+                + "    ON c.veh_id = v.veh_id "
+                + "   AND c.est_id = 1 "
+                + "GROUP BY v.veh_soat";
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
 
             while (rst.next()) {
@@ -219,11 +271,27 @@ public class EstadisticaDao {
 
         List<HashMap> listaDatos = new LinkedList<>();
 
-        String sql = "SELECT DECODE(V.VEH_TECNOMEC,'S','Si','N','No') DESCRIPCION, COUNT(DISTINCT V.VEH_ID) CANTIDAD, \n"
-                + "(SELECT COUNT( DISTINCT CV.VEH_ID) FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN(SELECT CC.VEH_ID FROM CEN_CENSOS CC WHERE CC.EST_ID=1 )) CANTIDAD_TOTAL \n"
-                + "FROM CEN_VEHICULOS V \n"
-                + "INNER JOIN CEN_CENSOS C ON C.EST_ID=1 AND C.VEH_ID=V.VEH_ID \n"
-                + "GROUP BY V.VEH_TECNOMEC";
+        String sql = "SELECT "
+                + "    CASE "
+                + "        WHEN v.veh_tecnomec = 'S' THEN 'SI' "
+                + "        WHEN v.veh_tecnomec = 'N' THEN 'NO' "
+                + "        ELSE 'DESCONOCIDO' "
+                + "    END AS descripcion, "
+                + "    COUNT(DISTINCT v.veh_id) AS cantidad, "
+                + "    ( "
+                + "        SELECT COUNT(DISTINCT cv.veh_id) "
+                + "        FROM cen_vehiculos cv "
+                + "        WHERE cv.veh_id IN ( "
+                + "            SELECT cc.veh_id "
+                + "            FROM cen_censos cc "
+                + "            WHERE cc.est_id = 1 "
+                + "        ) "
+                + "    ) AS cantidad_total "
+                + "FROM cen_vehiculos v "
+                + "INNER JOIN cen_censos c "
+                + "    ON c.veh_id = v.veh_id "
+                + "   AND c.est_id = 1 "
+                + "GROUP BY v.veh_tecnomec;";
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
 
             while (rst.next()) {
@@ -498,12 +566,20 @@ public class EstadisticaDao {
 
         List<HashMap> listaDatos = new LinkedList<>();
 
-        String sql = "SELECT DECODE(V.VEH_SOAT,'S','Si','N','No') DESCRIPCION, COUNT(DISTINCT V.VEH_ID) CANTIDAD, \n"
-                + "(SELECT COUNT( DISTINCT CV.VEH_ID) FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN(SELECT CC.VEH_ID FROM CEN_CENSOS CC WHERE CC.PUN_ID NOT IN(4) AND CC.EST_ID=1 )) CANTIDAD_TOTAL \n"
-                + "FROM CEN_VEHICULOS V \n"
-                + "INNER JOIN CEN_CENSOS C ON C.PUN_ID NOT IN(4) AND C.EST_ID=1  AND C.VEH_ID=V.VEH_ID \n"
+        String sql = "SELECT CASE WHEN v.veh_soat = 'S' THEN 'Si' "
+                + "WHEN v.veh_soat = 'N' THEN 'No' "
+                + "ELSE 'Desconocido' END AS DESCRIPCION, "
+                + "COUNT(DISTINCT V.VEH_ID) AS CANTIDAD, "
+                + "(SELECT COUNT( DISTINCT CV.VEH_ID) "
+                + "FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN("
+                + "SELECT CC.VEH_ID FROM CEN_CENSOS CC "
+                + "WHERE CC.PUN_ID NOT IN(4) AND CC.EST_ID=1 )) AS CANTIDAD_TOTAL "
+                + "FROM CEN_VEHICULOS V "
+                + "INNER JOIN CEN_CENSOS C ON C.PUN_ID NOT IN(4) "
+                + "AND C.EST_ID=1 AND C.VEH_ID=V.VEH_ID "
                 + "GROUP BY V.VEH_SOAT";
-        try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
+        try (PreparedStatement pst = conex.prepareStatement(sql); 
+                ResultSet rst = pst.executeQuery()) {
 
             while (rst.next()) {
                 ResultSetMetaData rsmd = rst.getMetaData();
@@ -523,10 +599,17 @@ public class EstadisticaDao {
 
         List<HashMap> listaDatos = new LinkedList<>();
 
-        String sql = "SELECT DECODE(V.VEH_SOAT,'S','Si','N','No') DESCRIPCION, COUNT(DISTINCT V.VEH_ID) CANTIDAD, \n"
-                + "(SELECT COUNT( DISTINCT CV.VEH_ID) FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN(SELECT CC.VEH_ID FROM CEN_CENSOS CC WHERE CC.PUN_ID IN(4) AND CC.EST_ID=1 )) CANTIDAD_TOTAL \n"
-                + "FROM CEN_VEHICULOS V \n"
-                + "INNER JOIN CEN_CENSOS C ON C.PUN_ID IN(4) AND C.EST_ID=1 AND C.VEH_ID=V.VEH_ID \n"
+        String sql = "SELECT CASE WHEN v.veh_soat = 'S' THEN 'Si' "
+                + "WHEN v.veh_soat = 'N' THEN 'No' "
+                + "ELSE 'Desconocido' END AS DESCRIPCION, "
+                + "COUNT(DISTINCT V.VEH_ID) AS CANTIDAD, "
+                + "(SELECT COUNT( DISTINCT CV.VEH_ID) "
+                + "FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN("
+                + "SELECT CC.VEH_ID FROM CEN_CENSOS CC "
+                + "WHERE CC.PUN_ID IN(4) AND CC.EST_ID=1 )) AS CANTIDAD_TOTAL "
+                + "FROM CEN_VEHICULOS V "
+                + "INNER JOIN CEN_CENSOS C ON C.PUN_ID IN(4) "
+                + "AND C.EST_ID=1 AND C.VEH_ID=V.VEH_ID "
                 + "GROUP BY V.VEH_SOAT";
 
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
@@ -549,10 +632,17 @@ public class EstadisticaDao {
 
         List<HashMap> listaDatos = new LinkedList<>();
 
-        String sql = "SELECT DECODE(V.VEH_TECNOMEC,'S','Si','N','No') DESCRIPCION, COUNT(DISTINCT V.VEH_ID) CANTIDAD, \n"
-                + "(SELECT COUNT( DISTINCT CV.VEH_ID) FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN(SELECT CC.VEH_ID FROM CEN_CENSOS CC WHERE CC.PUN_ID NOT IN(4) AND CC.EST_ID=1 )) CANTIDAD_TOTAL \n"
-                + "FROM CEN_VEHICULOS V \n"
-                + "INNER JOIN CEN_CENSOS C ON C.PUN_ID NOT IN(4) AND C.EST_ID=1  AND C.VEH_ID=V.VEH_ID \n"
+        String sql = "SELECT CASE WHEN v.veh_tecnomec = 'S' THEN 'Si' "
+                + "WHEN v.veh_tecnomec = 'N' THEN 'No' "
+                + "ELSE 'Desconocido' END AS DESCRIPCION, "
+                + "COUNT(DISTINCT V.VEH_ID) AS CANTIDAD, "
+                + "(SELECT COUNT( DISTINCT CV.VEH_ID) "
+                + "FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN("
+                + "SELECT CC.VEH_ID FROM CEN_CENSOS CC "
+                + "WHERE CC.PUN_ID NOT IN(4) AND CC.EST_ID=1 )) AS CANTIDAD_TOTAL "
+                + "FROM CEN_VEHICULOS V "
+                + "INNER JOIN CEN_CENSOS C ON C.PUN_ID NOT IN(4) "
+                + "AND C.EST_ID=1  AND C.VEH_ID=V.VEH_ID "
                 + "GROUP BY V.VEH_TECNOMEC";
 
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
@@ -574,10 +664,17 @@ public class EstadisticaDao {
 
         List<HashMap> listaDatos = new LinkedList<>();
 
-        String sql = "SELECT DECODE(V.VEH_TECNOMEC,'S','Si','N','No') DESCRIPCION, COUNT(DISTINCT V.VEH_ID) CANTIDAD, \n"
-                + "(SELECT COUNT( DISTINCT CV.VEH_ID) FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN(SELECT CC.VEH_ID FROM CEN_CENSOS CC WHERE CC.PUN_ID IN(4) AND CC.EST_ID=1 )) CANTIDAD_TOTAL \n"
-                + "FROM CEN_VEHICULOS V \n"
-                + "INNER JOIN CEN_CENSOS C ON C.PUN_ID IN(4) AND C.EST_ID=1 AND C.VEH_ID=V.VEH_ID \n"
+        String sql = "SELECT CASE WHEN v.veh_tecnomec = 'S' THEN 'Si' "
+                + "WHEN v.veh_tecnomec = 'N' THEN 'No' "
+                + "ELSE 'Desconocido' END AS DESCRIPCION, "
+                + "COUNT(DISTINCT V.VEH_ID) CANTIDAD, "
+                + "(SELECT COUNT( DISTINCT CV.VEH_ID) "
+                + "FROM CEN_VEHICULOS CV WHERE CV.VEH_ID IN("
+                + "SELECT CC.VEH_ID FROM CEN_CENSOS CC "
+                + "WHERE CC.PUN_ID IN(4) AND CC.EST_ID=1 )) CANTIDAD_TOTAL "
+                + "FROM CEN_VEHICULOS V "
+                + "INNER JOIN CEN_CENSOS C ON C.PUN_ID IN(4) "
+                + "AND C.EST_ID=1 AND C.VEH_ID=V.VEH_ID "
                 + "GROUP BY V.VEH_TECNOMEC";
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
 
@@ -599,7 +696,7 @@ public class EstadisticaDao {
 
         List<HashMap> listaDatos = new LinkedList<>();
 
-        String sql = "SELECT * FROM SQL_CENSOS_GENERAL_MENSUAL";
+        String sql = "select * from sql_censos_general_mensual";
 
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
 
@@ -621,7 +718,7 @@ public class EstadisticaDao {
 
         HashMap<String, Object> hash = new HashMap<>();
 
-        String sql = "SELECT * FROM SQL_CENSOS_GENERAL WHERE MES = ? ";
+        String sql = "select * from sql_censos_general where mes = ?";
 
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setString(1, mes);

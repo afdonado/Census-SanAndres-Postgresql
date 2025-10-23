@@ -17,11 +17,15 @@ public class PersonaDao {
 
     public int adicionarPersona(Connection conex, CenPersona cenpersona) {
 
-        String sql = "INSERT INTO CEN_PERSONAS (PER_TIPODOC,PER_DOCUMENTO,"
-                + "PER_NOMBRE1,PER_NOMBRE2,PER_APELLIDO1,PER_APELLIDO2,PER_FECHANAC,PER_GENERO,PER_DIRECCION,"
-                + "MUN_ID,PER_TELEFONO,PER_MAIL,PER_GRUPOSANGUINEO,PER_LICONDUCCION,PER_FEXPLIC,PER_FVENLIC,"
-                + "PER_CATLIC,PER_FECHAPROCESO, LICENCIA_CONDUCCION) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,sysdate,?)";
-        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"PER_ID"})) {
+        String sql = "insert into cen_personas ("
+                + "per_tipodoc,per_documento,"
+                + "per_nombre1,per_nombre2,per_apellido1,per_apellido2,"
+                + "per_fechanac,per_genero,"
+                + "per_direccion,mun_id,per_telefono,per_mail,"
+                + "per_gruposanguineo,per_liconduccion,per_fexplic,per_fvenlic,"
+                + "per_catlic,per_fechaproceso, licencia_conduccion) "
+                + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),?)";
+        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"per_id"})) {
             pst.setInt(1, cenpersona.getTipodocumento());
             pst.setString(2, cenpersona.getDocumento());
             pst.setString(3, cenpersona.getNombre1());
@@ -56,11 +60,14 @@ public class PersonaDao {
 
     public boolean modificarPersona(Connection conex, CenPersona cenpersona) throws SQLException, IOException {
 
-        String sql = "UPDATE CEN_PERSONAS SET PER_TIPODOC = ?,PER_DOCUMENTO = ?,"
-                + "PER_NOMBRE1 = ?,PER_NOMBRE2 = ?,PER_APELLIDO1 = ?,PER_APELLIDO2 = ?,PER_FECHANAC = ?,"
-                + "PER_GENERO = ?,PER_DIRECCION = ?,MUN_ID = ?,PER_TELEFONO = ?,PER_MAIL = ?,PER_GRUPOSANGUINEO = ?,"
-                + "PER_LICONDUCCION = ?,PER_FEXPLIC = ?,PER_FVENLIC = ?,"
-                + "PER_CATLIC = ?, LICENCIA_CONDUCCION = ? WHERE PER_ID = ? ";
+        String sql = "update cen_personas set "
+                + "per_tipodoc = ?,per_documento = ?, "
+                + "per_nombre1 = ?,per_nombre2 = ?,per_apellido1 = ?,per_apellido2 = ?,"
+                + "per_fechanac = ?,per_genero = ?,"
+                + "per_direccion = ?,mun_id = ?,per_telefono = ?,per_mail = ?,"
+                + "per_gruposanguineo = ?,"
+                + "per_liconduccion = ?,per_fexplic = ?,per_fvenlic = ?,"
+                + "per_catlic = ?, licencia_conduccion = ? where per_id = ? ";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setInt(1, cenpersona.getTipodocumento());
             pst.setString(2, cenpersona.getDocumento());
@@ -150,9 +157,9 @@ public class PersonaDao {
 
         List<HashMap<String, Object>> lista = new LinkedList<>();
 
-        String sql = "SELECT PER_ID, TIPO_DOC, DOCUMENTO, NOMBRE_COMPLETO, \n"
-                + "FECHA_NAC, DIRECCION, DEPARTAMENTO, MUNICIPIO, \n"
-                + "TELEFONO, MAIL\n"
+        String sql = "SELECT PER_ID, TIPO_DOC, DOCUMENTO, NOMBRE_COMPLETO, "
+                + "FECHA_NAC, DIRECCION, DEPARTAMENTO, MUNICIPIO, "
+                + "TELEFONO, MAIL "
                 + "FROM VW_PERSONAS";
         try (PreparedStatement pst = conex.prepareStatement(sql); ResultSet rst = pst.executeQuery()) {
             while (rst.next()) {

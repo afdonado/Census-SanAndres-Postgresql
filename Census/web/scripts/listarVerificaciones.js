@@ -12,21 +12,21 @@ $(function () {
             dataSrc: 'data'
         },
         columns: [
-            {data: 'NUMERO', defaultContent: ''},
-            {data: 'FECHA', defaultContent: ''},
-            {data: 'PUNTO_ATENCION', defaultContent: ''},
-            {data: 'VEH_PLACA', defaultContent: ''},
-            {data: 'VEH_MOTOR', defaultContent: ''},
-            {data: 'VEH_CHASIS', defaultContent: ''},
-            {data: 'VEH_SERIE', defaultContent: ''},
-            {data: 'VERIFICACION_DOC', defaultContent: ''},
-            {data: 'VERIFICACION_FOTOS', defaultContent: ''},
-            {data: 'FECHA_PROCESO_VERIFICACION_FORMAT', defaultContent: ''},
-            {data: 'ESTADO_VERIFICACION', defaultContent: ''},
+            {data: 'numero', defaultContent: ''},
+            {data: 'fecha', defaultContent: ''},
+            {data: 'punto_atencion', defaultContent: ''},
+            {data: 'veh_placa', defaultContent: ''},
+            {data: 'veh_motor', defaultContent: ''},
+            {data: 'veh_chasis', defaultContent: ''},
+            {data: 'veh_serie', defaultContent: ''},
+            {data: 'verificacion_doc', defaultContent: ''},
+            {data: 'verificacion_fotos', defaultContent: ''},
+            {data: 'fecha_proceso_verificacion_format', defaultContent: ''},
+            {data: 'estado_verificacion', defaultContent: ''},
             {
                 data: null,
                 render: function (data) {
-                    return `<button type="button" class="btn btn-info btnconsultar" data-id="${data.CEN_ID}">Consultar</button>`;
+                    return `<button type="button" class="btn btn-info btnconsultar" data-id="${data.cen_id}">Consultar</button>`;
                 }
             },
             {
@@ -34,9 +34,9 @@ $(function () {
                 render: function (data) {
                     var idverificacion = data.VERIFICACION_ID || '';
                     if (idverificacion === '') {
-                        return `<button type="button" class="btn btn-primary btnregistrar" name="btnregistrar" data-id="${data.CEN_ID}">Guardar</button>`;
+                        return `<button type="button" class="btn btn-primary btnregistrar" name="btnregistrar" data-id="${data.cen_id}">Guardar</button>`;
                     } else {
-                        return `<button type="button" class="btn btn-danger btneditar" name="btneditar" data-id="${data.CEN_ID}">Editar</button>`;
+                        return `<button type="button" class="btn btn-danger btneditar" name="btneditar" data-id="${data.cen_id}">Editar</button>`;
                     }
                 }
             }

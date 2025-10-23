@@ -17,13 +17,13 @@ $(function () {
             $.each(lista, function (index, usuario) {
                 var nuevoElemento = `
                 <tr>
-                    <td>${usuario.NOMBRE_USUARIO}</td>
-                    <td>${usuario.FECHA_INICIO}</td>
-                    <td>${usuario.FECHA_FINAL}</td>
-                    <td>${usuario.PERFIL}</td>
-                    <td>${usuario.ESTADO}</td>
-                    <td><button type="button" class="btn btn-info btnconsultar" name="btnconsultar" data-id="${usuario.USU_ID}">Consultar</button></td>
-                    <td><button type="button" class="btn btn-danger btneditar" name="btneditar" data-id="${usuario.USU_ID}">Editar</button></td>
+                    <td>${usuario.nombre_usuario}</td>
+                    <td>${usuario.fecha_inicio}</td>
+                    <td>${usuario.fecha_final}</td>
+                    <td>${usuario.perfil}</td>
+                    <td>${usuario.estado}</td>
+                    <td><button type="button" class="btn btn-info btnconsultar" name="btnconsultar" data-id="${usuario.usu_id}">Consultar</button></td>
+                    <td><button type="button" class="btn btn-danger btneditar" name="btneditar" data-id="${usuario.usu_id}">Editar</button></td>
                     </tr>
                 `;
                 $("#lista-usuarios").append(nuevoElemento);

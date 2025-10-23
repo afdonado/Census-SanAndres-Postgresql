@@ -64,8 +64,8 @@ public class ImportarDocumentosMasivo extends HttpServlet {
             for (HashMap hash : lista) {
                 try {
 
-                    int idcenso = Integer.parseInt(hash.get("CEN_ID").toString());
-                    String numerocenso = hash.get("NUMERO").toString().trim();
+                    int idcenso = Integer.parseInt(hash.get("cen_id").toString());
+                    String numerocenso = hash.get("numero").toString().trim();
                     String complementonombre = request.getParameter("complementonombre");
                     String nombreDocumento = numerocenso.concat(complementonombre);
 

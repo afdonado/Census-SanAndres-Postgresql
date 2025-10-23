@@ -16,8 +16,8 @@ public class PersonaVehiculoDao {
     public int adicionarPersonaVehiculo(Connection conex, CenPersonaVehiculo cenpersonasvehiculo) {
 
         String sql = "INSERT INTO CEN_PERSONA_VEHICULO (TPER_ID,PER_ID,VEH_ID,"
-                + "PV_FECHAINICIO,PV_FECHAFINAL,USU_ID,EST_ID,PV_FECHAPROCESO) VALUES (?,?,?,sysdate,null,?,?,sysdate)";
-        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"PV_ID"})) {
+                + "PV_FECHAINICIO,PV_FECHAFINAL,USU_ID,EST_ID,PV_FECHAPROCESO) VALUES (?,?,?,now(),null,?,?,now())";
+        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"pv_id"})) {
             pst.setInt(1, cenpersonasvehiculo.getTper_id());
             pst.setInt(2, cenpersonasvehiculo.getPer_id());
             pst.setInt(3, cenpersonasvehiculo.getVeh_id());
@@ -40,7 +40,7 @@ public class PersonaVehiculoDao {
 
     public boolean modificarPersonaVehiculo(Connection conex, CenPersonaVehiculo cenpersonasvehiculo) throws SQLException, IOException {
 
-        String sql = "UPDATE CEN_PERSONA_VEHICULO SET TPER_ID = ?, PER_ID = ?, USU_ID = ?, PV_FECHAPROCESO = sysdate WHERE PV_ID = ? ";
+        String sql = "UPDATE CEN_PERSONA_VEHICULO SET TPER_ID = ?, PER_ID = ?, USU_ID = ?, PV_FECHAPROCESO = now() WHERE PV_ID = ? ";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setInt(1, cenpersonasvehiculo.getTper_id());
             pst.setInt(2, cenpersonasvehiculo.getPer_id());
@@ -143,7 +143,7 @@ public class PersonaVehiculoDao {
 
     public boolean anularPersonaVehiculo(Connection conex, int id) throws SQLException, IOException {
 
-        String sql = "UPDATE CEN_PERSONA_VEHICULO SET PV_FECHAFINAL = SYSDATE, EST_ID = 2 WHERE PV_ID = ? ";
+        String sql = "UPDATE CEN_PERSONA_VEHICULO SET PV_FECHAFINAL = now(), EST_ID = 2 WHERE PV_ID = ? ";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setInt(1, id);
             pst.executeUpdate();

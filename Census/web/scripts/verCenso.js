@@ -21,19 +21,19 @@ $(function () {
 
                 if (response.status === "success") {
 
-                    $('#txtnumerocenso').val(response.censo.NUMERO);
-                    $('#txtfechacenso').val(response.censo.FECHA);
-                    $('#txtpuntoatencion').val(response.censo.PUNTO_ATENCION);
-                    $('#txtusuarioregistro').val(response.censo.USUARIO);
+                    $('#txtnumerocenso').val(response.censo.numero);
+                    $('#txtfechacenso').val(response.censo.fecha);
+                    $('#txtpuntoatencion').val(response.censo.punto_atencion);
+                    $('#txtusuarioregistro').val(response.censo.usuario);
 
-                    $('#txtplaca').val(response.censo.VEH_PLACA);
-                    $('#txtmotor').val(response.censo.VEH_MOTOR);
-                    $('#txtchasis').val(response.censo.VEH_CHASIS);
-                    $('#txtserie').val(response.censo.VEH_SERIE);
+                    $('#txtplaca').val(response.censo.veh_placa);
+                    $('#txtmotor').val(response.censo.veh_motor);
+                    $('#txtchasis').val(response.censo.veh_chasis);
+                    $('#txtserie').val(response.censo.veh_serie);
 
-                    $('#txtobservaciones').val(response.censo.OBSERVACIONES);
+                    $('#txtobservaciones').val(response.censo.observaciones);
 
-                    $(".btneditar").attr("data-id", response.censo.CEN_ID);
+                    $(".btneditar").attr("data-id", response.censo.cen_id);
 
                     var personas = response.personasVehiculo;
                     var contenedor = $('#personas-censo');
@@ -43,16 +43,16 @@ $(function () {
                         var nuevoElemento = `
                 <div id="contenedor" class="form-group row">
                     <div class="col-sm-2 mb-3 mb-sm-0">
-                        <input class="form-control" id="txttipopersona" name="txttipopersona" value="${persona.TIPO_PERSONA}" readonly="true">
+                        <input class="form-control" id="txttipopersona" name="txttipopersona" value="${persona.tipo_persona}" readonly="true">
                     </div>
                     <div class="col-sm-2 mb-3 mb-sm-0">
-                        <input class="form-control" id="txttipodocumento" name="txttipodocumento" value="${persona.TIPO_DOC}" readonly="true">
+                        <input class="form-control" id="txttipodocumento" name="txttipodocumento" value="${persona.tipo_doc}" readonly="true">
                     </div>
                     <div class="col-sm-3 mb-3 mb-sm-0">
-                        <input class="form-control" type="text" id="txtdocumento" name="txtdocumento" value="${persona.DOCUMENTO}" readonly="true">
+                        <input class="form-control" type="text" id="txtdocumento" name="txtdocumento" value="${persona.documento}" readonly="true">
                     </div>
                     <div class="col-sm-5 mb-3 mb-sm-0">
-                        <input class="form-control" type="text" id="txtnombre" name="txtnombre" value="${persona.NOMBRE}" readonly="true">
+                        <input class="form-control" type="text" id="txtnombre" name="txtnombre" value="${persona.nombre}" readonly="true">
                     </div>
                 </div>
             `;

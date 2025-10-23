@@ -24,37 +24,37 @@ $(function () {
 
                 if (response.status === "success") {
 
-                    $('#txtplaca').val(response.vehiculo.VEH_PLACA);
-                    $('#txtmotor').val(response.vehiculo.VEH_MOTOR);
-                    $('#txtchasis').val(response.vehiculo.VEH_CHASIS);
-                    $('#txtserie').val(response.vehiculo.VEH_SERIE);
+                    $('#txtplaca').val(response.vehiculo.veh_placa);
+                    $('#txtmotor').val(response.vehiculo.veh_motor);
+                    $('#txtchasis').val(response.vehiculo.veh_chasis);
+                    $('#txtserie').val(response.vehiculo.veh_serie);
 
-                    var claseVehiculoId = response.vehiculo.CLASE_ID;
-                    var servicioId = response.vehiculo.SERVICIO_ID;
-                    var tipousoId = response.vehiculo.TIPO_USO_ID;
+                    var claseVehiculoId = response.vehiculo.clase_id;
+                    var servicioId = response.vehiculo.servicio_id;
+                    var tipousoId = response.vehiculo.tipo_uso_id;
 
-                    $('#txtcolores').val(response.vehiculo.COLOR);
-                    $('#txtmarcas').val(response.vehiculo.MARCA);
-                    $('#txtlineas').val(response.vehiculo.LINEA);
-                    $('#txtmodelo').val(response.vehiculo.MODELO);
-                    $('#cmbtransformado').val(response.vehiculo.TRANSFORMADO);
-                    $('#cmbrunt').val(response.vehiculo.RUNT);                    
-                    $('#txtlicenciatransito').val(response.vehiculo.LICENCIA_TRANSITO);
-                    $('#txtfechamatricula').val(response.vehiculo.FECHA_MATRICULA);
-                    var paisMatriculaId = response.vehiculo.PAIS_MATRICULA_ID;
-                    var departamentoMatriculaId = response.vehiculo.DPTO_MATRICULA_ID;
-                    var municipioMatriculaId = response.vehiculo.MUNI_MATRICULA_ID;
-                    var runt = response.vehiculo.RUNT;
+                    $('#txtcolores').val(response.vehiculo.color);
+                    $('#txtmarcas').val(response.vehiculo.marca);
+                    $('#txtlineas').val(response.vehiculo.linea);
+                    $('#txtmodelo').val(response.vehiculo.modelo);
+                    $('#cmbtransformado').val(response.vehiculo.transformado);
+                    $('#cmbrunt').val(response.vehiculo.runt);                    
+                    $('#txtlicenciatransito').val(response.vehiculo.licencia_transito);
+                    $('#txtfechamatricula').val(response.vehiculo.fecha_matricula);
+                    var paisMatriculaId = response.vehiculo.pais_matricula_id;
+                    var departamentoMatriculaId = response.vehiculo.dpto_matricula_id;
+                    var municipioMatriculaId = response.vehiculo.muni_matricula_id;
+                    var runt = response.vehiculo.runt;
                     if (runt === "N") {
                         $('.matricula').hide();
                     } else {
                         $('.matricula').show();
                     }
 
-                    //var tipoImportacionId = response.vehiculo.TDOC_IMP_ID;
-                    //$('#txtdocumentoimportacion').val(response.vehiculo.DOCUMENTO_IMP);
-                    //$('#txtfechaimportacion').val(response.vehiculo.FECHA_IMP);
-                    //var paisImportacionId = response.vehiculo.PAIS_IMP_ID;
+                    //var tipoImportacionId = response.vehiculo.tdoc_imp_id;
+                    //$('#txtdocumentoimportacion').val(response.vehiculo.documento_imp);
+                    //$('#txtfechaimportacion').val(response.vehiculo.fecha_imp);
+                    //var paisImportacionId = response.vehiculo.pais_imp_id;
 
                     //if (tipoImportacionId === 0) {
                     //    $('.importacion').hide();
@@ -62,25 +62,25 @@ $(function () {
                     //    $('.importacion').show();
                     //}
 
-                    $('#cmbsoat').val(response.vehiculo.SOAT);
-                    $('#txtfechavsoat').val(response.vehiculo.FECHAV_SOAT);
-                    var soat = response.vehiculo.SOAT;
+                    $('#cmbsoat').val(response.vehiculo.soat);
+                    $('#txtfechavsoat').val(response.vehiculo.fechav_soat);
+                    var soat = response.vehiculo.soat;
                     if(soat === 'N'){
                         $('#soatcontenedor').hide();
                     } else {
                         $('#soatcontenedor').show();
                     }
                     
-                    $('#cmbtecnomecanica').val(response.vehiculo.TECNO_MECANICA);
-                    $('#txtfechavtecnomecanica').val(response.vehiculo.FECHAV_TECNO);
-                    var tecnomecanica = response.vehiculo.TECNO_MECANICA;
+                    $('#cmbtecnomecanica').val(response.vehiculo.tecno_mecanica);
+                    $('#txtfechavtecnomecanica').val(response.vehiculo.fechav_tecno);
+                    var tecnomecanica = response.vehiculo.tecno_mecanica;
                     if(tecnomecanica === 'N'){
                         $('#tecnomecanicacontenedor').hide();
                     } else {
                         $('#tecnomecanicacontenedor').show();
                     }
 
-                    $('#idvehiculo').val(response.vehiculo.VEH_ID);
+                    $('#idvehiculo').val(response.vehiculo.veh_id);
 
                     $.ajax({
                         url: '../../cargarClasesVehiculo',
@@ -219,30 +219,30 @@ $(function () {
 
                     $.each(personas, function (index, persona) {
                         var nuevoElemento = `
-                <div id="contenedor${persona.PV_ID}" class="form-group row">
+                <div id="contenedor${persona.pv_id}" class="form-group row">
                     <div class="col-sm-2 mb-3 mb-sm-0">
-                        <select class="form-control" id="cmbtipospersona${persona.PV_ID}" name="cmbtipospersona${persona.PV_ID}"></select>
+                        <select class="form-control" id="cmbtipospersona${persona.pv_id}" name="cmbtipospersona${persona.pv_id}"></select>
                     </div>
                     <div class="col-sm-2 mb-3 mb-sm-0">
-                        <select class="form-control" id="cmbtiposdocumento${persona.PV_ID}" name="cmbtiposdocumento${persona.PV_ID}"></select>
+                        <select class="form-control" id="cmbtiposdocumento${persona.pv_id}" name="cmbtiposdocumento${persona.pv_id}"></select>
                     </div>
                     <div class="col-sm-3 mb-3 mb-sm-0">
-                        <input class="form-control solo-numeros" type="number" id="txtdocumento${persona.PV_ID}" name="txtdocumento${persona.PV_ID}" maxlength="20" value="${persona.DOCUMENTO}" style="text-transform: uppercase">
+                        <input class="form-control solo-numeros" type="number" id="txtdocumento${persona.pv_id}" name="txtdocumento${persona.pv_id}" maxlength="20" value="${persona.documento}" style="text-transform: uppercase">
                     </div>
                     <div class="col-sm-4 mb-2 mb-sm-0">
-                        <input class="form-control" type="text" id="txtnombre${persona.PV_ID}" name="txtnombre${persona.PV_ID}" value="${persona.NOMBRE}">
+                        <input class="form-control" type="text" id="txtnombre${persona.pv_id}" name="txtnombre${persona.pv_id}" value="${persona.nombre}">
                     </div>
                     <div class="col-sm-1 mb-1 mb-sm-0">
-                        <button type="button" class="btn btn-danger btnanular" id="btnanular${persona.PV_ID}" name="btnanular${persona.PV_ID}" data-id="${persona.PV_ID}">X</button>
+                        <button type="button" class="btn btn-danger btnanular" id="btnanular${persona.pv_id}" name="btnanular${persona.pv_id}" data-id="${persona.pv_id}">X</button>
                     </div>
-                    <input type="hidden" id="idpersona${persona.PV_ID}" name="idpersona${persona.PV_ID}" value="${persona.PER_ID}">
-                    <input type="hidden" id="estadoperveh${persona.PV_ID}" name="estadoperveh${persona.PV_ID}" value="1">
+                    <input type="hidden" id="idpersona${persona.pv_id}" name="idpersona${persona.pv_id}" value="${persona.per_id}">
+                    <input type="hidden" id="estadoperveh${persona.pv_id}" name="estadoperveh${persona.pv_id}" value="1">
                 </div>
             `;
                         contenedor.append(nuevoElemento);
 
-                        cargarTiposPersona(`#cmbtipospersona${persona.PV_ID}`, persona.TIPO_PERSONA_ID);
-                        cargarTiposDocumento(`#cmbtiposdocumento${persona.PV_ID}`, persona.TIPO_DOC_ID);
+                        cargarTiposPersona(`#cmbtipospersona${persona.pv_id}`, persona.tipo_persona_id);
+                        cargarTiposDocumento(`#cmbtiposdocumento${persona.pv_id}`, persona.tipo_doc_id);
                     });
 
                 } else if (response.status === "fail") {

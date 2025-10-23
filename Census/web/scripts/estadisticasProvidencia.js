@@ -6,8 +6,8 @@ $(document).ready(function () {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
-                var serie = new Array(data[i].CLV_DESCRIPCION, parseInt(data[i].CANTIDAD));
-                CantidadTotal = data[i].CANTIDAD_TOTAL;
+                var serie = new Array(data[i].clv_descripcion, parseInt(data[i].cantidad));
+                CantidadTotal = data[i].cantidad_total;
                 datos.push(serie);
             }
             $('#graficaClaseVeh').highcharts({
@@ -50,8 +50,8 @@ $(document).ready(function () {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
-                var serie = new Array(data[i].PUN_DESCRIPCION, parseInt(data[i].CANTIDAD));
-                CantidadTotal = data[i].CANTIDAD_TOTAL;
+                var serie = new Array(data[i].pun_descripcion, parseInt(data[i].cantidad));
+                CantidadTotal = data[i].cantidad_total;
                 datos.push(serie);
             }
             $('#graficaPuntosAten').highcharts({
@@ -95,8 +95,8 @@ $(document).ready(function () {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
-                var serie = new Array(data[i].GENERO, parseInt(data[i].PORCENTAJE));
-                CantidadTotal = data[i].CANTIDAD_TOTAL;
+                var serie = new Array(data[i].genero, parseInt(data[i].porcentaje));
+                CantidadTotal = data[i].cantidad_total;
                 datos.push(serie);
             }
             $('#graficaPersonasGenero').highcharts({
@@ -151,8 +151,8 @@ $(document).ready(function () {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
-                var serie = new Array(data[i].DESCRIPCION, parseInt(data[i].PORCENTAJE));
-                CantidadTotal = data[i].CANTIDAD_TOTAL;
+                var serie = new Array(data[i].descripcion, parseInt(data[i].porcentaje));
+                CantidadTotal = data[i].cantidad_total;
                 datos.push(serie);
             }
             $('#graficaPersonasLicencia').highcharts({
@@ -206,8 +206,8 @@ $(document).ready(function () {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
-                var serie = new Array(data[i].DESCRIPCION, parseInt(data[i].PORCENTAJE));
-                CantidadTotal = data[i].CANTIDAD_TOTAL;
+                var serie = new Array(data[i].descripcion, parseInt(data[i].porcentaje));
+                CantidadTotal = data[i].cantidad_total;
                 datos.push(serie);
             }
             $('#graficaVehiculosPlacas').highcharts({
@@ -261,8 +261,8 @@ $(document).ready(function () {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
-                var serie = new Array(data[i].DESCRIPCION, parseInt(data[i].CANTIDAD));
-                CantidadTotal = data[i].CANTIDAD_TOTAL;
+                var serie = new Array(data[i].descripcion, parseInt(data[i].cantidad));
+                CantidadTotal = data[i].cantidad_total;
                 datos.push(serie);
             }
             $('#graficaVehiculoSoat').highcharts({
@@ -306,8 +306,8 @@ $(document).ready(function () {
             var datos = [];
             var CantidadTotal;
             for (var i = 0; i < data.length; i++) {
-                var serie = new Array(data[i].DESCRIPCION, parseInt(data[i].CANTIDAD));
-                CantidadTotal = data[i].CANTIDAD_TOTAL;
+                var serie = new Array(data[i].descripcion, parseInt(data[i].cantidad));
+                CantidadTotal = data[i].cantidad_total;
                 datos.push(serie);
             }
             $('#graficaVehiculoTecno').highcharts({

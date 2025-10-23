@@ -24,66 +24,66 @@ $(function () {
 
                 if (response.status === "success") {
 
-                    $('#txtplaca').val(response.vehiculo.VEH_PLACA);
-                    $('#txtmotor').val(response.vehiculo.VEH_MOTOR);
-                    $('#txtchasis').val(response.vehiculo.VEH_CHASIS);
-                    $('#txtserie').val(response.vehiculo.VEH_SERIE);
+                    $('#txtplaca').val(response.vehiculo.veh_placa);
+                    $('#txtmotor').val(response.vehiculo.veh_motor);
+                    $('#txtchasis').val(response.vehiculo.veh_chasis);
+                    $('#txtserie').val(response.vehiculo.veh_serie);
 
-                    $('#txtclase').val(response.vehiculo.CLASE);
-                    $('#txtservicio').val(response.vehiculo.SERVICIO);
-                    $('#txttipouso').val(response.vehiculo.TIPO_USO);
+                    $('#txtclase').val(response.vehiculo.clase);
+                    $('#txtservicio').val(response.vehiculo.servicio);
+                    $('#txttipouso').val(response.vehiculo.tipo_uso);
 
-                    $('#txtcolores').val(response.vehiculo.COLOR);
-                    $('#txtmarcas').val(response.vehiculo.MARCA);
-                    $('#txtlineas').val(response.vehiculo.LINEA);
-                    $('#txtmodelo').val(response.vehiculo.MODELO);
-                    $('#txttransformado').val(response.vehiculo.TRANSFORMADO === 'S' ? 'Si' : 'No');
-                    $('#txtrunt').val(response.vehiculo.RUNT === 'S' ? 'Si' : 'No');
+                    $('#txtcolores').val(response.vehiculo.color);
+                    $('#txtmarcas').val(response.vehiculo.marca);
+                    $('#txtlineas').val(response.vehiculo.linea);
+                    $('#txtmodelo').val(response.vehiculo.modelo);
+                    $('#txttransformado').val(response.vehiculo.transformado === 'S' ? 'Si' : 'No');
+                    $('#txtrunt').val(response.vehiculo.runt === 'S' ? 'Si' : 'No');
 
-                    var runt = response.vehiculo.RUNT;
-                    $('#txtlicenciatransito').val(response.vehiculo.LICENCIA_TRANSITO);
-                    $('#txtfechamatricula').val(response.vehiculo.FECHA_MATRICULA);
-                    $('#txtpaismatricula').val(response.vehiculo.PAIS_MATRICULA);
-                    $('#txtdepartamentomatricula').val(response.vehiculo.DPTO_MATRICULA);
-                    $('#txtmunicipiomatricula').val(response.vehiculo.MUNI_MATRICULA);
-                    $('#txtciudadmatricula').val(response.vehiculo.CIUDAD_MATRICULA);
+                    var runt = response.vehiculo.runt;
+                    $('#txtlicenciatransito').val(response.vehiculo.licencia_transito);
+                    $('#txtfechamatricula').val(response.vehiculo.fecha_matricula);
+                    $('#txtpaismatricula').val(response.vehiculo.pais_matricula);
+                    $('#txtdepartamentomatricula').val(response.vehiculo.dpto_matricula);
+                    $('#txtmunicipiomatricula').val(response.vehiculo.muni_matricula);
+                    $('#txtciudadmatricula').val(response.vehiculo.ciudad_matricula);
                     if (runt === "N") {
                         $('.matricula').hide();
                     } else {
                         $('.matricula').show();
                     }
 
-                    $('#txttipodocimportacion').val(response.vehiculo.TDOC_IMP);
-                    $('#txtdocumentoimportacion').val(response.vehiculo.DOCUMENTO_IMP);
-                    $('#txtfechaimportacion').val(response.vehiculo.FECHA_IMP);
-                    $('#txtpaisimportacion').val(response.vehiculo.PAIS_IMP);
+                    $('#txttipodocimportacion').val(response.vehiculo.tdoc_imp);
+                    $('#txtdocumentoimportacion').val(response.vehiculo.documento_imp);
+                    $('#txtfechaimportacion').val(response.vehiculo.fecha_imp);
+                    $('#txtpaisimportacion').val(response.vehiculo.pais_imp);
 
-                    var tipoImportacionId = response.vehiculo.TDOC_IMP_ID;
+                    var tipoImportacionId = response.vehiculo.tdoc_imp_id;
                     if (tipoImportacionId === 0) {
                         $('.importacion').hide();
                     } else {
                         $('.importacion').show();
                     }
 
-                    $('#txtsoat').val(response.vehiculo.SOAT === 'S' ? 'Si' : 'No');
-                    $('#txtfechavsoat').val(response.vehiculo.FECHAV_SOAT);
-                    var soat = response.vehiculo.SOAT;
+                    $('#txtsoat').val(response.vehiculo.soat === 'S' ? 'Si' : 'No');
+                    $('#txtfechavsoat').val(response.vehiculo.fechav_soat);
+                    var soat = response.vehiculo.soat;
                     if (soat === 'N') {
                         $('#soatcontenedor').hide();
                     } else {
                         $('#soatcontenedor').show();
                     }
 
-                    $('#txttecnomecanica').val(response.vehiculo.TECNO_MECANICA === 'S' ? 'Si' : 'No');
-                    $('#txtfechavtecnomecanica').val(response.vehiculo.FECHAV_TECNO);
-                    var tecnomecanica = response.vehiculo.TECNO_MECANICA;
+                    $('#txttecnomecanica').val(response.vehiculo.tecno_mecanica === 'S' ? 'Si' : 'No');
+                    $('#txtfechavtecnomecanica').val(response.vehiculo.fechav_tecno);
+                    var tecnomecanica = response.vehiculo.tecno_mecanica;
                     if (tecnomecanica === 'N') {
                         $('#tecnomecanicacontenedor').hide();
                     } else {
                         $('#tecnomecanicacontenedor').show();
                     }
 
-                    $(".btneditar").attr("data-id", response.vehiculo.VEH_ID);
+                    $(".btneditar").attr("data-id", response.vehiculo.veh_id);
 
                     var personas = response.personasVehiculo;
                     var contenedor = $('#personas-vehiculo');
@@ -93,16 +93,16 @@ $(function () {
                         var nuevoElemento = `
                 <div id="contenedor" class="form-group row">
                     <div class="col-sm-2 mb-3 mb-sm-0">
-                        <input class="form-control" id="txttipopersona" name="txttipopersona" value="${persona.TIPO_PERSONA}" readonly="true">
+                        <input class="form-control" id="txttipopersona" name="txttipopersona" value="${persona.tipo_persona}" readonly="true">
                     </div>
                     <div class="col-sm-2 mb-3 mb-sm-0">
-                        <input class="form-control" id="txttipodocumento" name="txttipodocumento" value="${persona.TIPO_DOC}" readonly="true">
+                        <input class="form-control" id="txttipodocumento" name="txttipodocumento" value="${persona.tipo_doc}" readonly="true">
                     </div>
                     <div class="col-sm-3 mb-3 mb-sm-0">
-                        <input class="form-control" type="text" id="txtdocumento" name="txtdocumento" value="${persona.DOCUMENTO}" readonly="true">
+                        <input class="form-control" type="text" id="txtdocumento" name="txtdocumento" value="${persona.documento}" readonly="true">
                     </div>
                     <div class="col-sm-5 mb-3 mb-sm-0">
-                        <input class="form-control" type="text" id="txtnombre" name="txtnombre" value="${persona.NOMBRE}" readonly="true">
+                        <input class="form-control" type="text" id="txtnombre" name="txtnombre" value="${persona.nombre}" readonly="true">
                     </div>
                 </div>
             `;

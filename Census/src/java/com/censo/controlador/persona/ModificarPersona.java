@@ -186,7 +186,7 @@ public class ModificarPersona extends HttpServlet {
                     response.getWriter().write(jsonError);
                     return;
                 }
-                numeroLicencia = request.getParameter("cmbcategoriaslicencia").toUpperCase().trim();
+                numeroLicencia = request.getParameter("txtnumerolicencia").toUpperCase().trim();
                 
                 if (request.getParameter("cmbcategoriaslicencia") == null || request.getParameter("cmbcategoriaslicencia").isEmpty()) {
                     respuesta.put("status", "error");

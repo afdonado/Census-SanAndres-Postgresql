@@ -20,18 +20,18 @@ $(function () {
             success: function (response) {
                 if (response.status === "success") {
 
-                    $('#idverificacion').val(response.verificacion.VERIFICACION_ID || '');
-                    $('#idcenso').val(response.verificacion.CEN_ID);
-                    $('#txtnumerocenso').val(response.verificacion.NUMERO);
-                    $('#txtfechacenso').val(response.verificacion.FECHA);
-                    if (response.verificacion.VERIFICACION_DOC === 'S') {
+                    $('#idverificacion').val(response.verificacion.verificacion_id || '');
+                    $('#idcenso').val(response.verificacion.cen_id);
+                    $('#txtnumerocenso').val(response.verificacion.numero);
+                    $('#txtfechacenso').val(response.verificacion.fecha);
+                    if (response.verificacion.verificacion_doc === 'S') {
                         $('#chkdocumentos').prop('checked', true);
                     }
-                    if (response.verificacion.VERIFICACION_FOTOS === 'S') {
+                    if (response.verificacion.verificacion_fotos === 'S') {
                         $('#chkfotos').prop('checked', true);
                     }
-                    var estadoverificacionId = response.verificacion.ESTADO_VERIFICACION_ID || 1;
-                    $('#txtobservaciones').val(response.verificacion.OBSERVACIONES_VERIFICACION);
+                    var estadoverificacionId = response.verificacion.estado_verificacion_id || 1;
+                    $('#txtobservaciones').val(response.verificacion.observaciones_verificacion);
 
                     $.ajax({
                         url: '../../cargarEstadosVerificacion',

@@ -21,40 +21,40 @@ $(function () {
 
                 if (response.status === "success") {
 
-                    $('#txtnumerocenso').val(response.censo.NUMERO);
-                    $('#txtfechacenso').val(response.censo.FECHA);
-                    var puntoatencionId = response.censo.PUN_ID;
+                    $('#txtnumerocenso').val(response.censo.numero);
+                    $('#txtfechacenso').val(response.censo.fecha);
+                    var puntoatencionId = response.censo.pun_id;
 
 
                     var tipoReferenciaId = 0;
                     var referencia = '';
 
-                    if (response.censo.VEH_PLACA.length > 0) {
+                    if (response.censo.veh_placa.length > 0) {
                         tipoReferenciaId = 1;
-                        referencia = response.censo.VEH_PLACA;
+                        referencia = response.censo.veh_placa;
                     } else {
-                        if (response.censo.VEH_MOTOR.length > 0) {
+                        if (response.censo.veh_motor.length > 0) {
                             tipoReferenciaId = 2;
-                            referencia = response.censo.VEH_MOTOR;
+                            referencia = response.censo.veh_motor;
                         } else {
-                            if (response.censo.VEH_CHASIS.length > 0) {
+                            if (response.censo.veh_chasis.length > 0) {
                                 tipoReferenciaId = 3;
-                                referencia = response.censo.VEH_CHASIS;
+                                referencia = response.censo.veh_chasis;
                             } else {
-                                if (response.censo.VEH_SERIE.length > 0) {
+                                if (response.censo.veh_serie.length > 0) {
                                     tipoReferenciaId = 4;
-                                    referencia = response.censo.VEH_SERIE;
+                                    referencia = response.censo.veh_serie;
                                 }
                             }
                         }
                     }
                     $('#txtreferencia').val(referencia);
 
-                    $('#txtobservaciones').val(response.censo.OBSERVACIONES);
+                    $('#txtobservaciones').val(response.censo.observaciones);
 
-                    $('#idcenso').val(response.censo.CEN_ID);
-                    $('#idvehiculo').val(response.censo.VEH_ID);
-                    $('#numerocenso').val(response.censo.NUMERO);
+                    $('#idcenso').val(response.censo.cen_id);
+                    $('#idvehiculo').val(response.censo.veh_id);
+                    $('#numerocenso').val(response.censo.numero);
                     $('#tiporeferencia').val(tipoReferenciaId);
                     $('#referencia').val(referencia);
 

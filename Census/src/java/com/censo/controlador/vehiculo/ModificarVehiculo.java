@@ -497,7 +497,7 @@ public class ModificarVehiculo extends HttpServlet {
                     if (!listapersonasVehiculo.isEmpty()) {
 
                         for (HashMap hash : listapersonasVehiculo) {
-                            int idperveh = Integer.parseInt(hash.get("PV_ID").toString());
+                            int idperveh = Integer.parseInt(hash.get("pv_id").toString());
 
                             //Validar parametro tipo documento
                             if (request.getParameter("estadoperveh" + idperveh) == null || request.getParameter("estadoperveh" + idperveh).isEmpty()) {

@@ -22,30 +22,30 @@ $(function () {
 console.log("response. ",response   );
                 if (response.status === "success") {
 
-                    $('#txttipodocumento').val(response.persona.TIPO_DOC);
-                    $('#txtdocumento').val(response.persona.DOCUMENTO);
+                    $('#txttipodocumento').val(response.persona.tipo_doc);
+                    $('#txtdocumento').val(response.persona.documento);
 
-                    $('#txtprimernombre').val(response.persona.NOMBRE1);
-                    $('#txtsegundonombre').val(response.persona.NOMBRE2);
-                    $('#txtprimerapellido').val(response.persona.APELLIDO1);
-                    $('#txtsegundoapellido').val(response.persona.APELLIDO2);
+                    $('#txtprimernombre').val(response.persona.nombre1);
+                    $('#txtsegundonombre').val(response.persona.nombre2);
+                    $('#txtprimerapellido').val(response.persona.apellido1);
+                    $('#txtsegundoapellido').val(response.persona.apellido2);
 
-                    $('#txtfechanacimiento').val(response.persona.FECHA_NAC);
-                    $('#txtgenero').val(response.persona.GENERO);
-                    $('#txtgruposanguineo').val(response.persona.GRUPO_SANGUINEO);
+                    $('#txtfechanacimiento').val(response.persona.fecha_nac);
+                    $('#txtgenero').val(response.persona.genero);
+                    $('#txtgruposanguineo').val(response.persona.grupo_sanguineo);
 
-                    $('#txtdepartamento').val(response.persona.DEPARTAMENTO);
-                    $('#txtmunicipio').val(response.persona.MUNICIPIO);
-                    $('#txtdireccion').val(response.persona.DIRECCION);
-                    $('#txttelefono').val(response.persona.TELEFONO);
-                    $('#txtemail').val(response.persona.MAIL);
+                    $('#txtdepartamento').val(response.persona.departamento);
+                    $('#txtmunicipio').val(response.persona.municipio);
+                    $('#txtdireccion').val(response.persona.direccion);
+                    $('#txttelefono').val(response.persona.telefono);
+                    $('#txtemail').val(response.persona.mail);
 
-console.log("licencia de conduccion. ",response.persona.LICENCIA_CONDUCCION);
-                    if (response.persona.LICENCIA_CONDUCCION === 'S') {
-                        $('#txtnumerolicencia').val(response.persona.LIC_CONDUCCION);
-                        $('#txtcategorialicencia').val(response.persona.CATEGORIA_LIC);
-                        $('#txtfechaexplicencia').val(response.persona.FECHA_EXP);
-                        $('#txtfechavlicencia').val(response.persona.FECHA_VEN);
+console.log("licencia de conduccion. ",response.persona.licencia_conduccion);
+                    if (response.persona.licencia_conduccion === 'S') {
+                        $('#txtnumerolicencia').val(response.persona.lic_conduccion);
+                        $('#txtcategorialicencia').val(response.persona.categoria_lic);
+                        $('#txtfechaexplicencia').val(response.persona.fecha_exp);
+                        $('#txtfechavlicencia').val(response.persona.fecha_ven);
                         $('.licencia-conduccion').show();
                     } else {
                         $('#txtnumerolicencia').val('');
@@ -54,7 +54,7 @@ console.log("licencia de conduccion. ",response.persona.LICENCIA_CONDUCCION);
                         $('#txtfechavlicencia').val('');
                         $('.licencia-conduccion').hide();
                     }
-                    $(".btneditar").attr("data-id", response.persona.PER_ID);
+                    $(".btneditar").attr("data-id", response.persona.per_id);
 
                 } else if (response.status === "fail") {
                     alert(response.message);

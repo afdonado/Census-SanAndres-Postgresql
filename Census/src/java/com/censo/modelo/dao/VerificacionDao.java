@@ -18,8 +18,8 @@ public class VerificacionDao {
 
         String sql = "INSERT INTO CEN_VERIFICACIONES (CEN_ID,VER_DOCUMENTOS,"
                 + "VER_FOTOS,VER_OBSERVACIONES,USU_ID,VER_FECHAPROCESO,EVER_ID) "
-                + "VALUES (?,?,?,?,?,sysdate,?)";
-        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"VER_ID"})) {
+                + "VALUES (?,?,?,?,?,now(),?)";
+        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"ver_id"})) {
             pst.setInt(1, cenverificacion.getCen_id());
             pst.setString(2, cenverificacion.getVerificado_doc());
             pst.setString(3, cenverificacion.getVerificado_foto());
@@ -42,7 +42,7 @@ public class VerificacionDao {
 
     public boolean modificarVerificacion(Connection conex, CenVerificacion cenverificacion) throws SQLException, IOException {
 
-        String sql = "UPDATE CEN_VERIFICACIONES SET VER_DOCUMENTOS = ?,VER_FOTOS = ? ,VER_OBSERVACIONES = ?, EVER_ID = ?, USU_ID = ?, VER_FECHAPROCESO = SYSDATE WHERE VER_ID = ? ";
+        String sql = "UPDATE CEN_VERIFICACIONES SET VER_DOCUMENTOS = ?,VER_FOTOS = ? ,VER_OBSERVACIONES = ?, EVER_ID = ?, USU_ID = ?, VER_FECHAPROCESO = now() WHERE VER_ID = ? ";
         try (PreparedStatement pst = conex.prepareStatement(sql)) {
             pst.setString(1, cenverificacion.getVerificado_doc());
             pst.setString(2, cenverificacion.getVerificado_foto());
@@ -77,8 +77,8 @@ public class VerificacionDao {
     public int adicionarHistorialVerificacion(Connection conex, CenHistorialVerificacion cenhistotialverificacion) {
 
         String sql = "INSERT INTO CEN_HISTORIAL_VERIFICACIONES (VER_ID,EVER_ID,USU_ID,HVER_OBSERVACIONES,HVER_FECHAPROCESO) "
-                + "VALUES (?,?,?,?,sysdate)";
-        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"VER_ID"})) {
+                + "VALUES (?,?,?,?,now())";
+        try (PreparedStatement pst = conex.prepareStatement(sql, new String[]{"ver_id"})) {
             pst.setInt(1, cenhistotialverificacion.getVer_id());
             pst.setInt(2, cenhistotialverificacion.getEstado());
             pst.setInt(3, cenhistotialverificacion.getUsu_id());
